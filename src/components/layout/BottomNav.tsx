@@ -1,23 +1,21 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Home, Package, ArrowLeftRight, MessageCircle, User } from 'lucide-react';
+import { Home, Package, ArrowLeftRight, User } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 
 const navItems = [
   { icon: Home, label: 'Discover', path: '/', notificationKey: null },
   { icon: Package, label: 'My Items', path: '/items', notificationKey: null },
   { icon: ArrowLeftRight, label: 'Matches', path: '/matches', notificationKey: 'matches' as const },
-  { icon: MessageCircle, label: 'Chat', path: '/chats', notificationKey: 'messages' as const },
   { icon: User, label: 'Profile', path: '/profile', notificationKey: null },
 ];
 
 export function BottomNav() {
   const location = useLocation();
-  const { hasNewMatches, hasNewMessages } = useNotifications();
+  const { hasNewMatches } = useNotifications();
 
-  const getNotification = (key: 'matches' | 'messages' | null) => {
+  const getNotification = (key: 'matches' | null) => {
     if (key === 'matches') return hasNewMatches;
-    if (key === 'messages') return hasNewMessages;
     return false;
   };
 
