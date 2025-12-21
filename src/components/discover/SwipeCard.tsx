@@ -120,7 +120,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
       {/* Card Background */}
       <div className="absolute inset-0 bg-card">
         {/* Main Photo */}
-        <div className="relative h-[70%] bg-muted overflow-hidden">
+        <div className="relative h-[55%] bg-muted overflow-hidden">
           {hasPhotos ? (
             <img
               src={item.photos[0]}
@@ -158,24 +158,39 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
           </motion.div>
 
           {/* Community Rating - Top Left */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-3 left-3">
             <RatingStars rating={item.community_rating} totalInteractions={item.total_interactions} />
           </div>
 
           {/* Condition Badge - Top Right */}
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-3 right-3">
             <Badge variant="secondary" className="backdrop-blur-sm bg-background/80 text-foreground font-medium px-3 py-1">
               {CONDITION_LABELS[item.condition]}
             </Badge>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] p-5 bg-card">
+        {/* Content - More space for owner info */}
+        <div className="absolute bottom-0 left-0 right-0 h-[45%] p-4 bg-card">
           <div className="h-full flex flex-col">
+            {/* Owner - at top of content */}
+            <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border/50">
+              <div className="w-11 h-11 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md shrink-0">
+                {item.owner_avatar_url ? (
+                  <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  item.owner_display_name.charAt(0).toUpperCase()
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground truncate text-base">{item.owner_display_name}</p>
+                <p className="text-xs text-muted-foreground">wants to swap</p>
+              </div>
+            </div>
+
             {/* Title & Category */}
             <div className="flex items-start justify-between gap-3 mb-2">
-              <h3 className="text-2xl font-display font-bold text-foreground leading-tight line-clamp-1">
+              <h3 className="text-xl font-display font-bold text-foreground leading-tight line-clamp-1">
                 {item.title}
               </h3>
             </div>
@@ -186,7 +201,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
             </p>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 mt-auto">
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
                 {CATEGORY_LABELS[item.category]}
               </Badge>
@@ -195,20 +210,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
                   ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
                 </Badge>
               )}
-            </div>
-
-            {/* Owner */}
-            <div className="mt-auto flex items-center gap-3 pt-2 border-t border-border/50">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md">
-                {item.owner_avatar_url ? (
-                  <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  item.owner_display_name.charAt(0).toUpperCase()
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground truncate">{item.owner_display_name}</p>
-              </div>
             </div>
           </div>
         </div>
