@@ -3,16 +3,58 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, MapPin } from 'lucide-react';
+import { Package, Star } from 'lucide-react';
 
 interface SwipeCardProps {
-  item: Item & { owner_display_name: string; owner_avatar_url: string | null };
+  item: Item & { 
+    owner_display_name: string; 
+    owner_avatar_url: string | null;
+    recommendation_score?: number;
+  };
   isTop: boolean;
   onSwipeComplete: (direction: 'left' | 'right') => void;
   swipeDirection: 'left' | 'right' | null;
 }
 
 const SWIPE_THRESHOLD = 100;
+
+// Convert recommendation score (0-1) to 5-star rating
+function ScoreToStars({ score }: { score?: number }) {
+  if (score === undefined) return null;
+  
+  // Score is typically 0-1, convert to 0-5 stars
+  const stars = Math.min(5, Math.max(0, Math.round(score * 5 * 10) / 10));
+  const fullStars = Math.floor(stars);
+  const hasHalfStar = stars - fullStars >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  return (
+    <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+      <div className="flex items-center gap-0.5">
+        {/* Full stars */}
+        {Array.from({ length: fullStars }).map((_, i) => (
+          <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+        ))}
+        {/* Half star */}
+        {hasHalfStar && (
+          <div className="relative">
+            <Star className="w-4 h-4 text-muted-foreground/30" />
+            <div className="absolute inset-0 overflow-hidden w-[50%]">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            </div>
+          </div>
+        )}
+        {/* Empty stars */}
+        {Array.from({ length: emptyStars }).map((_, i) => (
+          <Star key={`empty-${i}`} className="w-4 h-4 text-muted-foreground/30" />
+        ))}
+      </div>
+      <span className="text-xs font-semibold text-foreground/80 ml-1">
+        {(score * 100).toFixed(0)}%
+      </span>
+    </div>
+  );
+}
 
 export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -107,7 +149,12 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
             </div>
           </motion.div>
 
-          {/* Condition Badge */}
+          {/* Match Score - Top Left */}
+          <div className="absolute top-4 left-4">
+            <ScoreToStars score={item.recommendation_score} />
+          </div>
+
+          {/* Condition Badge - Top Right */}
           <div className="absolute top-4 right-4">
             <Badge variant="secondary" className="backdrop-blur-sm bg-background/80 text-foreground font-medium px-3 py-1">
               {CONDITION_LABELS[item.condition]}
