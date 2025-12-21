@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Items from "./pages/Items";
 import NewItem from "./pages/NewItem";
+import EditItem from "./pages/EditItem";
 import Matches from "./pages/Matches";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/items" element={<Items />} />
             <Route path="/items/new" element={<NewItem />} />
+            <Route path="/items/:id/edit" element={<EditItem />} />
             <Route path="/matches" element={<Matches />} />
             <Route path="/chat/:matchId" element={<Chat />} />
             <Route path="/chats" element={<Matches />} />
