@@ -36,21 +36,10 @@ export function useSwipeableItems(myItemId: string | null) {
 
       const swipedItemIds = existingSwipes?.map(s => s.swiped_item_id) || [];
 
-      // Get compatible items:
-      // 1. Not my own items
-      // 2. Their category is in my swap preferences
-      // 3. My category is in their swap preferences
-      // 4. Not already swiped
-      // 5. Active items only
+      // Get compatible items (without profile join - we'll fetch profiles separately)
       const { data: items, error } = await supabase
         .from('items')
-        .select(`
-          *,
-          profiles!items_user_id_fkey (
-            display_name,
-            avatar_url
-          )
-        `)
+        .select('*')
         .neq('user_id', user.id)
         .eq('is_active', true)
         .in('category', mySwapPreferences)
@@ -59,15 +48,32 @@ export function useSwipeableItems(myItemId: string | null) {
       if (error) throw error;
 
       // Filter out already swiped items
-      const filteredItems = (items || [])
-        .filter(item => !swipedItemIds.includes(item.id))
-        .map(item => ({
-          ...item,
-          owner_display_name: (item.profiles as any)?.display_name || 'Unknown',
-          owner_avatar_url: (item.profiles as any)?.avatar_url || null,
-        })) as SwipeableItem[];
+      const filteredItems = (items || []).filter(item => !swipedItemIds.includes(item.id));
 
-      return filteredItems;
+      if (filteredItems.length === 0) return [];
+
+      // Get unique user IDs from filtered items
+      const userIds = [...new Set(filteredItems.map(item => item.user_id))];
+
+      // Fetch profiles for these users
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      // Create a map for quick lookup
+      const profileMap = new Map(
+        (profiles || []).map(p => [p.user_id, p])
+      );
+
+      // Combine items with profile data
+      const swipeableItems: SwipeableItem[] = filteredItems.map(item => ({
+        ...item,
+        owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+        owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+      }));
+
+      return swipeableItems;
     },
     enabled: !!user && !!myItemId,
   });

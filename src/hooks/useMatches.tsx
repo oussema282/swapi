@@ -25,42 +25,62 @@ export function useMatches() {
         .from('matches')
         .select(`
           *,
-          item_a:items!matches_item_a_id_fkey (
-            *,
-            profiles!items_user_id_fkey (display_name)
-          ),
-          item_b:items!matches_item_b_id_fkey (
-            *,
-            profiles!items_user_id_fkey (display_name)
-          )
+          item_a:items!matches_item_a_id_fkey (*),
+          item_b:items!matches_item_b_id_fkey (*)
         `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Filter and transform matches to identify my item vs their item
-      const userMatches = (matches || [])
-        .filter(match => 
-          (match.item_a as any)?.user_id === user.id || 
-          (match.item_b as any)?.user_id === user.id
-        )
-        .map(match => {
-          const itemA = match.item_a as any;
-          const itemB = match.item_b as any;
-          const isMyItemA = itemA?.user_id === user.id;
-          
-          return {
-            ...match,
-            item_a: { ...itemA, owner_display_name: itemA?.profiles?.display_name },
-            item_b: { ...itemB, owner_display_name: itemB?.profiles?.display_name },
-            my_item: isMyItemA ? itemA : itemB,
-            their_item: isMyItemA 
-              ? { ...itemB, owner_display_name: itemB?.profiles?.display_name }
-              : { ...itemA, owner_display_name: itemA?.profiles?.display_name },
-          } as MatchWithItems;
-        });
+      // Filter matches where user owns one of the items
+      const userMatches = (matches || []).filter(match => 
+        (match.item_a as any)?.user_id === user.id || 
+        (match.item_b as any)?.user_id === user.id
+      );
 
-      return userMatches;
+      if (userMatches.length === 0) return [];
+
+      // Get all unique user IDs from matches
+      const userIds = new Set<string>();
+      userMatches.forEach(match => {
+        if ((match.item_a as any)?.user_id) userIds.add((match.item_a as any).user_id);
+        if ((match.item_b as any)?.user_id) userIds.add((match.item_b as any).user_id);
+      });
+
+      // Fetch profiles for all users
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', Array.from(userIds));
+
+      const profileMap = new Map(
+        (profiles || []).map(p => [p.user_id, p])
+      );
+
+      // Transform matches with profile data
+      const transformedMatches = userMatches.map(match => {
+        const itemA = match.item_a as any;
+        const itemB = match.item_b as any;
+        const isMyItemA = itemA?.user_id === user.id;
+        
+        return {
+          ...match,
+          item_a: { 
+            ...itemA, 
+            owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown'
+          },
+          item_b: { 
+            ...itemB, 
+            owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown'
+          },
+          my_item: isMyItemA ? itemA : itemB,
+          their_item: isMyItemA 
+            ? { ...itemB, owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown' }
+            : { ...itemA, owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown' },
+        } as MatchWithItems;
+      });
+
+      return transformedMatches;
     },
     enabled: !!user,
   });
@@ -69,7 +89,7 @@ export function useMatches() {
 export function useMessages(matchId: string) {
   const queryClient = useQueryClient();
 
-const query = useQuery({
+  const query = useQuery({
     queryKey: ['messages', matchId],
     queryFn: async () => {
       const { data, error } = await supabase
