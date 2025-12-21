@@ -9,7 +9,7 @@ import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { Button } from '@/components/ui/button';
-import { X, Heart } from 'lucide-react';
+import { X, Heart, RotateCcw } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { Item } from '@/types/database';
 
@@ -97,8 +97,8 @@ export default function Index() {
           />
         </div>
 
-        {/* Main Swipe Area */}
-        <div className="flex-1 relative overflow-hidden">
+        {/* Main Swipe Area - Critical: needs explicit height */}
+        <div className="flex-1 relative min-h-[400px]">
           {noItems ? (
             <EmptyState
               title="Add your first item"
@@ -123,8 +123,8 @@ export default function Index() {
               onAction={handleRefresh}
             />
           ) : (
-            /* Card Stack - bigger card */
-            <div className="absolute inset-0 p-3">
+            /* Card Stack - centered and sized properly */
+            <div className="absolute inset-0 p-4">
               <div className="relative w-full h-full max-w-md mx-auto">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
@@ -140,17 +140,27 @@ export default function Index() {
           )}
         </div>
 
-        {/* Action Buttons - Just above navbar */}
-        {selectedItemId && !noItems && hasCards && (
-          <div className="py-3 flex justify-center items-center gap-8 shrink-0 bg-background border-t border-border/30">
+        {/* Action Buttons - Always visible when item selected */}
+        {selectedItemId && !noItems && (
+          <div className="p-4 pb-2 flex justify-center items-center gap-4 shrink-0 bg-background">
             <Button
               size="lg"
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-destructive/40 bg-background hover:bg-destructive hover:border-destructive hover:text-destructive-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('left')}
-              disabled={swipeMutation.isPending}
+              disabled={swipeMutation.isPending || !hasCards}
             >
               <X className="w-7 h-7" />
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+              onClick={handleRefresh}
+              disabled={isLoading}
+            >
+              <RotateCcw className="w-5 h-5" />
             </Button>
             
             <Button
@@ -158,7 +168,7 @@ export default function Index() {
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-success/40 bg-background hover:bg-success hover:border-success hover:text-success-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('right')}
-              disabled={swipeMutation.isPending}
+              disabled={swipeMutation.isPending || !hasCards}
             >
               <Heart className="w-7 h-7" />
             </Button>
