@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      item_ratings: {
+        Row: {
+          alpha: number
+          beta: number
+          created_at: string
+          dislikes_count: number
+          id: string
+          item_id: string
+          last_calculated_at: string
+          likes_count: number
+          rating: number
+          successful_exchanges: number
+          total_interactions: number
+          updated_at: string
+        }
+        Insert: {
+          alpha?: number
+          beta?: number
+          created_at?: string
+          dislikes_count?: number
+          id?: string
+          item_id: string
+          last_calculated_at?: string
+          likes_count?: number
+          rating?: number
+          successful_exchanges?: number
+          total_interactions?: number
+          updated_at?: string
+        }
+        Update: {
+          alpha?: number
+          beta?: number
+          created_at?: string
+          dislikes_count?: number
+          id?: string
+          item_id?: string
+          last_calculated_at?: string
+          likes_count?: number
+          rating?: number
+          successful_exchanges?: number
+          total_interactions?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_ratings_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: true
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       items: {
         Row: {
           category: Database["public"]["Enums"]["item_category"]
