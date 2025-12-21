@@ -298,14 +298,13 @@ serve(async (req) => {
     const swipedItemIds = swipeHistory.map(s => s.swiped_item_id);
     const likedItemIds = swipeHistory.filter(s => s.liked).map(s => s.swiped_item_id);
 
-    // Get all candidate items
+    // Get all candidate items - less strict filtering to show more items
+    // We'll score them by exchange compatibility instead of filtering strictly
     const { data: candidateItems, error: itemsError } = await supabaseClient
       .from("items")
       .select("*")
       .eq("is_active", true)
-      .neq("user_id", user.id)
-      .in("category", myItem.swap_preferences)
-      .contains("swap_preferences", [myItem.category]);
+      .neq("user_id", user.id);
 
     if (itemsError) {
       console.error("Error fetching items:", itemsError);
