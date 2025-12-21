@@ -2,3 +2,6 @@ project_id = "zzfungtlmdbqwkzrbbeu"
 
 [functions.recommend-items]
 verify_jwt = false
+
+[functions.setup-test-data]
+verify_jwt = false
