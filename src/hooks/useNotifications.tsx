@@ -9,7 +9,7 @@ export function useNotifications() {
   const { data: notifications, refetch } = useQuery({
     queryKey: ['notifications', user?.id],
     queryFn: async () => {
-      if (!user) return { hasNewMatches: false, hasNewMessages: false };
+      if (!user) return { hasNewMatches: false };
 
       // Get user's items
       const { data: myItems } = await supabase
@@ -20,7 +20,7 @@ export function useNotifications() {
       const myItemIds = myItems?.map(i => i.id) || [];
 
       if (myItemIds.length === 0) {
-        return { hasNewMatches: false, hasNewMessages: false };
+        return { hasNewMatches: false };
       }
 
       // Check for matches created in the last 24 hours that the user might not have seen
@@ -35,55 +35,19 @@ export function useNotifications() {
 
       const hasNewMatches = (recentMatches?.length || 0) > 0;
 
-      // Check for unread messages (messages from others in the last hour)
-      const oneHourAgo = new Date();
-      oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-
-      // Get matches for the user
-      const { data: matches } = await supabase
-        .from('matches')
-        .select('id')
-        .or(`item_a_id.in.(${myItemIds.join(',')}),item_b_id.in.(${myItemIds.join(',')})`);
-
-      const matchIds = matches?.map(m => m.id) || [];
-
-      let hasNewMessages = false;
-      if (matchIds.length > 0) {
-        const { data: recentMessages } = await supabase
-          .from('messages')
-          .select('id, sender_id')
-          .in('match_id', matchIds)
-          .neq('sender_id', user.id)
-          .gte('created_at', oneHourAgo.toISOString())
-          .limit(1);
-
-        hasNewMessages = (recentMessages?.length || 0) > 0;
-      }
-
-      return { hasNewMatches, hasNewMessages };
+      return { hasNewMatches };
     },
     enabled: !!user,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
     staleTime: 10000,
   });
 
-  // Subscribe to real-time updates for new messages
+  // Subscribe to real-time updates for new matches
   useEffect(() => {
     if (!user) return;
 
     const channel = supabase
       .channel('notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-        },
-        () => {
-          refetch();
-        }
-      )
       .on(
         'postgres_changes',
         {
@@ -104,6 +68,5 @@ export function useNotifications() {
 
   return {
     hasNewMatches: notifications?.hasNewMatches || false,
-    hasNewMessages: notifications?.hasNewMessages || false,
   };
 }
