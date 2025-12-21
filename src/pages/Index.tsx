@@ -2,7 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
-import { useSwipeableItems, useSwipe } from '@/hooks/useSwipe';
+import { useRecommendedItems } from '@/hooks/useRecommendations';
+import { useSwipe } from '@/hooks/useSwipe';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
@@ -28,7 +29,7 @@ export default function Index() {
     }
   }, [myItems, selectedItemId]);
 
-  const { data: swipeableItems, isLoading: swipeLoading, refetch } = useSwipeableItems(selectedItemId);
+  const { data: swipeableItems, isLoading: swipeLoading, refetch } = useRecommendedItems(selectedItemId);
   const swipeMutation = useSwipe();
 
   const currentItem = swipeableItems?.[currentIndex];

@@ -20,6 +20,8 @@ export interface Profile {
   avatar_url: string | null;
   bio: string | null;
   location: string | null;
+  latitude: number | null;
+  longitude: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -36,6 +38,18 @@ export interface Item {
   value_min: number;
   value_max: number | null;
   is_active: boolean;
+  latitude: number | null;
+  longitude: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserPreferences {
+  id: string;
+  user_id: string;
+  category_weights: Record<string, number>;
+  condition_weights: Record<string, number>;
+  value_range_preference: { min: number; max: number };
   created_at: string;
   updated_at: string;
 }
