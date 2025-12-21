@@ -96,8 +96,8 @@ export default function Index() {
           />
         </div>
 
-        {/* Main Swipe Area */}
-        <div className="flex-1 relative overflow-hidden min-h-0">
+        {/* Main Swipe Area - Critical: needs explicit height */}
+        <div className="flex-1 relative min-h-[400px]">
           {noItems ? (
             <EmptyState
               title="Add your first item"
@@ -122,24 +122,26 @@ export default function Index() {
               onAction={handleRefresh}
             />
           ) : (
-            /* Card Stack */
-            <div className="absolute inset-4 md:inset-6 lg:inset-8">
-              {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
-                <SwipeCard
-                  key={item.id}
-                  item={item}
-                  isTop={idx === arr.length - 1}
-                  onSwipeComplete={handleSwipeComplete}
-                  swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
-                />
-              ))}
+            /* Card Stack - centered and sized properly */
+            <div className="absolute inset-0 p-4">
+              <div className="relative w-full h-full max-w-md mx-auto">
+                {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
+                  <SwipeCard
+                    key={item.id}
+                    item={item}
+                    isTop={idx === arr.length - 1}
+                    onSwipeComplete={handleSwipeComplete}
+                    swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
 
         {/* Action Buttons - Always visible when item selected */}
         {selectedItemId && !noItems && (
-          <div className="p-4 pb-6 flex justify-center items-center gap-4 shrink-0 bg-background/80 backdrop-blur-sm">
+          <div className="p-4 pb-2 flex justify-center items-center gap-4 shrink-0 bg-background">
             <Button
               size="lg"
               variant="outline"
