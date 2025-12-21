@@ -10,6 +10,8 @@ interface SwipeCardProps {
     owner_display_name: string; 
     owner_avatar_url: string | null;
     recommendation_score?: number;
+    community_rating?: number;
+    total_interactions?: number;
   };
   isTop: boolean;
   onSwipeComplete: (direction: 'left' | 'right') => void;
@@ -18,15 +20,21 @@ interface SwipeCardProps {
 
 const SWIPE_THRESHOLD = 100;
 
-// Convert recommendation score (0-1) to 5-star rating
-function ScoreToStars({ score }: { score?: number }) {
-  if (score === undefined) return null;
+// Convert rating (1-5) to star display
+function RatingStars({ rating, totalInteractions }: { rating?: number; totalInteractions?: number }) {
+  // Default to 3 stars for new items (cold start)
+  const displayRating = rating ?? 3;
   
-  // Score is typically 0-1, convert to 0-5 stars
-  const stars = Math.min(5, Math.max(0, Math.round(score * 5 * 10) / 10));
-  const fullStars = Math.floor(stars);
-  const hasHalfStar = stars - fullStars >= 0.5;
+  // Round to nearest 0.5
+  const roundedRating = Math.round(displayRating * 2) / 2;
+  const clampedRating = Math.min(5, Math.max(1, roundedRating));
+  
+  const fullStars = Math.floor(clampedRating);
+  const hasHalfStar = clampedRating - fullStars >= 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  // Confidence indicator based on interaction volume
+  const isNewItem = (totalInteractions ?? 0) < 5;
 
   return (
     <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
@@ -49,9 +57,9 @@ function ScoreToStars({ score }: { score?: number }) {
           <Star key={`empty-${i}`} className="w-4 h-4 text-muted-foreground/30" />
         ))}
       </div>
-      <span className="text-xs font-semibold text-foreground/80 ml-1">
-        {(score * 100).toFixed(0)}%
-      </span>
+      {isNewItem && (
+        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">New</span>
+      )}
     </div>
   );
 }
@@ -149,9 +157,9 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
             </div>
           </motion.div>
 
-          {/* Match Score - Top Left */}
+          {/* Community Rating - Top Left */}
           <div className="absolute top-4 left-4">
-            <ScoreToStars score={item.recommendation_score} />
+            <RatingStars rating={item.community_rating} totalInteractions={item.total_interactions} />
           </div>
 
           {/* Condition Badge - Top Right */}

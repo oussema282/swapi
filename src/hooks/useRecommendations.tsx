@@ -7,6 +7,8 @@ interface SwipeableItem extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
   recommendation_score?: number;
+  community_rating?: number;
+  total_interactions?: number;
 }
 
 interface RecommendationResult {
@@ -71,17 +73,29 @@ export function useRecommendedItems(myItemId: string | null) {
           .select('user_id, display_name, avatar_url')
           .in('user_id', userIds);
 
+        // Get community ratings for these items
+        const { data: ratings } = await supabase
+          .from('item_ratings')
+          .select('item_id, rating, total_interactions')
+          .in('item_id', itemIds);
+
         const profileMap = new Map(
           (profiles || []).map(p => [p.user_id, p])
         );
 
-        // Combine items with profile data and scores, maintaining rank order
+        const ratingsMap = new Map(
+          (ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }])
+        );
+
+        // Combine items with profile data, scores, and community ratings
         const swipeableItems: SwipeableItem[] = (items || [])
           .map(item => ({
             ...item,
             owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
             owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
             recommendation_score: scoreMap.get(item.id),
+            community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+            total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
           }))
           .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
 
@@ -142,13 +156,26 @@ async function fallbackFetch(userId: string, myItemId: string): Promise<Swipeabl
     .select('user_id, display_name, avatar_url')
     .in('user_id', userIds);
 
+  // Get community ratings
+  const itemIds = filteredItems.map(item => item.id);
+  const { data: ratings } = await supabase
+    .from('item_ratings')
+    .select('item_id, rating, total_interactions')
+    .in('item_id', itemIds);
+
   const profileMap = new Map(
     (profiles || []).map(p => [p.user_id, p])
+  );
+
+  const ratingsMap = new Map(
+    (ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }])
   );
 
   return filteredItems.map(item => ({
     ...item,
     owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
     owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+    community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+    total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
   }));
 }
