@@ -22,6 +22,8 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean
+          latitude: number | null
+          longitude: number | null
           photos: string[] | null
           swap_preferences: Database["public"]["Enums"]["item_category"][]
           title: string
@@ -37,6 +39,8 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          latitude?: number | null
+          longitude?: number | null
           photos?: string[] | null
           swap_preferences?: Database["public"]["Enums"]["item_category"][]
           title: string
@@ -52,6 +56,8 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          latitude?: number | null
+          longitude?: number | null
           photos?: string[] | null
           swap_preferences?: Database["public"]["Enums"]["item_category"][]
           title?: string
@@ -143,7 +149,9 @@ export type Database = {
           created_at: string
           display_name: string
           id: string
+          latitude: number | null
           location: string | null
+          longitude: number | null
           updated_at: string
           user_id: string
         }
@@ -153,7 +161,9 @@ export type Database = {
           created_at?: string
           display_name: string
           id?: string
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           updated_at?: string
           user_id: string
         }
@@ -163,7 +173,9 @@ export type Database = {
           created_at?: string
           display_name?: string
           id?: string
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -207,6 +219,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_preferences: {
+        Row: {
+          category_weights: Json
+          condition_weights: Json
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          value_range_preference: Json
+        }
+        Insert: {
+          category_weights?: Json
+          condition_weights?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          value_range_preference?: Json
+        }
+        Update: {
+          category_weights?: Json
+          condition_weights?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          value_range_preference?: Json
+        }
+        Relationships: []
       }
     }
     Views: {

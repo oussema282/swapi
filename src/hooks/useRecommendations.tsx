@@ -1,0 +1,154 @@
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Item, ItemCategory } from '@/types/database';
+import { useAuth } from './useAuth';
+
+interface SwipeableItem extends Item {
+  owner_display_name: string;
+  owner_avatar_url: string | null;
+  recommendation_score?: number;
+}
+
+interface RecommendationResult {
+  id: string;
+  score: number;
+}
+
+export function useRecommendedItems(myItemId: string | null) {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['recommended-items', myItemId, user?.id],
+    queryFn: async (): Promise<SwipeableItem[]> => {
+      if (!user || !myItemId) return [];
+
+      // Call the recommendation edge function
+      const { data: session } = await supabase.auth.getSession();
+      const token = session?.session?.access_token;
+
+      if (!token) return [];
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/recommend-items`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ myItemId, limit: 50 }),
+          }
+        );
+
+        if (!response.ok) {
+          console.error('Recommendation API error:', response.status);
+          // Fall back to basic query
+          return fallbackFetch(user.id, myItemId);
+        }
+
+        const { rankedItems }: { rankedItems: RecommendationResult[] } = await response.json();
+
+        if (!rankedItems || rankedItems.length === 0) {
+          return [];
+        }
+
+        // Fetch full item details for ranked items
+        const itemIds = rankedItems.map(r => r.id);
+        const scoreMap = new Map(rankedItems.map(r => [r.id, r.score]));
+
+        const { data: items, error } = await supabase
+          .from('items')
+          .select('*')
+          .in('id', itemIds);
+
+        if (error) throw error;
+
+        // Get profiles for these items
+        const userIds = [...new Set((items || []).map(item => item.user_id))];
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, display_name, avatar_url')
+          .in('user_id', userIds);
+
+        const profileMap = new Map(
+          (profiles || []).map(p => [p.user_id, p])
+        );
+
+        // Combine items with profile data and scores, maintaining rank order
+        const swipeableItems: SwipeableItem[] = (items || [])
+          .map(item => ({
+            ...item,
+            owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+            owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+            recommendation_score: scoreMap.get(item.id),
+          }))
+          .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
+
+        return swipeableItems;
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
+        // Fall back to basic query
+        return fallbackFetch(user.id, myItemId);
+      }
+    },
+    enabled: !!user && !!myItemId,
+    staleTime: 30000, // Cache for 30 seconds
+  });
+}
+
+// Fallback function if recommendation API fails
+async function fallbackFetch(userId: string, myItemId: string): Promise<SwipeableItem[]> {
+  // Get my item
+  const { data: myItem, error: myItemError } = await supabase
+    .from('items')
+    .select('*')
+    .eq('id', myItemId)
+    .single();
+
+  if (myItemError || !myItem) return [];
+
+  const mySwapPreferences = myItem.swap_preferences as string[];
+  const myCategory = myItem.category as string;
+
+  // Get items I've already swiped on
+  const { data: existingSwipes } = await supabase
+    .from('swipes')
+    .select('swiped_item_id')
+    .eq('swiper_item_id', myItemId);
+
+  const swipedItemIds = existingSwipes?.map(s => s.swiped_item_id) || [];
+
+  // Get compatible items
+  const { data: items, error } = await supabase
+    .from('items')
+    .select('*')
+    .neq('user_id', userId)
+    .eq('is_active', true)
+    .in('category', mySwapPreferences as ItemCategory[])
+    .contains('swap_preferences', [myCategory as ItemCategory]);
+
+  if (error) throw error;
+
+  // Filter out already swiped items
+  const filteredItems = (items || []).filter(item => !swipedItemIds.includes(item.id));
+
+  if (filteredItems.length === 0) return [];
+
+  // Get profiles
+  const userIds = [...new Set(filteredItems.map(item => item.user_id))];
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('user_id, display_name, avatar_url')
+    .in('user_id', userIds);
+
+  const profileMap = new Map(
+    (profiles || []).map(p => [p.user_id, p])
+  );
+
+  return filteredItems.map(item => ({
+    ...item,
+    owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+    owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+  }));
+}
