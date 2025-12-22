@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems } from '@/hooks/useRecommendations';
 import { useSwipe } from '@/hooks/useSwipe';
+import { useSwipeState } from '@/hooks/useSwipeState';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
@@ -11,18 +12,15 @@ import { MatchModal } from '@/components/discover/MatchModal';
 import { Button } from '@/components/ui/button';
 import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
-import { Item } from '@/types/database';
 
 export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
-  const [matchedItem, setMatchedItem] = useState<Item | null>(null);
-  const [showMatch, setShowMatch] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [swipeHistory, setSwipeHistory] = useState<string[]>([]);
+  
+  // Use the new swipe state machine
+  const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();
+  const { currentIndex, swipeDirection, isAnimating, showMatch, matchedItem } = swipeState;
 
   // Auto-select first item when items load
   useEffect(() => {
@@ -31,49 +29,56 @@ export default function Index() {
     }
   }, [myItems, selectedItemId]);
 
-  const { data: swipeableItems, isLoading: swipeLoading, refetch } = useRecommendedItems(selectedItemId);
+  const { data: swipeableItems, isLoading: swipeLoading } = useRecommendedItems(selectedItemId);
   const swipeMutation = useSwipe();
 
   const currentItem = swipeableItems?.[currentIndex];
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
-    if (!selectedItemId || !currentItem || isAnimating) return;
+    if (!selectedItemId || !currentItem || !canSwipe) return;
 
-    setIsAnimating(true);
-    setSwipeDirection(direction);
+    // Start swipe animation - this locks the state
+    actions.startSwipe(direction);
     
+    // Wait for animation, then complete
     setTimeout(async () => {
-      const result = await swipeMutation.mutateAsync({
-        swiperItemId: selectedItemId,
-        swipedItemId: currentItem.id,
-        liked: direction === 'right',
-      });
+      try {
+        const result = await swipeMutation.mutateAsync({
+          swiperItemId: selectedItemId,
+          swipedItemId: currentItem.id,
+          liked: direction === 'right',
+        });
 
-      if (result.match) {
-        setMatchedItem(currentItem);
-        setShowMatch(true);
+        if (result.match) {
+          actions.setMatch(currentItem);
+        }
+
+        // Complete the swipe - this unlocks and advances
+        actions.completeSwipe(currentItem.id);
+      } catch (error) {
+        // On error, unlock the state so user can try again
+        actions.unlock();
+        console.error('Swipe failed:', error);
       }
-
-      // Track swipe history for undo
-      setSwipeHistory(prev => [...prev, currentItem.id]);
-      setCurrentIndex(prev => prev + 1);
-      setSwipeDirection(null);
-      setIsAnimating(false);
     }, 300);
-  }, [selectedItemId, currentItem, swipeMutation, isAnimating]);
+  }, [selectedItemId, currentItem, swipeMutation, canSwipe, actions]);
 
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
-    if (!isAnimating) {
+    if (canSwipe) {
       handleSwipe(direction);
     }
-  }, [handleSwipe, isAnimating]);
+  }, [handleSwipe, canSwipe]);
 
   const handleGoBack = useCallback(() => {
-    if (currentIndex > 0 && !isAnimating && swipeHistory.length > 0) {
-      setCurrentIndex(prev => prev - 1);
-      setSwipeHistory(prev => prev.slice(0, -1));
+    if (canGoBack) {
+      actions.goBack();
     }
-  }, [currentIndex, isAnimating, swipeHistory]);
+  }, [canGoBack, actions]);
+
+  const handleSelectItem = useCallback((id: string) => {
+    setSelectedItemId(id);
+    actions.reset();
+  }, [actions]);
 
   if (authLoading) {
     return (
@@ -100,11 +105,7 @@ export default function Index() {
           <ItemSelector
             items={myItems || []}
             selectedId={selectedItemId}
-            onSelect={(id) => {
-              setSelectedItemId(id);
-              setCurrentIndex(0);
-              setSwipeHistory([]);
-            }}
+            onSelect={handleSelectItem}
           />
         </div>
 
@@ -157,7 +158,7 @@ export default function Index() {
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-destructive/40 bg-background hover:bg-destructive hover:border-destructive hover:text-destructive-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('left')}
-              disabled={swipeMutation.isPending || !hasCards}
+              disabled={swipeMutation.isPending || !hasCards || isAnimating}
             >
               <X className="w-7 h-7" />
             </Button>
@@ -167,7 +168,7 @@ export default function Index() {
               variant="outline"
               className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
               onClick={handleGoBack}
-              disabled={currentIndex === 0 || isAnimating || swipeHistory.length === 0}
+              disabled={!canGoBack}
             >
               <Undo2 className="w-5 h-5" />
             </Button>
@@ -177,7 +178,7 @@ export default function Index() {
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-success/40 bg-background hover:bg-success hover:border-success hover:text-success-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('right')}
-              disabled={swipeMutation.isPending || !hasCards}
+              disabled={swipeMutation.isPending || !hasCards || isAnimating}
             >
               <Heart className="w-7 h-7" />
             </Button>
@@ -188,7 +189,7 @@ export default function Index() {
       {/* Match Modal */}
       <MatchModal
         open={showMatch}
-        onClose={() => setShowMatch(false)}
+        onClose={actions.clearMatch}
         myItem={myItems?.find(i => i.id === selectedItemId) || null}
         theirItem={matchedItem}
       />
