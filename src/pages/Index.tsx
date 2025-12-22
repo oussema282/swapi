@@ -99,7 +99,7 @@ export default function Index() {
         </div>
 
         {/* Main Swipe Area */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative min-h-[400px]">
           {noItems ? (
             <EmptyState
               title="Add your first item"
