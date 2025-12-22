@@ -47,6 +47,10 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
+        price: {
+          DEFAULT: "hsl(var(--price))",
+          foreground: "hsl(var(--price-foreground))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
