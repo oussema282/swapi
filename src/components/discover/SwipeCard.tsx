@@ -121,14 +121,16 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
       <div className="absolute inset-0 bg-card">
         {/* Main Photo */}
         <div className="relative h-[70%] bg-muted overflow-hidden">
-          {hasPhotos ? (
-            <img
-              src={item.photos[0]}
-              alt={item.title}
-              className="w-full h-full object-cover"
-              draggable={false}
-            />
-          ) : (
+            {hasPhotos ? (
+              <img
+                src={item.photos[0]}
+                alt={item.title}
+                className="w-full h-full object-cover"
+                draggable={false}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
               <Package className="w-24 h-24 text-muted-foreground/20" />
             </div>
@@ -172,41 +174,49 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
 
         {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 h-[35%] p-5 bg-card">
-          {/* Title & Category */}
-          <div className="flex items-start justify-between gap-3 mb-2">
-            <h3 className="text-2xl font-display font-bold text-foreground leading-tight line-clamp-1">
-              {item.title}
-            </h3>
-          </div>
+          <div className="h-full flex flex-col">
+            {/* Title */}
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <h3 className="text-2xl font-display font-bold text-foreground leading-tight line-clamp-1">
+                {item.title}
+              </h3>
+            </div>
 
-          {/* Description - fixed height */}
-          <p className="text-muted-foreground text-sm line-clamp-2 h-10 mb-2">
-            {item.description || 'No description provided'}
-          </p>
+            {/* Description (fixed height so footer doesn't jump) */}
+            <p className="text-muted-foreground text-sm line-clamp-2 h-10 mb-2">
+              {item.description || 'No description provided'}
+            </p>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-2">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-              {CATEGORY_LABELS[item.category]}
-            </Badge>
-            {item.value_min && item.value_min > 0 && (
-              <Badge variant="outline" className="bg-emerald-500 text-black border-emerald-600 font-semibold">
-                ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
+            {/* Tags (fixed height so they never collide with footer) */}
+            <div className="flex flex-wrap gap-2 h-8 overflow-hidden">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                {CATEGORY_LABELS[item.category]}
               </Badge>
-            )}
-          </div>
-
-          {/* Owner - fixed at bottom */}
-          <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 pt-2 border-t border-border/50">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md flex-shrink-0">
-              {item.owner_avatar_url ? (
-                <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
-              ) : (
-                item.owner_display_name.charAt(0).toUpperCase()
+              {item.value_min && item.value_min > 0 && (
+                <Badge variant="outline" className="bg-price text-price-foreground border-price/40 font-semibold">
+                  ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
+                </Badge>
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-foreground truncate">{item.owner_display_name}</p>
+
+            {/* Owner */}
+            <div className="mt-auto flex items-center gap-3 pt-2 border-t border-border/50">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md flex-shrink-0">
+                {item.owner_avatar_url ? (
+                  <img
+                    src={item.owner_avatar_url}
+                    alt={`${item.owner_display_name} profile picture`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  item.owner_display_name.charAt(0).toUpperCase()
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground truncate">{item.owner_display_name}</p>
+              </div>
             </div>
           </div>
         </div>

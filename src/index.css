@@ -30,6 +30,9 @@
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
+    --price: 142 76% 45%;
+    --price-foreground: 0 0% 0%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
@@ -82,6 +85,9 @@
 
     --success: 142 76% 42%;
     --success-foreground: 0 0% 100%;
+
+    --price: 142 76% 52%;
+    --price-foreground: 0 0% 0%;
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
