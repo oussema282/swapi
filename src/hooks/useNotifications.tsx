@@ -23,17 +23,14 @@ export function useNotifications() {
         return { hasNewMatches: false };
       }
 
-      // Check for matches created in the last 24 hours that the user might not have seen
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-
-      const { data: recentMatches } = await supabase
+      // Check for active (non-completed) matches
+      const { data: activeMatches } = await supabase
         .from('matches')
-        .select('id, created_at')
+        .select('id')
         .or(`item_a_id.in.(${myItemIds.join(',')}),item_b_id.in.(${myItemIds.join(',')})`)
-        .gte('created_at', yesterday.toISOString());
+        .eq('is_completed', false);
 
-      const hasNewMatches = (recentMatches?.length || 0) > 0;
+      const hasNewMatches = (activeMatches?.length || 0) > 0;
 
       return { hasNewMatches };
     },
