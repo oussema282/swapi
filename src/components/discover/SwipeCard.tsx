@@ -120,7 +120,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
       {/* Card Background */}
       <div className="absolute inset-0 bg-card">
         {/* Main Photo */}
-        <div className="relative h-[60%] bg-muted overflow-hidden">
+        <div className="relative h-[70%] bg-muted overflow-hidden">
           {hasPhotos ? (
             <img
               src={item.photos[0]}
@@ -171,11 +171,35 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
         </div>
 
         {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 h-[40%] p-4 bg-card">
+        <div className="absolute bottom-0 left-0 right-0 h-[35%] p-5 bg-card">
           <div className="h-full flex flex-col">
-            {/* Owner - Top of content */}
-            <div className="flex items-center gap-3 pb-2 mb-2 border-b border-border/50">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md shrink-0">
+            {/* Title & Category */}
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <h3 className="text-2xl font-display font-bold text-foreground leading-tight line-clamp-1">
+                {item.title}
+              </h3>
+            </div>
+
+            {/* Description */}
+            <p className="text-muted-foreground text-sm line-clamp-2 mb-3 flex-shrink-0">
+              {item.description || 'No description provided'}
+            </p>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                {CATEGORY_LABELS[item.category]}
+              </Badge>
+              {item.value_min && item.value_min > 0 && (
+                <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/30">
+                  ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
+                </Badge>
+              )}
+            </div>
+
+            {/* Owner */}
+            <div className="mt-auto flex items-center gap-3 pt-2 border-t border-border/50">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md">
                 {item.owner_avatar_url ? (
                   <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
                 ) : (
@@ -185,28 +209,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-foreground truncate">{item.owner_display_name}</p>
               </div>
-            </div>
-
-            {/* Title */}
-            <h3 className="text-xl font-display font-bold text-foreground leading-tight line-clamp-1 mb-1">
-              {item.title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-muted-foreground text-sm line-clamp-2 mb-2 flex-shrink-0">
-              {item.description || 'No description provided'}
-            </p>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mt-auto">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-                {CATEGORY_LABELS[item.category]}
-              </Badge>
-              {item.value_min && item.value_min > 0 && (
-                <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/30">
-                  ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
-                </Badge>
-              )}
             </div>
           </div>
         </div>
