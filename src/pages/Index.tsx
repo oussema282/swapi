@@ -9,7 +9,7 @@ import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { Button } from '@/components/ui/button';
-import { X, Heart, RotateCcw } from 'lucide-react';
+import { X, Heart } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { Item } from '@/types/database';
 
@@ -60,10 +60,6 @@ export default function Index() {
     handleSwipe(direction);
   }, [handleSwipe]);
 
-  const handleRefresh = useCallback(() => {
-    setCurrentIndex(0);
-    refetch();
-  }, [refetch]);
 
   if (authLoading) {
     return (
@@ -97,8 +93,8 @@ export default function Index() {
           />
         </div>
 
-        {/* Main Swipe Area - Critical: needs explicit height */}
-        <div className="flex-1 relative min-h-[400px]">
+        {/* Main Swipe Area */}
+        <div className="flex-1 relative">
           {noItems ? (
             <EmptyState
               title="Add your first item"
@@ -119,8 +115,6 @@ export default function Index() {
             <EmptyState
               title="No more items"
               description="You've seen all compatible items for now. Try a different item or check back later!"
-              actionLabel="Refresh"
-              onAction={handleRefresh}
             />
           ) : (
             /* Card Stack - centered and sized properly */
@@ -140,9 +134,9 @@ export default function Index() {
           )}
         </div>
 
-        {/* Action Buttons - Always visible when item selected */}
+        {/* Action Buttons - Just above navbar */}
         {selectedItemId && !noItems && (
-          <div className="p-4 pb-2 flex justify-center items-center gap-4 shrink-0 bg-background">
+          <div className="py-3 flex justify-center items-center gap-8 shrink-0 bg-background">
             <Button
               size="lg"
               variant="outline"
@@ -151,16 +145,6 @@ export default function Index() {
               disabled={swipeMutation.isPending || !hasCards}
             >
               <X className="w-7 h-7" />
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
-              onClick={handleRefresh}
-              disabled={isLoading}
-            >
-              <RotateCcw className="w-5 h-5" />
             </Button>
             
             <Button
