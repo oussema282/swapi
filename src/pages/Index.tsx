@@ -21,6 +21,8 @@ export default function Index() {
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [matchedItem, setMatchedItem] = useState<Item | null>(null);
   const [showMatch, setShowMatch] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [swipeHistory, setSwipeHistory] = useState<string[]>([]);
 
   // Auto-select first item when items load
   useEffect(() => {
@@ -35,8 +37,9 @@ export default function Index() {
   const currentItem = swipeableItems?.[currentIndex];
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
-    if (!selectedItemId || !currentItem) return;
+    if (!selectedItemId || !currentItem || isAnimating) return;
 
+    setIsAnimating(true);
     setSwipeDirection(direction);
     
     setTimeout(async () => {
@@ -51,20 +54,26 @@ export default function Index() {
         setShowMatch(true);
       }
 
+      // Track swipe history for undo
+      setSwipeHistory(prev => [...prev, currentItem.id]);
       setCurrentIndex(prev => prev + 1);
       setSwipeDirection(null);
+      setIsAnimating(false);
     }, 300);
-  }, [selectedItemId, currentItem, swipeMutation]);
+  }, [selectedItemId, currentItem, swipeMutation, isAnimating]);
 
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
-    handleSwipe(direction);
-  }, [handleSwipe]);
+    if (!isAnimating) {
+      handleSwipe(direction);
+    }
+  }, [handleSwipe, isAnimating]);
 
   const handleGoBack = useCallback(() => {
-    if (currentIndex > 0) {
+    if (currentIndex > 0 && !isAnimating && swipeHistory.length > 0) {
       setCurrentIndex(prev => prev - 1);
+      setSwipeHistory(prev => prev.slice(0, -1));
     }
-  }, [currentIndex]);
+  }, [currentIndex, isAnimating, swipeHistory]);
 
   if (authLoading) {
     return (
@@ -94,6 +103,7 @@ export default function Index() {
             onSelect={(id) => {
               setSelectedItemId(id);
               setCurrentIndex(0);
+              setSwipeHistory([]);
             }}
           />
         </div>
@@ -157,7 +167,7 @@ export default function Index() {
               variant="outline"
               className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
               onClick={handleGoBack}
-              disabled={currentIndex === 0}
+              disabled={currentIndex === 0 || isAnimating || swipeHistory.length === 0}
             >
               <Undo2 className="w-5 h-5" />
             </Button>

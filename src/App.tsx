@@ -13,6 +13,7 @@ import Matches from "./pages/Matches";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/items" element={<Items />} />
             <Route path="/items/new" element={<NewItem />} />
             <Route path="/items/:id/edit" element={<EditItem />} />
