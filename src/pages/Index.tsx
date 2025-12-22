@@ -9,7 +9,7 @@ import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { Button } from '@/components/ui/button';
-import { X, Heart } from 'lucide-react';
+import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { Item } from '@/types/database';
 
@@ -60,6 +60,11 @@ export default function Index() {
     handleSwipe(direction);
   }, [handleSwipe]);
 
+  const handleGoBack = useCallback(() => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  }, [currentIndex]);
 
   if (authLoading) {
     return (
@@ -136,7 +141,7 @@ export default function Index() {
 
         {/* Action Buttons - Just above navbar */}
         {selectedItemId && !noItems && (
-          <div className="py-3 flex justify-center items-center gap-8 shrink-0 bg-background">
+          <div className="py-3 flex justify-center items-center gap-4 shrink-0 bg-background">
             <Button
               size="lg"
               variant="outline"
@@ -145,6 +150,16 @@ export default function Index() {
               disabled={swipeMutation.isPending || !hasCards}
             >
               <X className="w-7 h-7" />
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+              onClick={handleGoBack}
+              disabled={currentIndex === 0}
+            >
+              <Undo2 className="w-5 h-5" />
             </Button>
             
             <Button
