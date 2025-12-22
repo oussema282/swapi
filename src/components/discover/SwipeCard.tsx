@@ -117,10 +117,10 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 1.02 }}
     >
-      {/* Card Background */}
-      <div className="absolute inset-0 bg-card">
-        {/* Main Photo */}
-        <div className="relative h-[70%] bg-muted overflow-hidden">
+      {/* Card Background - Use flex column to prevent overlap */}
+      <div className="absolute inset-0 bg-card flex flex-col">
+        {/* Main Photo - flex-shrink-0 to maintain size */}
+        <div className="relative flex-1 min-h-0 bg-muted overflow-hidden">
             {hasPhotos ? (
               <img
                 src={item.photos[0]}
@@ -172,52 +172,46 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
           </div>
         </div>
 
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 h-[35%] p-5 bg-card">
-          <div className="h-full flex flex-col">
-            {/* Title */}
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <h3 className="text-2xl font-display font-bold text-foreground leading-tight line-clamp-1">
-                {item.title}
-              </h3>
-            </div>
+        {/* Content - Fixed height, no overlap */}
+        <div className="flex-shrink-0 p-4 bg-card border-t border-border/30">
+          {/* Title */}
+          <h3 className="text-xl font-display font-bold text-foreground leading-tight line-clamp-1 mb-1">
+            {item.title}
+          </h3>
 
-            {/* Description (fixed height so footer doesn't jump) */}
-            <p className="text-muted-foreground text-sm line-clamp-2 h-10 mb-2">
-              {item.description || 'No description provided'}
-            </p>
+          {/* Description */}
+          <p className="text-muted-foreground text-sm line-clamp-1 mb-2">
+            {item.description || 'No description provided'}
+          </p>
 
-            {/* Tags (fixed height so they never collide with footer) */}
-            <div className="flex flex-wrap gap-2 h-8 overflow-hidden">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-                {CATEGORY_LABELS[item.category]}
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-3">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
+              {CATEGORY_LABELS[item.category]}
+            </Badge>
+            {item.value_min && item.value_min > 0 && (
+              <Badge variant="outline" className="bg-price text-price-foreground border-price/40 font-semibold text-xs">
+                ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
               </Badge>
-              {item.value_min && item.value_min > 0 && (
-                <Badge variant="outline" className="bg-price text-price-foreground border-price/40 font-semibold">
-                  ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
-                </Badge>
+            )}
+          </div>
+
+          {/* Owner - Always at bottom, never overlapped */}
+          <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md flex-shrink-0">
+              {item.owner_avatar_url ? (
+                <img
+                  src={item.owner_avatar_url}
+                  alt={`${item.owner_display_name} profile picture`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                item.owner_display_name.charAt(0).toUpperCase()
               )}
             </div>
-
-            {/* Owner */}
-            <div className="mt-auto flex items-center gap-3 pt-2 border-t border-border/50">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md flex-shrink-0">
-                {item.owner_avatar_url ? (
-                  <img
-                    src={item.owner_avatar_url}
-                    alt={`${item.owner_display_name} profile picture`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  item.owner_display_name.charAt(0).toUpperCase()
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground truncate">{item.owner_display_name}</p>
-              </div>
-            </div>
+            <p className="font-medium text-foreground text-sm truncate">{item.owner_display_name}</p>
           </div>
         </div>
       </div>
