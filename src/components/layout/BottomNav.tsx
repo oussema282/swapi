@@ -26,86 +26,86 @@ export function BottomNav() {
   const rightItems = sideNavItems.slice(2);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border">
-      <div className="flex items-end justify-around h-20 max-w-lg mx-auto pb-safe relative">
+    <nav className="fixed bottom-0 left-0 right-0 z-50">
+      {/* Background bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-lg border-t border-border" />
+      
+      {/* Navigation content */}
+      <div className="relative flex items-end justify-between h-20 max-w-lg mx-auto px-2 pb-safe">
         {/* Left side items */}
-        {leftItems.map(({ icon: Icon, label, path, notificationKey }) => {
-          const isActive = location.pathname === path;
-          const hasNotification = getNotification(notificationKey);
-          
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={cn(
-                'flex flex-col items-center justify-center flex-1 h-full transition-colors relative pb-1',
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              <div className="relative">
-                <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
-                {hasNotification && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+        <div className="flex flex-1 justify-around pb-1">
+          {leftItems.map(({ icon: Icon, label, path, notificationKey }) => {
+            const isActive = location.pathname === path;
+            const hasNotification = getNotification(notificationKey);
+            
+            return (
+              <Link
+                key={path}
+                to={path}
+                className={cn(
+                  'flex flex-col items-center justify-center py-2 px-4 transition-colors relative',
+                  isActive
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
-              </div>
-              <span className="text-[10px] mt-1 font-medium">{label}</span>
-            </Link>
-          );
-        })}
+              >
+                <div className="relative">
+                  <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
+                  {hasNotification && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                  )}
+                </div>
+                <span className="text-[10px] mt-1 font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </div>
 
-        {/* Center Discover Button */}
+        {/* Center Discover Button - Floating above navbar */}
         <Link
           to="/"
-          className="relative flex items-center justify-center -mt-6"
+          className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center"
         >
           <div
             className={cn(
-              'w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-200',
+              'w-[72px] h-[72px] rounded-full flex items-center justify-center shadow-xl border-4 border-background transition-all duration-200',
               isDiscoverActive
-                ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground scale-110'
+                ? 'bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground scale-105'
                 : 'bg-gradient-to-br from-primary/90 to-primary/70 text-primary-foreground hover:scale-105'
             )}
           >
-            <Compass className="w-7 h-7" />
+            <Compass className="w-8 h-8" />
           </div>
-          <span
-            className={cn(
-              'absolute -bottom-5 text-[10px] font-semibold',
-              isDiscoverActive ? 'text-primary' : 'text-muted-foreground'
-            )}
-          >
-            Discover
-          </span>
         </Link>
 
         {/* Right side items */}
-        {rightItems.map(({ icon: Icon, label, path, notificationKey }) => {
-          const isActive = location.pathname === path;
-          const hasNotification = getNotification(notificationKey);
-          
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={cn(
-                'flex flex-col items-center justify-center flex-1 h-full transition-colors relative pb-1',
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              <div className="relative">
-                <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
-                {hasNotification && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+        <div className="flex flex-1 justify-around pb-1">
+          {rightItems.map(({ icon: Icon, label, path, notificationKey }) => {
+            const isActive = location.pathname === path;
+            const hasNotification = getNotification(notificationKey);
+            
+            return (
+              <Link
+                key={path}
+                to={path}
+                className={cn(
+                  'flex flex-col items-center justify-center py-2 px-4 transition-colors relative',
+                  isActive
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
-              </div>
-              <span className="text-[10px] mt-1 font-medium">{label}</span>
-            </Link>
-          );
-        })}
+              >
+                <div className="relative">
+                  <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
+                  {hasNotification && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                  )}
+                </div>
+                <span className="text-[10px] mt-1 font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

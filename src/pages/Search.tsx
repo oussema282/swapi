@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -40,7 +40,6 @@ const categories: { value: ItemCategory | 'all'; label: string }[] = [
 
 export default function Search() {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const { latitude, longitude, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -263,7 +262,6 @@ export default function Search() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-card rounded-xl border border-border overflow-hidden"
-                  onClick={() => navigate(`/items/${item.id}`)}
                 >
                   <div className="flex gap-3 p-3">
                     {/* Photo */}
