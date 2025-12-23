@@ -264,7 +264,7 @@ export default function MapView() {
                 <p className="text-xs text-muted-foreground">{filteredItems.length} items near you</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mr-12">
               <Button 
                 variant={showFilters ? 'default' : 'secondary'} 
                 size="icon" 

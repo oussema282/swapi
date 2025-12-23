@@ -14,6 +14,11 @@ import {
 } from '@/components/ui/dialog';
 import { Item, CATEGORY_LABELS } from '@/types/database';
 
+interface ExistingInvite {
+  sender_item_id: string;
+  status: string;
+}
+
 interface DealInviteButtonProps {
   targetItemId: string;
   targetItemTitle: string;
@@ -43,18 +48,21 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
   });
 
   // Check existing invites to this item
-  const { data: existingInvites = [] } = useQuery({
-    queryKey: ['my-invites-to-item', targetItemId, user?.id],
-    queryFn: async () => {
-      if (!user || !myItems.length) return [];
+  const { data: existingInvites = [] } = useQuery<ExistingInvite[]>({
+    queryKey: ['my-invites-to-item', targetItemId, user?.id, myItems.map(i => i.id)],
+    queryFn: async (): Promise<ExistingInvite[]> => {
+      if (!user || myItems.length === 0) return [];
       const myItemIds = myItems.map(i => i.id);
       const { data, error } = await supabase
-        .from('deal_invites')
+        .from('deal_invites' as any)
         .select('sender_item_id, status')
         .eq('receiver_item_id', targetItemId)
         .in('sender_item_id', myItemIds);
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error('Error fetching invites:', error);
+        return [];
+      }
+      return (data as unknown as ExistingInvite[]) || [];
     },
     enabled: !!user && myItems.length > 0,
   });
@@ -62,7 +70,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
   const sendInviteMutation = useMutation({
     mutationFn: async (senderItemId: string) => {
       const { error } = await supabase
-        .from('deal_invites')
+        .from('deal_invites' as any)
         .insert({
           sender_item_id: senderItemId,
           receiver_item_id: targetItemId,

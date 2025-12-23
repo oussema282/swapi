@@ -13,7 +13,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Item, CATEGORY_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
+
+interface DealInviteRaw {
+  id: string;
+  sender_item_id: string;
+  receiver_item_id: string;
+  status: string;
+  created_at: string;
+  responded_at: string | null;
+}
 
 interface DealInviteWithItems {
   id: string;
@@ -48,19 +57,24 @@ export function DealInvitesNotification() {
       
       // Get pending invites for user's items
       const { data: invites, error } = await supabase
-        .from('deal_invites')
+        .from('deal_invites' as any)
         .select('*')
         .in('receiver_item_id', myItemIds)
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching deal invites:', error);
+        return [];
+      }
       if (!invites?.length) return [];
+      
+      const typedInvites = invites as unknown as DealInviteRaw[];
 
       // Get all item IDs from invites
       const allItemIds = [...new Set([
-        ...invites.map(i => i.sender_item_id),
-        ...invites.map(i => i.receiver_item_id),
+        ...typedInvites.map(i => i.sender_item_id),
+        ...typedInvites.map(i => i.receiver_item_id),
       ])];
 
       // Fetch items
@@ -70,7 +84,7 @@ export function DealInvitesNotification() {
         .in('id', allItemIds);
 
       // Get owner profiles
-      const senderUserIds = [...new Set(items?.filter(i => invites.some(inv => inv.sender_item_id === i.id)).map(i => i.user_id) || [])];
+      const senderUserIds = [...new Set(items?.filter(i => typedInvites.some(inv => inv.sender_item_id === i.id)).map(i => i.user_id) || [])];
       const { data: profiles } = await supabase
         .from('profiles')
         .select('user_id, display_name')
@@ -79,7 +93,7 @@ export function DealInvitesNotification() {
       const itemsMap = new Map(items?.map(i => [i.id, i]) || []);
       const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
 
-      return invites.map(invite => {
+      return typedInvites.map(invite => {
         const senderItem = itemsMap.get(invite.sender_item_id);
         const receiverItem = itemsMap.get(invite.receiver_item_id);
         const ownerProfile = senderItem ? profilesMap.get(senderItem.user_id) : null;
@@ -98,7 +112,7 @@ export function DealInvitesNotification() {
   const respondMutation = useMutation({
     mutationFn: async ({ inviteId, accept }: { inviteId: string; accept: boolean }) => {
       const { error } = await supabase
-        .from('deal_invites')
+        .from('deal_invites' as any)
         .update({ 
           status: accept ? 'accepted' : 'rejected',
           responded_at: new Date().toISOString(),
