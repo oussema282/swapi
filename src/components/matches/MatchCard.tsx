@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Package, ArrowLeftRight, MessageCircle, Clock } from 'lucide-react';
+import { Package, ArrowLeftRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDistanceToNow } from 'date-fns';
@@ -16,51 +16,44 @@ interface MatchCardProps {
 export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) {
   const lastMessagePreview = match.last_message?.content || 'Start a conversation...';
   const lastActivityTime = match.last_message?.created_at || match.created_at;
-  
-  const getStatusText = () => {
-    if (!match.last_message) return 'New match';
-    if (hasUnread) return 'Unread';
-    return 'In discussion';
-  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
+      whileTap={{ scale: 0.98 }}
     >
       <Card
         className={cn(
-          "p-4 cursor-pointer transition-all duration-200 border-border/50",
-          "hover:shadow-lg hover:border-primary/20",
+          "p-3 cursor-pointer transition-all duration-200 border-border/50",
+          "hover:shadow-md hover:border-primary/20 active:bg-muted/50",
           hasUnread && "bg-primary/5 border-primary/30"
         )}
         onClick={onClick}
       >
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           {/* Swap Visual */}
           <div className="relative flex-shrink-0">
-            <div className="flex items-center gap-1">
-              <div className="w-12 h-12 rounded-xl overflow-hidden bg-muted ring-2 ring-background shadow-sm">
+            <div className="flex items-center">
+              <div className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm">
                 {match.my_item?.photos?.[0] ? (
                   <img src={match.my_item.photos[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-5 h-5 text-muted-foreground" />
+                    <Package className="w-4 h-4 text-muted-foreground" />
                   </div>
                 )}
               </div>
-              <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center -mx-2 z-10">
-                <ArrowLeftRight className="w-3 h-3 text-primary" />
+              <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center -mx-1.5 z-10">
+                <ArrowLeftRight className="w-2.5 h-2.5 text-primary" />
               </div>
-              <div className="w-12 h-12 rounded-xl overflow-hidden bg-muted ring-2 ring-background shadow-sm">
+              <div className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm">
                 {match.their_item?.photos?.[0] ? (
                   <img src={match.their_item.photos[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-5 h-5 text-muted-foreground" />
+                    <Package className="w-4 h-4 text-muted-foreground" />
                   </div>
                 )}
               </div>
@@ -69,28 +62,31 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <div className="flex items-center gap-2 min-w-0">
-                <Avatar className="w-5 h-5">
+            <div className="flex items-center justify-between gap-2 mb-0.5">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Avatar className="w-4 h-4">
                   <AvatarImage src={match.other_user_profile?.avatar_url || undefined} />
-                  <AvatarFallback className="text-[10px]">
+                  <AvatarFallback className="text-[8px]">
                     {match.other_user_profile?.display_name?.charAt(0) || '?'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-semibold text-sm truncate">
+                <span className="font-medium text-sm truncate">
                   {match.other_user_profile?.display_name || 'Unknown'}
                 </span>
-                {hasUnread && (
-                  <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                )}
               </div>
-              <span className="text-xs text-muted-foreground flex-shrink-0 flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+              
+              {/* Status Chip */}
+              <span className={cn(
+                "text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0",
+                hasUnread 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-muted text-muted-foreground"
+              )}>
+                {hasUnread ? 'New' : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
               </span>
             </div>
             
-            <p className="text-sm font-medium text-foreground/90 truncate mb-0.5">
+            <p className="text-xs text-muted-foreground truncate mb-0.5">
               {match.their_item?.title}
             </p>
             
@@ -101,29 +97,6 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
               {lastMessagePreview}
             </p>
           </div>
-
-          {/* Chat Arrow */}
-          <div className="flex items-center">
-            <MessageCircle className={cn(
-              "w-5 h-5",
-              hasUnread ? "text-primary" : "text-muted-foreground/50"
-            )} />
-          </div>
-        </div>
-
-        {/* Status Badge */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
-          <span className={cn(
-            "text-xs font-medium px-2 py-1 rounded-full",
-            hasUnread 
-              ? "bg-primary/10 text-primary" 
-              : "bg-muted text-muted-foreground"
-          )}>
-            {getStatusText()}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            Tap to continue
-          </span>
         </div>
       </Card>
     </motion.div>
