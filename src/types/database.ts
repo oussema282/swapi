@@ -71,11 +71,14 @@ export interface Match {
   completed_at: string | null;
 }
 
+export type MessageStatus = 'sending' | 'sent' | 'delivered' | 'read';
+
 export interface Message {
   id: string;
   match_id: string;
   sender_id: string;
   content: string;
+  status: MessageStatus;
   created_at: string;
 }
 
