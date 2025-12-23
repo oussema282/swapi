@@ -125,6 +125,36 @@ export function useSwipe() {
   });
 }
 
+export function useCheckUndoEligibility() {
+  return useMutation({
+    mutationFn: async ({ 
+      swiperItemId, 
+      swipedItemId 
+    }: { 
+      swiperItemId: string; 
+      swipedItemId: string; 
+    }) => {
+      // Check if user already undid this item in the last 24 hours
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      
+      const { data: recentUndo, error } = await supabase
+        .from('swipe_undos')
+        .select('id, undone_at')
+        .eq('swiper_item_id', swiperItemId)
+        .eq('swiped_item_id', swipedItemId)
+        .gte('undone_at', twentyFourHoursAgo)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      return { 
+        canUndo: !recentUndo, 
+        lastUndoAt: recentUndo?.undone_at || null 
+      };
+    },
+  });
+}
+
 export function useUndoSwipe() {
   const queryClient = useQueryClient();
 
@@ -136,14 +166,39 @@ export function useUndoSwipe() {
       swiperItemId: string; 
       swipedItemId: string; 
     }) => {
+      // Check if user already undid this item in the last 24 hours
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      
+      const { data: recentUndo } = await supabase
+        .from('swipe_undos')
+        .select('id, undone_at')
+        .eq('swiper_item_id', swiperItemId)
+        .eq('swiped_item_id', swipedItemId)
+        .gte('undone_at', twentyFourHoursAgo)
+        .maybeSingle();
+
+      if (recentUndo) {
+        throw new Error('You can only undo once per item every 24 hours');
+      }
+
       // Delete the swipe record
-      const { error } = await supabase
+      const { error: deleteError } = await supabase
         .from('swipes')
         .delete()
         .eq('swiper_item_id', swiperItemId)
         .eq('swiped_item_id', swipedItemId);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
+
+      // Record the undo
+      const { error: insertError } = await supabase
+        .from('swipe_undos')
+        .insert({
+          swiper_item_id: swiperItemId,
+          swiped_item_id: swipedItemId,
+        });
+
+      if (insertError) throw insertError;
 
       return { success: true };
     },

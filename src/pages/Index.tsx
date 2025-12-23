@@ -3,7 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems } from '@/hooks/useRecommendations';
-import { useSwipe, useUndoSwipe } from '@/hooks/useSwipe';
+import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
@@ -12,6 +12,7 @@ import { MatchModal } from '@/components/discover/MatchModal';
 import { Button } from '@/components/ui/button';
 import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function Index() {
   const { user, loading: authLoading } = useAuth();
@@ -32,6 +33,7 @@ export default function Index() {
   const { data: swipeableItems, isLoading: swipeLoading } = useRecommendedItems(selectedItemId);
   const swipeMutation = useSwipe();
   const undoMutation = useUndoSwipe();
+  const checkUndoMutation = useCheckUndoEligibility();
 
   const currentItem = swipeableItems?.[currentIndex];
 
@@ -77,22 +79,33 @@ export default function Index() {
     const lastEntry = swipeState.historyStack[swipeState.historyStack.length - 1];
     if (!lastEntry) return;
 
-    // Go back in UI state first
-    actions.goBack();
-
-    // Then delete the swipe record from database
+    // First check if undo is allowed (24h limit)
     try {
+      const { canUndo } = await checkUndoMutation.mutateAsync({
+        swiperItemId: selectedItemId,
+        swipedItemId: lastEntry.itemId,
+      });
+
+      if (!canUndo) {
+        toast.error('You can only undo once per item every 24 hours');
+        return;
+      }
+
+      // Go back in UI state
+      actions.goBack();
+
+      // Then delete the swipe record and record the undo
       await undoMutation.mutateAsync({
         swiperItemId: selectedItemId,
         swipedItemId: lastEntry.itemId,
       });
       actions.clearUndo();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to undo swipe:', error);
-      // Even if deletion fails, keep the UI state consistent
+      toast.error(error.message || 'Failed to undo swipe');
       actions.clearUndo();
     }
-  }, [canGoBack, selectedItemId, swipeState.historyStack, actions, undoMutation]);
+  }, [canGoBack, selectedItemId, swipeState.historyStack, actions, undoMutation, checkUndoMutation]);
 
   const handleSelectItem = useCallback((id: string) => {
     setSelectedItemId(id);
