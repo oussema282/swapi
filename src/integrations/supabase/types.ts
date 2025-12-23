@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      deal_invites: {
+        Row: {
+          created_at: string
+          id: string
+          receiver_item_id: string
+          responded_at: string | null
+          sender_item_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          receiver_item_id: string
+          responded_at?: string | null
+          sender_item_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          receiver_item_id?: string
+          responded_at?: string | null
+          sender_item_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_invites_receiver_item_id_fkey"
+            columns: ["receiver_item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deal_invites_sender_item_id_fkey"
+            columns: ["sender_item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       item_ratings: {
         Row: {
           alpha: number
