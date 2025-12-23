@@ -1,12 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search as SearchIcon, MapPin, Package, Filter, X } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { Slider } from '@/components/ui/slider';
+import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
@@ -38,16 +39,36 @@ const categories: { value: ItemCategory | 'all'; label: string }[] = [
   { value: 'other', label: 'Other' },
 ];
 
+const distanceOptions = [
+  { value: 'any', label: 'Any distance' },
+  { value: '5', label: '5 km' },
+  { value: '10', label: '10 km' },
+  { value: '25', label: '25 km' },
+  { value: '50', label: '50 km' },
+  { value: '100', label: '100 km' },
+  { value: '200', label: '200 km' },
+];
+
 export default function Search() {
   const { user, loading: authLoading } = useAuth();
   const { latitude, longitude, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
+  const queryClient = useQueryClient();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
-  const [maxDistance, setMaxDistance] = useState<number | null>(null);
+  const [maxDistance, setMaxDistance] = useState<string>('any');
+  const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const { data: items, isLoading } = useQuery({
+  // Auto-request location on mount
+  useEffect(() => {
+    if (!hasLocation && !locationLoading) {
+      requestLocation();
+    }
+  }, [hasLocation, locationLoading, requestLocation]);
+
+  const { data: items, isLoading, refetch, isFetching } = useQuery({
     queryKey: ['search-items', user?.id],
     queryFn: async (): Promise<SearchItem[]> => {
       if (!user) return [];
@@ -80,30 +101,24 @@ export default function Search() {
       }));
     },
     enabled: !!user,
+    refetchInterval: 30000, // Auto-refresh every 30 seconds
   });
+
+  // Determine if search/filters are active
+  useEffect(() => {
+    const hasSearch = searchQuery.trim().length > 0;
+    const hasCategory = selectedCategory !== 'all';
+    const hasDistance = maxDistance !== 'any';
+    const hasBudget = budgetRange[0] > 0 || budgetRange[1] < 1000;
+    setIsSearchActive(hasSearch || hasCategory || hasDistance || hasBudget);
+  }, [searchQuery, selectedCategory, maxDistance, budgetRange]);
 
   const filteredItems = useMemo(() => {
     if (!items) return [];
 
     let filtered = items;
 
-    // Text search
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        item =>
-          item.title.toLowerCase().includes(query) ||
-          item.description?.toLowerCase().includes(query) ||
-          item.owner_display_name.toLowerCase().includes(query)
-      );
-    }
-
-    // Category filter
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(item => item.category === selectedCategory);
-    }
-
-    // Add distance if we have user location
+    // Add distance calculation first
     if (hasLocation && latitude && longitude) {
       filtered = filtered.map(item => {
         if (item.owner_latitude && item.owner_longitude) {
@@ -117,24 +132,75 @@ export default function Search() {
             ),
           };
         }
-        return item;
+        return { ...item, distance: undefined };
       });
+    }
 
-      // Filter by max distance if set
-      if (maxDistance) {
-        filtered = filtered.filter(item => !item.distance || item.distance <= maxDistance);
-      }
+    // Text search (title, description, category, owner)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(item => {
+        const categoryLabel = CATEGORY_LABELS[item.category]?.toLowerCase() || '';
+        return (
+          item.title.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.owner_display_name.toLowerCase().includes(query) ||
+          categoryLabel.includes(query)
+        );
+      });
+    }
 
-      // Sort by distance
+    // Category filter
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(item => item.category === selectedCategory);
+    }
+
+    // Distance filter
+    if (maxDistance !== 'any' && hasLocation) {
+      const maxDist = parseInt(maxDistance);
+      filtered = filtered.filter(item => 
+        item.distance !== undefined && item.distance <= maxDist
+      );
+    }
+
+    // Budget filter
+    if (budgetRange[0] > 0 || budgetRange[1] < 1000) {
+      filtered = filtered.filter(item => {
+        const itemMin = item.value_min || 0;
+        const itemMax = item.value_max || 1000;
+        // Check if item's value range overlaps with filter range
+        return itemMin <= budgetRange[1] && itemMax >= budgetRange[0];
+      });
+    }
+
+    // Sort by distance if available, otherwise by created_at
+    if (hasLocation) {
       filtered = filtered.sort((a, b) => {
+        if (a.distance === undefined && b.distance === undefined) return 0;
         if (a.distance === undefined) return 1;
         if (b.distance === undefined) return -1;
         return a.distance - b.distance;
       });
     }
 
+    // If no search active, return top 10 nearby; otherwise return all matches
+    if (!isSearchActive) {
+      return filtered.slice(0, 10);
+    }
+
     return filtered;
-  }, [items, searchQuery, selectedCategory, hasLocation, latitude, longitude, maxDistance]);
+  }, [items, searchQuery, selectedCategory, hasLocation, latitude, longitude, maxDistance, budgetRange, isSearchActive]);
+
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
+  const clearAllFilters = useCallback(() => {
+    setSearchQuery('');
+    setSelectedCategory('all');
+    setMaxDistance('any');
+    setBudgetRange([0, 1000]);
+  }, []);
 
   if (authLoading) {
     return (
@@ -148,19 +214,26 @@ export default function Search() {
     return <Navigate to="/auth" replace />;
   }
 
+  const activeFiltersCount = [
+    selectedCategory !== 'all',
+    maxDistance !== 'any',
+    budgetRange[0] > 0 || budgetRange[1] < 1000,
+  ].filter(Boolean).length;
+
   return (
     <AppLayout>
       <div className="flex flex-col h-full">
         {/* Search Header */}
         <div className="px-4 pt-4 pb-3 bg-background border-b border-border/50 space-y-3">
+          {/* Top row: Search + Filter button */}
           <div className="flex gap-2">
             <div className="flex-1 relative">
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
-                placeholder="Search items, categories, or users..."
+                placeholder="Search items, categories, users..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 bg-muted/50"
+                className="pl-10 pr-10 h-12 bg-muted/50 text-base"
               />
               {searchQuery && (
                 <button
@@ -174,66 +247,139 @@ export default function Search() {
             <Button
               variant={showFilters ? 'default' : 'outline'}
               size="icon"
-              className="h-12 w-12"
+              className="h-12 w-12 relative"
               onClick={() => setShowFilters(!showFilters)}
             >
               <Filter className="w-5 h-5" />
+              {activeFiltersCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
             </Button>
           </div>
 
-          {/* Filters */}
+          {/* Quick category pills */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            {categories.map(cat => (
+              <button
+                key={cat.value}
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all ${
+                  selectedCategory === cat.value
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Expanded Filters */}
           <AnimatePresence>
             {showFilters && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="space-y-3 overflow-hidden"
+                className="space-y-4 overflow-hidden"
               >
-                <Select value={selectedCategory} onValueChange={(v) => setSelectedCategory(v as ItemCategory | 'all')}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map(cat => (
-                      <SelectItem key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </SelectItem>
+                {/* Distance */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-primary" />
+                      Distance
+                    </label>
+                    {!hasLocation && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={requestLocation}
+                        disabled={locationLoading}
+                        className="text-xs"
+                      >
+                        {locationLoading ? 'Getting...' : 'Enable location'}
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    {distanceOptions.map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setMaxDistance(opt.value)}
+                        disabled={!hasLocation && opt.value !== 'any'}
+                        className={`flex-1 px-2 py-2 rounded-lg text-xs transition-all ${
+                          maxDistance === opt.value
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                        } disabled:opacity-40 disabled:cursor-not-allowed`}
+                      >
+                        {opt.label}
+                      </button>
                     ))}
-                  </SelectContent>
-                </Select>
-
-                <div className="flex gap-2">
-                  <Button
-                    variant={hasLocation ? 'default' : 'outline'}
-                    size="sm"
-                    className="flex-1"
-                    onClick={requestLocation}
-                    disabled={locationLoading}
-                  >
-                    <MapPin className="w-4 h-4 mr-2" />
-                    {locationLoading ? 'Getting location...' : hasLocation ? 'Location enabled' : 'Enable location'}
-                  </Button>
-                  
-                  {hasLocation && (
-                    <Select value={maxDistance?.toString() || 'any'} onValueChange={(v) => setMaxDistance(v === 'any' ? null : parseInt(v))}>
-                      <SelectTrigger className="w-32">
-                        <SelectValue placeholder="Distance" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="any">Any distance</SelectItem>
-                        <SelectItem value="5">Within 5km</SelectItem>
-                        <SelectItem value="10">Within 10km</SelectItem>
-                        <SelectItem value="25">Within 25km</SelectItem>
-                        <SelectItem value="50">Within 50km</SelectItem>
-                        <SelectItem value="100">Within 100km</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
+                  </div>
                 </div>
+
+                {/* Budget */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-primary" />
+                    Value Range: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
+                  </label>
+                  <Slider
+                    value={budgetRange}
+                    onValueChange={(v) => setBudgetRange(v as [number, number])}
+                    min={0}
+                    max={1000}
+                    step={25}
+                    className="w-full"
+                  />
+                </div>
+
+                {/* Clear all */}
+                {isSearchActive && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearAllFilters}
+                    className="w-full text-muted-foreground"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Clear all filters
+                  </Button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Results Header */}
+        <div className="px-4 py-2 bg-muted/30 border-b border-border/30 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {!isSearchActive && hasLocation && (
+              <Sparkles className="w-4 h-4 text-primary" />
+            )}
+            <span className="text-sm text-muted-foreground">
+              {isLoading ? (
+                'Loading...'
+              ) : isSearchActive ? (
+                `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''}`
+              ) : (
+                'Top 10 near you'
+              )}
+            </span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isFetching}
+            className="h-8 px-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+          </Button>
         </div>
 
         {/* Results */}
@@ -246,22 +392,26 @@ export default function Search() {
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
               <h3 className="text-lg font-semibold mb-2">No items found</h3>
-              <p className="text-muted-foreground text-sm">
-                {searchQuery ? 'Try a different search term' : 'No items available in your area'}
+              <p className="text-muted-foreground text-sm mb-4">
+                {isSearchActive 
+                  ? 'Try adjusting your filters or search terms' 
+                  : 'No items available in your area yet'}
               </p>
+              {isSearchActive && (
+                <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                  Clear filters
+                </Button>
+              )}
             </div>
           ) : (
             <div className="p-4 space-y-3">
-              <p className="text-sm text-muted-foreground">
-                {filteredItems.length} item{filteredItems.length !== 1 ? 's' : ''} found
-              </p>
-              
-              {filteredItems.map((item) => (
+              {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-card rounded-xl border border-border overflow-hidden"
+                  transition={{ delay: index * 0.03 }}
+                  className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-3 p-3">
                     {/* Photo */}
@@ -271,6 +421,7 @@ export default function Search() {
                           src={item.photos[0]}
                           alt={item.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
@@ -297,6 +448,11 @@ export default function Search() {
                           <Badge variant="outline" className="text-xs">
                             <MapPin className="w-3 h-3 mr-1" />
                             {formatDistance(item.distance)}
+                          </Badge>
+                        )}
+                        {(item.value_min || item.value_max) && (
+                          <Badge variant="outline" className="text-xs text-price">
+                            €{item.value_min || 0}-{item.value_max || '?'}
                           </Badge>
                         )}
                       </div>

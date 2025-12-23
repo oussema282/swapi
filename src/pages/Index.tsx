@@ -161,8 +161,10 @@ export default function Index() {
             </div>
           ) : noMoreCards ? (
             <EmptyState
-              title="No more items"
-              description="You've seen all compatible items for now. Try a different item or check back later!"
+              title="You've seen everything!"
+              description="No more items to swipe right now. Use Search to explore items by category, distance, or budget."
+              actionLabel="Explore Search"
+              actionHref="/search"
             />
           ) : (
             /* Card Stack - centered and sized properly */

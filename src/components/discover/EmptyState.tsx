@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { RefreshCw, Package, Plus } from 'lucide-react';
+import { RefreshCw, Package, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface EmptyStateProps {
@@ -31,10 +31,16 @@ export function EmptyState({
     }
   };
 
+  const isSearchAction = actionHref === '/search';
+
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-6">
       <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-6">
-        <Package className="w-12 h-12 text-primary/60" />
+        {isSearchAction ? (
+          <Search className="w-12 h-12 text-primary/60" />
+        ) : (
+          <Package className="w-12 h-12 text-primary/60" />
+        )}
       </div>
       <h3 className="text-2xl font-display font-bold mb-3 text-foreground">{title}</h3>
       <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
@@ -44,6 +50,7 @@ export function EmptyState({
         {actionLabel && (
           <Button onClick={handleAction} className="gradient-primary">
             {actionHref === '/items/new' && <Plus className="w-4 h-4 mr-2" />}
+            {isSearchAction && <Search className="w-4 h-4 mr-2" />}
             {actionLabel}
           </Button>
         )}
