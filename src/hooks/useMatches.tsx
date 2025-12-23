@@ -1,16 +1,29 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Match, Message, Item } from '@/types/database';
+import { Match, Item } from '@/types/database';
 import { useAuth } from './useAuth';
+import { MessageStatusType } from '@/components/chat/MessageStatus';
+
+export interface MessageWithStatus {
+  id: string;
+  match_id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
+  status: MessageStatusType;
+}
 
 interface MatchWithItems extends Match {
   item_a: Item & { owner_display_name: string };
   item_b: Item & { owner_display_name: string };
   my_item: Item;
   their_item: Item & { owner_display_name: string };
-  last_message?: Message;
+  other_user_id: string;
+  last_message?: MessageWithStatus;
 }
+
+export type { MatchWithItems };
 
 export function useMatches() {
   const { user } = useAuth();
@@ -20,7 +33,6 @@ export function useMatches() {
     queryFn: async () => {
       if (!user) return [];
 
-      // Get all matches where user owns one of the items
       const { data: matches, error } = await supabase
         .from('matches')
         .select(`
@@ -32,7 +44,6 @@ export function useMatches() {
 
       if (error) throw error;
 
-      // Filter matches where user owns one of the items
       const userMatches = (matches || []).filter(match => 
         (match.item_a as any)?.user_id === user.id || 
         (match.item_b as any)?.user_id === user.id
@@ -40,28 +51,26 @@ export function useMatches() {
 
       if (userMatches.length === 0) return [];
 
-      // Get all unique user IDs from matches
       const userIds = new Set<string>();
       userMatches.forEach(match => {
         if ((match.item_a as any)?.user_id) userIds.add((match.item_a as any).user_id);
         if ((match.item_b as any)?.user_id) userIds.add((match.item_b as any).user_id);
       });
 
-      // Fetch profiles for all users
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('user_id, display_name, avatar_url')
+        .select('user_id, display_name, avatar_url, last_seen')
         .in('user_id', Array.from(userIds));
 
       const profileMap = new Map(
         (profiles || []).map(p => [p.user_id, p])
       );
 
-      // Transform matches with profile data
       const transformedMatches = userMatches.map(match => {
         const itemA = match.item_a as any;
         const itemB = match.item_b as any;
         const isMyItemA = itemA?.user_id === user.id;
+        const otherUserId = isMyItemA ? itemB?.user_id : itemA?.user_id;
         
         return {
           ...match,
@@ -77,6 +86,7 @@ export function useMatches() {
           their_item: isMyItemA 
             ? { ...itemB, owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown' }
             : { ...itemA, owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown' },
+          other_user_id: otherUserId,
         } as MatchWithItems;
       });
 
@@ -88,6 +98,7 @@ export function useMatches() {
 
 export function useMessages(matchId: string) {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const query = useQuery({
     queryKey: ['messages', matchId],
@@ -99,12 +110,12 @@ export function useMessages(matchId: string) {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      return data as Message[];
+      return data as MessageWithStatus[];
     },
     enabled: !!matchId,
   });
 
-  // Subscribe to realtime updates
+  // Subscribe to realtime updates (INSERT and UPDATE)
   useEffect(() => {
     if (!matchId) return;
 
@@ -113,7 +124,7 @@ export function useMessages(matchId: string) {
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'messages',
           filter: `match_id=eq.${matchId}`,
@@ -129,7 +140,33 @@ export function useMessages(matchId: string) {
     };
   }, [matchId, queryClient]);
 
-  return query;
+  // Mark messages as read when viewing
+  const markAsRead = useCallback(async () => {
+    if (!matchId || !user) return;
+
+    const messages = query.data;
+    if (!messages) return;
+
+    const unreadMessages = messages.filter(
+      msg => msg.sender_id !== user.id && msg.status !== 'read'
+    );
+
+    if (unreadMessages.length === 0) return;
+
+    await supabase
+      .from('messages')
+      .update({ status: 'read' })
+      .in('id', unreadMessages.map(m => m.id));
+  }, [matchId, user, query.data]);
+
+  // Mark as read when messages load or update
+  useEffect(() => {
+    if (query.data && query.data.length > 0) {
+      markAsRead();
+    }
+  }, [query.data, markAsRead]);
+
+  return { ...query, markAsRead };
 }
 
 export function useSendMessage() {
@@ -146,12 +183,64 @@ export function useSendMessage() {
           match_id: matchId,
           sender_id: user.id,
           content,
+          status: 'sent',
         })
         .select()
         .single();
 
       if (error) throw error;
-      return data as Message;
+      return data as MessageWithStatus;
+    },
+    onMutate: async ({ matchId, content }) => {
+      // Optimistic update
+      await queryClient.cancelQueries({ queryKey: ['messages', matchId] });
+      
+      const previousMessages = queryClient.getQueryData<MessageWithStatus[]>(['messages', matchId]);
+      
+      const optimisticMessage: MessageWithStatus = {
+        id: `temp-${Date.now()}`,
+        match_id: matchId,
+        sender_id: user!.id,
+        content,
+        created_at: new Date().toISOString(),
+        status: 'sending',
+      };
+
+      queryClient.setQueryData<MessageWithStatus[]>(['messages', matchId], (old) => 
+        [...(old || []), optimisticMessage]
+      );
+
+      return { previousMessages };
+    },
+    onError: (_, variables, context) => {
+      if (context?.previousMessages) {
+        queryClient.setQueryData(['messages', variables.matchId], context.previousMessages);
+      }
+    },
+    onSettled: (_, __, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['messages', variables.matchId] });
+    },
+  });
+}
+
+export function useUpdateMessageStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ 
+      messageIds, 
+      status 
+    }: { 
+      messageIds: string[]; 
+      status: 'delivered' | 'read';
+      matchId: string;
+    }) => {
+      const { error } = await supabase
+        .from('messages')
+        .update({ status })
+        .in('id', messageIds);
+
+      if (error) throw error;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['messages', variables.matchId] });

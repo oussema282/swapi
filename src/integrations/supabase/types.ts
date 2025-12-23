@@ -170,6 +170,7 @@ export type Database = {
           id: string
           match_id: string
           sender_id: string
+          status: string
         }
         Insert: {
           content: string
@@ -177,6 +178,7 @@ export type Database = {
           id?: string
           match_id: string
           sender_id: string
+          status?: string
         }
         Update: {
           content?: string
@@ -184,6 +186,7 @@ export type Database = {
           id?: string
           match_id?: string
           sender_id?: string
+          status?: string
         }
         Relationships: [
           {
@@ -202,6 +205,7 @@ export type Database = {
           created_at: string
           display_name: string
           id: string
+          last_seen: string | null
           latitude: number | null
           location: string | null
           longitude: number | null
@@ -214,6 +218,7 @@ export type Database = {
           created_at?: string
           display_name: string
           id?: string
+          last_seen?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
@@ -226,6 +231,7 @@ export type Database = {
           created_at?: string
           display_name?: string
           id?: string
+          last_seen?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
