@@ -4,14 +4,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMatches } from '@/hooks/useMatches';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeftRight, MessageCircle, Package, Loader2, CheckCircle2 } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import { CompleteSwapModal } from '@/components/matches/CompleteSwapModal';
-import { motion } from 'framer-motion';
+import { MatchCard } from '@/components/matches/MatchCard';
+import { CompletedMatchCard } from '@/components/matches/CompletedMatchCard';
+import { MatchesHeader } from '@/components/matches/MatchesHeader';
+import { EmptyMatchesState } from '@/components/matches/EmptyMatchesState';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
 
 export default function Matches() {
   const { user, loading: authLoading } = useAuth();
@@ -59,158 +60,107 @@ export default function Matches() {
   const activeMatches = matches?.filter(m => !m.is_completed) || [];
   const completedMatches = matches?.filter(m => m.is_completed) || [];
 
+  // Check for unread messages (messages from other user that aren't read)
+  const hasUnreadMessages = (match: any) => {
+    if (!match.last_message || !user) return false;
+    return match.last_message.sender_id !== user.id && match.last_message.status !== 'read';
+  };
+
   return (
     <AppLayout>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex-1 flex flex-col max-w-lg mx-auto w-full px-4 pt-4 overflow-hidden"
-      >
-        <h1 className="text-2xl font-display font-bold mb-2">Matches</h1>
-        <p className="text-sm text-muted-foreground mb-4">
-          {activeMatches.length} active · {completedMatches.length} completed
-        </p>
+      <div className="flex-1 flex flex-col max-w-lg mx-auto w-full px-4 pt-4 overflow-hidden">
+        <MatchesHeader
+          activeCount={activeMatches.length}
+          completedCount={completedMatches.length}
+        />
 
         {matches && matches.length > 0 ? (
-          <div className="flex-1 overflow-y-auto space-y-6 pb-4">
+          <div className="flex-1 overflow-y-auto space-y-8 pb-4">
             {/* Active Matches */}
-            {activeMatches.length > 0 && (
-              <div className="space-y-3">
-                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Active</h2>
-                {activeMatches.map((match, index) => (
-                  <motion.div
-                    key={match.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Card className="p-4 hover:shadow-md transition-shadow">
-                      <div
-                        className="flex items-center gap-3 cursor-pointer"
+            <AnimatePresence mode="wait">
+              {activeMatches.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-3"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <h2 className="text-sm font-semibold text-foreground">Active Exchanges</h2>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                      {activeMatches.length}
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {activeMatches.map((match, index) => (
+                      <MatchCard
+                        key={match.id}
+                        match={match}
+                        index={index}
                         onClick={() => navigate(`/chat/${match.id}`)}
-                      >
-                        <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                          {match.my_item?.photos?.[0] ? (
-                            <img src={match.my_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="w-6 h-6 text-muted-foreground" />
-                            </div>
-                          )}
-                        </div>
+                        hasUnread={hasUnreadMessages(match)}
+                      />
+                    ))}
+                  </div>
 
-                        <ArrowLeftRight className="w-5 h-5 text-primary flex-shrink-0" />
-
-                        <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                          {match.their_item?.photos?.[0] ? (
-                            <img src={match.their_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="w-6 h-6 text-muted-foreground" />
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex-1 min-w-0 ml-2">
-                          <p className="font-medium line-clamp-2">{match.their_item?.title}</p>
-                          <p className="text-sm text-muted-foreground">with {match.their_item?.owner_display_name}</p>
-                        </div>
-
-                        <MessageCircle className="w-5 h-5 text-muted-foreground" />
-                      </div>
-
-                      <div className="flex gap-2 mt-3 pt-3 border-t">
+                  {/* Complete Swap CTAs */}
+                  <div className="pt-2">
+                    <p className="text-xs text-muted-foreground mb-2">Ready to finalize an exchange?</p>
+                    <div className="flex flex-wrap gap-2">
+                      {activeMatches.slice(0, 3).map((match) => (
                         <Button
+                          key={match.id}
+                          size="sm"
                           variant="outline"
-                          size="sm"
-                          className="flex-1"
-                          onClick={() => navigate(`/chat/${match.id}`)}
-                        >
-                          <MessageCircle className="w-4 h-4 mr-1" />
-                          Chat
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="flex-1 bg-success hover:bg-success/90 text-success-foreground"
+                          className="text-xs border-success/30 text-success hover:bg-success/10"
                           onClick={() => {
                             setSelectedMatch(match);
                             setShowCompleteModal(true);
                           }}
                         >
-                          <CheckCircle2 className="w-4 h-4 mr-1" />
-                          Complete
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Complete: {match.their_item?.title?.slice(0, 15)}...
                         </Button>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Completed Matches */}
-            {completedMatches.length > 0 && (
-              <div className="space-y-3">
-                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Completed</h2>
-                {completedMatches.map((match, index) => (
-                  <motion.div
-                    key={match.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Card className={cn("p-4 opacity-75")}>
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                          {match.my_item?.photos?.[0] ? (
-                            <img src={match.my_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="w-5 h-5 text-muted-foreground" />
-                            </div>
-                          )}
-                        </div>
-
-                        <ArrowLeftRight className="w-4 h-4 text-success flex-shrink-0" />
-
-                        <div className="w-12 h-12 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                          {match.their_item?.photos?.[0] ? (
-                            <img src={match.their_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="w-5 h-5 text-muted-foreground" />
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex-1 min-w-0 ml-2">
-                          <p className="font-medium line-clamp-2 text-sm">{match.their_item?.title}</p>
-                          <p className="text-xs text-muted-foreground">with {match.their_item?.owner_display_name}</p>
-                        </div>
-
-                        <Badge variant="secondary" className="bg-success/10 text-success border-0">
-                          <CheckCircle2 className="w-3 h-3 mr-1" />
-                          Done
-                        </Badge>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {completedMatches.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-3"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <h2 className="text-sm font-semibold text-muted-foreground">Completed</h2>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-success/10 text-success font-medium">
+                      {completedMatches.length}
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {completedMatches.map((match, index) => (
+                      <CompletedMatchCard
+                        key={match.id}
+                        match={match}
+                        index={index}
+                        onClick={() => navigate(`/chat/${match.id}`)}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-              <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
-            </div>
-            <h3 className="font-semibold mb-2">No matches yet</h3>
-            <p className="text-sm text-muted-foreground mb-4">Keep swiping to find swaps!</p>
-            <Button onClick={() => navigate('/')} className="gradient-primary text-primary-foreground">
-              Discover Items
-            </Button>
-          </div>
+          <EmptyMatchesState />
         )}
-      </motion.div>
+      </div>
 
       {/* Complete Swap Modal */}
       <CompleteSwapModal
