@@ -64,15 +64,15 @@ export default function Matches() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-lg mx-auto px-4 pt-4 pb-24"
+        className="flex-1 flex flex-col max-w-lg mx-auto w-full px-4 pt-4 overflow-hidden"
       >
         <h1 className="text-2xl font-display font-bold mb-2">Matches</h1>
-        <p className="text-sm text-muted-foreground mb-6">
+        <p className="text-sm text-muted-foreground mb-4">
           {activeMatches.length} active · {completedMatches.length} completed
         </p>
 
         {matches && matches.length > 0 ? (
-          <div className="space-y-6">
+          <div className="flex-1 overflow-y-auto space-y-6 pb-4">
             {/* Active Matches */}
             {activeMatches.length > 0 && (
               <div className="space-y-3">
@@ -112,7 +112,7 @@ export default function Matches() {
                         </div>
 
                         <div className="flex-1 min-w-0 ml-2">
-                          <p className="font-medium truncate">{match.their_item?.title}</p>
+                          <p className="font-medium line-clamp-2">{match.their_item?.title}</p>
                           <p className="text-sm text-muted-foreground">with {match.their_item?.owner_display_name}</p>
                         </div>
 
@@ -183,7 +183,7 @@ export default function Matches() {
                         </div>
 
                         <div className="flex-1 min-w-0 ml-2">
-                          <p className="font-medium truncate text-sm">{match.their_item?.title}</p>
+                          <p className="font-medium line-clamp-2 text-sm">{match.their_item?.title}</p>
                           <p className="text-xs text-muted-foreground">with {match.their_item?.owner_display_name}</p>
                         </div>
 
