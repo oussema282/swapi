@@ -15,6 +15,8 @@ interface SwipeState {
   historyStack: SwipeHistoryEntry[];
   matchedItem: Item | null;
   showMatch: boolean;
+  lastUndoneItemId: string | null; // Track the last undone item for cleanup
+  cardKey: number; // Force re-mount of card after undo
 }
 
 type SwipeAction =
@@ -24,7 +26,8 @@ type SwipeAction =
   | { type: 'CLEAR_MATCH' }
   | { type: 'GO_BACK' }
   | { type: 'RESET' }
-  | { type: 'UNLOCK' };
+  | { type: 'UNLOCK' }
+  | { type: 'CLEAR_UNDO' };
 
 const initialState: SwipeState = {
   currentIndex: 0,
@@ -34,6 +37,8 @@ const initialState: SwipeState = {
   historyStack: [],
   matchedItem: null,
   showMatch: false,
+  lastUndoneItemId: null,
+  cardKey: 0,
 };
 
 function swipeReducer(state: SwipeState, action: SwipeAction): SwipeState {
@@ -95,6 +100,14 @@ function swipeReducer(state: SwipeState, action: SwipeAction): SwipeState {
         swipeDirection: null,
         isAnimating: false,
         isLocked: false,
+        lastUndoneItemId: previousEntry.itemId,
+        cardKey: state.cardKey + 1, // Force card remount to reset gesture state
+      };
+
+    case 'CLEAR_UNDO':
+      return {
+        ...state,
+        lastUndoneItemId: null,
       };
 
     case 'RESET':
@@ -154,6 +167,10 @@ export function useSwipeState() {
     dispatch({ type: 'UNLOCK' });
   }, []);
 
+  const clearUndo = useCallback(() => {
+    dispatch({ type: 'CLEAR_UNDO' });
+  }, []);
+
   // Check if can perform actions
   const canSwipe = !state.isAnimating && !state.isLocked;
   const canGoBack = !state.isAnimating && !state.isLocked && state.historyStack.length > 0;
@@ -168,6 +185,7 @@ export function useSwipeState() {
       goBack,
       reset,
       unlock,
+      clearUndo,
     },
     canSwipe,
     canGoBack,
