@@ -1,10 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Search, Package, ArrowLeftRight, User, Compass } from 'lucide-react';
+import { Map, Package, ArrowLeftRight, User, Compass } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 
 const sideNavItems = [
-  { icon: Search, label: 'Search', path: '/search', notificationKey: null },
+  { icon: Map, label: 'Map', path: '/map', notificationKey: null },
   { icon: Package, label: 'My Items', path: '/items', notificationKey: null },
   { icon: ArrowLeftRight, label: 'Matches', path: '/matches', notificationKey: 'matches' as const },
   { icon: User, label: 'Profile', path: '/profile', notificationKey: null },

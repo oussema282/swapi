@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, X, Package } from 'lucide-react';
+import { ArrowLeft, X, Package, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -14,8 +14,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// You'll need to set your Mapbox token
-const MAPBOX_TOKEN = 'pk.eyJ1Ijoic3dhcHNwb3QiLCJhIjoiY200eDNlc2x4MDBnMjJrbzZ5OXZzNjA3cyJ9.demo';
+// Get Mapbox token from edge function
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -58,10 +58,20 @@ export default function MapView() {
   // Filter out user's own items
   const otherUsersItems = items.filter(item => item.user_id !== user?.id);
 
-  useEffect(() => {
-    if (!mapContainer.current || !latitude || !longitude) return;
+  // Fetch mapbox token
+  const { data: mapboxToken, isLoading: tokenLoading } = useQuery({
+    queryKey: ['mapbox-token'],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+      if (error) throw error;
+      return data.token as string;
+    },
+  });
 
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+  useEffect(() => {
+    if (!mapContainer.current || !latitude || !longitude || !mapboxToken) return;
+
+    mapboxgl.accessToken = mapboxToken;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -81,7 +91,7 @@ export default function MapView() {
     return () => {
       map.current?.remove();
     };
-  }, [latitude, longitude]);
+  }, [latitude, longitude, mapboxToken]);
 
   // Add item markers
   useEffect(() => {
@@ -130,9 +140,19 @@ export default function MapView() {
     });
   }, [otherUsersItems]);
 
+  if (tokenLoading) {
+    return (
+      <AppLayout showNav>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AppLayout>
+    );
+  }
+
   return (
-    <AppLayout showNav={false}>
-      <div className="relative h-[100dvh]">
+    <AppLayout showNav>
+      <div className="relative h-[calc(100dvh-5rem)]">
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-background to-transparent">
           <div className="flex items-center gap-3">
