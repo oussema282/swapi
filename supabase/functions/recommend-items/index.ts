@@ -281,7 +281,7 @@ serve(async (req) => {
     const {
       data: { user },
       error: userError,
-    } = await supabaseAuth.auth.getUser();
+    } = await supabaseAuth.auth.getUser(token);
 
     if (userError || !user) {
       console.error(
