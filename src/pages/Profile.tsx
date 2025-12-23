@@ -9,10 +9,40 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Profile() {
   const { user, profile, loading, signOut } = useAuth();
   const { data: items = [], isLoading: itemsLoading } = useMyItems();
+  
+  // Fetch completed swaps count for current user
+  const { data: completedSwapsCount = 0 } = useQuery({
+    queryKey: ['completed-swaps-count', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return 0;
+      
+      // Get user's items first
+      const { data: userItems } = await supabase
+        .from('items')
+        .select('id')
+        .eq('user_id', user.id);
+      
+      if (!userItems?.length) return 0;
+      
+      const itemIds = userItems.map(i => i.id);
+      
+      // Count matches where user's items are involved and is_completed = true
+      const { count } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_completed', true)
+        .or(`item_a_id.in.(${itemIds.join(',')}),item_b_id.in.(${itemIds.join(',')})`);
+      
+      return count || 0;
+    },
+    enabled: !!user?.id,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,7 +111,7 @@ export default function Profile() {
               <p className="text-xs text-muted-foreground">Items</p>
             </div>
             <div className="p-3 rounded-xl bg-muted/50">
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{completedSwapsCount}</p>
               <p className="text-xs text-muted-foreground">Swaps</p>
             </div>
             <div className="p-3 rounded-xl bg-muted/50">
