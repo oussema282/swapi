@@ -124,3 +124,33 @@ export function useSwipe() {
     },
   });
 }
+
+export function useUndoSwipe() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ 
+      swiperItemId, 
+      swipedItemId 
+    }: { 
+      swiperItemId: string; 
+      swipedItemId: string; 
+    }) => {
+      // Delete the swipe record
+      const { error } = await supabase
+        .from('swipes')
+        .delete()
+        .eq('swiper_item_id', swiperItemId)
+        .eq('swiped_item_id', swipedItemId);
+
+      if (error) throw error;
+
+      return { success: true };
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate queries to refresh the swipeable items
+      queryClient.invalidateQueries({ queryKey: ['swipeable-items', variables.swiperItemId] });
+      queryClient.invalidateQueries({ queryKey: ['recommended-items', variables.swiperItemId] });
+    },
+  });
+}

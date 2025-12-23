@@ -3,7 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems } from '@/hooks/useRecommendations';
-import { useSwipe } from '@/hooks/useSwipe';
+import { useSwipe, useUndoSwipe } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
@@ -20,7 +20,7 @@ export default function Index() {
   
   // Use the new swipe state machine
   const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();
-  const { currentIndex, swipeDirection, isAnimating, showMatch, matchedItem } = swipeState;
+  const { currentIndex, swipeDirection, isAnimating, showMatch, matchedItem, lastUndoneItemId, cardKey } = swipeState;
 
   // Auto-select first item when items load
   useEffect(() => {
@@ -31,6 +31,7 @@ export default function Index() {
 
   const { data: swipeableItems, isLoading: swipeLoading } = useRecommendedItems(selectedItemId);
   const swipeMutation = useSwipe();
+  const undoMutation = useUndoSwipe();
 
   const currentItem = swipeableItems?.[currentIndex];
 
@@ -69,11 +70,29 @@ export default function Index() {
     }
   }, [handleSwipe, canSwipe]);
 
-  const handleGoBack = useCallback(() => {
-    if (canGoBack) {
-      actions.goBack();
+  const handleGoBack = useCallback(async () => {
+    if (!canGoBack || !selectedItemId) return;
+    
+    // Get the item ID from history before going back
+    const lastEntry = swipeState.historyStack[swipeState.historyStack.length - 1];
+    if (!lastEntry) return;
+
+    // Go back in UI state first
+    actions.goBack();
+
+    // Then delete the swipe record from database
+    try {
+      await undoMutation.mutateAsync({
+        swiperItemId: selectedItemId,
+        swipedItemId: lastEntry.itemId,
+      });
+      actions.clearUndo();
+    } catch (error) {
+      console.error('Failed to undo swipe:', error);
+      // Even if deletion fails, keep the UI state consistent
+      actions.clearUndo();
     }
-  }, [canGoBack, actions]);
+  }, [canGoBack, selectedItemId, swipeState.historyStack, actions, undoMutation]);
 
   const handleSelectItem = useCallback((id: string) => {
     setSelectedItemId(id);
@@ -138,7 +157,7 @@ export default function Index() {
               <div className="relative w-full h-full max-w-md mx-auto">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
-                    key={item.id}
+                    key={`${item.id}-${cardKey}`}
                     item={item}
                     isTop={idx === arr.length - 1}
                     onSwipeComplete={handleSwipeComplete}
