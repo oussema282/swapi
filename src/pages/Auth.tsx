@@ -100,13 +100,37 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5 animate-gradient-shift" />
+      {/* Animated mesh gradient background */}
+      <div 
+        className="absolute inset-0 animate-auth-gradient"
+        style={{
+          background: `
+            linear-gradient(
+              135deg,
+              hsl(252 100% 68% / 0.15) 0%,
+              hsl(296 75% 66% / 0.12) 25%,
+              hsl(338 83% 68% / 0.10) 50%,
+              hsl(222 100% 68% / 0.12) 75%,
+              hsl(252 100% 68% / 0.15) 100%
+            )
+          `,
+          backgroundSize: '400% 400%',
+        }}
+      />
       
-      {/* Animated blob shapes */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-blob opacity-50" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-blob-delay-2 opacity-50" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/10 rounded-full blur-3xl animate-blob-delay-4 opacity-30" />
+      {/* Subtle overlay for readability */}
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-[1px]" />
+      
+      {/* Soft ambient blobs (very subtle) */}
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-30 animate-blob-slow" 
+        style={{ background: 'hsl(252 100% 68% / 0.4)' }} 
+      />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-25 animate-blob-slow-reverse" 
+        style={{ background: 'hsl(296 75% 66% / 0.35)' }} 
+      />
+      <div className="absolute top-[40%] left-[60%] w-[400px] h-[400px] rounded-full blur-[100px] opacity-20 animate-blob-slow-delay" 
+        style={{ background: 'hsl(338 83% 68% / 0.3)' }} 
+      />
 
       {/* Content */}
       <div className="relative min-h-screen flex flex-col items-center justify-center p-4 z-10">
