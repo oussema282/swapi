@@ -234,6 +234,45 @@ export type Database = {
         }
         Relationships: []
       }
+      swipe_undos: {
+        Row: {
+          created_at: string
+          id: string
+          swiped_item_id: string
+          swiper_item_id: string
+          undone_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          swiped_item_id: string
+          swiper_item_id: string
+          undone_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          swiped_item_id?: string
+          swiper_item_id?: string
+          undone_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swipe_undos_swiped_item_id_fkey"
+            columns: ["swiped_item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_undos_swiper_item_id_fkey"
+            columns: ["swiper_item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       swipes: {
         Row: {
           created_at: string
