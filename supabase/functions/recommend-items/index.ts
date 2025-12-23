@@ -233,29 +233,40 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseClient = createClient(
+    // Create client with anon key for auth validation
+    const supabaseAuth = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    // Create admin client for data queries
+    const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      console.error("No authorization header provided");
       return new Response(JSON.stringify({ error: "No authorization header" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Get the user from the JWT
+    // Get the user from the JWT using the anon client
     const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token);
+    const { data: { user }, error: userError } = await supabaseAuth.auth.getUser(token);
     
     if (userError || !user) {
+      console.error("Token validation failed:", userError?.message || "No user found");
       return new Response(JSON.stringify({ error: "Invalid token" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    console.log(`Processing recommendation request for user ${user.id}`);
 
     const { myItemId, limit = 20 } = await req.json();
 
@@ -267,7 +278,7 @@ serve(async (req) => {
     }
 
     // Get my item
-    const { data: myItem, error: myItemError } = await supabaseClient
+    const { data: myItem, error: myItemError } = await supabaseAdmin
       .from("items")
       .select("*")
       .eq("id", myItemId)
@@ -282,14 +293,14 @@ serve(async (req) => {
     }
 
     // Get user's profile for location
-    const { data: profile } = await supabaseClient
+    const { data: profile } = await supabaseAdmin
       .from("profiles")
       .select("latitude, longitude")
       .eq("user_id", user.id)
       .single();
 
     // Get user's swipe history for this item
-    const { data: swipes } = await supabaseClient
+    const { data: swipes } = await supabaseAdmin
       .from("swipes")
       .select("swiped_item_id, liked")
       .eq("swiper_item_id", myItemId);
@@ -300,7 +311,7 @@ serve(async (req) => {
 
     // Get all candidate items - less strict filtering to show more items
     // We'll score them by exchange compatibility instead of filtering strictly
-    const { data: candidateItems, error: itemsError } = await supabaseClient
+    const { data: candidateItems, error: itemsError } = await supabaseAdmin
       .from("items")
       .select("*")
       .eq("is_active", true)
@@ -316,11 +327,11 @@ serve(async (req) => {
 
     // Filter out already swiped items
     const unswiped = (candidateItems || []).filter(
-      item => !swipedItemIds.includes(item.id)
+      (item: Item) => !swipedItemIds.includes(item.id)
     );
 
     // Get liked items for behavior analysis
-    const { data: likedItemsData } = await supabaseClient
+    const { data: likedItemsData } = await supabaseAdmin
       .from("items")
       .select("*")
       .in("id", likedItemIds.length > 0 ? likedItemIds : ["none"]);
@@ -328,7 +339,7 @@ serve(async (req) => {
     const likedItems: Item[] = likedItemsData || [];
 
     // Score and rank items
-    const scoredItems = unswiped.map(item => ({
+    const scoredItems = unswiped.map((item: Item) => ({
       item,
       score: calculateItemScore(
         myItem as Item,
@@ -340,10 +351,10 @@ serve(async (req) => {
     }));
 
     // Sort by score descending
-    scoredItems.sort((a, b) => b.score - a.score);
+    scoredItems.sort((a: { item: Item; score: number }, b: { item: Item; score: number }) => b.score - a.score);
 
     // Return top items with their IDs and scores
-    const rankedItems = scoredItems.slice(0, limit).map(({ item, score }) => ({
+    const rankedItems = scoredItems.slice(0, limit).map(({ item, score }: { item: Item; score: number }) => ({
       id: item.id,
       score: Math.round(score * 1000) / 1000,
     }));
