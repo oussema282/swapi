@@ -1,29 +1,26 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Search, Map, ArrowLeftRight, User, Compass } from 'lucide-react';
+import { Search, Map, Compass, Plus, ArrowLeftRight, User } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
+import { motion } from 'framer-motion';
 
-const sideNavItems = [
-  { icon: Search, label: 'Search', path: '/search', notificationKey: null },
-  { icon: Map, label: 'Map', path: '/map', notificationKey: null },
-  { icon: ArrowLeftRight, label: 'Matches', path: '/matches', notificationKey: 'matches' as const },
-  { icon: User, label: 'Profile', path: '/profile', notificationKey: null },
+const navItems = [
+  { icon: Search, label: 'Search', path: '/search' },
+  { icon: Map, label: 'Map', path: '/map' },
+  { icon: Compass, label: 'Discover', path: '/' },
+  { icon: Plus, label: 'Add', path: '/items/new' },
+  { icon: ArrowLeftRight, label: 'Matches', path: '/matches' },
+  { icon: User, label: 'Profile', path: '/profile' },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const { hasNewMatches } = useNotifications();
 
-  const getNotification = (key: 'matches' | null) => {
-    if (key === 'matches') return hasNewMatches;
-    return false;
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
   };
-
-  const isDiscoverActive = location.pathname === '/';
-
-  // Split nav items for left and right sides
-  const leftItems = sideNavItems.slice(0, 2);
-  const rightItems = sideNavItems.slice(2);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
@@ -31,81 +28,59 @@ export function BottomNav() {
       <div className="absolute bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-lg border-t border-border" />
       
       {/* Navigation content */}
-      <div className="relative flex items-end justify-between h-20 max-w-lg mx-auto px-2 pb-safe">
-        {/* Left side items */}
-        <div className="flex flex-1 justify-around pb-1">
-          {leftItems.map(({ icon: Icon, label, path, notificationKey }) => {
-            const isActive = location.pathname === path;
-            const hasNotification = getNotification(notificationKey);
-            
-            return (
-              <Link
-                key={path}
-                to={path}
+      <div className="relative flex items-end justify-between h-20 max-w-lg mx-auto px-2">
+        {navItems.map(({ icon: Icon, label, path }) => {
+          const active = isActive(path);
+          const hasNotification = path === '/matches' && hasNewMatches;
+          
+          return (
+            <Link
+              key={path}
+              to={path}
+              className="relative flex flex-col items-center flex-1"
+            >
+              {/* Active indicator - elevated pill */}
+              {active && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute -top-3 w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/30"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
+              
+              {/* Icon container */}
+              <div
                 className={cn(
-                  'flex flex-col items-center justify-center py-2 px-4 transition-colors relative',
-                  isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                  'relative z-10 flex flex-col items-center justify-center py-2 transition-all duration-200',
+                  active ? '-translate-y-3' : 'translate-y-0'
                 )}
               >
                 <div className="relative">
-                  <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
+                  <Icon 
+                    className={cn(
+                      'transition-all duration-200',
+                      active 
+                        ? 'w-6 h-6 text-primary-foreground' 
+                        : 'w-5 h-5 text-muted-foreground'
+                    )} 
+                  />
                   {hasNotification && (
                     <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
                   )}
                 </div>
-                <span className="text-[10px] mt-1 font-medium">{label}</span>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Center Discover Button - Floating above navbar */}
-        <Link
-          to="/"
-          className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center"
-        >
-          <div
-            className={cn(
-              'w-[72px] h-[72px] rounded-full flex items-center justify-center shadow-xl border-4 border-background transition-all duration-200',
-              isDiscoverActive
-                ? 'bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground scale-105'
-                : 'bg-gradient-to-br from-primary/90 to-primary/70 text-primary-foreground hover:scale-105'
-            )}
-          >
-            <Compass className="w-8 h-8" />
-          </div>
-        </Link>
-
-        {/* Right side items */}
-        <div className="flex flex-1 justify-around pb-1">
-          {rightItems.map(({ icon: Icon, label, path, notificationKey }) => {
-            const isActive = location.pathname === path;
-            const hasNotification = getNotification(notificationKey);
-            
-            return (
-              <Link
-                key={path}
-                to={path}
-                className={cn(
-                  'flex flex-col items-center justify-center py-2 px-4 transition-colors relative',
-                  isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                <div className="relative">
-                  <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
-                  {hasNotification && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                <span 
+                  className={cn(
+                    'text-[10px] mt-1 font-medium transition-colors duration-200',
+                    active ? 'text-primary-foreground' : 'text-muted-foreground'
                   )}
-                </div>
-                <span className="text-[10px] mt-1 font-medium">{label}</span>
-              </Link>
-            );
-          })}
-        </div>
+                >
+                  {label}
+                </span>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
