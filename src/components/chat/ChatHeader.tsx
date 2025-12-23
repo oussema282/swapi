@@ -18,6 +18,10 @@ interface ChatHeaderProps {
   lastSeen?: Date | null;
   className?: string;
   matchId?: string;
+  myItemTitle?: string;
+  theirItemTitle?: string;
+  myItemPhoto?: string;
+  theirItemPhoto?: string;
 }
 
 export function ChatHeader({ 
@@ -26,7 +30,11 @@ export function ChatHeader({
   isOnline, 
   lastSeen,
   className,
-  matchId
+  matchId,
+  myItemTitle,
+  theirItemTitle,
+  myItemPhoto,
+  theirItemPhoto
 }: ChatHeaderProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -51,6 +59,8 @@ export function ChatHeader({
     toast.success('Swap completed successfully!');
     queryClient.invalidateQueries({ queryKey: ['matches'] });
     queryClient.invalidateQueries({ queryKey: ['completed-swaps-count'] });
+    queryClient.invalidateQueries({ queryKey: ['map-items'] });
+    queryClient.invalidateQueries({ queryKey: ['completed-swap-items'] });
   };
 
   return (
@@ -120,8 +130,10 @@ export function ChatHeader({
         open={showCompleteModal}
         onClose={() => setShowCompleteModal(false)}
         onComplete={handleCompleteSwap}
-        myItemTitle="Your item"
-        theirItemTitle="Their item"
+        myItemTitle={myItemTitle || 'Your item'}
+        theirItemTitle={theirItemTitle || 'Their item'}
+        myItemPhoto={myItemPhoto}
+        theirItemPhoto={theirItemPhoto}
       />
     </>
   );

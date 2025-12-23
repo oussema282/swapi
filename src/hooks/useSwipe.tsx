@@ -36,6 +36,19 @@ export function useSwipeableItems(myItemId: string | null) {
 
       const swipedItemIds = existingSwipes?.map(s => s.swiped_item_id) || [];
 
+      // Get items I've already matched with (to exclude from swiping)
+      const { data: existingMatches } = await supabase
+        .from('matches')
+        .select('item_a_id, item_b_id')
+        .or(`item_a_id.eq.${myItemId},item_b_id.eq.${myItemId}`);
+
+      const matchedItemIds = existingMatches?.flatMap(m => 
+        [m.item_a_id, m.item_b_id].filter(id => id !== myItemId)
+      ) || [];
+
+      // Combine swiped and matched items to exclude
+      const excludedItemIds = [...new Set([...swipedItemIds, ...matchedItemIds])];
+
       // Get compatible items (without profile join - we'll fetch profiles separately)
       const { data: items, error } = await supabase
         .from('items')
@@ -47,8 +60,8 @@ export function useSwipeableItems(myItemId: string | null) {
 
       if (error) throw error;
 
-      // Filter out already swiped items
-      const filteredItems = (items || []).filter(item => !swipedItemIds.includes(item.id));
+      // Filter out already swiped/matched items
+      const filteredItems = (items || []).filter(item => !excludedItemIds.includes(item.id));
 
       if (filteredItems.length === 0) return [];
 
