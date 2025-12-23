@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
@@ -6,19 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
-import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw } from 'lucide-react';
+import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 interface SearchItem extends Item {
   owner_display_name: string;
@@ -28,8 +21,14 @@ interface SearchItem extends Item {
   distance?: number;
 }
 
-const categories: { value: ItemCategory | 'all'; label: string }[] = [
-  { value: 'all', label: 'All Categories' },
+interface Suggestion {
+  type: 'item' | 'category' | 'popular';
+  text: string;
+  icon: 'item' | 'category' | 'trending';
+  category?: ItemCategory;
+}
+
+const categories: { value: ItemCategory; label: string }[] = [
   { value: 'games', label: 'Games' },
   { value: 'electronics', label: 'Electronics' },
   { value: 'clothes', label: 'Clothes' },
@@ -40,13 +39,20 @@ const categories: { value: ItemCategory | 'all'; label: string }[] = [
 ];
 
 const distanceOptions = [
-  { value: 'any', label: 'Any distance' },
-  { value: '5', label: '5 km' },
-  { value: '10', label: '10 km' },
-  { value: '25', label: '25 km' },
-  { value: '50', label: '50 km' },
-  { value: '100', label: '100 km' },
-  { value: '200', label: '200 km' },
+  { value: 'any', label: 'Any' },
+  { value: '5', label: '5km' },
+  { value: '10', label: '10km' },
+  { value: '25', label: '25km' },
+  { value: '50', label: '50km' },
+  { value: '100', label: '100km' },
+];
+
+const popularSearches = [
+  'PlayStation Controller',
+  'iPhone',
+  'Nike Shoes',
+  'Books',
+  'Vintage',
 ];
 
 export default function Search() {
@@ -55,11 +61,19 @@ export default function Search() {
   const queryClient = useQueryClient();
   
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<ItemCategory | 'all'>('all');
+  const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [maxDistance, setMaxDistance] = useState<string>('any');
   const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  
+  // Autocomplete state
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   // Auto-request location on mount
   useEffect(() => {
@@ -67,6 +81,28 @@ export default function Search() {
       requestLocation();
     }
   }, [hasLocation, locationLoading, requestLocation]);
+
+  // Debounce search query for autocomplete
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Close suggestions on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        inputRef.current && !inputRef.current.contains(e.target as Node) &&
+        suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const { data: items, isLoading, refetch, isFetching } = useQuery({
     queryKey: ['search-items', user?.id],
@@ -81,7 +117,6 @@ export default function Search() {
 
       if (error) throw error;
 
-      // Get profiles for all users
       const userIds = [...new Set((allItems || []).map(item => item.user_id))];
       const { data: profiles } = await supabase
         .from('profiles')
@@ -101,17 +136,73 @@ export default function Search() {
       }));
     },
     enabled: !!user,
-    refetchInterval: 30000, // Auto-refresh every 30 seconds
+    refetchInterval: 30000,
   });
+
+  // Generate suggestions based on debounced query
+  useEffect(() => {
+    if (debouncedQuery.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const query = debouncedQuery.toLowerCase();
+    const newSuggestions: Suggestion[] = [];
+
+    // Category matches
+    categories.forEach(cat => {
+      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 5) {
+        newSuggestions.push({
+          type: 'category',
+          text: cat.label,
+          icon: 'category',
+          category: cat.value,
+        });
+      }
+    });
+
+    // Item title matches
+    if (items) {
+      const titleMatches = items
+        .filter(item => item.title.toLowerCase().includes(query))
+        .slice(0, 5 - newSuggestions.length);
+      
+      titleMatches.forEach(item => {
+        if (!newSuggestions.some(s => s.text.toLowerCase() === item.title.toLowerCase())) {
+          newSuggestions.push({
+            type: 'item',
+            text: item.title,
+            icon: 'item',
+          });
+        }
+      });
+    }
+
+    // Popular search matches
+    popularSearches.forEach(search => {
+      if (search.toLowerCase().includes(query) && newSuggestions.length < 5) {
+        if (!newSuggestions.some(s => s.text.toLowerCase() === search.toLowerCase())) {
+          newSuggestions.push({
+            type: 'popular',
+            text: search,
+            icon: 'trending',
+          });
+        }
+      }
+    });
+
+    setSuggestions(newSuggestions.slice(0, 5));
+    setSelectedSuggestionIndex(-1);
+  }, [debouncedQuery, items]);
 
   // Determine if search/filters are active
   useEffect(() => {
     const hasSearch = searchQuery.trim().length > 0;
-    const hasCategory = selectedCategory !== 'all';
+    const hasCategory = selectedCategories.length > 0;
     const hasDistance = maxDistance !== 'any';
     const hasBudget = budgetRange[0] > 0 || budgetRange[1] < 1000;
     setIsSearchActive(hasSearch || hasCategory || hasDistance || hasBudget);
-  }, [searchQuery, selectedCategory, maxDistance, budgetRange]);
+  }, [searchQuery, selectedCategories, maxDistance, budgetRange]);
 
   const filteredItems = useMemo(() => {
     if (!items) return [];
@@ -124,19 +215,14 @@ export default function Search() {
         if (item.owner_latitude && item.owner_longitude) {
           return {
             ...item,
-            distance: calculateDistance(
-              latitude,
-              longitude,
-              item.owner_latitude,
-              item.owner_longitude
-            ),
+            distance: calculateDistance(latitude, longitude, item.owner_latitude, item.owner_longitude),
           };
         }
         return { ...item, distance: undefined };
       });
     }
 
-    // Text search (title, description, category, owner)
+    // Text search
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => {
@@ -150,17 +236,15 @@ export default function Search() {
       });
     }
 
-    // Category filter
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(item => item.category === selectedCategory);
+    // Multi-category filter
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(item => selectedCategories.includes(item.category));
     }
 
     // Distance filter
     if (maxDistance !== 'any' && hasLocation) {
       const maxDist = parseInt(maxDistance);
-      filtered = filtered.filter(item => 
-        item.distance !== undefined && item.distance <= maxDist
-      );
+      filtered = filtered.filter(item => item.distance !== undefined && item.distance <= maxDist);
     }
 
     // Budget filter
@@ -168,12 +252,11 @@ export default function Search() {
       filtered = filtered.filter(item => {
         const itemMin = item.value_min || 0;
         const itemMax = item.value_max || 1000;
-        // Check if item's value range overlaps with filter range
         return itemMin <= budgetRange[1] && itemMax >= budgetRange[0];
       });
     }
 
-    // Sort by distance if available, otherwise by created_at
+    // Sort by distance
     if (hasLocation) {
       filtered = filtered.sort((a, b) => {
         if (a.distance === undefined && b.distance === undefined) return 0;
@@ -183,13 +266,12 @@ export default function Search() {
       });
     }
 
-    // If no search active, return top 10 nearby; otherwise return all matches
     if (!isSearchActive) {
       return filtered.slice(0, 10);
     }
 
     return filtered;
-  }, [items, searchQuery, selectedCategory, hasLocation, latitude, longitude, maxDistance, budgetRange, isSearchActive]);
+  }, [items, searchQuery, selectedCategories, hasLocation, latitude, longitude, maxDistance, budgetRange, isSearchActive]);
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -197,10 +279,69 @@ export default function Search() {
 
   const clearAllFilters = useCallback(() => {
     setSearchQuery('');
-    setSelectedCategory('all');
+    setSelectedCategories([]);
     setMaxDistance('any');
     setBudgetRange([0, 1000]);
+    setShowSuggestions(false);
   }, []);
+
+  const toggleCategory = useCallback((cat: ItemCategory) => {
+    setSelectedCategories(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  }, []);
+
+  const handleSuggestionClick = useCallback((suggestion: Suggestion) => {
+    if (suggestion.type === 'category' && suggestion.category) {
+      if (!selectedCategories.includes(suggestion.category)) {
+        setSelectedCategories(prev => [...prev, suggestion.category!]);
+      }
+      setSearchQuery('');
+    } else {
+      setSearchQuery(suggestion.text);
+    }
+    setShowSuggestions(false);
+    inputRef.current?.blur();
+  }, [selectedCategories]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (!showSuggestions || suggestions.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+        } else {
+          setShowSuggestions(false);
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        break;
+    }
+  }, [showSuggestions, suggestions, selectedSuggestionIndex, handleSuggestionClick]);
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) => 
+      regex.test(part) ? <mark key={i} className="bg-primary/20 text-primary font-medium">{part}</mark> : part
+    );
+  };
 
   if (authLoading) {
     return (
@@ -215,7 +356,7 @@ export default function Search() {
   }
 
   const activeFiltersCount = [
-    selectedCategory !== 'all',
+    selectedCategories.length > 0,
     maxDistance !== 'any',
     budgetRange[0] > 0 || budgetRange[1] < 1000,
   ].filter(Boolean).length;
@@ -225,24 +366,86 @@ export default function Search() {
       <div className="flex flex-col h-full">
         {/* Search Header */}
         <div className="px-4 pt-4 pb-3 bg-background border-b border-border/50 space-y-3">
-          {/* Top row: Search + Filter button */}
+          {/* Search input with autocomplete */}
           <div className="flex gap-2">
             <div className="flex-1 relative">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
               <Input
+                ref={inputRef}
                 placeholder="Search items, categories, users..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (e.target.value.length >= 2) {
+                    setShowSuggestions(true);
+                  } else {
+                    setShowSuggestions(false);
+                  }
+                }}
+                onFocus={() => {
+                  if (searchQuery.length >= 2) {
+                    setShowSuggestions(true);
+                  }
+                }}
+                onKeyDown={handleKeyDown}
                 className="pl-10 pr-10 h-12 bg-muted/50 text-base"
               />
               {searchQuery && (
                 <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setShowSuggestions(false);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground z-10"
                 >
                   <X className="w-4 h-4" />
                 </button>
               )}
+
+              {/* Autocomplete dropdown */}
+              <AnimatePresence>
+                {showSuggestions && suggestions.length > 0 && (
+                  <motion.div
+                    ref={suggestionsRef}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden z-50"
+                  >
+                    {suggestions.map((suggestion, index) => (
+                      <button
+                        key={`${suggestion.type}-${suggestion.text}`}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+                          index === selectedSuggestionIndex
+                            ? 'bg-primary/10'
+                            : 'hover:bg-muted/50'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
+                          suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
+                          'bg-muted text-muted-foreground'
+                        }`}>
+                          {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
+                          {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
+                          {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">
+                            {highlightMatch(suggestion.text, searchQuery)}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {suggestion.type === 'category' ? 'Category' : 
+                             suggestion.type === 'popular' ? 'Popular search' : 'Item'}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <Button
               variant={showFilters ? 'default' : 'outline'}
@@ -259,16 +462,39 @@ export default function Search() {
             </Button>
           </div>
 
-          {/* Quick category pills */}
+          {/* Selected categories (multi-select chips) */}
+          {selectedCategories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedCategories.map(cat => (
+                <Badge
+                  key={cat}
+                  variant="default"
+                  className="pl-2 pr-1 py-1 gap-1 cursor-pointer"
+                  onClick={() => toggleCategory(cat)}
+                >
+                  {CATEGORY_LABELS[cat]}
+                  <X className="w-3 h-3" />
+                </Badge>
+              ))}
+              <button
+                onClick={() => setSelectedCategories([])}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
+
+          {/* Category pills (multi-select) */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             {categories.map(cat => (
               <button
                 key={cat.value}
-                onClick={() => setSelectedCategory(cat.value)}
-                className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all ${
-                  selectedCategory === cat.value
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                onClick={() => toggleCategory(cat.value)}
+                className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all border ${
+                  selectedCategories.includes(cat.value)
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-background text-muted-foreground border-border hover:border-primary/50'
                 }`}
               >
                 {cat.label}
@@ -293,24 +519,18 @@ export default function Search() {
                       Distance
                     </label>
                     {!hasLocation && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={requestLocation}
-                        disabled={locationLoading}
-                        className="text-xs"
-                      >
+                      <Button variant="ghost" size="sm" onClick={requestLocation} disabled={locationLoading} className="text-xs">
                         {locationLoading ? 'Getting...' : 'Enable location'}
                       </Button>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {distanceOptions.map(opt => (
                       <button
                         key={opt.value}
                         onClick={() => setMaxDistance(opt.value)}
                         disabled={!hasLocation && opt.value !== 'any'}
-                        className={`flex-1 px-2 py-2 rounded-lg text-xs transition-all ${
+                        className={`px-3 py-2 rounded-lg text-xs transition-all ${
                           maxDistance === opt.value
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -326,7 +546,7 @@ export default function Search() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-primary" />
-                    Value Range: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
+                    Value: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
                   </label>
                   <Slider
                     value={budgetRange}
@@ -338,14 +558,8 @@ export default function Search() {
                   />
                 </div>
 
-                {/* Clear all */}
                 {isSearchActive && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearAllFilters}
-                    className="w-full text-muted-foreground"
-                  >
+                  <Button variant="ghost" size="sm" onClick={clearAllFilters} className="w-full text-muted-foreground">
                     <X className="w-4 h-4 mr-2" />
                     Clear all filters
                   </Button>
@@ -358,26 +572,12 @@ export default function Search() {
         {/* Results Header */}
         <div className="px-4 py-2 bg-muted/30 border-b border-border/30 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {!isSearchActive && hasLocation && (
-              <Sparkles className="w-4 h-4 text-primary" />
-            )}
+            {!isSearchActive && hasLocation && <Sparkles className="w-4 h-4 text-primary" />}
             <span className="text-sm text-muted-foreground">
-              {isLoading ? (
-                'Loading...'
-              ) : isSearchActive ? (
-                `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''}`
-              ) : (
-                'Top 10 near you'
-              )}
+              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''}` : 'Top 10 near you'}
             </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isFetching}
-            className="h-8 px-2"
-          >
+          <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={isFetching} className="h-8 px-2">
             <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
           </Button>
         </div>
@@ -393,14 +593,10 @@ export default function Search() {
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
               <h3 className="text-lg font-semibold mb-2">No items found</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                {isSearchActive 
-                  ? 'Try adjusting your filters or search terms' 
-                  : 'No items available in your area yet'}
+                {isSearchActive ? 'Try adjusting your filters or search terms' : 'No items available in your area yet'}
               </p>
               {isSearchActive && (
-                <Button variant="outline" size="sm" onClick={clearAllFilters}>
-                  Clear filters
-                </Button>
+                <Button variant="outline" size="sm" onClick={clearAllFilters}>Clear filters</Button>
               )}
             </div>
           ) : (
@@ -414,36 +610,21 @@ export default function Search() {
                   className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-3 p-3">
-                    {/* Photo */}
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                       {item.photos && item.photos.length > 0 ? (
-                        <img
-                          src={item.photos[0]}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
+                        <img src={item.photos[0]} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Package className="w-8 h-8 text-muted-foreground/30" />
                         </div>
                       )}
                     </div>
-
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-foreground truncate">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-1">
-                        {item.description || 'No description'}
-                      </p>
-                      
+                      <p className="text-sm text-muted-foreground line-clamp-1">{item.description || 'No description'}</p>
                       <div className="flex flex-wrap gap-1.5 mt-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {CATEGORY_LABELS[item.category]}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {CONDITION_LABELS[item.condition]}
-                        </Badge>
+                        <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[item.category]}</Badge>
+                        <Badge variant="outline" className="text-xs">{CONDITION_LABELS[item.condition]}</Badge>
                         {item.distance !== undefined && (
                           <Badge variant="outline" className="text-xs">
                             <MapPin className="w-3 h-3 mr-1" />
@@ -451,13 +632,9 @@ export default function Search() {
                           </Badge>
                         )}
                         {(item.value_min || item.value_max) && (
-                          <Badge variant="outline" className="text-xs text-price">
-                            €{item.value_min || 0}-{item.value_max || '?'}
-                          </Badge>
+                          <Badge variant="outline" className="text-xs text-price">€{item.value_min || 0}-{item.value_max || '?'}</Badge>
                         )}
                       </div>
-
-                      {/* Owner */}
                       <div className="flex items-center gap-2 mt-2">
                         <div className="w-5 h-5 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center text-[10px] font-bold">
                           {item.owner_avatar_url ? (
@@ -466,9 +643,7 @@ export default function Search() {
                             item.owner_display_name.charAt(0).toUpperCase()
                           )}
                         </div>
-                        <span className="text-xs text-muted-foreground truncate">
-                          {item.owner_display_name}
-                        </span>
+                        <span className="text-xs text-muted-foreground truncate">{item.owner_display_name}</span>
                       </div>
                     </div>
                   </div>
