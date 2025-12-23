@@ -89,21 +89,24 @@ export default function Chat() {
           displayName={match?.other_user_profile?.display_name || 'Unknown'}
           isOnline={otherUserOnline}
           lastSeen={displayLastSeen}
+          matchId={matchId}
         />
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-background">
-          {messages?.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-8"
-            >
-              <p className="text-sm text-muted-foreground">
-                Start the conversation! Say hi and discuss the swap details.
-              </p>
-            </motion.div>
-          )}
+        {/* Messages - flex-col-reverse makes messages start from bottom */}
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col-reverse bg-background">
+          <div ref={messagesEndRef} />
+          <div className="space-y-1 mt-auto">
+            {messages?.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-8"
+              >
+                <p className="text-sm text-muted-foreground">
+                  Start the conversation! Say hi and discuss the swap details.
+                </p>
+              </motion.div>
+            )}
           
           <AnimatePresence initial={false}>
             {groupedMessages.map((group, groupIndex) => {
@@ -144,8 +147,8 @@ export default function Chat() {
                 </div>
               );
             })}
-          </AnimatePresence>
-          <div ref={messagesEndRef} />
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Input */}

@@ -39,23 +39,36 @@ export default function MapView() {
   const { data: items = [] } = useQuery({
     queryKey: ['map-items'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First get items
+      const { data: itemsData, error: itemsError } = await supabase
         .from('items')
-        .select(`
-          *,
-          profiles!items_user_id_fkey(display_name, avatar_url)
-        `)
+        .select('*')
         .eq('is_active', true)
         .not('latitude', 'is', null)
         .not('longitude', 'is', null);
 
-      if (error) throw error;
+      if (itemsError) throw itemsError;
+      if (!itemsData?.length) return [];
 
-      return (data || []).map((item: any) => ({
-        ...item,
-        owner_display_name: item.profiles?.display_name || 'Unknown',
-        owner_avatar_url: item.profiles?.avatar_url || null,
-      })) as ItemWithOwner[];
+      // Get unique user IDs
+      const userIds = [...new Set(itemsData.map(item => item.user_id))];
+      
+      // Fetch profiles for those users
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      const profilesMap = new Map(profilesData?.map(p => [p.user_id, p]) || []);
+
+      return itemsData.map((item: any) => {
+        const profile = profilesMap.get(item.user_id);
+        return {
+          ...item,
+          owner_display_name: profile?.display_name || 'Unknown',
+          owner_avatar_url: profile?.avatar_url || null,
+        };
+      }) as ItemWithOwner[];
     },
   });
 
