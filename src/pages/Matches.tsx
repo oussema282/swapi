@@ -74,24 +74,26 @@ export default function Matches() {
           completedCount={completedMatches.length}
         />
 
-        {matches && matches.length > 0 ? (
-          <div className="flex-1 overflow-y-auto space-y-8 pb-4">
+{matches && matches.length > 0 ? (
+          <div className="flex-1 overflow-y-auto space-y-6 pb-4">
             {/* Active Matches */}
             <AnimatePresence mode="wait">
               {activeMatches.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="space-y-3"
+                  className="space-y-2"
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <h2 className="text-sm font-semibold text-foreground">Active Exchanges</h2>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
-                      {activeMatches.length}
-                    </span>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-sm font-semibold text-foreground">Active</h2>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                        {activeMatches.length}
+                      </span>
+                    </div>
                   </div>
                   
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {activeMatches.map((match, index) => (
                       <MatchCard
                         key={match.id}
@@ -101,28 +103,6 @@ export default function Matches() {
                         hasUnread={hasUnreadMessages(match)}
                       />
                     ))}
-                  </div>
-
-                  {/* Complete Swap CTAs */}
-                  <div className="pt-2">
-                    <p className="text-xs text-muted-foreground mb-2">Ready to finalize an exchange?</p>
-                    <div className="flex flex-wrap gap-2">
-                      {activeMatches.slice(0, 3).map((match) => (
-                        <Button
-                          key={match.id}
-                          size="sm"
-                          variant="outline"
-                          className="text-xs border-success/30 text-success hover:bg-success/10"
-                          onClick={() => {
-                            setSelectedMatch(match);
-                            setShowCompleteModal(true);
-                          }}
-                        >
-                          <CheckCircle2 className="w-3 h-3 mr-1" />
-                          Complete: {match.their_item?.title?.slice(0, 15)}...
-                        </Button>
-                      ))}
-                    </div>
                   </div>
                 </motion.div>
               )}
