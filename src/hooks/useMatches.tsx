@@ -73,12 +73,29 @@ export function useMatches() {
         (profiles || []).map(p => [p.user_id, p])
       );
 
+      // Fetch last messages for each match
+      const matchIds = userMatches.map(m => m.id);
+      const { data: lastMessages } = await supabase
+        .from('messages')
+        .select('*')
+        .in('match_id', matchIds)
+        .order('created_at', { ascending: false });
+
+      // Group messages by match_id and get only the last one
+      const lastMessageMap = new Map<string, MessageWithStatus>();
+      (lastMessages || []).forEach(msg => {
+        if (!lastMessageMap.has(msg.match_id)) {
+          lastMessageMap.set(msg.match_id, msg as MessageWithStatus);
+        }
+      });
+
       const transformedMatches = userMatches.map(match => {
         const itemA = match.item_a as any;
         const itemB = match.item_b as any;
         const isMyItemA = itemA?.user_id === user.id;
         const otherUserId = isMyItemA ? itemB?.user_id : itemA?.user_id;
         const otherUserProfile = profileMap.get(otherUserId);
+        const lastMessage = lastMessageMap.get(match.id);
         
         return {
           ...match,
@@ -100,6 +117,7 @@ export function useMatches() {
             avatar_url: otherUserProfile?.avatar_url || null,
             last_seen: otherUserProfile?.last_seen || null,
           },
+          last_message: lastMessage,
         } as MatchWithItems;
       });
 
