@@ -236,7 +236,14 @@ serve(async (req) => {
     // Create client with anon key for auth validation
     const supabaseAuth = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false,
+        },
+      }
     );
 
     // Create admin client for data queries
@@ -245,8 +252,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    const rawAuthHeader = req.headers.get("Authorization") ?? req.headers.get("authorization");
+    if (!rawAuthHeader) {
       console.error("No authorization header provided");
       return new Response(JSON.stringify({ error: "No authorization header" }), {
         status: 401,
@@ -254,12 +261,29 @@ serve(async (req) => {
       });
     }
 
-    // Get the user from the JWT using the anon client
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: userError } = await supabaseAuth.auth.getUser(token);
-    
+    const tokenMatch = rawAuthHeader.match(/^Bearer\s+(.+)$/i);
+    const token = tokenMatch?.[1]?.trim();
+    if (!token) {
+      console.error("Invalid authorization header format");
+      return new Response(JSON.stringify({ error: "Invalid token" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate JWT (must pass the token explicitly in server environments)
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseAuth.auth.getUser(token);
+
     if (userError || !user) {
-      console.error("Token validation failed:", userError?.message || "No user found");
+      console.error(
+        "Token validation failed:",
+        userError?.message || "No user found",
+        "tokenLength=",
+        token.length
+      );
       return new Response(JSON.stringify({ error: "Invalid token" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

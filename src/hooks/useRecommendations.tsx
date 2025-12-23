@@ -24,36 +24,21 @@ export function useRecommendedItems(myItemId: string | null) {
     queryFn: async (): Promise<SwipeableItem[]> => {
       if (!user || !myItemId) return [];
 
-      // Call the recommendation edge function
-      const { data: session } = await supabase.auth.getSession();
-      const token = session?.session?.access_token;
+       try {
+         const { data, error: invokeError } = await supabase.functions.invoke('recommend-items', {
+           body: { myItemId, limit: 50 },
+         });
 
-      if (!token) return [];
+         if (invokeError) {
+           console.error('Recommendation API error:', invokeError.message);
+           return fallbackFetch(user.id, myItemId);
+         }
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/recommend-items`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ myItemId, limit: 50 }),
-          }
-        );
+         const rankedItems = (data as { rankedItems?: RecommendationResult[] } | null)?.rankedItems;
 
-        if (!response.ok) {
-          console.error('Recommendation API error:', response.status);
-          // Fall back to basic query
-          return fallbackFetch(user.id, myItemId);
-        }
-
-        const { rankedItems }: { rankedItems: RecommendationResult[] } = await response.json();
-
-        if (!rankedItems || rankedItems.length === 0) {
-          return [];
-        }
+         if (!rankedItems || rankedItems.length === 0) {
+           return [];
+         }
 
         // Fetch full item details for ranked items
         const itemIds = rankedItems.map(r => r.id);
