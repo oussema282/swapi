@@ -95,8 +95,8 @@ export default function NewItem() {
     const files = e.target.files;
     if (!files || !user) return;
 
-    if (photos.length + files.length > 5) {
-      toast({ variant: 'destructive', title: 'Maximum 5 photos allowed' });
+    if (photos.length + files.length > 4) {
+      toast({ variant: 'destructive', title: 'Maximum 4 photos allowed' });
       return;
     }
 
@@ -320,7 +320,7 @@ export default function NewItem() {
                       </motion.div>
                     ))}
                     
-                    {photos.length < 5 && (
+                    {photos.length < 4 && (
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
@@ -349,7 +349,7 @@ export default function NewItem() {
                   />
                   
                   <p className="text-xs text-muted-foreground">
-                    Add up to 5 photos • Max 5MB each
+                    Add up to 4 photos • Max 5MB each
                   </p>
                 </Card>
 

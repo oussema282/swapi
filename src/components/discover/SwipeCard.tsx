@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star, ChevronDown, MapPin } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 
@@ -25,28 +25,21 @@ const SWIPE_THRESHOLD = 100;
 
 // Convert rating (1-5) to star display
 function RatingStars({ rating, totalInteractions }: { rating?: number; totalInteractions?: number }) {
-  // Default to 3 stars for new items (cold start)
   const displayRating = rating ?? 3;
-  
-  // Round to nearest 0.5
   const roundedRating = Math.round(displayRating * 2) / 2;
   const clampedRating = Math.min(5, Math.max(1, roundedRating));
   
   const fullStars = Math.floor(clampedRating);
   const hasHalfStar = clampedRating - fullStars >= 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  // Confidence indicator based on interaction volume
   const isNewItem = (totalInteractions ?? 0) < 5;
 
   return (
     <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
       <div className="flex items-center gap-0.5">
-        {/* Full stars */}
         {Array.from({ length: fullStars }).map((_, i) => (
           <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
         ))}
-        {/* Half star */}
         {hasHalfStar && (
           <div className="relative">
             <Star className="w-4 h-4 text-muted-foreground/30" />
@@ -55,7 +48,6 @@ function RatingStars({ rating, totalInteractions }: { rating?: number; totalInte
             </div>
           </div>
         )}
-        {/* Empty stars */}
         {Array.from({ length: emptyStars }).map((_, i) => (
           <Star key={`empty-${i}`} className="w-4 h-4 text-muted-foreground/30" />
         ))}
@@ -72,7 +64,11 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false);
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const x = useMotionValue(0);
+
+  const photos = item.photos || [];
+  const hasMultiplePhotos = photos.length > 1;
 
   // Check if description is truncated
   useEffect(() => {
@@ -83,18 +79,20 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     }
   }, [item.description]);
 
+  // Reset photo index when item changes
+  useEffect(() => {
+    setCurrentPhotoIndex(0);
+  }, [item.id]);
+
   // Calculate distance to item
   const distanceKm = userLocation?.latitude && userLocation?.longitude && item.latitude && item.longitude
     ? calculateDistance(userLocation.latitude, userLocation.longitude, item.latitude, item.longitude)
     : null;
+
   const rotate = useTransform(x, [-300, 0, 300], [-25, 0, 25]);
   const opacity = useTransform(x, [-300, -100, 0, 100, 300], [0, 1, 1, 1, 0]);
-  
-  // Overlay opacities
   const likeOpacity = useTransform(x, [0, 100, 200], [0, 0.8, 1]);
   const nopeOpacity = useTransform(x, [-200, -100, 0], [1, 0.8, 0]);
-
-  const hasPhotos = item.photos && item.photos.length > 0;
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const threshold = SWIPE_THRESHOLD;
@@ -105,7 +103,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     }
   };
 
-  // Animate out when swipeDirection is set
   const getExitAnimation = () => {
     if (swipeDirection === 'left') {
       return { x: -500, rotate: -30, opacity: 0 };
@@ -114,6 +111,16 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
       return { x: 500, rotate: 30, opacity: 0 };
     }
     return {};
+  };
+
+  const handlePrevPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentPhotoIndex(prev => (prev > 0 ? prev - 1 : photos.length - 1));
+  };
+
+  const handleNextPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentPhotoIndex(prev => (prev < photos.length - 1 ? prev + 1 : 0));
   };
 
   return (
@@ -137,26 +144,65 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 1.02 }}
     >
-      {/* Card Background - Use flex column to prevent overlap */}
       <div className="absolute inset-0 bg-card flex flex-col">
-        {/* Main Photo - flex-shrink-0 to maintain size */}
+        {/* Photo Area with Navigation */}
         <div className="relative flex-1 min-h-0 bg-muted overflow-hidden">
-            {hasPhotos ? (
+          {photos.length > 0 ? (
+            <>
               <img
-                src={item.photos[0]}
-                alt={item.title}
+                src={photos[currentPhotoIndex]}
+                alt={`${item.title} - Photo ${currentPhotoIndex + 1}`}
                 className="w-full h-full object-cover"
                 draggable={false}
                 loading="lazy"
                 decoding="async"
               />
-            ) : (
+
+              {/* Photo Navigation Arrows */}
+              {hasMultiplePhotos && isTop && (
+                <>
+                  <button
+                    onClick={handlePrevPhoto}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-black/60 transition-colors"
+                  >
+                    <ChevronLeft className="w-6 h-6 text-white" />
+                  </button>
+                  <button
+                    onClick={handleNextPhoto}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-black/60 transition-colors"
+                  >
+                    <ChevronRight className="w-6 h-6 text-white" />
+                  </button>
+                </>
+              )}
+
+              {/* Photo Dots Indicator */}
+              {hasMultiplePhotos && (
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                  {photos.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentPhotoIndex(index);
+                      }}
+                      className={cn(
+                        'w-2 h-2 rounded-full transition-all',
+                        index === currentPhotoIndex
+                          ? 'bg-white w-4'
+                          : 'bg-white/50 hover:bg-white/75'
+                      )}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
               <Package className="w-24 h-24 text-muted-foreground/20" />
             </div>
           )}
 
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
 
           {/* Like Overlay */}
@@ -192,14 +238,12 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           </div>
         </div>
 
-        {/* Content - Fixed height, no overlap */}
+        {/* Content */}
         <div className="flex-shrink-0 p-4 bg-card border-t border-border/30">
-          {/* Title */}
           <h3 className="text-xl font-display font-bold text-foreground leading-tight line-clamp-1 mb-1">
             {item.title}
           </h3>
 
-          {/* Description with expand button */}
           <div className="flex items-start gap-1 mb-2">
             <p 
               ref={descriptionRef}
@@ -221,7 +265,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             )}
           </div>
 
-          {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               {CATEGORY_LABELS[item.category]}
@@ -239,7 +282,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             )}
           </div>
 
-          {/* Owner - Always at bottom, never overlapped */}
           <div className="flex items-center gap-2 pt-2 border-t border-border/50">
             <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md flex-shrink-0">
               {item.owner_avatar_url ? (
@@ -259,7 +301,6 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
         </div>
       </div>
 
-      {/* Description Modal */}
       <DescriptionModal
         open={showDescriptionModal}
         onOpenChange={setShowDescriptionModal}
