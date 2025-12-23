@@ -26,6 +26,7 @@ export function useDeviceLocation() {
       setLocation(prev => ({
         ...prev,
         error: 'Geolocation is not supported by your browser',
+        permissionStatus: 'denied',
       }));
       return;
     }
@@ -37,6 +38,19 @@ export function useDeviceLocation() {
       if (navigator.permissions) {
         const permission = await navigator.permissions.query({ name: 'geolocation' });
         setLocation(prev => ({ ...prev, permissionStatus: permission.state }));
+        
+        // Listen for permission changes
+        permission.addEventListener('change', () => {
+          setLocation(prev => ({ ...prev, permissionStatus: permission.state }));
+          if (permission.state === 'denied') {
+            setLocation(prev => ({
+              ...prev,
+              latitude: null,
+              longitude: null,
+              error: 'Location permission denied',
+            }));
+          }
+        });
       }
 
       navigator.geolocation.getCurrentPosition(
@@ -73,6 +87,8 @@ export function useDeviceLocation() {
           
           setLocation(prev => ({
             ...prev,
+            latitude: null,
+            longitude: null,
             loading: false,
             error: errorMessage,
             permissionStatus: 'denied',
@@ -80,8 +96,8 @@ export function useDeviceLocation() {
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000, // 5 minutes cache
+          timeout: 15000,
+          maximumAge: 0, // Always get fresh location
         }
       );
     } catch (err) {
@@ -89,14 +105,40 @@ export function useDeviceLocation() {
         ...prev,
         loading: false,
         error: 'Error requesting location',
+        permissionStatus: 'denied',
       }));
     }
   }, [user]);
 
-  // Load saved location from profile on mount
+  // Monitor permission changes continuously
+  useEffect(() => {
+    if (!navigator.permissions) return;
+
+    const checkPermission = async () => {
+      try {
+        const permission = await navigator.permissions.query({ name: 'geolocation' });
+        setLocation(prev => ({ ...prev, permissionStatus: permission.state }));
+        
+        if (permission.state === 'denied') {
+          setLocation(prev => ({
+            ...prev,
+            latitude: null,
+            longitude: null,
+            error: 'Location permission denied',
+          }));
+        }
+      } catch {
+        // Permission API not supported
+      }
+    };
+
+    checkPermission();
+  }, []);
+
+  // Load saved location from profile on mount (only if we don't have fresh location)
   useEffect(() => {
     const loadSavedLocation = async () => {
-      if (!user) return;
+      if (!user || location.latitude !== null) return;
 
       const { data: profile } = await supabase
         .from('profiles')
@@ -104,7 +146,8 @@ export function useDeviceLocation() {
         .eq('user_id', user.id)
         .single();
 
-      if (profile?.latitude && profile?.longitude) {
+      // Only use saved location temporarily while we get fresh location
+      if (profile?.latitude && profile?.longitude && location.latitude === null) {
         setLocation(prev => ({
           ...prev,
           latitude: profile.latitude,
@@ -114,12 +157,12 @@ export function useDeviceLocation() {
     };
 
     loadSavedLocation();
-  }, [user]);
+  }, [user, location.latitude]);
 
   return {
     ...location,
     requestLocation,
-    hasLocation: location.latitude !== null && location.longitude !== null,
+    hasLocation: location.latitude !== null && location.longitude !== null && location.permissionStatus !== 'denied',
   };
 }
 

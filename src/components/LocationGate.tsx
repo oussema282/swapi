@@ -10,8 +10,8 @@ interface LocationGateProps {
 export function LocationGate({ children }: LocationGateProps) {
   const { hasLocation, loading, error, permissionStatus, requestLocation } = useDeviceLocation();
 
-  // If we have location, render children
-  if (hasLocation) {
+  // If we have valid location and permission is not denied, render children
+  if (hasLocation && permissionStatus !== 'denied') {
     return <>{children}</>;
   }
 

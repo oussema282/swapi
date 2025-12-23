@@ -57,14 +57,23 @@ export function useCreateItem() {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (data: CreateItemData) => {
+    mutationFn: async (data: CreateItemData & { latitude?: number; longitude?: number }) => {
       if (!user) throw new Error('Not authenticated');
+
+      // Get user's current location from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('latitude, longitude')
+        .eq('user_id', user.id)
+        .single();
 
       const { data: item, error } = await supabase
         .from('items')
         .insert({
           ...data,
           user_id: user.id,
+          latitude: data.latitude ?? profile?.latitude ?? null,
+          longitude: data.longitude ?? profile?.longitude ?? null,
         })
         .select()
         .single();
@@ -74,6 +83,7 @@ export function useCreateItem() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['my-items'] });
+      queryClient.invalidateQueries({ queryKey: ['map-items'] });
     },
   });
 }
