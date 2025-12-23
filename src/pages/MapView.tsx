@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { DealInviteButton } from '@/components/deals/DealInviteButton';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -39,6 +40,8 @@ const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'book
 
 export default function MapView() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const focusItemId = searchParams.get('itemId');
   const { user } = useAuth();
   const { latitude, longitude } = useDeviceLocation();
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -49,6 +52,7 @@ export default function MapView() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
+  const hasNavigatedToFocusItem = useRef(false);
 
   // Fetch completed swap item IDs to exclude from map
   const { data: completedItemIds = [] } = useQuery({
@@ -219,6 +223,22 @@ export default function MapView() {
     });
   }, [filteredItems]);
 
+  // Focus on item from URL param
+  useEffect(() => {
+    if (!focusItemId || !map.current || hasNavigatedToFocusItem.current) return;
+    
+    const focusItem = items.find(item => item.id === focusItemId);
+    if (focusItem && focusItem.latitude && focusItem.longitude) {
+      hasNavigatedToFocusItem.current = true;
+      setSelectedItem(focusItem);
+      map.current.flyTo({
+        center: [focusItem.longitude, focusItem.latitude],
+        zoom: 15,
+        duration: 1500,
+      });
+    }
+  }, [focusItemId, items]);
+
   if (tokenLoading) {
     return (
       <AppLayout showNav>
@@ -346,6 +366,12 @@ export default function MapView() {
                       <Badge variant="outline" className="text-xs">
                         {CONDITION_LABELS[selectedItem.condition]}
                       </Badge>
+                    </div>
+                    <div className="mt-3">
+                      <DealInviteButton 
+                        targetItemId={selectedItem.id}
+                        targetItemTitle={selectedItem.title}
+                      />
                     </div>
                   </div>
                 </div>

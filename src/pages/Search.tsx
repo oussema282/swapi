@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DealInviteButton } from '@/components/deals/DealInviteButton';
 
 interface SearchItem extends Item {
   owner_display_name: string;
@@ -57,6 +58,7 @@ const popularSearches = [
 
 export default function Search() {
   const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const { latitude, longitude, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
   const queryClient = useQueryClient();
   
@@ -607,7 +609,8 @@ export default function Search() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
-                  className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
+                  className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => navigate(`/map?itemId=${item.id}`)}
                 >
                   <div className="flex gap-3 p-3">
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted flex-shrink-0">
@@ -635,15 +638,22 @@ export default function Search() {
                           <Badge variant="outline" className="text-xs text-price">€{item.value_min || 0}-{item.value_max || '?'}</Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 mt-2">
-                        <div className="w-5 h-5 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center text-[10px] font-bold">
-                          {item.owner_avatar_url ? (
-                            <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            item.owner_display_name.charAt(0).toUpperCase()
-                          )}
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center text-[10px] font-bold">
+                            {item.owner_avatar_url ? (
+                              <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              item.owner_display_name.charAt(0).toUpperCase()
+                            )}
+                          </div>
+                          <span className="text-xs text-muted-foreground truncate">{item.owner_display_name}</span>
                         </div>
-                        <span className="text-xs text-muted-foreground truncate">{item.owner_display_name}</span>
+                        <DealInviteButton 
+                          targetItemId={item.id} 
+                          targetItemTitle={item.title}
+                          iconOnly
+                        />
                       </div>
                     </div>
                   </div>
