@@ -233,19 +233,6 @@ serve(async (req) => {
   }
 
   try {
-    // Create client with anon key for auth validation
-    const supabaseAuth = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-          detectSessionInUrl: false,
-        },
-      }
-    );
-
     // Create admin client for data queries
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -271,16 +258,35 @@ serve(async (req) => {
       });
     }
 
-    // Validate JWT (must pass the token explicitly in server environments)
+    // Create client with anon key for auth validation.
+    // IMPORTANT: In server environments, relying on the request Authorization header
+    // is more reliable than passing the token as a parameter.
+    const supabaseAuth = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      {
+        global: {
+          headers: {
+            Authorization: rawAuthHeader,
+          },
+        },
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false,
+        },
+      }
+    );
+
     const {
       data: { user },
       error: userError,
-    } = await supabaseAuth.auth.getUser(token);
+    } = await supabaseAuth.auth.getUser();
 
     if (userError || !user) {
       console.error(
         "Token validation failed:",
-        userError?.message || "No user found",
+        userError ? JSON.stringify(userError) : "No user found",
         "tokenLength=",
         token.length
       );
