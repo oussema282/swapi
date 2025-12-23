@@ -6,13 +6,14 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, X, Package, Loader2, Sun, Moon } from 'lucide-react';
+import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
-import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -24,6 +25,18 @@ const MAP_STYLES = {
   light: 'mapbox://styles/mapbox/light-v11',
 };
 
+const CATEGORY_ICONS: Record<ItemCategory, React.ReactNode> = {
+  games: <Gamepad2 className="w-4 h-4" />,
+  electronics: <Smartphone className="w-4 h-4" />,
+  clothes: <Shirt className="w-4 h-4" />,
+  books: <BookOpen className="w-4 h-4" />,
+  home_garden: <Home className="w-4 h-4" />,
+  sports: <Dumbbell className="w-4 h-4" />,
+  other: <Package className="w-4 h-4" />,
+};
+
+const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'books', 'home_garden', 'sports', 'other'];
+
 export default function MapView() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -34,24 +47,51 @@ export default function MapView() {
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedItem, setSelectedItem] = useState<ItemWithOwner | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
 
-  // Fetch all items with location
+  // Fetch completed swap item IDs to exclude from map
+  const { data: completedItemIds = [] } = useQuery({
+    queryKey: ['completed-swap-items'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('matches')
+        .select('item_a_id, item_b_id')
+        .eq('is_completed', true);
+
+      if (error) throw error;
+      
+      // Get all item IDs that have been swapped
+      const itemIds: string[] = [];
+      data?.forEach(match => {
+        itemIds.push(match.item_a_id, match.item_b_id);
+      });
+      return [...new Set(itemIds)];
+    },
+  });
+
+  // Fetch all items with location (excluding completed swaps)
   const { data: items = [] } = useQuery({
-    queryKey: ['map-items'],
+    queryKey: ['map-items', completedItemIds],
     queryFn: async () => {
       // First get items
-      const { data: itemsData, error: itemsError } = await supabase
+      let query = supabase
         .from('items')
         .select('*')
         .eq('is_active', true)
         .not('latitude', 'is', null)
         .not('longitude', 'is', null);
 
+      const { data: itemsData, error: itemsError } = await query;
+
       if (itemsError) throw itemsError;
       if (!itemsData?.length) return [];
 
+      // Filter out completed swap items
+      const filteredItems = itemsData.filter(item => !completedItemIds.includes(item.id));
+
       // Get unique user IDs
-      const userIds = [...new Set(itemsData.map(item => item.user_id))];
+      const userIds = [...new Set(filteredItems.map(item => item.user_id))];
       
       // Fetch profiles for those users
       const { data: profilesData } = await supabase
@@ -61,7 +101,7 @@ export default function MapView() {
 
       const profilesMap = new Map(profilesData?.map(p => [p.user_id, p]) || []);
 
-      return itemsData.map((item: any) => {
+      return filteredItems.map((item: any) => {
         const profile = profilesMap.get(item.user_id);
         return {
           ...item,
@@ -70,10 +110,23 @@ export default function MapView() {
         };
       }) as ItemWithOwner[];
     },
+    enabled: completedItemIds !== undefined,
   });
 
-  // Filter out user's own items
-  const otherUsersItems = items.filter(item => item.user_id !== user?.id);
+  // Filter items by category and exclude user's own items
+  const filteredItems = items.filter(item => {
+    if (item.user_id === user?.id) return false;
+    if (selectedCategories.length === 0) return true;
+    return selectedCategories.includes(item.category);
+  });
+
+  const toggleCategory = (category: ItemCategory) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   // Fetch mapbox token
   const { data: mapboxToken, isLoading: tokenLoading } = useQuery({
@@ -127,7 +180,7 @@ export default function MapView() {
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    otherUsersItems.forEach(item => {
+    filteredItems.forEach(item => {
       if (!item.latitude || !item.longitude) return;
 
       // Create custom marker element
@@ -164,7 +217,7 @@ export default function MapView() {
 
       markersRef.current.push(marker);
     });
-  }, [otherUsersItems]);
+  }, [filteredItems]);
 
   if (tokenLoading) {
     return (
@@ -188,13 +241,62 @@ export default function MapView() {
               </Button>
               <div>
                 <h1 className="text-lg font-display font-bold">Nearby Items</h1>
-                <p className="text-xs text-muted-foreground">{otherUsersItems.length} items near you</p>
+                <p className="text-xs text-muted-foreground">{filteredItems.length} items near you</p>
               </div>
             </div>
-            <Button variant="secondary" size="icon" onClick={toggleMapTheme}>
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant={showFilters ? 'default' : 'secondary'} 
+                size="icon" 
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="w-5 h-5" />
+              </Button>
+              <Button variant="secondary" size="icon" onClick={toggleMapTheme}>
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </Button>
+            </div>
           </div>
+
+          {/* Category Filters */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden mt-3"
+              >
+                <div className="flex flex-wrap gap-2">
+                  {ALL_CATEGORIES.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategories.includes(category) ? 'default' : 'secondary'}
+                      size="sm"
+                      onClick={() => toggleCategory(category)}
+                      className={cn(
+                        'flex items-center gap-1.5',
+                        selectedCategories.includes(category) && 'ring-2 ring-primary/50'
+                      )}
+                    >
+                      {CATEGORY_ICONS[category]}
+                      <span className="text-xs">{CATEGORY_LABELS[category]}</span>
+                    </Button>
+                  ))}
+                  {selectedCategories.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedCategories([])}
+                      className="text-xs"
+                    >
+                      Clear All
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Map */}
