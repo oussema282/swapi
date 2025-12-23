@@ -5,6 +5,7 @@ import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems } from '@/hooks/useRecommendations';
 import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
+import { useDeviceLocation } from '@/hooks/useLocation';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
@@ -18,6 +19,7 @@ export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const { latitude, longitude } = useDeviceLocation();
   
   // Use the new swipe state machine
   const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();
@@ -177,6 +179,7 @@ export default function Index() {
                     isTop={idx === arr.length - 1}
                     onSwipeComplete={handleSwipeComplete}
                     swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
+                    userLocation={{ latitude, longitude }}
                   />
                 ))}
               </div>

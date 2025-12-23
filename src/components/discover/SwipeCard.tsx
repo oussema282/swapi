@@ -1,9 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin } from 'lucide-react';
+import { DescriptionModal } from './DescriptionModal';
+import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 
 interface SwipeCardProps {
   item: Item & { 
@@ -16,6 +18,7 @@ interface SwipeCardProps {
   isTop: boolean;
   onSwipeComplete: (direction: 'left' | 'right') => void;
   swipeDirection: 'left' | 'right' | null;
+  userLocation?: { latitude: number | null; longitude: number | null };
 }
 
 const SWIPE_THRESHOLD = 100;
@@ -64,9 +67,26 @@ function RatingStars({ rating, totalInteractions }: { rating?: number; totalInte
   );
 }
 
-export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: SwipeCardProps) {
+export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false);
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const x = useMotionValue(0);
+
+  // Check if description is truncated
+  useEffect(() => {
+    if (descriptionRef.current) {
+      setIsDescriptionTruncated(
+        descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight
+      );
+    }
+  }, [item.description]);
+
+  // Calculate distance to item
+  const distanceKm = userLocation?.latitude && userLocation?.longitude && item.latitude && item.longitude
+    ? calculateDistance(userLocation.latitude, userLocation.longitude, item.latitude, item.longitude)
+    : null;
   const rotate = useTransform(x, [-300, 0, 300], [-25, 0, 25]);
   const opacity = useTransform(x, [-300, -100, 0, 100, 300], [0, 1, 1, 1, 0]);
   
@@ -179,16 +199,39 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
             {item.title}
           </h3>
 
-          {/* Description */}
-          <p className="text-muted-foreground text-sm line-clamp-1 mb-2">
-            {item.description || 'No description provided'}
-          </p>
+          {/* Description with expand button */}
+          <div className="flex items-start gap-1 mb-2">
+            <p 
+              ref={descriptionRef}
+              className="text-muted-foreground text-sm line-clamp-1 flex-1"
+            >
+              {item.description || 'No description provided'}
+            </p>
+            {isDescriptionTruncated && item.description && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDescriptionModal(true);
+                }}
+                className="flex-shrink-0 p-0.5 rounded hover:bg-muted transition-colors"
+                aria-label="Read full description"
+              >
+                <ChevronDown className="w-4 h-4 text-primary" />
+              </button>
+            )}
+          </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               {CATEGORY_LABELS[item.category]}
             </Badge>
+            {distanceKm !== null && (
+              <Badge variant="outline" className="bg-muted text-muted-foreground border-border text-xs flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {formatDistance(distanceKm)}
+              </Badge>
+            )}
             {item.value_min && item.value_min > 0 && (
               <Badge variant="outline" className="bg-price text-price-foreground border-price/40 font-semibold text-xs">
                 ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
@@ -215,6 +258,14 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection }: Swip
           </div>
         </div>
       </div>
+
+      {/* Description Modal */}
+      <DescriptionModal
+        open={showDescriptionModal}
+        onOpenChange={setShowDescriptionModal}
+        title={item.title}
+        description={item.description || ''}
+      />
     </motion.div>
   );
 }

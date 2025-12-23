@@ -27,13 +27,13 @@ const CONDITION_WEIGHTS: Record<string, number> = {
   poor: 0.3,
 };
 
-// Algorithm weights
+// Algorithm weights - Geo score prioritized for location-based discovery
 const WEIGHTS = {
-  categorySimilarity: 0.25,
-  geoScore: 0.15,
-  exchangeCompatibility: 0.25,
-  behaviorAffinity: 0.15,
-  freshness: 0.10,
+  categorySimilarity: 0.20,
+  geoScore: 0.30,
+  exchangeCompatibility: 0.20,
+  behaviorAffinity: 0.12,
+  freshness: 0.08,
   conditionScore: 0.10,
 };
 
