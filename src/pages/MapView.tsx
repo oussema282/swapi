@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, X, Package, Loader2 } from 'lucide-react';
+import { ArrowLeft, X, Package, Loader2, Sun, Moon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -14,13 +14,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Get Mapbox token from edge function
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
-
 interface ItemWithOwner extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
 }
+
+const MAP_STYLES = {
+  dark: 'mapbox://styles/mapbox/dark-v11',
+  light: 'mapbox://styles/mapbox/light-v11',
+};
 
 export default function MapView() {
   const navigate = useNavigate();
@@ -29,7 +31,9 @@ export default function MapView() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedItem, setSelectedItem] = useState<ItemWithOwner | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   // Fetch all items with location
   const { data: items = [] } = useQuery({
@@ -68,6 +72,7 @@ export default function MapView() {
     },
   });
 
+  // Initialize map
   useEffect(() => {
     if (!mapContainer.current || !latitude || !longitude || !mapboxToken) return;
 
@@ -75,7 +80,7 @@ export default function MapView() {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style: isDarkMode ? MAP_STYLES.dark : MAP_STYLES.light,
       center: [longitude, latitude],
       zoom: 12,
     });
@@ -84,7 +89,7 @@ export default function MapView() {
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     // Add user location marker
-    new mapboxgl.Marker({ color: '#22c55e' })
+    userMarkerRef.current = new mapboxgl.Marker({ color: '#22c55e' })
       .setLngLat([longitude, latitude])
       .addTo(map.current);
 
@@ -92,6 +97,14 @@ export default function MapView() {
       map.current?.remove();
     };
   }, [latitude, longitude, mapboxToken]);
+
+  // Handle theme toggle
+  const toggleMapTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    if (map.current) {
+      map.current.setStyle(isDarkMode ? MAP_STYLES.light : MAP_STYLES.dark);
+    }
+  };
 
   // Add item markers
   useEffect(() => {
@@ -155,14 +168,19 @@ export default function MapView() {
       <div className="relative h-[calc(100dvh-5rem)]">
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-background to-transparent">
-          <div className="flex items-center gap-3">
-            <Button variant="secondary" size="icon" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-lg font-display font-bold">Nearby Items</h1>
-              <p className="text-xs text-muted-foreground">{otherUsersItems.length} items near you</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button variant="secondary" size="icon" onClick={() => navigate(-1)}>
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg font-display font-bold">Nearby Items</h1>
+                <p className="text-xs text-muted-foreground">{otherUsersItems.length} items near you</p>
+              </div>
             </div>
+            <Button variant="secondary" size="icon" onClick={toggleMapTheme}>
+              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </Button>
           </div>
         </div>
 
