@@ -14,16 +14,23 @@ export interface MessageWithStatus {
   status: MessageStatusType;
 }
 
+interface OtherUserProfile {
+  display_name: string;
+  avatar_url: string | null;
+  last_seen: string | null;
+}
+
 interface MatchWithItems extends Match {
   item_a: Item & { owner_display_name: string };
   item_b: Item & { owner_display_name: string };
   my_item: Item;
   their_item: Item & { owner_display_name: string };
   other_user_id: string;
+  other_user_profile: OtherUserProfile;
   last_message?: MessageWithStatus;
 }
 
-export type { MatchWithItems };
+export type { MatchWithItems, OtherUserProfile };
 
 export function useMatches() {
   const { user } = useAuth();
@@ -71,6 +78,7 @@ export function useMatches() {
         const itemB = match.item_b as any;
         const isMyItemA = itemA?.user_id === user.id;
         const otherUserId = isMyItemA ? itemB?.user_id : itemA?.user_id;
+        const otherUserProfile = profileMap.get(otherUserId);
         
         return {
           ...match,
@@ -87,6 +95,11 @@ export function useMatches() {
             ? { ...itemB, owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown' }
             : { ...itemA, owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown' },
           other_user_id: otherUserId,
+          other_user_profile: {
+            display_name: otherUserProfile?.display_name || 'Unknown',
+            avatar_url: otherUserProfile?.avatar_url || null,
+            last_seen: otherUserProfile?.last_seen || null,
+          },
         } as MatchWithItems;
       });
 
