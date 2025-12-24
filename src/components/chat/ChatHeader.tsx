@@ -10,6 +10,7 @@ import { CompleteSwapModal } from '@/components/matches/CompleteSwapModal';
 import { supabase } from '@/integrations/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { VerifiedName } from '@/components/ui/verified-name';
 
 interface ChatHeaderProps {
   avatarUrl?: string | null;
@@ -96,8 +97,8 @@ export function ChatHeader({
         </div>
         
         <div className="flex flex-col min-w-0 flex-1">
-          <h1 className="font-semibold text-foreground truncate text-sm">
-            {displayName}
+          <h1 className="font-semibold text-foreground text-sm">
+            <VerifiedName name={displayName} />
           </h1>
           <p className="text-xs truncate">
             {isOnline ? (
