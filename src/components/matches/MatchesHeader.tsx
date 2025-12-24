@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeftRight, Filter, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowLeftRight, Send } from 'lucide-react';
 
 type TabType = 'active' | 'completed' | 'invites';
 
@@ -10,7 +9,6 @@ interface MatchesHeaderProps {
   invitesCount: number;
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
-  onFilterClick?: () => void;
 }
 
 export function MatchesHeader({ 
@@ -19,7 +17,6 @@ export function MatchesHeader({
   invitesCount,
   activeTab,
   onTabChange,
-  onFilterClick 
 }: MatchesHeaderProps) {
   return (
     <motion.div
@@ -39,16 +36,6 @@ export function MatchesHeader({
             </p>
           </div>
         </div>
-        
-        {/* Future filter button slot */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-muted-foreground"
-          onClick={onFilterClick}
-        >
-          <Filter className="w-5 h-5" />
-        </Button>
       </div>
 
       {/* Tabs */}

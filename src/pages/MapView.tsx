@@ -49,7 +49,10 @@ export default function MapView() {
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedItem, setSelectedItem] = useState<ItemWithOwner | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('map-theme');
+    return saved ? saved === 'dark' : false; // Default to light mode
+  });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
   const hasNavigatedToFocusItem = useRef(false);
@@ -170,9 +173,11 @@ export default function MapView() {
 
   // Handle theme toggle
   const toggleMapTheme = () => {
-    setIsDarkMode(!isDarkMode);
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem('map-theme', newMode ? 'dark' : 'light');
     if (map.current) {
-      map.current.setStyle(isDarkMode ? MAP_STYLES.light : MAP_STYLES.dark);
+      map.current.setStyle(newMode ? MAP_STYLES.dark : MAP_STYLES.light);
     }
   };
 
