@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Package, ArrowLeftRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { formatDistanceToNow } from 'date-fns';
 import { MatchWithItems } from '@/hooks/useMatches';
 
@@ -52,7 +53,7 @@ export function CompletedMatchCard({ match, index, onClick }: CompletedMatchCard
               {match.their_item?.title}
             </p>
             <p className="text-xs text-muted-foreground/70">
-              with {match.other_user_profile?.display_name || 'Unknown'} • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
+              with <VerifiedName name={match.other_user_profile?.display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
             </p>
           </div>
 

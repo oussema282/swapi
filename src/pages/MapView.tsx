@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -363,7 +364,7 @@ export default function MapView() {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{selectedItem.title}</h3>
-                    <p className="text-sm text-muted-foreground truncate">{selectedItem.owner_display_name}</p>
+                    <p className="text-sm text-muted-foreground"><VerifiedName name={selectedItem.owner_display_name} badgeClassName="w-3.5 h-3.5" /></p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <Badge variant="secondary" className="text-xs">
                         {CATEGORY_LABELS[selectedItem.category]}

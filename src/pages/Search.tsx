@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -647,7 +648,7 @@ export default function Search() {
                               item.owner_display_name.charAt(0).toUpperCase()
                             )}
                           </div>
-                          <span className="text-xs text-muted-foreground truncate">{item.owner_display_name}</span>
+                          <VerifiedName name={item.owner_display_name} className="text-xs text-muted-foreground" badgeClassName="w-3 h-3" />
                         </div>
                         <DealInviteButton 
                           targetItemId={item.id} 

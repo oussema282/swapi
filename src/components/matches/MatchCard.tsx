@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Package, ArrowLeftRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
@@ -70,8 +71,8 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                     {match.other_user_profile?.display_name?.charAt(0) || '?'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-medium text-sm truncate">
-                  {match.other_user_profile?.display_name || 'Unknown'}
+                <span className="font-medium text-sm">
+                  <VerifiedName name={match.other_user_profile?.display_name || 'Unknown'} badgeClassName="w-3.5 h-3.5" />
                 </span>
               </div>
               

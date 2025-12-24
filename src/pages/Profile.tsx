@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -88,7 +89,7 @@ export default function Profile() {
               )}
             </Avatar>
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-semibold truncate">{profile?.display_name || 'User'}</h2>
+              <h2 className="text-xl font-semibold"><VerifiedName name={profile?.display_name || 'User'} /></h2>
               {profile?.location && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
                   <MapPin className="w-3 h-3" />
