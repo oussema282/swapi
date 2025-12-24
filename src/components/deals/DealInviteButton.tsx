@@ -116,8 +116,9 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Send Deal Invite</DialogTitle>
-            <DialogDescription>
-              Select one of your items to offer for "{targetItemTitle}"
+            <DialogDescription className="text-center">
+              Select one of your items to offer for
+              <span className="block font-bold text-foreground mt-1">{targetItemTitle}</span>
             </DialogDescription>
           </DialogHeader>
 

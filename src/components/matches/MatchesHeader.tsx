@@ -1,14 +1,26 @@
 import { motion } from 'framer-motion';
-import { ArrowLeftRight, Filter } from 'lucide-react';
+import { ArrowLeftRight, Filter, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+type TabType = 'active' | 'completed' | 'invites';
 
 interface MatchesHeaderProps {
   activeCount: number;
   completedCount: number;
+  invitesCount: number;
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
   onFilterClick?: () => void;
 }
 
-export function MatchesHeader({ activeCount, completedCount, onFilterClick }: MatchesHeaderProps) {
+export function MatchesHeader({ 
+  activeCount, 
+  completedCount, 
+  invitesCount,
+  activeTab,
+  onTabChange,
+  onFilterClick 
+}: MatchesHeaderProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -39,16 +51,42 @@ export function MatchesHeader({ activeCount, completedCount, onFilterClick }: Ma
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="flex gap-4 mt-4">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10">
-          <span className="text-xl font-bold text-primary">{activeCount}</span>
-          <span className="text-sm text-muted-foreground">Active</span>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10">
-          <span className="text-xl font-bold text-success">{completedCount}</span>
-          <span className="text-sm text-muted-foreground">Completed</span>
-        </div>
+      {/* Tabs */}
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={() => onTabChange('active')}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+            activeTab === 'active' 
+              ? 'bg-primary/10 text-primary' 
+              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <span className="text-xl font-bold">{activeCount}</span>
+          <span className="text-sm">Active</span>
+        </button>
+        <button
+          onClick={() => onTabChange('completed')}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+            activeTab === 'completed' 
+              ? 'bg-success/10 text-success' 
+              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <span className="text-xl font-bold">{completedCount}</span>
+          <span className="text-sm">Completed</span>
+        </button>
+        <button
+          onClick={() => onTabChange('invites')}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+            activeTab === 'invites' 
+              ? 'bg-orange-500/10 text-orange-500' 
+              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <Send className="w-4 h-4" />
+          <span className="text-xl font-bold">{invitesCount}</span>
+          <span className="text-sm">Invites</span>
+        </button>
       </div>
     </motion.div>
   );
