@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
@@ -12,6 +13,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Item, CATEGORY_LABELS } from '@/types/database';
 
 interface ExistingInvite {
@@ -30,6 +32,8 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const { canUse, usage, incrementUsage, isPro } = useSubscription();
 
   // Fetch user's own items
   const { data: myItems = [], isLoading: itemsLoading } = useQuery({
@@ -69,6 +73,18 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
 
   const sendInviteMutation = useMutation({
     mutationFn: async (senderItemId: string) => {
+      // Check limit for free users
+      if (!canUse.dealInvites) {
+        setShowModal(false);
+        setShowUpgradePrompt(true);
+        throw new Error('limit_reached');
+      }
+
+      // Increment usage for free users
+      if (!isPro) {
+        await incrementUsage('deal_invites');
+      }
+
       const { error } = await supabase
         .from('deal_invites' as any)
         .insert({
@@ -84,6 +100,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
       setShowModal(false);
     },
     onError: (error: any) => {
+      if (error.message === 'limit_reached') return;
       if (error.message?.includes('duplicate')) {
         toast.error('You already sent an invite for this item');
       } else {
@@ -180,6 +197,15 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Upgrade Prompt */}
+      <UpgradePrompt
+        open={showUpgradePrompt}
+        onOpenChange={setShowUpgradePrompt}
+        feature="deal invites"
+        usedCount={usage.dealInvites}
+        limit={FREE_LIMITS.dealInvites}
+      />
     </>
   );
 }

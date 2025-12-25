@@ -12,10 +12,12 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
 import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
+import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -56,7 +58,10 @@ export default function MapView() {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [hasTrackedUsage, setHasTrackedUsage] = useState(false);
   const hasNavigatedToFocusItem = useRef(false);
+  const { canUse, usage, incrementUsage, isPro } = useSubscription();
 
   // Fetch completed swap item IDs to exclude from map
   const { data: completedItemIds = [] } = useQuery({
@@ -145,6 +150,20 @@ export default function MapView() {
       return data.token as string;
     },
   });
+
+  // Track map usage on mount (for free users)
+  useEffect(() => {
+    if (hasTrackedUsage || isPro) return;
+    
+    // Check limit before tracking
+    if (!canUse.mapUses) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+    
+    incrementUsage('map_uses');
+    setHasTrackedUsage(true);
+  }, [hasTrackedUsage, isPro, canUse.mapUses, incrementUsage]);
 
   // Initialize map
   useEffect(() => {
@@ -385,6 +404,15 @@ export default function MapView() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Upgrade Prompt */}
+        <UpgradePrompt
+          open={showUpgradePrompt}
+          onOpenChange={setShowUpgradePrompt}
+          feature="map views"
+          usedCount={usage.mapUses}
+          limit={FREE_LIMITS.mapUses}
+        />
       </div>
     </AppLayout>
   );

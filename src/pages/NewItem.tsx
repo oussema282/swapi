@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateItem } from '@/hooks/useItems';
+import { useItemLimit } from '@/hooks/useSubscription';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +29,8 @@ import {
   Sparkles,
   Star,
   ThumbsUp,
-  Zap
+  Zap,
+  Crown
 } from 'lucide-react';
 import { ItemCategory, ItemCondition, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
@@ -65,6 +67,7 @@ export default function NewItem() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const createItem = useCreateItem();
+  const { canAddItem, itemCount, limit, isPro } = useItemLimit();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState(1);
@@ -83,7 +86,16 @@ export default function NewItem() {
     if (!authLoading && !user) {
       navigate('/auth');
     }
-  }, [user, authLoading, navigate]);
+    // Check item limit on mount
+    if (!authLoading && user && !canAddItem) {
+      toast({ 
+        variant: 'destructive', 
+        title: 'Item limit reached',
+        description: `Free users can only have ${limit} items. Upgrade to Pro for unlimited items!`
+      });
+      navigate('/checkout');
+    }
+  }, [user, authLoading, navigate, canAddItem, limit, toast]);
 
   const toggleSwapPreference = (cat: ItemCategory) => {
     setSwapPreferences(prev =>

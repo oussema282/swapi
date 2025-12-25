@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_usage: {
+        Row: {
+          created_at: string
+          deal_invites_count: number
+          id: string
+          map_uses_count: number
+          searches_count: number
+          swipes_count: number
+          updated_at: string
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deal_invites_count?: number
+          id?: string
+          map_uses_count?: number
+          searches_count?: number
+          swipes_count?: number
+          updated_at?: string
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          deal_invites_count?: number
+          id?: string
+          map_uses_count?: number
+          searches_count?: number
+          swipes_count?: number
+          updated_at?: string
+          usage_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       deal_invites: {
         Row: {
           created_at: string
@@ -390,12 +426,84 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          dodo_session_id: string | null
+          expires_at: string | null
+          id: string
+          is_pro: boolean
+          subscribed_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dodo_session_id?: string | null
+          expires_at?: string | null
+          id?: string
+          is_pro?: boolean
+          subscribed_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dodo_session_id?: string | null
+          expires_at?: string | null
+          id?: string
+          is_pro?: boolean
+          subscribed_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_or_create_daily_usage: {
+        Args: { p_user_id: string }
+        Returns: {
+          created_at: string
+          deal_invites_count: number
+          id: string
+          map_uses_count: number
+          searches_count: number
+          swipes_count: number
+          updated_at: string
+          usage_date: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "daily_usage"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      increment_usage: {
+        Args: { p_field: string; p_user_id: string }
+        Returns: {
+          created_at: string
+          deal_invites_count: number
+          id: string
+          map_uses_count: number
+          searches_count: number
+          swipes_count: number
+          updated_at: string
+          usage_date: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "daily_usage"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       item_category:

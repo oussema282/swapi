@@ -6,10 +6,12 @@ import { useRecommendedItems } from '@/hooks/useRecommendations';
 import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
+import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
+import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Button } from '@/components/ui/button';
 import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
@@ -19,7 +21,9 @@ export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
+  const { canUse, remaining, usage, incrementUsage, isPro } = useSubscription();
   
   // Use the new swipe state machine
   const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();
@@ -42,12 +46,23 @@ export default function Index() {
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
     if (!selectedItemId || !currentItem || !canSwipe) return;
 
+    // Check swipe limit for free users
+    if (!canUse.swipes) {
+      setShowUpgradePrompt(true);
+      return;
+    }
+
     // Start swipe animation - this locks the state
     actions.startSwipe(direction);
     
     // Wait for animation, then complete
     setTimeout(async () => {
       try {
+        // Increment usage for free users
+        if (!isPro) {
+          await incrementUsage('swipes');
+        }
+
         const result = await swipeMutation.mutateAsync({
           swiperItemId: selectedItemId,
           swipedItemId: currentItem.id,
@@ -66,7 +81,7 @@ export default function Index() {
         console.error('Swipe failed:', error);
       }
     }, 300);
-  }, [selectedItemId, currentItem, swipeMutation, canSwipe, actions]);
+  }, [selectedItemId, currentItem, swipeMutation, canSwipe, actions, canUse.swipes, isPro, incrementUsage]);
 
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
     if (canSwipe) {
@@ -229,6 +244,15 @@ export default function Index() {
         onClose={actions.clearMatch}
         myItem={myItems?.find(i => i.id === selectedItemId) || null}
         theirItem={matchedItem}
+      />
+
+      {/* Upgrade Prompt */}
+      <UpgradePrompt
+        open={showUpgradePrompt}
+        onOpenChange={setShowUpgradePrompt}
+        feature="swipes"
+        usedCount={usage.swipes}
+        limit={FREE_LIMITS.swipes}
       />
     </AppLayout>
   );
