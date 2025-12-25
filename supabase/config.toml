@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.add-sample-photos]
 verify_jwt = false
+
+[functions.dodo-checkout]
+verify_jwt = false
+
+[functions.get-mapbox-token]
+verify_jwt = false

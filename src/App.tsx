@@ -16,6 +16,8 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import Search from "./pages/Search";
 import MapView from "./pages/MapView";
+import Checkout from "./pages/Checkout";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +42,8 @@ const App = () => (
               <Route path="/chat/:matchId" element={<Chat />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/success" element={<CheckoutSuccess />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </LocationGate>
