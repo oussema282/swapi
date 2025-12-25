@@ -1,12 +1,14 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { VerifiedName } from '@/components/ui/verified-name';
+import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -75,8 +77,11 @@ export default function Search() {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [searchCount, setSearchCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const { canUse, usage, incrementUsage, isPro } = useSubscription();
 
   // Auto-request location on mount
   useEffect(() => {
@@ -294,7 +299,19 @@ export default function Search() {
     );
   }, []);
 
-  const handleSuggestionClick = useCallback((suggestion: Suggestion) => {
+  const handleSuggestionClick = useCallback(async (suggestion: Suggestion) => {
+    // Check search limit for free users
+    if (!canUse.searches) {
+      setShowUpgradePrompt(true);
+      setShowSuggestions(false);
+      return;
+    }
+
+    // Increment usage for free users
+    if (!isPro) {
+      await incrementUsage('searches');
+    }
+
     if (suggestion.type === 'category' && suggestion.category) {
       if (!selectedCategories.includes(suggestion.category)) {
         setSelectedCategories(prev => [...prev, suggestion.category!]);
@@ -305,7 +322,7 @@ export default function Search() {
     }
     setShowSuggestions(false);
     inputRef.current?.blur();
-  }, [selectedCategories]);
+  }, [selectedCategories, canUse.searches, isPro, incrementUsage]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
@@ -664,6 +681,15 @@ export default function Search() {
           )}
         </div>
       </div>
+
+      {/* Upgrade Prompt */}
+      <UpgradePrompt
+        open={showUpgradePrompt}
+        onOpenChange={setShowUpgradePrompt}
+        feature="searches"
+        usedCount={usage.searches}
+        limit={FREE_LIMITS.searches}
+      />
     </AppLayout>
   );
 }
