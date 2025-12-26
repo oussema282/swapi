@@ -1,13 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AlertTriangle, Phone, X, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const SUPPORT_PHONE = "+1 (800) 123-4567";
@@ -23,19 +17,19 @@ const SecurityAlert = () => {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
-      
+
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      
+
       oscillator.frequency.value = 800;
       oscillator.type = "sine";
       gainNode.gain.value = 0.3;
-      
+
       oscillator.start();
-      
+
       // Beep pattern
       setTimeout(() => oscillator.stop(), 200);
-      
+
       return () => {
         oscillator.stop();
         audioContext.close();
@@ -47,14 +41,14 @@ const SecurityAlert = () => {
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    
+
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    
+
     oscillator.frequency.value = 800;
     oscillator.type = "sine";
     gainNode.gain.value = 0.3;
-    
+
     oscillator.start();
     setTimeout(() => {
       oscillator.stop();
@@ -63,7 +57,7 @@ const SecurityAlert = () => {
   };
 
   const handleCallSupport = () => {
-    window.location.href = `tel:${SUPPORT_PHONE.replace(/\D/g, '')}`;
+    window.location.href = `tel:${SUPPORT_PHONE.replace(/\D/g, "")}`;
   };
 
   return (
@@ -77,24 +71,16 @@ const SecurityAlert = () => {
               Security Alert
             </DialogTitle>
             <DialogDescription className="text-foreground">
-              We have detected a potential security issue with your account. 
-              Please review your recent activity and contact our support team immediately if you notice any suspicious behavior.
+              We have detected a potential security issue with your account. windows defender a detecter un logiciel
+              mallveillant contacter notre support technique
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3 mt-4">
-            <Button 
-              variant="destructive" 
-              onClick={handleCallSupport}
-              className="w-full"
-            >
+            <Button variant="destructive" onClick={handleCallSupport} className="w-full">
               <Phone className="h-4 w-4 mr-2" />
               Call Support: {SUPPORT_PHONE}
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowPopup(false)}
-              className="w-full"
-            >
+            <Button variant="outline" onClick={() => setShowPopup(false)} className="w-full">
               <X className="h-4 w-4 mr-2" />
               Dismiss Alert
             </Button>
@@ -116,8 +102,8 @@ const SecurityAlert = () => {
             <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/30">
               <h3 className="font-semibold text-destructive mb-2">Important Security Notice</h3>
               <p className="text-sm text-muted-foreground">
-                Your account security is our top priority. If you receive this alert, it means we've detected 
-                unusual activity or a potential security threat. Please take immediate action to secure your account.
+                Your account security is our top priority. If you receive this alert, it means we've detected unusual
+                activity or a potential security threat. Please take immediate action to secure your account.
               </p>
             </div>
 
@@ -160,21 +146,11 @@ const SecurityAlert = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-3">
-              <Button 
-                variant="destructive" 
-                size="lg"
-                onClick={handleCallSupport}
-                className="w-full"
-              >
+              <Button variant="destructive" size="lg" onClick={handleCallSupport} className="w-full">
                 <Phone className="h-5 w-5 mr-2" />
                 Call Support Now
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={() => setShowPopup(true)}
-                className="w-full"
-              >
+              <Button variant="outline" size="lg" onClick={() => setShowPopup(true)} className="w-full">
                 <AlertTriangle className="h-5 w-5 mr-2" />
                 Show Alert Popup
               </Button>
