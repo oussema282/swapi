@@ -18,7 +18,6 @@ import Search from "./pages/Search";
 import MapView from "./pages/MapView";
 import Checkout from "./pages/Checkout";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
-import SecurityAlert from "./pages/SecurityAlert";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,7 +44,6 @@ const App = () => (
               <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/checkout/success" element={<CheckoutSuccess />} />
-              <Route path="/security-alert" element={<SecurityAlert />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </LocationGate>
