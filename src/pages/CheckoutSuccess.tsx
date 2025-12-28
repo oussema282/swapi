@@ -16,7 +16,7 @@ const CheckoutSuccess = () => {
   }, [sessionId]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-dvh bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 relative overflow-hidden">
       <Confetti show={true} />
       
       <Card className="w-full max-w-md border-2 border-primary/20 shadow-2xl text-center">

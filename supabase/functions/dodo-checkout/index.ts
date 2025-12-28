@@ -29,7 +29,12 @@ serve(async (req) => {
       );
     }
 
-    console.log('Creating Dodo Payments checkout session...');
+    // Get origin from request headers to build return URL
+    const body = await req.json().catch(() => ({}));
+    const origin = body.origin || Deno.env.get('APP_URL') || 'https://promonet.digital';
+    const returnUrl = `${origin}/checkout/success`;
+
+    console.log('Creating Dodo Payments checkout session with return URL:', returnUrl);
 
     const response = await fetch('https://test.dodopayments.com/checkouts', {
       method: 'POST',
@@ -41,10 +46,10 @@ serve(async (req) => {
         product_cart: [
           { product_id: 'pdt_0NUqlt6o4xC9TVkFhOCA3', quantity: 1 }
         ],
-        return_url: 'https://promonet.digital/checkout/success',
+        return_url: returnUrl,
         metadata: { 
           source: 'lovable', 
-          site: 'promonet.digital' 
+          site: origin 
         }
       })
     });

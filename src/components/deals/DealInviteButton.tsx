@@ -97,6 +97,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
       toast.success('Deal invite sent!');
       queryClient.invalidateQueries({ queryKey: ['my-invites-to-item'] });
       queryClient.invalidateQueries({ queryKey: ['deal-invites'] });
+      // Just close modal - don't navigate anywhere
       setShowModal(false);
     },
     onError: (error: any) => {

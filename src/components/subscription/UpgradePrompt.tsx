@@ -15,6 +15,7 @@ interface UpgradePromptProps {
   feature: string;
   usedCount: number;
   limit: number;
+  required?: boolean;
 }
 
 export function UpgradePrompt({ 
@@ -22,12 +23,19 @@ export function UpgradePrompt({
   onOpenChange, 
   feature,
   usedCount,
-  limit
+  limit,
+  required = false
 }: UpgradePromptProps) {
   const navigate = useNavigate();
 
+  const handleOpenChange = (newOpen: boolean) => {
+    // If required, don't allow closing via backdrop click or escape
+    if (required && !newOpen) return;
+    onOpenChange(newOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-sm text-center">
         <DialogHeader>
           <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
@@ -51,13 +59,15 @@ export function UpgradePrompt({
             <Sparkles className="w-4 h-4 mr-2" />
             Upgrade to Pro
           </Button>
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={() => onOpenChange(false)}
-          >
-            Maybe Later
-          </Button>
+          {!required && (
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => onOpenChange(false)}
+            >
+              Maybe Later
+            </Button>
+          )}
         </div>
 
         <p className="text-xs text-muted-foreground mt-4">

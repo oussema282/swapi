@@ -14,7 +14,8 @@ const Checkout = () => {
     
     try {
       const { data, error } = await supabase.functions.invoke('dodo-checkout', {
-        method: 'POST'
+        method: 'POST',
+        body: { origin: window.location.origin }
       });
 
       if (error) {
