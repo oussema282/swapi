@@ -6,11 +6,13 @@ import { cn } from '@/lib/utils';
 import { Package, Star, ChevronDown, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
+import { VerifiedName } from '@/components/ui/verified-name';
 
 interface SwipeCardProps {
   item: Item & { 
     owner_display_name: string; 
     owner_avatar_url: string | null;
+    owner_is_pro?: boolean;
     recommendation_score?: number;
     community_rating?: number;
     total_interactions?: number;
@@ -296,7 +298,11 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 item.owner_display_name.charAt(0).toUpperCase()
               )}
             </div>
-            <p className="font-medium text-foreground text-sm truncate">{item.owner_display_name}</p>
+            <VerifiedName 
+              name={item.owner_display_name} 
+              isPro={item.owner_is_pro} 
+              className="font-medium text-foreground text-sm"
+            />
           </div>
         </div>
       </div>

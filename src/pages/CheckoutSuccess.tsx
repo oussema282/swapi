@@ -1,24 +1,71 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Crown, Home, Sparkles } from "lucide-react";
+import { CheckCircle2, Crown, Home, Sparkles, Loader2 } from "lucide-react";
 import { Confetti } from "@/components/discover/Confetti";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id');
+  const { user, refreshProfile } = useAuth();
+  const queryClient = useQueryClient();
+  const [isActivating, setIsActivating] = useState(true);
 
   useEffect(() => {
-    // Log successful payment for debugging
-    console.log('Payment successful, session:', sessionId);
-  }, [sessionId]);
+    const activateSubscription = async () => {
+      if (!user || !sessionId) {
+        setIsActivating(false);
+        return;
+      }
+
+      try {
+        console.log('Activating subscription for session:', sessionId);
+        
+        // Upsert subscription record - set user as Pro
+        const { error } = await supabase
+          .from('user_subscriptions')
+          .upsert({
+            user_id: user.id,
+            is_pro: true,
+            subscribed_at: new Date().toISOString(),
+            dodo_session_id: sessionId,
+          }, { onConflict: 'user_id' });
+
+        if (error) {
+          console.error('Error activating subscription:', error);
+        } else {
+          console.log('Subscription activated successfully');
+          // Refresh subscription data
+          await queryClient.invalidateQueries({ queryKey: ['subscription'] });
+          await refreshProfile();
+        }
+      } catch (err) {
+        console.error('Error activating subscription:', err);
+      } finally {
+        setIsActivating(false);
+      }
+    };
+
+    activateSubscription();
+  }, [user, sessionId, queryClient, refreshProfile]);
 
   return (
-    <div className="min-h-dvh bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 relative overflow-hidden">
-      <Confetti show={true} />
+    <div className="min-h-dvh w-full bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 relative overflow-hidden">
+      <Confetti show={!isActivating} />
       
+      {isActivating ? (
+        <Card className="w-full max-w-md border-2 border-primary/20 shadow-2xl text-center">
+          <CardContent className="py-12">
+            <Loader2 className="w-12 h-12 mx-auto text-primary animate-spin mb-4" />
+            <p className="text-muted-foreground">Activating your Pro subscription...</p>
+          </CardContent>
+        </Card>
+      ) : (
       <Card className="w-full max-w-md border-2 border-primary/20 shadow-2xl text-center">
         <CardHeader className="pb-2">
           <div className="mx-auto mb-4 w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center animate-pulse">
@@ -67,6 +114,7 @@ const CheckoutSuccess = () => {
           </Button>
         </CardFooter>
       </Card>
+      )}
     </div>
   );
 };
