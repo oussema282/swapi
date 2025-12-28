@@ -39,6 +39,7 @@ export interface SwipeableItem {
   updated_at: string;
   owner_display_name: string;
   owner_avatar_url: string | null;
+  owner_is_pro?: boolean;
   recommendation_score?: number;
   community_rating?: number;
   total_interactions?: number;

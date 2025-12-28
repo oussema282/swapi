@@ -6,6 +6,7 @@ import { useAuth } from './useAuth';
 interface SwipeableItem extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
+  owner_is_pro?: boolean;
   recommendation_score?: number;
   community_rating?: number;
   total_interactions?: number;
@@ -58,6 +59,12 @@ export function useRecommendedItems(myItemId: string | null) {
           .select('user_id, display_name, avatar_url')
           .in('user_id', userIds);
 
+        // Get subscriptions to check Pro status
+        const { data: subscriptions } = await supabase
+          .from('user_subscriptions')
+          .select('user_id, is_pro')
+          .in('user_id', userIds);
+
         // Get community ratings for these items
         const { data: ratings } = await supabase
           .from('item_ratings')
@@ -66,6 +73,10 @@ export function useRecommendedItems(myItemId: string | null) {
 
         const profileMap = new Map(
           (profiles || []).map(p => [p.user_id, p])
+        );
+
+        const subscriptionMap = new Map(
+          (subscriptions || []).map(s => [s.user_id, s.is_pro])
         );
 
         const ratingsMap = new Map(
@@ -78,6 +89,7 @@ export function useRecommendedItems(myItemId: string | null) {
             ...item,
             owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
             owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+            owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
             recommendation_score: scoreMap.get(item.id),
             community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
             total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
@@ -148,8 +160,18 @@ async function fallbackFetch(userId: string, myItemId: string): Promise<Swipeabl
     .select('item_id, rating, total_interactions')
     .in('item_id', itemIds);
 
+  // Get subscriptions to check Pro status
+  const { data: subscriptions } = await supabase
+    .from('user_subscriptions')
+    .select('user_id, is_pro')
+    .in('user_id', userIds);
+
   const profileMap = new Map(
     (profiles || []).map(p => [p.user_id, p])
+  );
+
+  const subscriptionMap = new Map(
+    (subscriptions || []).map(s => [s.user_id, s.is_pro])
   );
 
   const ratingsMap = new Map(
@@ -160,6 +182,7 @@ async function fallbackFetch(userId: string, myItemId: string): Promise<Swipeabl
     ...item,
     owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
     owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+    owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
     community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
     total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
   }));

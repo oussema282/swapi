@@ -73,6 +73,7 @@ export function Confetti({ show }: { show: boolean }) {
             backgroundColor: piece.color,
             borderRadius: Math.random() > 0.5 ? '50%' : '2px',
             top: 0,
+            left: 0,
           }}
         />
       ))}
