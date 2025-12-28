@@ -405,13 +405,14 @@ export default function MapView() {
           )}
         </AnimatePresence>
 
-        {/* Upgrade Prompt */}
+        {/* Upgrade Prompt - Required (not dismissable) */}
         <UpgradePrompt
           open={showUpgradePrompt}
           onOpenChange={setShowUpgradePrompt}
           feature="map views"
           usedCount={usage.mapUses}
           limit={FREE_LIMITS.mapUses}
+          required
         />
       </div>
     </AppLayout>

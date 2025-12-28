@@ -269,7 +269,7 @@ export default function NewItem() {
 
   return (
     <AppLayout showNav={false}>
-      <div className="max-w-lg mx-auto px-4 py-4 min-h-[calc(100vh-2rem)]">
+      <div className="max-w-lg mx-auto px-4 py-4 pb-24 min-h-[calc(100vh-2rem)] flex flex-col">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={handleBack}>
@@ -305,7 +305,7 @@ export default function NewItem() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
-            className="flex-1"
+            className="flex-1 overflow-y-auto"
           >
             {/* Step 1: Photos & Title */}
             {step === 1 && (
@@ -544,30 +544,32 @@ export default function NewItem() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Navigation Buttons */}
-        <div className="mt-8 flex gap-3">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-            className="flex-1"
-          >
-            {step === 1 ? 'Cancel' : 'Back'}
-          </Button>
-          
-          <Button
-            onClick={handleNext}
-            disabled={!canProceed() || createItem.isPending}
-            className="flex-1 gradient-primary"
-          >
-            {createItem.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin mr-2" />
-            ) : step === 4 ? (
-              <Check className="w-4 h-4 mr-2" />
-            ) : (
-              <ArrowRight className="w-4 h-4 mr-2" />
-            )}
-            {step === 4 ? 'Create Item' : 'Continue'}
-          </Button>
+        {/* Navigation Buttons - Fixed at bottom */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border z-10">
+          <div className="max-w-lg mx-auto flex gap-3">
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              className="flex-1"
+            >
+              {step === 1 ? 'Cancel' : 'Back'}
+            </Button>
+            
+            <Button
+              onClick={handleNext}
+              disabled={!canProceed() || createItem.isPending}
+              className="flex-1 gradient-primary"
+            >
+              {createItem.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : step === 4 ? (
+                <Check className="w-4 h-4 mr-2" />
+              ) : (
+                <ArrowRight className="w-4 h-4 mr-2" />
+              )}
+              {step === 4 ? 'Create Item' : 'Continue'}
+            </Button>
+          </div>
         </div>
       </div>
     </AppLayout>
