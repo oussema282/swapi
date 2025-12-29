@@ -631,48 +631,54 @@ export default function Search() {
                   onClick={() => navigate(`/map?itemId=${item.id}`)}
                 >
                   <div className="flex gap-3 p-3">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                    {/* Fixed size image */}
+                    <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                       {item.photos && item.photos.length > 0 ? (
                         <img src={item.photos[0]} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-8 h-8 text-muted-foreground/30" />
+                          <Package className="w-10 h-10 text-muted-foreground/30" />
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground truncate">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-1">{item.description || 'No description'}</p>
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[item.category]}</Badge>
-                        <Badge variant="outline" className="text-xs">{CONDITION_LABELS[item.condition]}</Badge>
+                    
+                    {/* Content with fixed structure */}
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      {/* Title - always single line */}
+                      <h3 className="font-semibold text-foreground truncate text-base">{item.title}</h3>
+                      
+                      {/* Description - fixed 2 lines max */}
+                      <p className="text-sm text-muted-foreground line-clamp-2 h-10 leading-5">{item.description || 'No description'}</p>
+                      
+                      {/* Metadata row - always at same position */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-1">
+                        <Badge variant="secondary" className="text-xs py-0.5">{CATEGORY_LABELS[item.category]}</Badge>
                         {item.distance !== undefined && (
-                          <Badge variant="outline" className="text-xs">
-                            <MapPin className="w-3 h-3 mr-1" />
+                          <Badge variant="outline" className="text-xs py-0.5 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
                             {formatDistance(item.distance)}
                           </Badge>
                         )}
                         {(item.value_min || item.value_max) && (
-                          <Badge variant="outline" className="text-xs text-price">€{item.value_min || 0}-{item.value_max || '?'}</Badge>
+                          <Badge className="text-xs py-0.5 bg-price/15 text-price border-price/30 font-semibold">€{item.value_min || 0}-{item.value_max || '?'}</Badge>
                         )}
                       </div>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center text-[10px] font-bold">
-                            {item.owner_avatar_url ? (
-                              <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              item.owner_display_name.charAt(0).toUpperCase()
-                            )}
-                          </div>
-                          <VerifiedName name={item.owner_display_name} className="text-xs text-muted-foreground" badgeClassName="w-3 h-3" />
-                        </div>
-                        <DealInviteButton 
-                          targetItemId={item.id} 
-                          targetItemTitle={item.title}
-                          iconOnly
-                        />
+                    </div>
+                    
+                    {/* Action column - fixed right */}
+                    <div className="flex flex-col items-end justify-between py-0.5 flex-shrink-0">
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-[10px] font-bold ring-1 ring-border">
+                        {item.owner_avatar_url ? (
+                          <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-muted-foreground">{item.owner_display_name.charAt(0).toUpperCase()}</span>
+                        )}
                       </div>
+                      <DealInviteButton 
+                        targetItemId={item.id} 
+                        targetItemTitle={item.title}
+                        iconOnly
+                      />
                     </div>
                   </div>
                 </motion.div>

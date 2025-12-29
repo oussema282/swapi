@@ -131,7 +131,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     <motion.div
       ref={cardRef}
       className={cn(
-        'absolute inset-0 rounded-3xl overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing',
+        'absolute inset-0 rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing swipe-card-shadow',
         !isTop && 'pointer-events-none'
       )}
       style={{ 
@@ -167,13 +167,13 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 <>
                   <button
                     onClick={handlePrevPhoto}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-black/60 transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-black/70 transition-all active:scale-95"
                   >
                     <ChevronLeft className="w-6 h-6 text-white" />
                   </button>
                   <button
                     onClick={handleNextPhoto}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-black/60 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-black/70 transition-all active:scale-95"
                   >
                     <ChevronRight className="w-6 h-6 text-white" />
                   </button>
@@ -182,7 +182,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
 
               {/* Photo Dots Indicator */}
               {hasMultiplePhotos && (
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2 py-1.5">
                   {photos.map((_, index) => (
                     <button
                       key={index}
@@ -193,7 +193,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                       className={cn(
                         'w-2 h-2 rounded-full transition-all',
                         index === currentPhotoIndex
-                          ? 'bg-white w-4'
+                          ? 'bg-white w-5'
                           : 'bg-white/50 hover:bg-white/75'
                       )}
                     />
@@ -207,25 +207,27 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+          {/* Premium gradient overlay for text readability */}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
 
           {/* Like Overlay */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-success/20"
+            className="absolute inset-0 flex items-center justify-center bg-success/30"
             style={{ opacity: isTop ? likeOpacity : 0 }}
           >
-            <div className="px-10 py-5 rounded-2xl bg-success/90 border-4 border-success-foreground transform -rotate-12 shadow-2xl">
-              <span className="text-success-foreground font-bold text-4xl tracking-wider">LIKE</span>
+            <div className="px-12 py-6 rounded-3xl bg-success border-4 border-white transform -rotate-12 shadow-2xl">
+              <span className="text-white font-bold text-5xl tracking-wider">LIKE</span>
             </div>
           </motion.div>
 
           {/* Nope Overlay */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-destructive/20"
+            className="absolute inset-0 flex items-center justify-center bg-destructive/30"
             style={{ opacity: isTop ? nopeOpacity : 0 }}
           >
-            <div className="px-10 py-5 rounded-2xl bg-destructive/90 border-4 border-destructive-foreground transform rotate-12 shadow-2xl">
-              <span className="text-destructive-foreground font-bold text-4xl tracking-wider">NOPE</span>
+            <div className="px-12 py-6 rounded-3xl bg-destructive border-4 border-white transform rotate-12 shadow-2xl">
+              <span className="text-white font-bold text-5xl tracking-wider">NOPE</span>
             </div>
           </motion.div>
 
@@ -242,22 +244,23 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
 
           {/* Condition Badge - Top Right */}
           <div className="absolute top-4 right-4">
-            <Badge variant="secondary" className="backdrop-blur-sm bg-background/80 text-foreground font-medium px-3 py-1">
+            <Badge variant="secondary" className="backdrop-blur-md bg-white/90 text-foreground font-semibold px-3 py-1.5 shadow-lg">
               {CONDITION_LABELS[item.condition]}
             </Badge>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-shrink-0 p-4 bg-card border-t border-border/30">
-          <h3 className="text-xl font-display font-bold text-foreground leading-tight line-clamp-1 mb-1">
+        {/* Content - Anchored at bottom of card */}
+        <div className="absolute inset-x-0 bottom-0 p-5 z-10">
+          {/* Title & Description on image */}
+          <h3 className="text-2xl font-display font-bold text-white leading-tight line-clamp-1 mb-1 drop-shadow-lg">
             {item.title}
           </h3>
 
-          <div className="flex items-start gap-1 mb-2">
+          <div className="flex items-start gap-1 mb-3">
             <p 
               ref={descriptionRef}
-              className="text-muted-foreground text-sm line-clamp-1 flex-1"
+              className="text-white/80 text-sm line-clamp-2 flex-1 drop-shadow-md"
             >
               {item.description || 'No description provided'}
             </p>
@@ -267,33 +270,35 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                   e.stopPropagation();
                   setShowDescriptionModal(true);
                 }}
-                className="flex-shrink-0 p-0.5 rounded hover:bg-muted transition-colors"
+                className="flex-shrink-0 p-1 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
                 aria-label="Read full description"
               >
-                <ChevronDown className="w-4 h-4 text-primary" />
+                <ChevronDown className="w-4 h-4 text-white" />
               </button>
             )}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-3">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
+          {/* Info pills */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 text-xs font-medium">
               {CATEGORY_LABELS[item.category]}
             </Badge>
             {distanceKm !== null && (
-              <Badge variant="outline" className="bg-muted text-muted-foreground border-border text-xs flex items-center gap-1">
+              <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 text-xs flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 {formatDistance(distanceKm)}
               </Badge>
             )}
             {item.value_min && item.value_min > 0 && (
-              <Badge variant="outline" className="bg-price text-price-foreground border-price/40 font-semibold text-xs">
+              <Badge className="bg-price/90 text-price-foreground border-price/50 font-bold text-xs shadow-md">
                 ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
               </Badge>
             )}
           </div>
 
-          <div className="flex items-center gap-2 pt-2 border-t border-border/50">
-            <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md flex-shrink-0">
+          {/* Owner info - glass card */}
+          <div className="flex items-center gap-3 bg-white/15 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/20">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold shadow-lg ring-2 ring-white/30 flex-shrink-0">
               {item.owner_avatar_url ? (
                 <img
                   src={item.owner_avatar_url}
@@ -309,7 +314,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             <VerifiedName 
               name={item.owner_display_name} 
               isPro={item.owner_is_pro} 
-              className="font-medium text-foreground text-sm"
+              className="font-semibold text-white text-sm drop-shadow-md"
+              badgeClassName="text-amber-400"
             />
           </div>
         </div>
