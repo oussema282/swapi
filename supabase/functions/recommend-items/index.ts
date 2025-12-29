@@ -29,12 +29,13 @@ const CONDITION_WEIGHTS: Record<string, number> = {
 
 // Algorithm weights - Geo score prioritized for location-based discovery
 const WEIGHTS = {
-  categorySimilarity: 0.20,
-  geoScore: 0.30,
-  exchangeCompatibility: 0.20,
-  behaviorAffinity: 0.12,
-  freshness: 0.08,
-  conditionScore: 0.10,
+  categorySimilarity: 0.18,
+  geoScore: 0.28,
+  exchangeCompatibility: 0.18,
+  behaviorAffinity: 0.10,
+  freshness: 0.06,
+  conditionScore: 0.08,
+  reciprocalBoost: 0.12, // Boost for items with high reciprocal match potential
 };
 
 // Sigma for geo decay (in km)
@@ -58,6 +59,7 @@ interface Item {
   title: string;
   description: string | null;
   photos: string[] | null;
+  reciprocal_boost: number | null;
 }
 
 interface UserPreferences {
@@ -211,6 +213,7 @@ function calculateItemScore(
   const behaviorAffinity = calculateBehaviorAffinity(swipeHistory, likedItems, targetItem);
   const freshness = calculateFreshness(targetItem.created_at);
   const conditionScore = CONDITION_WEIGHTS[targetItem.condition] || 0.5;
+  const reciprocalBoost = targetItem.reciprocal_boost || 0;
   
   // Weighted sum
   const baseScore = 
@@ -219,7 +222,8 @@ function calculateItemScore(
     WEIGHTS.exchangeCompatibility * exchangeCompat +
     WEIGHTS.behaviorAffinity * behaviorAffinity +
     WEIGHTS.freshness * freshness +
-    WEIGHTS.conditionScore * conditionScore;
+    WEIGHTS.conditionScore * conditionScore +
+    WEIGHTS.reciprocalBoost * reciprocalBoost;
   
   // Add exploration randomness
   const exploration = Math.random() * EXPLORATION_FACTOR;
