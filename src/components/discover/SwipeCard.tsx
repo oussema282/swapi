@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star, ChevronDown, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -16,6 +16,7 @@ interface SwipeCardProps {
     recommendation_score?: number;
     community_rating?: number;
     total_interactions?: number;
+    reciprocal_boost?: number;
   };
   isTop: boolean;
   onSwipeComplete: (direction: 'left' | 'right') => void;
@@ -71,6 +72,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
 
   const photos = item.photos || [];
   const hasMultiplePhotos = photos.length > 1;
+  const hasReciprocalBoost = (item.reciprocal_boost ?? 0) > 0.5;
 
   // Check if description is truncated
   useEffect(() => {
@@ -228,8 +230,14 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           </motion.div>
 
           {/* Community Rating - Top Left */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
             <RatingStars rating={item.community_rating} totalInteractions={item.total_interactions} />
+            {hasReciprocalBoost && (
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full px-3 py-1.5 shadow-lg">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-xs font-semibold">High Match Potential</span>
+              </div>
+            )}
           </div>
 
           {/* Condition Badge - Top Right */}

@@ -12,6 +12,7 @@ import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
+import { SwapOpportunitiesSection } from '@/components/discover/SwapOpportunitiesSection';
 import { Button } from '@/components/ui/button';
 import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
@@ -157,6 +158,9 @@ export default function Index() {
             onSelect={handleSelectItem}
           />
         </div>
+
+        {/* Swap Opportunities Section */}
+        <SwapOpportunitiesSection />
 
         {/* Main Swipe Area */}
         <div className="flex-1 relative min-h-[400px]">

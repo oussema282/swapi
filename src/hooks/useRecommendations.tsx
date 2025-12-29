@@ -10,6 +10,7 @@ interface SwipeableItem extends Item {
   recommendation_score?: number;
   community_rating?: number;
   total_interactions?: number;
+  reciprocal_boost?: number;
 }
 
 interface RecommendationResult {
@@ -93,6 +94,7 @@ export function useRecommendedItems(myItemId: string | null) {
             recommendation_score: scoreMap.get(item.id),
             community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
             total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
+            reciprocal_boost: item.reciprocal_boost ?? 0,
           }))
           .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
 

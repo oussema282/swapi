@@ -156,6 +156,7 @@ export type Database = {
           latitude: number | null
           longitude: number | null
           photos: string[] | null
+          reciprocal_boost: number | null
           swap_preferences: Database["public"]["Enums"]["item_category"][]
           title: string
           updated_at: string
@@ -173,6 +174,7 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
+          reciprocal_boost?: number | null
           swap_preferences?: Database["public"]["Enums"]["item_category"][]
           title: string
           updated_at?: string
@@ -190,6 +192,7 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
+          reciprocal_boost?: number | null
           swap_preferences?: Database["public"]["Enums"]["item_category"][]
           title?: string
           updated_at?: string
@@ -318,6 +321,76 @@ export type Database = {
         }
         Relationships: []
       }
+      swap_opportunities: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          cycle_type: string
+          expires_at: string
+          id: string
+          item_a_id: string
+          item_b_id: string
+          item_c_id: string | null
+          status: string
+          updated_at: string
+          user_a_id: string
+          user_b_id: string
+          user_c_id: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          cycle_type: string
+          expires_at?: string
+          id?: string
+          item_a_id: string
+          item_b_id: string
+          item_c_id?: string | null
+          status?: string
+          updated_at?: string
+          user_a_id: string
+          user_b_id: string
+          user_c_id?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          cycle_type?: string
+          expires_at?: string
+          id?: string
+          item_a_id?: string
+          item_b_id?: string
+          item_c_id?: string | null
+          status?: string
+          updated_at?: string
+          user_a_id?: string
+          user_b_id?: string
+          user_c_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swap_opportunities_item_a_id_fkey"
+            columns: ["item_a_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swap_opportunities_item_b_id_fkey"
+            columns: ["item_b_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swap_opportunities_item_c_id_fkey"
+            columns: ["item_c_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       swipe_undos: {
         Row: {
           created_at: string
@@ -423,6 +496,30 @@ export type Database = {
           updated_at?: string
           user_id?: string
           value_range_preference?: Json
+        }
+        Relationships: []
+      }
+      user_preferences_learned: {
+        Row: {
+          category_affinities: Json
+          computed_at: string
+          id: string
+          user_factors: Json
+          user_id: string
+        }
+        Insert: {
+          category_affinities?: Json
+          computed_at?: string
+          id?: string
+          user_factors?: Json
+          user_id: string
+        }
+        Update: {
+          category_affinities?: Json
+          computed_at?: string
+          id?: string
+          user_factors?: Json
+          user_id?: string
         }
         Relationships: []
       }
