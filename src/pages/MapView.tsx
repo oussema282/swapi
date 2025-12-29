@@ -165,31 +165,52 @@ export default function MapView() {
     setHasTrackedUsage(true);
   }, [hasTrackedUsage, isPro, canUse.mapUses, incrementUsage]);
 
-  // Initialize map
+  // Initialize map - center on item if focusItemId is provided, otherwise user location
   useEffect(() => {
-    if (!mapContainer.current || !latitude || !longitude || !mapboxToken) return;
+    if (!mapContainer.current || !mapboxToken) return;
+    // Need either user location or focus item location
+    const focusItem = focusItemId ? items.find(item => item.id === focusItemId) : null;
+    const hasUserLocation = latitude && longitude;
+    const hasFocusItemLocation = focusItem?.latitude && focusItem?.longitude;
+    
+    if (!hasUserLocation && !hasFocusItemLocation) return;
 
     mapboxgl.accessToken = mapboxToken;
+
+    // Determine initial center - prioritize item location if navigating to specific item
+    const initialCenter: [number, number] = hasFocusItemLocation
+      ? [focusItem.longitude!, focusItem.latitude!]
+      : [longitude!, latitude!];
+    
+    const initialZoom = hasFocusItemLocation ? 15 : 12;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: isDarkMode ? MAP_STYLES.dark : MAP_STYLES.light,
-      center: [longitude, latitude],
-      zoom: 12,
+      center: initialCenter,
+      zoom: initialZoom,
     });
 
     // Add navigation controls
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    // Add user location marker
-    userMarkerRef.current = new mapboxgl.Marker({ color: '#22c55e' })
-      .setLngLat([longitude, latitude])
-      .addTo(map.current);
+    // Add user location marker if available
+    if (hasUserLocation) {
+      userMarkerRef.current = new mapboxgl.Marker({ color: '#22c55e' })
+        .setLngLat([longitude!, latitude!])
+        .addTo(map.current);
+    }
+    
+    // If navigating to a specific item, select it
+    if (focusItem && hasFocusItemLocation) {
+      hasNavigatedToFocusItem.current = true;
+      setSelectedItem(focusItem);
+    }
 
     return () => {
       map.current?.remove();
     };
-  }, [latitude, longitude, mapboxToken]);
+  }, [latitude, longitude, mapboxToken, focusItemId, items, isDarkMode]);
 
   // Handle theme toggle
   const toggleMapTheme = () => {
@@ -248,7 +269,7 @@ export default function MapView() {
     });
   }, [filteredItems]);
 
-  // Focus on item from URL param
+  // Focus on item from URL param (after map is loaded and items change)
   useEffect(() => {
     if (!focusItemId || !map.current || hasNavigatedToFocusItem.current) return;
     
@@ -256,11 +277,14 @@ export default function MapView() {
     if (focusItem && focusItem.latitude && focusItem.longitude) {
       hasNavigatedToFocusItem.current = true;
       setSelectedItem(focusItem);
-      map.current.flyTo({
-        center: [focusItem.longitude, focusItem.latitude],
-        zoom: 15,
-        duration: 1500,
-      });
+      // Only fly if map was already initialized (e.g., items loaded later)
+      if (map.current.loaded()) {
+        map.current.flyTo({
+          center: [focusItem.longitude, focusItem.latitude],
+          zoom: 15,
+          duration: 1200,
+        });
+      }
     }
   }, [focusItemId, items]);
 

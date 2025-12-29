@@ -96,79 +96,85 @@ export default function Chat() {
           theirItemPhoto={match?.their_item?.photos?.[0]}
         />
 
-        {/* Messages - flex-col-reverse makes messages start from bottom */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col-reverse bg-background">
-          <div ref={messagesEndRef} />
-          <div className="space-y-1 mt-auto">
-            {messages?.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center py-8"
-              >
-                <p className="text-sm text-muted-foreground">
-                  Start the conversation! Say hi and discuss the swap details.
-                </p>
-              </motion.div>
-            )}
-          
-          <AnimatePresence initial={false}>
-            {groupedMessages.map((group, groupIndex) => {
-              const isMe = group.senderId === user?.id;
-              const isLastGroup = groupIndex === groupedMessages.length - 1;
-              
-              return (
-                <div 
-                  key={`group-${groupIndex}`} 
-                  className="flex flex-col gap-0.5 mb-2"
-                >
-                  {group.messages.map((msg, msgIndex) => {
-                    const totalInGroup = group.messages.length;
-                    const isLastInGroup = msgIndex === totalInGroup - 1;
-                    const isLastMessage = isLastGroup && isLastInGroup;
-                    
-                    // Determine position for border radius
-                    let position: 'first' | 'middle' | 'last' | 'single' = 'single';
-                    if (totalInGroup > 1) {
-                      if (msgIndex === 0) position = 'first';
-                      else if (isLastInGroup) position = 'last';
-                      else position = 'middle';
-                    }
-                    
-                    return (
-                      <MessageBubble
-                        key={msg.id}
-                        content={msg.content}
-                        timestamp={new Date(msg.created_at)}
-                        isOutgoing={isMe}
-                        status={msg.status}
-                        showStatus={isMe && isLastMessage}
-                        position={position}
-                        animationDelay={groupIndex * 0.02}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
-            </AnimatePresence>
-          </div>
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto px-4 py-3 bg-gradient-to-b from-muted/20 to-background">
+          {messages?.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center justify-center h-full text-center px-6"
+            >
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4">
+                <Send className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Start the conversation!</h3>
+              <p className="text-sm text-muted-foreground max-w-[260px]">
+                Say hi and discuss the swap details. You can share photos, negotiate, and plan the exchange.
+              </p>
+            </motion.div>
+          ) : (
+            <div className="space-y-1 pb-2">
+              <AnimatePresence initial={false}>
+                {groupedMessages.map((group, groupIndex) => {
+                  const isMe = group.senderId === user?.id;
+                  const isLastGroup = groupIndex === groupedMessages.length - 1;
+                  
+                  return (
+                    <div 
+                      key={`group-${groupIndex}`} 
+                      className="flex flex-col gap-0.5 mb-3"
+                    >
+                      {group.messages.map((msg, msgIndex) => {
+                        const totalInGroup = group.messages.length;
+                        const isLastInGroup = msgIndex === totalInGroup - 1;
+                        const isLastMessage = isLastGroup && isLastInGroup;
+                        
+                        // Determine position for border radius
+                        let position: 'first' | 'middle' | 'last' | 'single' = 'single';
+                        if (totalInGroup > 1) {
+                          if (msgIndex === 0) position = 'first';
+                          else if (isLastInGroup) position = 'last';
+                          else position = 'middle';
+                        }
+                        
+                        return (
+                          <MessageBubble
+                            key={msg.id}
+                            content={msg.content}
+                            timestamp={new Date(msg.created_at)}
+                            isOutgoing={isMe}
+                            status={msg.status}
+                            showStatus={isMe && isLastMessage}
+                            position={position}
+                            animationDelay={groupIndex * 0.02}
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </AnimatePresence>
+              <div ref={messagesEndRef} />
+            </div>
+          )}
         </div>
 
-        {/* Input */}
-        <div className="p-4 border-t bg-card">
-          <div className="flex gap-2">
-            <Input
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message..."
-              className="h-12"
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            />
+        {/* Enhanced Input */}
+        <div className="p-4 border-t bg-card/95 backdrop-blur-sm">
+          <div className="flex gap-3 items-end">
+            <div className="flex-1 relative">
+              <Input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type a message..."
+                className="h-12 pr-4 bg-muted/50 border-border/50 focus:border-primary/50 rounded-2xl text-base"
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+              />
+            </div>
             <Button
               onClick={handleSend}
               disabled={!message.trim() || sendMessage.isPending}
-              className="h-12 w-12 gradient-primary shadow-lg"
+              className="h-12 w-12 gradient-primary shadow-lg rounded-full flex-shrink-0 hover:scale-105 transition-transform"
             >
               {sendMessage.isPending ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

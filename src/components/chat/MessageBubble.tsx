@@ -64,23 +64,23 @@ export function MessageBubble({
     >
       <div
         className={cn(
-          'min-w-[72px] max-w-[75%] px-3.5 py-2.5 shadow-sm',
+          'min-w-[80px] max-w-[80%] px-4 py-2.5',
           getBorderRadius(),
           isOutgoing
-            ? 'gradient-primary text-primary-foreground'
-            : 'bg-card border border-border text-foreground'
+            ? 'gradient-primary text-primary-foreground shadow-md'
+            : 'bg-card border border-border text-foreground shadow-sm'
         )}
       >
-        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+        <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">
           {content}
         </p>
         <div className={cn(
-          'flex items-center gap-1 mt-1',
+          'flex items-center gap-1.5 mt-1.5',
           isOutgoing ? 'justify-end' : 'justify-start'
         )}>
           <span
             className={cn(
-              'text-[10px]',
+              'text-[11px]',
               isOutgoing ? 'text-primary-foreground/70' : 'text-muted-foreground'
             )}
           >
