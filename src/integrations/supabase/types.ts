@@ -92,6 +92,36 @@ export type Database = {
           },
         ]
       }
+      feature_upgrades: {
+        Row: {
+          bonus_amount: number
+          created_at: string
+          expires_at: string | null
+          feature_type: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bonus_amount?: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bonus_amount?: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       item_ratings: {
         Row: {
           alpha: number

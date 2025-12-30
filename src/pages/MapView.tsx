@@ -440,6 +440,7 @@ export default function MapView() {
           open={showUpgradePrompt}
           onOpenChange={setShowUpgradePrompt}
           feature="map views"
+          featureType="map"
           usedCount={usage.mapUses}
           limit={FREE_LIMITS.mapUses}
           required

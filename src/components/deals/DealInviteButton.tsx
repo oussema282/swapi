@@ -204,6 +204,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
         open={showUpgradePrompt}
         onOpenChange={setShowUpgradePrompt}
         feature="deal invites"
+        featureType="deal_invites"
         usedCount={usage.dealInvites}
         limit={FREE_LIMITS.dealInvites}
       />
