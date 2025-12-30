@@ -2,20 +2,24 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
+import { useSubscription } from '@/hooks/useSubscription';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3 } from 'lucide-react';
+import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { format } from 'date-fns';
 
 export default function Profile() {
   const { user, profile, loading, signOut } = useAuth();
   const { data: items = [], isLoading: itemsLoading } = useMyItems();
+  const { isPro, subscription } = useSubscription();
   
   // Fetch completed swaps count for current user
   const { data: completedSwapsCount = 0 } = useQuery({
@@ -78,7 +82,7 @@ export default function Profile() {
           className="max-w-lg mx-auto px-4 pt-4 pb-24"
         >
           {/* Profile Header */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-4">
             <Avatar className="w-20 h-20 border-4 border-primary/20">
               {profile?.avatar_url ? (
                 <AvatarImage src={profile.avatar_url} alt="Avatar" />
@@ -89,7 +93,11 @@ export default function Profile() {
               )}
             </Avatar>
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-semibold"><VerifiedName name={profile?.display_name || 'User'} /></h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">
+                  <VerifiedName name={profile?.display_name || 'User'} isPro={isPro} />
+                </h2>
+              </div>
               {profile?.location && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
                   <MapPin className="w-3 h-3" />
@@ -104,6 +112,51 @@ export default function Profile() {
               <Edit className="w-4 h-4" />
             </Button>
           </div>
+
+          {/* Pro Status Card */}
+          {isPro ? (
+            <Card className="p-4 mb-6 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border-amber-500/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 flex items-center justify-center">
+                    <Crown className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Pro Member</p>
+                    <p className="text-xs text-muted-foreground">
+                      {subscription?.expires_at 
+                        ? `Expires ${format(new Date(subscription.expires_at), 'MMM d, yyyy')}`
+                        : 'Unlimited access'
+                      }
+                    </p>
+                  </div>
+                </div>
+                <Badge className="bg-gradient-to-r from-amber-400 to-yellow-500 text-white border-0">
+                  Active
+                </Badge>
+              </div>
+            </Card>
+          ) : (
+            <Card 
+              className="p-4 mb-6 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20 cursor-pointer hover:border-primary/40 transition-colors"
+              onClick={() => navigate('/checkout')}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Upgrade to Pro</p>
+                    <p className="text-xs text-muted-foreground">
+                      Unlimited swipes, searches, & more
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-primary" />
+              </div>
+            </Card>
+          )}
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-6 text-center">
@@ -121,38 +174,38 @@ export default function Profile() {
             </div>
           </div>
 
-        {/* Items Grid - Instagram Style */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Grid3X3 className="w-4 h-4" />
-              My Items
-            </h3>
-          </div>
-          {itemsLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          {/* Items Grid - Instagram Style */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold flex items-center gap-2">
+                <Grid3X3 className="w-4 h-4" />
+                My Items
+              </h3>
             </div>
-          ) : (
-            <ProfileItemsGrid items={items} isOwnProfile={true} />
-          )}
-        </div>
-
-        {/* Settings Section */}
-        <Card className="divide-y divide-border mb-4">
-          <button
-            onClick={() => navigate('/profile/edit')}
-            className="flex items-center justify-between w-full p-4 hover:bg-muted/50 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Settings className="w-5 h-5 text-primary" />
+            {itemsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
               </div>
-              <span className="font-medium">Account Settings</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
-          </button>
-        </Card>
+            ) : (
+              <ProfileItemsGrid items={items} isOwnProfile={true} />
+            )}
+          </div>
+
+          {/* Settings Section */}
+          <Card className="divide-y divide-border mb-4">
+            <button
+              onClick={() => navigate('/profile/edit')}
+              className="flex items-center justify-between w-full p-4 hover:bg-muted/50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Settings className="w-5 h-5 text-primary" />
+                </div>
+                <span className="font-medium">Account Settings</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </Card>
 
           {/* Sign Out */}
           <Button

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { useCallback } from 'react';
 
 // Limits for free users
 export const FREE_LIMITS = {
@@ -38,18 +39,26 @@ interface DailyUsage {
   map_uses_count: number;
 }
 
+/**
+ * Central subscription hook - single source of truth for Pro status
+ * All Pro checks throughout the app should use this hook
+ */
 export function useSubscription() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  // Fetch subscription status
-  const { data: subscription, isLoading: subscriptionLoading } = useQuery({
+  // Fetch subscription status with short stale time to ensure freshness
+  const { 
+    data: subscription, 
+    isLoading: subscriptionLoading,
+    refetch: refetchSubscription 
+  } = useQuery({
     queryKey: ['subscription', user?.id],
     queryFn: async (): Promise<Subscription | null> => {
       if (!user) return null;
 
       const { data, error } = await supabase
-        .from('user_subscriptions' as any)
+        .from('user_subscriptions')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
@@ -59,9 +68,21 @@ export function useSubscription() {
         return null;
       }
 
-      return (data as unknown) as Subscription | null;
+      // Check if subscription is active (not expired)
+      if (data?.expires_at) {
+        const expiresAt = new Date(data.expires_at);
+        if (expiresAt < new Date()) {
+          // Subscription expired - treat as non-Pro
+          return { ...data, is_pro: false } as Subscription;
+        }
+      }
+
+      return data as Subscription | null;
     },
     enabled: !!user,
+    staleTime: 0, // Always refetch when queried
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 
   // Fetch daily usage
@@ -73,7 +94,7 @@ export function useSubscription() {
       const today = new Date().toISOString().split('T')[0];
       
       const { data, error } = await supabase
-        .from('daily_usage' as any)
+        .from('daily_usage')
         .select('*')
         .eq('user_id', user.id)
         .eq('usage_date', today)
@@ -84,7 +105,7 @@ export function useSubscription() {
         return null;
       }
 
-      return (data as unknown) as DailyUsage | null;
+      return data as DailyUsage | null;
     },
     enabled: !!user,
   });
@@ -97,7 +118,7 @@ export function useSubscription() {
     
     // First try to get existing record
     const { data: existing } = await supabase
-      .from('daily_usage' as any)
+      .from('daily_usage')
       .select('*')
       .eq('user_id', user.id)
       .eq('usage_date', today)
@@ -107,7 +128,7 @@ export function useSubscription() {
 
     // Create new record
     const { data: newRecord, error } = await supabase
-      .from('daily_usage' as any)
+      .from('daily_usage')
       .insert({ user_id: user.id, usage_date: today })
       .select()
       .single();
@@ -132,7 +153,7 @@ export function useSubscription() {
       
       // Get current value
       const { data: current } = await supabase
-        .from('daily_usage' as any)
+        .from('daily_usage')
         .select(columnName)
         .eq('user_id', user.id)
         .eq('usage_date', today)
@@ -142,7 +163,7 @@ export function useSubscription() {
 
       // Update with incremented value
       const { error } = await supabase
-        .from('daily_usage' as any)
+        .from('daily_usage')
         .update({ [columnName]: currentValue + 1 })
         .eq('user_id', user.id)
         .eq('usage_date', today);
@@ -154,6 +175,7 @@ export function useSubscription() {
     },
   });
 
+  // Compute Pro status from subscription data
   const isPro = subscription?.is_pro ?? false;
   const limits = isPro ? PRO_LIMITS : FREE_LIMITS;
 
@@ -171,12 +193,22 @@ export function useSubscription() {
     mapUses: limits.mapUses === -1 ? -1 : Math.max(0, limits.mapUses - usage.mapUses),
   };
 
+  // canUse checks - Pro users always can, free users check remaining limits
   const canUse = {
     swipes: isPro || remaining.swipes > 0,
     searches: isPro || remaining.searches > 0,
     dealInvites: isPro || remaining.dealInvites > 0,
     mapUses: isPro || remaining.mapUses > 0,
   };
+
+  // Force refresh subscription status - call this after payment success
+  const refreshSubscription = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['subscription'] });
+    await queryClient.invalidateQueries({ queryKey: ['daily-usage'] });
+    await queryClient.invalidateQueries({ queryKey: ['my-items-count'] });
+    const result = await refetchSubscription();
+    return result.data;
+  }, [queryClient, refetchSubscription]);
 
   return {
     isPro,
@@ -187,15 +219,16 @@ export function useSubscription() {
     canUse,
     isLoading: subscriptionLoading || usageLoading,
     incrementUsage: incrementUsage.mutateAsync,
+    refreshSubscription,
   };
 }
 
 // Hook to check item count limit
 export function useItemLimit() {
   const { user } = useAuth();
-  const { isPro, limits } = useSubscription();
+  const { isPro, limits, isLoading: subscriptionLoading } = useSubscription();
 
-  const { data: itemCount = 0 } = useQuery({
+  const { data: itemCount = 0, isLoading: itemsLoading } = useQuery({
     queryKey: ['my-items-count', user?.id],
     queryFn: async () => {
       if (!user) return 0;
@@ -225,5 +258,6 @@ export function useItemLimit() {
     remaining,
     limit: limits.maxItems,
     isPro,
+    isLoading: subscriptionLoading || itemsLoading,
   };
 }
