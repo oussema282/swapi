@@ -67,7 +67,7 @@ export default function NewItem() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const createItem = useCreateItem();
-  const { canAddItem, itemCount, limit, isPro } = useItemLimit();
+  const { canAddItem, itemCount, limit, isPro, isLoading: limitLoading } = useItemLimit();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState(1);
@@ -86,8 +86,8 @@ export default function NewItem() {
     if (!authLoading && !user) {
       navigate('/auth');
     }
-    // Check item limit on mount
-    if (!authLoading && user && !canAddItem) {
+    // Wait for subscription data to load before checking limits
+    if (!authLoading && !limitLoading && user && !canAddItem) {
       toast({ 
         variant: 'destructive', 
         title: 'Item limit reached',
@@ -95,7 +95,7 @@ export default function NewItem() {
       });
       navigate('/checkout');
     }
-  }, [user, authLoading, navigate, canAddItem, limit, toast]);
+  }, [user, authLoading, limitLoading, navigate, canAddItem, limit, toast]);
 
   const toggleSwapPreference = (cat: ItemCategory) => {
     setSwapPreferences(prev =>
