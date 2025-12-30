@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMatches } from '@/hooks/useMatches';
+import { useMissedMatches } from '@/hooks/useMissedMatches';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { Loader2, Check, X } from 'lucide-react';
+import { Loader2, Check, X, HeartOff } from 'lucide-react';
 import { CompleteSwapModal } from '@/components/matches/CompleteSwapModal';
 import { MatchCard } from '@/components/matches/MatchCard';
 import { CompletedMatchCard } from '@/components/matches/CompletedMatchCard';
+import { MissedMatchCard } from '@/components/matches/MissedMatchCard';
 import { MatchesHeader } from '@/components/matches/MatchesHeader';
 import { EmptyMatchesState } from '@/components/matches/EmptyMatchesState';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,7 +19,7 @@ import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Item } from '@/types/database';
 
-type TabType = 'active' | 'completed' | 'invites';
+type TabType = 'active' | 'completed' | 'invites' | 'missed';
 
 interface DealInviteRaw {
   id: string;
@@ -43,6 +45,7 @@ export default function Matches() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: matches, isLoading, refetch } = useMatches();
+  const { data: missedMatches = [], isLoading: missedLoading } = useMissedMatches();
   const [selectedMatch, setSelectedMatch] = useState<any>(null);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('active');
@@ -195,6 +198,7 @@ export default function Matches() {
           activeCount={activeMatches.length}
           completedCount={completedMatches.length}
           invitesCount={pendingInvites.length}
+          missedCount={missedMatches.length}
           activeTab={activeTab}
           onTabChange={setActiveTab}
         />
@@ -337,6 +341,43 @@ export default function Matches() {
                 ) : (
                   <div className="text-center text-muted-foreground py-8">
                     No pending deal invites
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Missed Matches Tab */}
+            {activeTab === 'missed' && (
+              <motion.div
+                key="missed"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="space-y-4"
+              >
+                {missedLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : missedMatches.length > 0 ? (
+                  <>
+                    <div className="text-center py-2">
+                      <p className="text-sm text-muted-foreground">
+                        <HeartOff className="w-4 h-4 inline mr-1" />
+                        You missed a match! They wanted to swap with you.
+                      </p>
+                    </div>
+                    {missedMatches.map((missed, index) => (
+                      <MissedMatchCard
+                        key={missed.id}
+                        missedMatch={missed}
+                        index={index}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <div className="text-center text-muted-foreground py-8">
+                    No missed matches
                   </div>
                 )}
               </motion.div>

@@ -42,7 +42,12 @@ export function UpgradePrompt({
   const Icon = featureType ? featureIcons[featureType] : Crown;
 
   const handleOpenChange = (newOpen: boolean) => {
-    if (required && !newOpen) return;
+    if (required && !newOpen) {
+      // Redirect to discover page when closing required prompt
+      navigate('/');
+      onOpenChange(false);
+      return;
+    }
     onOpenChange(newOpen);
   };
 

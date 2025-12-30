@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
-import { ArrowLeftRight, Send } from 'lucide-react';
+import { ArrowLeftRight, Send, HeartOff } from 'lucide-react';
 
-type TabType = 'active' | 'completed' | 'invites';
+type TabType = 'active' | 'completed' | 'invites' | 'missed';
 
 interface MatchesHeaderProps {
   activeCount: number;
   completedCount: number;
   invitesCount: number;
+  missedCount?: number;
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
 }
@@ -15,6 +16,7 @@ export function MatchesHeader({
   activeCount, 
   completedCount, 
   invitesCount,
+  missedCount = 0,
   activeTab,
   onTabChange,
 }: MatchesHeaderProps) {
@@ -39,7 +41,7 @@ export function MatchesHeader({
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-4 flex-wrap">
         <button
           onClick={() => onTabChange('active')}
           className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
@@ -74,6 +76,20 @@ export function MatchesHeader({
           <span className="text-xl font-bold">{invitesCount}</span>
           <span className="text-sm">Invites</span>
         </button>
+        {missedCount > 0 && (
+          <button
+            onClick={() => onTabChange('missed')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+              activeTab === 'missed' 
+                ? 'bg-destructive/10 text-destructive' 
+                : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+            }`}
+          >
+            <HeartOff className="w-4 h-4" />
+            <span className="text-xl font-bold">{missedCount}</span>
+            <span className="text-sm">Missed</span>
+          </button>
+        )}
       </div>
     </motion.div>
   );
