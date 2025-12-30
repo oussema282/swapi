@@ -97,8 +97,8 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
             </p>
             
             <p className={cn(
-              "text-sm truncate font-semibold",
-              hasUnread ? "text-foreground" : "text-foreground"
+              "text-sm truncate",
+              hasUnread ? "font-bold text-foreground" : "font-normal text-muted-foreground"
             )}>
               {lastMessagePreview}
             </p>
