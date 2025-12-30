@@ -30,15 +30,16 @@ export default function WhitePaper() {
 
   const sections = [
     { id: 'overview', title: '1. System Overview', icon: FileText },
-    { id: 'algorithm', title: '2. Hybrid Recommendation Algorithm', icon: Cpu },
-    { id: 'swipe', title: '3. Swipe Lifecycle & State', icon: GitBranch },
-    { id: 'subscription', title: '4. Pro Subscription System', icon: Users },
-    { id: 'database', title: '5. Database Schema', icon: Database },
-    { id: 'background', title: '6. Background Processes', icon: Settings },
-    { id: 'constraints', title: '7. Known Constraints', icon: AlertTriangle },
-    { id: 'mapping', title: '8. Prompt-to-Code Mapping', icon: Code },
-    { id: 'changelog', title: '9. Change Log', icon: History },
-    { id: 'extension', title: '10. Extension Points', icon: Puzzle },
+    { id: 'state-machine', title: '2. State Machine & Invariants', icon: GitBranch },
+    { id: 'algorithm', title: '3. Hybrid Recommendation Algorithm', icon: Cpu },
+    { id: 'swipe', title: '4. Swipe Lifecycle & State', icon: GitBranch },
+    { id: 'subscription', title: '5. Pro Subscription System', icon: Users },
+    { id: 'database', title: '6. Database Schema', icon: Database },
+    { id: 'background', title: '7. Background Processes', icon: Settings },
+    { id: 'constraints', title: '8. Known Constraints', icon: AlertTriangle },
+    { id: 'mapping', title: '9. Prompt-to-Code Mapping', icon: Code },
+    { id: 'changelog', title: '10. Change Log', icon: History },
+    { id: 'extension', title: '11. Extension Points', icon: Puzzle },
   ];
 
   return (
@@ -99,6 +100,7 @@ export default function WhitePaper() {
               </div>
 
               {activeSection === 'overview' && <SystemOverview />}
+              {activeSection === 'state-machine' && <StateMachineSection />}
               {activeSection === 'algorithm' && <HybridAlgorithm />}
               {activeSection === 'swipe' && <SwipeLifecycle />}
               {activeSection === 'subscription' && <SubscriptionSystem />}
@@ -185,6 +187,63 @@ function SystemOverview() {
           <li>Mutual likes create a Match → Chat unlocked</li>
           <li>Users negotiate and complete the swap</li>
         </ol>
+      </div>
+    </section>
+  );
+}
+
+function StateMachineSection() {
+  return (
+    <section className="space-y-6">
+      <h2 className="text-2xl font-bold">2. State Machine & System Invariants</h2>
+      
+      <div className="prose prose-sm dark:prose-invert max-w-none">
+        <h3>Unified State Architecture</h3>
+        <p><strong>Location:</strong> <code>src/hooks/useSystemState.tsx</code></p>
+        <p>The system uses a global state machine to ensure consistent behavior across all features.</p>
+        
+        <h4>State Domains</h4>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`SYSTEM_PHASE:
+  BOOTSTRAPPING  → App initializing
+  ACTIVE         → Normal user interaction
+  TRANSITION     → State change in progress (e.g., upgrading)
+  BACKGROUND_ONLY → Only background jobs run
+  BLOCKED        → User cannot proceed
+
+SUBSCRIPTION_PHASE:
+  FREE_ACTIVE    → Free user, within limits
+  FREE_LIMITED   → Free user, some limits reached
+  UPGRADING      → Payment in progress
+  PRO_ACTIVE     → Pro subscription active
+  PRO_EXPIRED    → Pro subscription expired
+
+SWIPE_PHASE:
+  IDLE / LOADING / READY / SWIPING / COMMITTING
+  UNDOING / REFRESHING / EXHAUSTED / PAUSED
+
+MATCH_PHASE:
+  NONE / CREATED / NEGOTIATING / READY_TO_COMPLETE
+  COMPLETED / ABANDONED`}
+        </pre>
+
+        <h4>Entitlement Resolver</h4>
+        <p><strong>Location:</strong> <code>src/hooks/useEntitlements.tsx</code></p>
+        <p>Single source of truth for all Pro/limit checks:</p>
+        <ul>
+          <li>Pro users NEVER have usage tracked or limits enforced</li>
+          <li>All canUse checks go through the resolver</li>
+          <li>Subscription changes trigger full cache invalidation</li>
+          <li>Background jobs cannot influence UI during ACTIVE state</li>
+        </ul>
+
+        <h4>Fixed Issues (Dec 30, 2024)</h4>
+        <ul>
+          <li>Pro features now unlock immediately after payment</li>
+          <li>daily_usage completely ignored for Pro users</li>
+          <li>Subscription upgrades treated as state transitions, not boolean checks</li>
+          <li>All Pro checks centralized - no duplicated logic</li>
+        </ul>
       </div>
     </section>
   );
@@ -756,12 +815,14 @@ function ChangeLog() {
         
         <h4>Week 4 (Dec 23-30)</h4>
         <ul>
+          <li><strong>Unified State Machine:</strong> Introduced SystemStateProvider with SYSTEM_STATE, SUBSCRIPTION_STATE, SWIPE_STATE, MATCH_STATE phases</li>
+          <li><strong>Centralized Entitlements:</strong> Created useEntitlements hook as single source of truth for Pro/limit checks. Pro users skip daily_usage entirely.</li>
+          <li><strong>Subscription State Transitions:</strong> Upgrades now use UPGRADING state with proper cache invalidation</li>
           <li><strong>Hybrid Recommendation System:</strong> Implemented two-layer architecture with realtime ranking and offline reciprocal optimization</li>
           <li><strong>Removed Opportunity UI:</strong> Deleted SwapOpportunitiesSection, SwapOpportunityCard, useSwapOpportunities - reciprocal boosts now silent</li>
           <li><strong>Card Exhaustion Handling:</strong> Added expandedSearch mode with item recycling after 7 days</li>
           <li><strong>Missed Matches Tab:</strong> Added tab in Matches page showing items where counterparty liked but user skipped</li>
           <li><strong>Bold Unread Messages:</strong> Message previews now bold if unread</li>
-          <li><strong>Map Limit Redirect:</strong> Close button on upgrade prompt redirects to discover</li>
         </ul>
 
         <h4>Week 3 (Dec 16-22)</h4>
