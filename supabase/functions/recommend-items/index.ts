@@ -246,7 +246,7 @@ serve(async (req) => {
     // This function is configured as public (no JWT required). We intentionally avoid
     // validating the caller token here and instead derive the user context from the
     // provided item.
-    const { myItemId, limit = 20 } = await req.json();
+    const { myItemId, limit = 50, expandedSearch = false } = await req.json();
 
     if (!myItemId) {
       return new Response(JSON.stringify({ error: "myItemId is required" }), {
@@ -255,7 +255,7 @@ serve(async (req) => {
       });
     }
 
-    console.log(`Processing recommendation request for myItemId=${myItemId}`);
+    console.log(`Processing recommendation request for myItemId=${myItemId}, expanded=${expandedSearch}`);
 
     // Get my item
     const { data: myItem, error: myItemError } = await supabaseAdmin
@@ -307,9 +307,33 @@ serve(async (req) => {
     }
 
     // Filter out already swiped items
-    const unswiped = (candidateItems || []).filter(
+    let unswiped = (candidateItems || []).filter(
       (item: Item) => !swipedItemIds.includes(item.id)
     );
+
+    // If pool is exhausted, silently expand search criteria
+    let searchExpanded = false;
+    if (unswiped.length < 5 && !expandedSearch) {
+      console.log("Pool low, expanding search criteria silently");
+      searchExpanded = true;
+      // Include items that were swiped on more than 7 days ago (allow recycling)
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      
+      const { data: oldSwipes } = await supabaseAdmin
+        .from("swipes")
+        .select("swiped_item_id, created_at")
+        .eq("swiper_item_id", myItemId)
+        .lt("created_at", sevenDaysAgo);
+      
+      const recyclableItemIds = (oldSwipes || []).map(s => s.swiped_item_id);
+      
+      // Add recyclable items back to pool
+      const recyclableItems = (candidateItems || []).filter(
+        (item: Item) => recyclableItemIds.includes(item.id) && !unswiped.some(u => u.id === item.id)
+      );
+      
+      unswiped = [...unswiped, ...recyclableItems];
+    }
 
     // Get liked items for behavior analysis
     const { data: likedItemsData } = await supabaseAdmin
@@ -319,15 +343,24 @@ serve(async (req) => {
 
     const likedItems: Item[] = likedItemsData || [];
 
+    // Adjust weights if search was expanded (favor reciprocal boosts and behavioral affinity more)
+    const adjustedWeights = searchExpanded ? {
+      ...WEIGHTS,
+      reciprocalBoost: 0.20, // Higher boost for reciprocal matches
+      behaviorAffinity: 0.15, // More weight on learned preferences
+      exchangeCompatibility: 0.15, // Slightly less strict
+    } : WEIGHTS;
+
     // Score and rank items
     const scoredItems = unswiped.map((item: Item) => ({
       item,
-      score: calculateItemScore(
+      score: calculateItemScoreWithWeights(
         myItem as Item,
         item as Item,
         { lat: profile?.latitude ?? null, lon: profile?.longitude ?? null },
         swipeHistory,
-        likedItems
+        likedItems,
+        adjustedWeights
       ),
     }));
 
@@ -340,9 +373,9 @@ serve(async (req) => {
       score: Math.round(score * 1000) / 1000,
     }));
 
-    console.log(`Recommended ${rankedItems.length} items for owner ${ownerUserId}`);
+    console.log(`Recommended ${rankedItems.length} items for owner ${ownerUserId}${searchExpanded ? ' (expanded)' : ''}`);
 
-    return new Response(JSON.stringify({ rankedItems, total: unswiped.length }), {
+    return new Response(JSON.stringify({ rankedItems, total: unswiped.length, searchExpanded }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
@@ -353,3 +386,39 @@ serve(async (req) => {
     });
   }
 });
+
+// Calculate score with customizable weights
+function calculateItemScoreWithWeights(
+  myItem: Item,
+  targetItem: Item,
+  userLocation: { lat: number | null; lon: number | null },
+  swipeHistory: SwipeHistory[],
+  likedItems: Item[],
+  weights: typeof WEIGHTS
+): number {
+  const categorySim = calculateCategorySimilarity(myItem.swap_preferences, targetItem.category);
+  const geoScore = calculateGeoScore(
+    userLocation.lat, userLocation.lon,
+    targetItem.latitude, targetItem.longitude
+  );
+  const exchangeCompat = calculateExchangeCompatibility(myItem, targetItem);
+  const behaviorAffinity = calculateBehaviorAffinity(swipeHistory, likedItems, targetItem);
+  const freshness = calculateFreshness(targetItem.created_at);
+  const conditionScore = CONDITION_WEIGHTS[targetItem.condition] || 0.5;
+  const reciprocalBoost = targetItem.reciprocal_boost || 0;
+  
+  // Weighted sum with provided weights
+  const baseScore = 
+    weights.categorySimilarity * categorySim +
+    weights.geoScore * geoScore +
+    weights.exchangeCompatibility * exchangeCompat +
+    weights.behaviorAffinity * behaviorAffinity +
+    weights.freshness * freshness +
+    weights.conditionScore * conditionScore +
+    weights.reciprocalBoost * reciprocalBoost;
+  
+  // Add exploration randomness
+  const exploration = Math.random() * EXPLORATION_FACTOR;
+  
+  return baseScore + exploration;
+}

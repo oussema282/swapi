@@ -36,78 +36,92 @@ export function useRecommendedItems(myItemId: string | null) {
            return fallbackFetch(user.id, myItemId);
          }
 
-         const rankedItems = (data as { rankedItems?: RecommendationResult[] } | null)?.rankedItems;
+         const result = data as { rankedItems?: RecommendationResult[]; searchExpanded?: boolean } | null;
+         const rankedItems = result?.rankedItems;
 
          if (!rankedItems || rankedItems.length === 0) {
-           return [];
+           // Pool exhausted - silently retry with expanded criteria
+           console.log('Pool exhausted, trying expanded search...');
+           const { data: expandedData } = await supabase.functions.invoke('recommend-items', {
+             body: { myItemId, limit: 50, expandedSearch: true },
+           });
+           const expandedItems = (expandedData as { rankedItems?: RecommendationResult[] } | null)?.rankedItems;
+           if (!expandedItems || expandedItems.length === 0) {
+             return [];
+           }
+           return fetchItemDetails(expandedItems);
          }
 
-        // Fetch full item details for ranked items
-        const itemIds = rankedItems.map(r => r.id);
-        const scoreMap = new Map(rankedItems.map(r => [r.id, r.score]));
-
-        const { data: items, error } = await supabase
-          .from('items')
-          .select('*')
-          .in('id', itemIds);
-
-        if (error) throw error;
-
-        // Get profiles for these items
-        const userIds = [...new Set((items || []).map(item => item.user_id))];
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('user_id, display_name, avatar_url')
-          .in('user_id', userIds);
-
-        // Get subscriptions to check Pro status
-        const { data: subscriptions } = await supabase
-          .from('user_subscriptions')
-          .select('user_id, is_pro')
-          .in('user_id', userIds);
-
-        // Get community ratings for these items
-        const { data: ratings } = await supabase
-          .from('item_ratings')
-          .select('item_id, rating, total_interactions')
-          .in('item_id', itemIds);
-
-        const profileMap = new Map(
-          (profiles || []).map(p => [p.user_id, p])
-        );
-
-        const subscriptionMap = new Map(
-          (subscriptions || []).map(s => [s.user_id, s.is_pro])
-        );
-
-        const ratingsMap = new Map(
-          (ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }])
-        );
-
-        // Combine items with profile data, scores, and community ratings
-        const swipeableItems: SwipeableItem[] = (items || [])
-          .map(item => ({
-            ...item,
-            owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
-            owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
-            owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
-            recommendation_score: scoreMap.get(item.id),
-            community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
-            total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
-            reciprocal_boost: item.reciprocal_boost ?? 0,
-          }))
-          .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
-
-        return swipeableItems;
+        return fetchItemDetails(rankedItems);
       } catch (error) {
         console.error('Error fetching recommendations:', error);
-        // Fall back to basic query
         return fallbackFetch(user.id, myItemId);
       }
     },
     enabled: !!user && !!myItemId,
     staleTime: 30000, // Cache for 30 seconds
+    refetchInterval: 60000, // Silently refresh every 60 seconds
   });
+}
+
+// Helper to fetch full item details from ranked IDs
+async function fetchItemDetails(rankedItems: RecommendationResult[]): Promise<SwipeableItem[]> {
+  const itemIds = rankedItems.map(r => r.id);
+  const scoreMap = new Map(rankedItems.map(r => [r.id, r.score]));
+
+  const { data: items, error } = await supabase
+    .from('items')
+    .select('*')
+    .in('id', itemIds);
+
+  if (error) throw error;
+
+  // Get profiles for these items
+  const userIds = [...new Set((items || []).map(item => item.user_id))];
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('user_id, display_name, avatar_url')
+    .in('user_id', userIds);
+
+  // Get subscriptions to check Pro status
+  const { data: subscriptions } = await supabase
+    .from('user_subscriptions')
+    .select('user_id, is_pro')
+    .in('user_id', userIds);
+
+  // Get community ratings for these items
+  const { data: ratings } = await supabase
+    .from('item_ratings')
+    .select('item_id, rating, total_interactions')
+    .in('item_id', itemIds);
+
+  const profileMap = new Map(
+    (profiles || []).map(p => [p.user_id, p])
+  );
+
+  const subscriptionMap = new Map(
+    (subscriptions || []).map(s => [s.user_id, s.is_pro])
+  );
+
+  const ratingsMap = new Map(
+    (ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }])
+  );
+
+  // Combine items with profile data, scores, and community ratings
+  const swipeableItems: SwipeableItem[] = (items || [])
+    .map(item => ({
+      ...item,
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+      owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+      recommendation_score: scoreMap.get(item.id),
+      community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+      total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
+      reciprocal_boost: item.reciprocal_boost ?? 0,
+    }))
+    .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
+
+  return swipeableItems;
 }
 
 // Fallback function if recommendation API fails
