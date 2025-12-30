@@ -13,6 +13,7 @@ interface SwipeCardProps {
     owner_display_name: string; 
     owner_avatar_url: string | null;
     owner_is_pro?: boolean;
+    user_id: string;
     recommendation_score?: number;
     community_rating?: number;
     total_interactions?: number;
@@ -316,6 +317,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
               isPro={item.owner_is_pro} 
               className="font-semibold text-white text-sm drop-shadow-md"
               badgeClassName="text-amber-400"
+              userId={item.user_id}
+              clickable
             />
           </div>
         </div>

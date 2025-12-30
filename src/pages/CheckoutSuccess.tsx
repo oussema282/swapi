@@ -40,8 +40,11 @@ const CheckoutSuccess = () => {
           console.error('Error activating subscription:', error);
         } else {
           console.log('Subscription activated successfully');
-          // Refresh subscription data
+          // Refresh all subscription-related data
           await queryClient.invalidateQueries({ queryKey: ['subscription'] });
+          await queryClient.invalidateQueries({ queryKey: ['subscription', user.id] });
+          await queryClient.invalidateQueries({ queryKey: ['daily-usage'] });
+          await queryClient.invalidateQueries({ queryKey: ['my-items-count'] });
           await refreshProfile();
         }
       } catch (err) {
