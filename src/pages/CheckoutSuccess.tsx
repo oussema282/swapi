@@ -6,14 +6,16 @@ import { CheckCircle2, Crown, Home, Sparkles, Loader2, AlertCircle } from "lucid
 import { Confetti } from "@/components/discover/Confetti";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useSubscription } from "@/hooks/useSubscription";
+import { useEntitlements } from "@/hooks/useEntitlements";
+import { useSystemState } from "@/hooks/useSystemState";
 
 const CheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id');
   const { user, refreshProfile } = useAuth();
-  const { refreshSubscription, isPro } = useSubscription();
+  const { refreshEntitlements, isPro } = useEntitlements();
+  const { startUpgrade, completeUpgrade, failUpgrade } = useSystemState();
   const [isActivating, setIsActivating] = useState(true);
   const [activationError, setActivationError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -37,6 +39,9 @@ const CheckoutSuccess = () => {
         return;
       }
 
+      // Signal that upgrade is in progress
+      startUpgrade();
+
       try {
         console.log('Activating subscription for session:', sessionId);
         
@@ -58,18 +63,20 @@ const CheckoutSuccess = () => {
         if (error) {
           console.error('Error activating subscription:', error);
           setActivationError('Failed to activate subscription. Please contact support.');
+          failUpgrade();
           setIsActivating(false);
           return;
         }
 
-        console.log('Subscription record updated, refreshing...');
+        console.log('Subscription record updated, refreshing entitlements...');
         
-        // Force refresh subscription data and wait for it
-        const newSubscription = await refreshSubscription();
+        // Force refresh entitlement data and wait for it
+        const newSubscription = await refreshEntitlements();
         
         // Verify Pro status is now active
         if (newSubscription?.is_pro) {
           console.log('Pro subscription activated successfully');
+          completeUpgrade(true);
           await refreshProfile();
           setIsActivating(false);
         } else if (retryCount < 3) {
@@ -79,17 +86,19 @@ const CheckoutSuccess = () => {
           setTimeout(() => activateSubscription(), 1000);
         } else {
           console.log('Pro status confirmed after retries');
+          completeUpgrade(true);
           setIsActivating(false);
         }
       } catch (err) {
         console.error('Error activating subscription:', err);
         setActivationError('An unexpected error occurred. Please refresh the page.');
+        failUpgrade();
         setIsActivating(false);
       }
     };
 
     activateSubscription();
-  }, [user, sessionId, refreshSubscription, refreshProfile, retryCount, isPro]);
+  }, [user, sessionId, refreshEntitlements, refreshProfile, retryCount, isPro, startUpgrade, completeUpgrade, failUpgrade]);
 
   // Show error state
   if (activationError) {

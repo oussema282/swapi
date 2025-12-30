@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
+import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ export default function Search() {
   const [searchCount, setSearchCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-  const { canUse, usage, incrementUsage, isPro } = useSubscription();
+  const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
   // Auto-request location on mount
   useEffect(() => {

@@ -6,7 +6,8 @@ import { useRecommendedItems } from '@/hooks/useRecommendations';
 import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
-import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
+import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
+import { useSystemState } from '@/hooks/useSystemState';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
@@ -23,7 +24,8 @@ export default function Index() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
-  const { canUse, remaining, usage, incrementUsage, isPro } = useSubscription();
+  const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
+  const { setSwipePhase } = useSystemState();
   
   // Use the new swipe state machine
   const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();

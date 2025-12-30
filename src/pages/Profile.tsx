@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
-import { useSubscription } from '@/hooks/useSubscription';
+import { useEntitlements } from '@/hooks/useEntitlements';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -19,7 +19,7 @@ import { format } from 'date-fns';
 export default function Profile() {
   const { user, profile, loading, signOut } = useAuth();
   const { data: items = [], isLoading: itemsLoading } = useMyItems();
-  const { isPro, subscription } = useSubscription();
+  const { isPro, subscription } = useEntitlements();
   
   // Fetch completed swaps count for current user
   const { data: completedSwapsCount = 0 } = useQuery({

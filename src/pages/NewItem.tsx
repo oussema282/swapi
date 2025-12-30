@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateItem } from '@/hooks/useItems';
-import { useItemLimit } from '@/hooks/useSubscription';
+import { useItemLimit } from '@/hooks/useEntitlements';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

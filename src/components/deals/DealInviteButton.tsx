@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
+import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
@@ -33,7 +33,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
-  const { canUse, usage, incrementUsage, isPro } = useSubscription();
+  const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
   // Fetch user's own items
   const { data: myItems = [], isLoading: itemsLoading } = useQuery({

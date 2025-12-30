@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription, FREE_LIMITS } from '@/hooks/useSubscription';
+import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -61,7 +61,7 @@ export default function MapView() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [hasTrackedUsage, setHasTrackedUsage] = useState(false);
   const hasNavigatedToFocusItem = useRef(false);
-  const { canUse, usage, incrementUsage, isPro } = useSubscription();
+  const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
   // Fetch completed swap item IDs to exclude from map
   const { data: completedItemIds = [] } = useQuery({

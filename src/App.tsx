@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { SystemStateProvider } from "@/hooks/useSystemState";
 import { LocationGate } from "@/components/LocationGate";
 import { SetupGate } from "@/components/SetupGate";
 import Index from "./pages/Index";
@@ -34,27 +35,29 @@ const App = () => (
       <BrowserRouter>
         <SetupGate>
           <AuthProvider>
-            <LocationGate>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/setup" element={<Setup />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/map" element={<MapView />} />
-                <Route path="/items" element={<Items />} />
-                <Route path="/items/new" element={<NewItem />} />
-                <Route path="/items/:id/edit" element={<EditItem />} />
-                <Route path="/matches" element={<Matches />} />
-                <Route path="/chat/:matchId" element={<Chat />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/profile/edit" element={<EditProfile />} />
-                <Route path="/user/:userId" element={<UserProfile />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/checkout/success" element={<CheckoutSuccess />} />
-                <Route path="/whitepaper" element={<WhitePaper />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </LocationGate>
+            <SystemStateProvider>
+              <LocationGate>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/setup" element={<Setup />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/map" element={<MapView />} />
+                  <Route path="/items" element={<Items />} />
+                  <Route path="/items/new" element={<NewItem />} />
+                  <Route path="/items/:id/edit" element={<EditItem />} />
+                  <Route path="/matches" element={<Matches />} />
+                  <Route path="/chat/:matchId" element={<Chat />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile/edit" element={<EditProfile />} />
+                  <Route path="/user/:userId" element={<UserProfile />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/checkout/success" element={<CheckoutSuccess />} />
+                  <Route path="/whitepaper" element={<WhitePaper />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </LocationGate>
+            </SystemStateProvider>
           </AuthProvider>
         </SetupGate>
       </BrowserRouter>
