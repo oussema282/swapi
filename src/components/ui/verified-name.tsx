@@ -1,4 +1,5 @@
 import { Crown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 interface VerifiedNameProps {
@@ -6,16 +7,36 @@ interface VerifiedNameProps {
   className?: string;
   badgeClassName?: string;
   isPro?: boolean;
+  userId?: string;
+  clickable?: boolean;
 }
 
 export function VerifiedName({ 
   name, 
   className, 
   badgeClassName,
-  isPro = false 
+  isPro = false,
+  userId,
+  clickable = false
 }: VerifiedNameProps) {
+  const navigate = useNavigate();
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (clickable && userId) {
+      e.stopPropagation();
+      navigate(`/user/${userId}`);
+    }
+  };
+
   return (
-    <span className={cn("inline-flex items-center gap-1", className)}>
+    <span 
+      className={cn(
+        "inline-flex items-center gap-1", 
+        clickable && userId && "cursor-pointer hover:underline",
+        className
+      )}
+      onClick={handleClick}
+    >
       <span className="truncate">{name}</span>
       {isPro && (
         <span 

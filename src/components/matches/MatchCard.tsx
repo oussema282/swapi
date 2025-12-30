@@ -72,7 +72,12 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                   </AvatarFallback>
                 </Avatar>
                 <span className="font-medium text-sm">
-                  <VerifiedName name={match.other_user_profile?.display_name || 'Unknown'} badgeClassName="w-3.5 h-3.5" />
+                  <VerifiedName 
+                    name={match.other_user_profile?.display_name || 'Unknown'} 
+                    badgeClassName="w-3.5 h-3.5"
+                    userId={match.other_user_id}
+                    clickable
+                  />
                 </span>
               </div>
               
@@ -92,8 +97,8 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
             </p>
             
             <p className={cn(
-              "text-sm truncate",
-              hasUnread ? "text-foreground font-medium" : "text-muted-foreground"
+              "text-sm truncate font-semibold",
+              hasUnread ? "text-foreground" : "text-foreground"
             )}>
               {lastMessagePreview}
             </p>

@@ -16,12 +16,14 @@ import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/d
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
+import { ExpandableDescription } from '@/components/search/ExpandableDescription';
 
 interface SearchItem extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
   owner_latitude: number | null;
   owner_longitude: number | null;
+  owner_user_id: string;
   distance?: number;
 }
 
@@ -141,6 +143,7 @@ export default function Search() {
         owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
         owner_latitude: profileMap.get(item.user_id)?.latitude || null,
         owner_longitude: profileMap.get(item.user_id)?.longitude || null,
+        owner_user_id: item.user_id,
       }));
     },
     enabled: !!user,
@@ -647,8 +650,12 @@ export default function Search() {
                       {/* Title - always single line */}
                       <h3 className="font-semibold text-foreground truncate text-base">{item.title}</h3>
                       
-                      {/* Description - fixed 2 lines max */}
-                      <p className="text-sm text-muted-foreground line-clamp-2 h-10 leading-5">{item.description || 'No description'}</p>
+                      {/* Expandable Description */}
+                      <ExpandableDescription 
+                        description={item.description || 'No description'} 
+                        maxLines={2}
+                        className="min-h-[2.5rem]"
+                      />
                       
                       {/* Metadata row - always at same position */}
                       <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-1">
@@ -667,13 +674,20 @@ export default function Search() {
                     
                     {/* Action column - fixed right */}
                     <div className="flex flex-col items-end justify-between py-0.5 flex-shrink-0">
-                      <div className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-[10px] font-bold ring-1 ring-border">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/user/${item.owner_user_id}`);
+                        }}
+                        className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-[10px] font-bold ring-1 ring-border hover:ring-primary transition-all"
+                        title={`View ${item.owner_display_name}'s profile`}
+                      >
                         {item.owner_avatar_url ? (
                           <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-muted-foreground">{item.owner_display_name.charAt(0).toUpperCase()}</span>
                         )}
-                      </div>
+                      </button>
                       <DealInviteButton 
                         targetItemId={item.id} 
                         targetItemTitle={item.title}

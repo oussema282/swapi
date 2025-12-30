@@ -404,10 +404,16 @@ export default function MapView() {
                     )}
                   </div>
 
-                  {/* Info */}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{selectedItem.title}</h3>
-                    <p className="text-sm text-muted-foreground"><VerifiedName name={selectedItem.owner_display_name} badgeClassName="w-3.5 h-3.5" /></p>
+                    <p className="text-sm text-muted-foreground">
+                      <VerifiedName 
+                        name={selectedItem.owner_display_name} 
+                        badgeClassName="w-3.5 h-3.5"
+                        userId={selectedItem.user_id}
+                        clickable
+                      />
+                    </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <Badge variant="secondary" className="text-xs">
                         {CATEGORY_LABELS[selectedItem.category]}

@@ -15,6 +15,7 @@ import Matches from "./pages/Matches";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import UserProfile from "./pages/UserProfile";
 import Search from "./pages/Search";
 import MapView from "./pages/MapView";
 import Checkout from "./pages/Checkout";
@@ -46,6 +47,7 @@ const App = () => (
                 <Route path="/chat/:matchId" element={<Chat />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/edit" element={<EditProfile />} />
+                <Route path="/user/:userId" element={<UserProfile />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/success" element={<CheckoutSuccess />} />
                 <Route path="*" element={<NotFound />} />
