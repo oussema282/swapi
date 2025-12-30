@@ -707,6 +707,7 @@ export default function Search() {
         open={showUpgradePrompt}
         onOpenChange={setShowUpgradePrompt}
         feature="searches"
+        featureType="search"
         usedCount={usage.searches}
         limit={FREE_LIMITS.searches}
       />

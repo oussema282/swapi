@@ -21,6 +21,17 @@ export const PRO_LIMITS = {
   maxItems: -1,
 };
 
+// Feature upgrade packages
+export const FEATURE_UPGRADES = {
+  swipes: { name: 'Extra Swipes', bonus: 100, price: 1.99 },
+  deal_invites: { name: 'Extra Deal Invites', bonus: 20, price: 0.99 },
+  map: { name: 'Extra Map Views', bonus: 20, price: 0.99 },
+  search: { name: 'Extra Searches', bonus: 20, price: 0.99 },
+  items: { name: 'Extra Item Slots', bonus: 5, price: 1.49 },
+} as const;
+
+export type FeatureType = keyof typeof FEATURE_UPGRADES;
+
 interface Subscription {
   id: string;
   user_id: string;
@@ -37,6 +48,14 @@ interface DailyUsage {
   searches_count: number;
   deal_invites_count: number;
   map_uses_count: number;
+}
+
+interface FeatureUpgrade {
+  id: string;
+  user_id: string;
+  feature_type: string;
+  bonus_amount: number;
+  expires_at: string | null;
 }
 
 /**
@@ -83,6 +102,31 @@ export function useSubscription() {
     staleTime: 0, // Always refetch when queried
     refetchOnWindowFocus: true,
     refetchOnMount: true,
+  });
+
+  // Fetch feature upgrades (bonus amounts for individual features)
+  const { data: featureUpgrades = [] } = useQuery({
+    queryKey: ['feature-upgrades', user?.id],
+    queryFn: async (): Promise<FeatureUpgrade[]> => {
+      if (!user) return [];
+
+      const { data, error } = await supabase
+        .from('feature_upgrades')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error fetching feature upgrades:', error);
+        return [];
+      }
+
+      // Filter out expired upgrades
+      return (data || []).filter((upgrade: FeatureUpgrade) => {
+        if (!upgrade.expires_at) return true;
+        return new Date(upgrade.expires_at) > new Date();
+      });
+    },
+    enabled: !!user,
   });
 
   // Fetch daily usage
@@ -175,9 +219,24 @@ export function useSubscription() {
     },
   });
 
+  // Get bonus amounts from feature upgrades
+  const getBonus = (featureType: string): number => {
+    const upgrade = featureUpgrades.find(u => u.feature_type === featureType);
+    return upgrade?.bonus_amount || 0;
+  };
+
   // Compute Pro status from subscription data
   const isPro = subscription?.is_pro ?? false;
-  const limits = isPro ? PRO_LIMITS : FREE_LIMITS;
+  const baseLimits = isPro ? PRO_LIMITS : FREE_LIMITS;
+  
+  // Apply feature upgrades to limits (only for non-Pro users)
+  const limits = isPro ? PRO_LIMITS : {
+    swipes: baseLimits.swipes + getBonus('swipes'),
+    searches: baseLimits.searches + getBonus('search'),
+    dealInvites: baseLimits.dealInvites + getBonus('deal_invites'),
+    mapUses: baseLimits.mapUses + getBonus('map'),
+    maxItems: baseLimits.maxItems + getBonus('items'),
+  };
 
   const usage = {
     swipes: dailyUsage?.swipes_count ?? 0,
@@ -206,6 +265,7 @@ export function useSubscription() {
     await queryClient.invalidateQueries({ queryKey: ['subscription'] });
     await queryClient.invalidateQueries({ queryKey: ['daily-usage'] });
     await queryClient.invalidateQueries({ queryKey: ['my-items-count'] });
+    await queryClient.invalidateQueries({ queryKey: ['feature-upgrades'] });
     const result = await refetchSubscription();
     return result.data;
   }, [queryClient, refetchSubscription]);
@@ -217,6 +277,7 @@ export function useSubscription() {
     remaining,
     limits,
     canUse,
+    featureUpgrades,
     isLoading: subscriptionLoading || usageLoading,
     incrementUsage: incrementUsage.mutateAsync,
     refreshSubscription,

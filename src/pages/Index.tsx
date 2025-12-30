@@ -255,6 +255,7 @@ export default function Index() {
         open={showUpgradePrompt}
         onOpenChange={setShowUpgradePrompt}
         feature="swipes"
+        featureType="swipes"
         usedCount={usage.swipes}
         limit={FREE_LIMITS.swipes}
       />

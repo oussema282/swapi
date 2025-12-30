@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Crown, Sparkles } from 'lucide-react';
+import { Crown, Sparkles, Zap, MapPin, Search, Package, MessageSquare } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -8,28 +8,40 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import { FEATURE_UPGRADES, FeatureType } from '@/hooks/useSubscription';
 
 interface UpgradePromptProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   feature: string;
+  featureType?: FeatureType;
   usedCount: number;
   limit: number;
   required?: boolean;
 }
 
+const featureIcons: Record<FeatureType, typeof Zap> = {
+  swipes: Zap,
+  deal_invites: MessageSquare,
+  map: MapPin,
+  search: Search,
+  items: Package,
+};
+
 export function UpgradePrompt({ 
   open, 
   onOpenChange, 
   feature,
+  featureType,
   usedCount,
   limit,
   required = false
 }: UpgradePromptProps) {
   const navigate = useNavigate();
+  const upgrade = featureType ? FEATURE_UPGRADES[featureType] : null;
+  const Icon = featureType ? featureIcons[featureType] : Crown;
 
   const handleOpenChange = (newOpen: boolean) => {
-    // If required, don't allow closing via backdrop click or escape
     if (required && !newOpen) return;
     onOpenChange(newOpen);
   };
@@ -39,16 +51,40 @@ export function UpgradePrompt({
       <DialogContent className="max-w-sm text-center">
         <DialogHeader>
           <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-            <Crown className="w-8 h-8 text-primary-foreground" />
+            <Icon className="w-8 h-8 text-primary-foreground" />
           </div>
           <DialogTitle className="text-xl">Daily Limit Reached</DialogTitle>
           <DialogDescription className="text-base">
             You've used {usedCount}/{limit} {feature} today. 
-            Upgrade to Pro for unlimited access!
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3 mt-4">
+          {/* Feature-specific upgrade option */}
+          {upgrade && featureType && (
+            <div className="p-3 rounded-lg border bg-muted/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">{upgrade.name}</span>
+                <span className="text-primary font-bold">${upgrade.price}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-2">
+                +{upgrade.bonus} extra {feature}
+              </p>
+              <Button 
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  onOpenChange(false);
+                  navigate(`/checkout?feature=${featureType}`);
+                }}
+              >
+                Buy Now
+              </Button>
+            </div>
+          )}
+
+          {/* Pro upgrade */}
           <Button 
             className="w-full"
             onClick={() => {
@@ -56,12 +92,13 @@ export function UpgradePrompt({
               navigate('/checkout');
             }}
           >
-            <Sparkles className="w-4 h-4 mr-2" />
-            Upgrade to Pro
+            <Crown className="w-4 h-4 mr-2" />
+            Upgrade to Pro - Unlimited
           </Button>
+
           {!required && (
             <Button 
-              variant="outline" 
+              variant="ghost" 
               className="w-full"
               onClick={() => onOpenChange(false)}
             >
@@ -70,8 +107,8 @@ export function UpgradePrompt({
           )}
         </div>
 
-        <p className="text-xs text-muted-foreground mt-4">
-          Pro members get unlimited swipes, searches, deal invites, and more!
+        <p className="text-xs text-muted-foreground mt-2">
+          Pro members get unlimited swipes, searches, map views, and more!
         </p>
       </DialogContent>
     </Dialog>
