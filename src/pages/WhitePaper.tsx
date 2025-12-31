@@ -135,7 +135,7 @@ function SystemOverview() {
         <h3>Core Architecture</h3>
         <ul>
           <li><strong>Frontend:</strong> React 18 + TypeScript + Vite + TailwindCSS + Shadcn/UI</li>
-          <li><strong>State Management:</strong> TanStack React Query for server state</li>
+          <li><strong>State Management:</strong> TanStack React Query for server state + Global State Machine</li>
           <li><strong>Backend:</strong> Supabase (PostgreSQL + Auth + Edge Functions + Storage)</li>
           <li><strong>Routing:</strong> React Router v6</li>
         </ul>
@@ -151,6 +151,11 @@ function SystemOverview() {
           </thead>
           <tbody>
             <tr>
+              <td>SystemStateProvider</td>
+              <td><code>src/hooks/useSystemState.tsx</code></td>
+              <td>Global state machine for system phases</td>
+            </tr>
+            <tr>
               <td>AuthProvider</td>
               <td><code>src/hooks/useAuth.tsx</code></td>
               <td>User authentication context</td>
@@ -158,7 +163,7 @@ function SystemOverview() {
             <tr>
               <td>LocationGate</td>
               <td><code>src/components/LocationGate.tsx</code></td>
-              <td>Enforces geolocation permission</td>
+              <td>Enforces geolocation permission via state machine</td>
             </tr>
             <tr>
               <td>SetupGate</td>
@@ -166,9 +171,9 @@ function SystemOverview() {
               <td>Ensures app configuration</td>
             </tr>
             <tr>
-              <td>useSubscription</td>
-              <td><code>src/hooks/useSubscription.tsx</code></td>
-              <td>Pro status & usage limits</td>
+              <td>useEntitlements</td>
+              <td><code>src/hooks/useEntitlements.tsx</code></td>
+              <td>Centralized Pro status & usage limits</td>
             </tr>
             <tr>
               <td>useRecommendations</td>
@@ -178,10 +183,24 @@ function SystemOverview() {
           </tbody>
         </table>
 
+        <h3>Startup Sequence</h3>
+        <p className="bg-muted p-4 rounded-md border">
+          <strong>BOOTSTRAPPING</strong> → AuthProvider loads → <strong>AUTH_READY</strong> → 
+          LocationGate checks permission → <strong>LOCATION_GRANTED</strong> → <strong>ACTIVE</strong>
+        </p>
+        <ol>
+          <li>App enters BOOTSTRAPPING phase</li>
+          <li>AuthProvider completes (AUTH_READY action fires)</li>
+          <li>LocationGate becomes visible (not during BOOTSTRAPPING)</li>
+          <li>User grants location → LOCATION_GRANTED → ACTIVE phase</li>
+          <li>User denies location → LOCATION_DENIED → BLOCKED phase</li>
+          <li>Retry button → LOCATION_RETRY → TRANSITION → re-request</li>
+        </ol>
+
         <h3>User Flow</h3>
         <ol>
           <li>User signs up/logs in → Profile created via DB trigger</li>
-          <li>User grants location permission (required)</li>
+          <li>User grants location permission (required, enforced by LocationGate)</li>
           <li>User lists items with category, condition, photos, swap preferences</li>
           <li>User selects an item and swipes on recommendations</li>
           <li>Mutual likes create a Match → Chat unlocked</li>
@@ -205,11 +224,11 @@ function StateMachineSection() {
         <h4>State Domains</h4>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`SYSTEM_PHASE:
-  BOOTSTRAPPING  → App initializing
+  BOOTSTRAPPING  → App initializing (auth loading)
   ACTIVE         → Normal user interaction
-  TRANSITION     → State change in progress (e.g., upgrading)
+  TRANSITION     → State change in progress (e.g., upgrading, location check)
   BACKGROUND_ONLY → Only background jobs run
-  BLOCKED        → User cannot proceed
+  BLOCKED        → User cannot proceed (e.g., location denied)
 
 SUBSCRIPTION_PHASE:
   FREE_ACTIVE    → Free user, within limits
@@ -227,6 +246,24 @@ MATCH_PHASE:
   COMPLETED / ABANDONED`}
         </pre>
 
+        <h4>Location State Integration (Fixed Dec 30, 2024)</h4>
+        <p><strong>Key Insight:</strong> LocationGate is a CONSEQUENCE of the BLOCKED state, not an entry point.</p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Location Actions:
+  AUTH_READY        → Marks auth loading complete, stays in BOOTSTRAPPING
+  LOCATION_CHECKING → Transitions to TRANSITION while requesting location
+  LOCATION_GRANTED  → Transitions to ACTIVE, sets isInitialized=true
+  LOCATION_DENIED   → Transitions to BLOCKED
+  LOCATION_RETRY    → Transitions to TRANSITION before re-requesting
+
+Behavior Rules:
+  - LocationGate is NOT shown during BOOTSTRAPPING (auth loading)
+  - LocationGate appears ONLY after AUTH_READY fires
+  - BLOCKED is a waiting state, NOT a terminal state
+  - Retry button triggers LOCATION_RETRY → re-requests permission
+  - No feature runs while SYSTEM_PHASE is BOOTSTRAPPING or BLOCKED`}
+        </pre>
+
         <h4>Entitlement Resolver</h4>
         <p><strong>Location:</strong> <code>src/hooks/useEntitlements.tsx</code></p>
         <p>Single source of truth for all Pro/limit checks:</p>
@@ -237,12 +274,14 @@ MATCH_PHASE:
           <li>Background jobs cannot influence UI during ACTIVE state</li>
         </ul>
 
-        <h4>Fixed Issues (Dec 30, 2024)</h4>
+        <h4>Fixed Issues</h4>
         <ul>
-          <li>Pro features now unlock immediately after payment</li>
-          <li>daily_usage completely ignored for Pro users</li>
-          <li>Subscription upgrades treated as state transitions, not boolean checks</li>
-          <li>All Pro checks centralized - no duplicated logic</li>
+          <li><strong>Dec 30, 2024 (Location):</strong> LocationGate now waits for AUTH_READY before showing UI</li>
+          <li><strong>Dec 30, 2024 (Location):</strong> BLOCKED is recoverable - retry properly transitions state</li>
+          <li><strong>Dec 30, 2024 (Location):</strong> No features execute during BOOTSTRAPPING or BLOCKED</li>
+          <li><strong>Dec 30, 2024 (Pro):</strong> Pro features unlock immediately after payment</li>
+          <li><strong>Dec 30, 2024 (Pro):</strong> daily_usage completely ignored for Pro users</li>
+          <li><strong>Dec 30, 2024 (Pro):</strong> Subscription upgrades treated as state transitions</li>
         </ul>
       </div>
     </section>
@@ -815,6 +854,9 @@ function ChangeLog() {
         
         <h4>Week 4 (Dec 23-30)</h4>
         <ul>
+          <li><strong>Location State Machine Integration:</strong> LocationGate now properly integrates with SystemStateProvider. Shows loading during BOOTSTRAPPING, transitions through TRANSITION when checking location, and correctly handles BLOCKED state with working retry button.</li>
+          <li><strong>AUTH_READY Action:</strong> Added AUTH_READY action to separate auth completion from location checking. LocationGate only appears after auth is ready.</li>
+          <li><strong>Recoverable BLOCKED State:</strong> BLOCKED is now a waiting state, not terminal. Retry button triggers LOCATION_RETRY → TRANSITION → re-request location.</li>
           <li><strong>Unified State Machine:</strong> Introduced SystemStateProvider with SYSTEM_STATE, SUBSCRIPTION_STATE, SWIPE_STATE, MATCH_STATE phases</li>
           <li><strong>Centralized Entitlements:</strong> Created useEntitlements hook as single source of truth for Pro/limit checks. Pro users skip daily_usage entirely.</li>
           <li><strong>Subscription State Transitions:</strong> Upgrades now use UPGRADING state with proper cache invalidation</li>
