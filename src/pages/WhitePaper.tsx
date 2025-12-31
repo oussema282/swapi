@@ -188,26 +188,35 @@ function SystemOverview() {
           </tbody>
         </table>
 
-        <h3>Startup Sequence</h3>
+        <h3>Startup Sequence (BOOTSTRAPPING)</h3>
         <p className="bg-muted p-4 rounded-md border">
-          <strong>BOOTSTRAPPING</strong> → AuthProvider loads → <strong>AUTH_READY</strong> → 
-          SystemPhaseRenderer checks phase → <strong>LOCATION_GRANTED</strong> → <strong>ACTIVE</strong>
+          <strong>BOOTSTRAPPING</strong> → Auth loads → Profile loads → Subscription loads → 
+          <strong>isFullyBootstrapped</strong> → Location check → <strong>ACTIVE</strong> or <strong>BLOCKED</strong>
         </p>
+        <p><strong>BOOTSTRAPPING is a blocking phase.</strong> During BOOTSTRAPPING:</p>
+        <ul>
+          <li>No LocationGate is shown</li>
+          <li>No upgrade prompts are shown</li>
+          <li>No recommendations are fetched</li>
+          <li>No swipe, map, or background jobs run</li>
+        </ul>
+        <p>BOOTSTRAPPING ends ONLY after:</p>
         <ol>
-          <li>App enters BOOTSTRAPPING phase, SystemPhaseRenderer shows loading</li>
-          <li>AuthProvider completes (AUTH_READY action fires)</li>
-          <li>LocationGate syncs location status with state machine</li>
-          <li>SystemPhaseRenderer renders based on SYSTEM_PHASE only</li>
-          <li>User grants location → LOCATION_GRANTED → ACTIVE → children render</li>
-          <li>User denies location → LOCATION_DENIED → BLOCKED → LocationGate shown</li>
-          <li>Retry button → LOCATION_RETRY → TRANSITION → re-request</li>
+          <li><strong>AUTH_READY:</strong> Auth loading completes</li>
+          <li><strong>PROFILE_READY:</strong> Profile is loaded (or user is not logged in)</li>
+          <li><strong>SUBSCRIPTION_READY:</strong> Subscription data is fetched</li>
         </ol>
+        <p>Only after <code>isFullyBootstrapped === true</code>:</p>
+        <ul>
+          <li>If location is missing → enter <strong>BLOCKED</strong></li>
+          <li>If location is granted → enter <strong>ACTIVE</strong></li>
+        </ul>
 
         <h3>Root Rendering Authority</h3>
         <p><strong>Location:</strong> <code>src/components/layout/SystemPhaseRenderer.tsx</code></p>
         <p>The SystemPhaseRenderer is the SINGLE AUTHORITY for what top-level UI is rendered:</p>
         <ul>
-          <li><strong>BOOTSTRAPPING:</strong> Loading screen ("Initializing...")</li>
+          <li><strong>BOOTSTRAPPING:</strong> Loading screen ("Initializing...") - blocks everything</li>
           <li><strong>TRANSITION:</strong> Loading screen ("Getting your location...")</li>
           <li><strong>BLOCKED:</strong> LocationGate component (permission UI)</li>
           <li><strong>ACTIVE:</strong> Main application content (children)</li>
@@ -216,12 +225,13 @@ function SystemOverview() {
         <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20">
           <strong>Critical Invariant:</strong> No component below SystemPhaseRenderer may bypass SYSTEM_PHASE checks.
           LocationGate does NOT decide when it appears—it is rendered ONLY when SYSTEM_PHASE === 'BLOCKED'.
+          No features execute during BOOTSTRAPPING.
         </p>
 
         <h3>User Flow</h3>
         <ol>
           <li>User signs up/logs in → Profile created via DB trigger</li>
-          <li>User grants location permission (required, enforced by LocationGate)</li>
+          <li>User grants location permission (required, enforced after BOOTSTRAPPING)</li>
           <li>User lists items with category, condition, photos, swap preferences</li>
           <li>User selects an item and swipes on recommendations</li>
           <li>Mutual likes create a Match → Chat unlocked</li>
@@ -245,11 +255,17 @@ function StateMachineSection() {
         <h4>State Domains</h4>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`SYSTEM_PHASE:
-  BOOTSTRAPPING  → App initializing (auth loading)
+  BOOTSTRAPPING  → App initializing (auth, profile, subscription loading)
   ACTIVE         → Normal user interaction
   TRANSITION     → State change in progress (e.g., upgrading, location check)
   BACKGROUND_ONLY → Only background jobs run
   BLOCKED        → User cannot proceed (e.g., location denied)
+
+BOOTSTRAP READINESS FLAGS:
+  authReady         → Auth loading complete
+  profileReady      → Profile loaded (or no user)
+  subscriptionReady → Subscription data fetched
+  isFullyBootstrapped = authReady && profileReady && subscriptionReady
 
 SUBSCRIPTION_PHASE:
   FREE_ACTIVE    → Free user, within limits
@@ -267,30 +283,41 @@ MATCH_PHASE:
   COMPLETED / ABANDONED`}
         </pre>
 
-        <h4>Location State Integration (Fixed Dec 31, 2024)</h4>
+        <h4>BOOTSTRAPPING Phase (Fixed Dec 31, 2024)</h4>
+        <p><strong>BOOTSTRAPPING is a real blocking phase.</strong> Nothing renders or executes until fully bootstrapped.</p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`During BOOTSTRAPPING:
+  - NO LocationGate shown
+  - NO upgrade prompts shown
+  - NO recommendations fetched
+  - NO swipe, map, or background jobs run
+
+BOOTSTRAPPING ends ONLY after:
+  1. AUTH_READY        → Auth loading complete
+  2. PROFILE_READY     → Profile loaded (or user not logged in)
+  3. SUBSCRIPTION_READY → Subscription data fetched
+
+After isFullyBootstrapped === true:
+  - If location missing → BLOCKED → LocationGate shown
+  - If location granted → ACTIVE → main app renders`}
+        </pre>
+
+        <h4>Location State Integration</h4>
         <p><strong>Key Insight:</strong> LocationGate is a CONSEQUENCE of the BLOCKED state, not an entry point. 
         Top-level rendering is fully controlled by SYSTEM_PHASE via SystemPhaseRenderer.</p>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`Location Actions:
-  AUTH_READY        → Marks auth loading complete, stays in BOOTSTRAPPING
   LOCATION_CHECKING → Transitions to TRANSITION while requesting location
   LOCATION_GRANTED  → Transitions to ACTIVE, sets isInitialized=true
   LOCATION_DENIED   → Transitions to BLOCKED
   LOCATION_RETRY    → Transitions to TRANSITION before re-requesting
 
-Root Rendering (SystemPhaseRenderer):
-  - BOOTSTRAPPING → Loading screen (never LocationGate)
-  - TRANSITION    → Loading screen (location check in progress)
-  - BLOCKED       → LocationGate rendered (pure UI, no state decisions)
-  - ACTIVE        → Children rendered
-
-Location Sync Flow (in SystemPhaseRenderer):
-  1. Auth completes → AUTH_READY fires
-  2. SystemPhaseRenderer detects authReady + BOOTSTRAPPING
-  3. Checks existing permission/location
-  4. Dispatches LOCATION_CHECKING → requests location
-  5. On grant: LOCATION_GRANTED → ACTIVE
-  6. On deny: LOCATION_DENIED → BLOCKED → LocationGate shown
+Location Check Flow (in SystemPhaseRenderer):
+  1. Wait for isFullyBootstrapped === true
+  2. Check existing permission/location
+  3. Dispatches LOCATION_CHECKING → requests location
+  4. On grant: LOCATION_GRANTED → ACTIVE
+  5. On deny: LOCATION_DENIED → BLOCKED → LocationGate shown
 
 Behavior Rules:
   - SystemPhaseRenderer handles ALL location sync logic
@@ -308,11 +335,15 @@ Behavior Rules:
           <li>Pro users NEVER have usage tracked or limits enforced</li>
           <li>All canUse checks go through the resolver</li>
           <li>Subscription changes trigger full cache invalidation</li>
+          <li>Marks SUBSCRIPTION_READY when subscription data is fetched</li>
           <li>Background jobs cannot influence UI during ACTIVE state</li>
         </ul>
 
         <h4>Fixed Issues</h4>
         <ul>
+          <li><strong>Dec 31, 2024 (Bootstrap):</strong> BOOTSTRAPPING now waits for auth, profile, AND subscription</li>
+          <li><strong>Dec 31, 2024 (Bootstrap):</strong> isFullyBootstrapped flag gates location check</li>
+          <li><strong>Dec 31, 2024 (Bootstrap):</strong> No features execute during BOOTSTRAPPING</li>
           <li><strong>Dec 31, 2024 (Rendering):</strong> Location sync moved to SystemPhaseRenderer</li>
           <li><strong>Dec 31, 2024 (Rendering):</strong> LocationGate is now pure UI with no state sync logic</li>
           <li><strong>Dec 31, 2024 (Rendering):</strong> SystemPhaseRenderer is single authority for top-level UI</li>

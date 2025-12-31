@@ -44,12 +44,17 @@ interface SystemState {
   swipe: SwipePhase;
   match: MatchPhase;
   isInitialized: boolean;
+  // Bootstrap readiness flags
   authReady: boolean;
+  profileReady: boolean;
+  subscriptionReady: boolean;
 }
 
 type SystemAction =
   | { type: 'INITIALIZE' }
   | { type: 'AUTH_READY' }
+  | { type: 'PROFILE_READY' }
+  | { type: 'SUBSCRIPTION_READY' }
   | { type: 'SET_SYSTEM_PHASE'; phase: SystemPhase }
   | { type: 'SET_SUBSCRIPTION_PHASE'; phase: SubscriptionPhase }
   | { type: 'SET_SWIPE_PHASE'; phase: SwipePhase }
@@ -69,6 +74,8 @@ const initialState: SystemState = {
   match: 'NONE',
   isInitialized: false,
   authReady: false,
+  profileReady: false,
+  subscriptionReady: false,
 };
 
 function systemReducer(state: SystemState, action: SystemAction): SystemState {
@@ -81,11 +88,22 @@ function systemReducer(state: SystemState, action: SystemAction): SystemState {
       };
 
     case 'AUTH_READY':
-      // Auth is ready, but stay in BOOTSTRAPPING until location is checked
-      // This just marks that we can proceed to location check
+      // Auth is ready, but stay in BOOTSTRAPPING until profile and subscription are also ready
       return {
         ...state,
         authReady: true,
+      };
+
+    case 'PROFILE_READY':
+      return {
+        ...state,
+        profileReady: true,
+      };
+
+    case 'SUBSCRIPTION_READY':
+      return {
+        ...state,
+        subscriptionReady: true,
       };
 
     case 'SET_SYSTEM_PHASE':
@@ -172,6 +190,9 @@ interface SystemStateContextValue {
   locationGranted: () => void;
   locationDenied: () => void;
   retryLocation: () => void;
+  // Bootstrap actions
+  markProfileReady: () => void;
+  markSubscriptionReady: () => void;
   // State checks
   canSwipe: boolean;
   canUseFeatures: boolean;
@@ -179,13 +200,14 @@ interface SystemStateContextValue {
   isPro: boolean;
   isBootstrapping: boolean;
   isBlocked: boolean;
+  isFullyBootstrapped: boolean;
 }
 
 const SystemStateContext = createContext<SystemStateContextValue | null>(null);
 
 export function SystemStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(systemReducer, initialState);
-  const { user, loading: authLoading } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
 
   // Mark auth as ready when auth loading completes (for both logged-in and logged-out users)
   useEffect(() => {
@@ -193,6 +215,17 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'AUTH_READY' });
     }
   }, [authLoading, state.authReady]);
+
+  // Mark profile as ready when profile is loaded (or user is not logged in)
+  useEffect(() => {
+    if (state.authReady && !state.profileReady) {
+      // If no user, profile is "ready" (N/A)
+      // If user exists, wait for profile to load
+      if (!user || profile) {
+        dispatch({ type: 'PROFILE_READY' });
+      }
+    }
+  }, [state.authReady, state.profileReady, user, profile]);
 
   const initialize = useCallback(() => {
     dispatch({ type: 'INITIALIZE' });
@@ -242,6 +275,14 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'LOCATION_RETRY' });
   }, []);
 
+  const markProfileReady = useCallback(() => {
+    dispatch({ type: 'PROFILE_READY' });
+  }, []);
+
+  const markSubscriptionReady = useCallback(() => {
+    dispatch({ type: 'SUBSCRIPTION_READY' });
+  }, []);
+
   // Derived state checks
   const canSwipe = 
     state.phase === 'ACTIVE' && 
@@ -258,7 +299,9 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
   const isPro = 
     state.subscription === 'PRO_ACTIVE';
 
-  const isBootstrapping = state.phase === 'BOOTSTRAPPING' && !state.authReady;
+  // BOOTSTRAPPING is true until all required data is loaded
+  const isFullyBootstrapped = state.authReady && state.profileReady && state.subscriptionReady;
+  const isBootstrapping = state.phase === 'BOOTSTRAPPING' && !isFullyBootstrapped;
   const isBlocked = state.phase === 'BLOCKED';
 
   const value: SystemStateContextValue = {
@@ -276,12 +319,15 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
     locationGranted,
     locationDenied,
     retryLocation,
+    markProfileReady,
+    markSubscriptionReady,
     canSwipe,
     canUseFeatures,
     isTransitioning,
     isPro,
     isBootstrapping,
     isBlocked,
+    isFullyBootstrapped,
   };
 
   return (
