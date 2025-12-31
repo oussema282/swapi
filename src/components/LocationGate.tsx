@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,64 +6,29 @@ import { useDeviceLocation } from '@/hooks/useLocation';
 import { useSystemState } from '@/hooks/useSystemState';
 
 /**
- * LocationGate - Syncs device location with the system state machine.
+ * LocationGate - Pure UI for location permission requests.
  * 
- * IMPORTANT: This component does NOT decide when it appears.
- * The App component renders this ONLY when SYSTEM_PHASE === 'BLOCKED'.
- * This component's only job is to:
- * 1. Sync location status with the system state machine
- * 2. Provide UI for requesting/retrying location permission
+ * CRITICAL ARCHITECTURE RULE:
+ * This component does NOT decide when it appears.
+ * It is rendered ONLY when SYSTEM_PHASE === 'BLOCKED'.
+ * The decision is made by SystemPhaseRenderer, not here.
+ * 
+ * This component's only responsibilities:
+ * 1. Display permission request/error UI
+ * 2. Handle retry button clicks (triggering state transitions)
  */
 export function LocationGate() {
-  const { 
-    hasLocation, 
-    loading, 
-    error, 
-    permissionStatus, 
-    requestLocation 
-  } = useDeviceLocation();
-  
-  const { 
-    state, 
-    isBlocked,
-    locationGranted,
-    locationDenied,
-    retryLocation,
-  } = useSystemState();
+  const { loading, error, requestLocation } = useDeviceLocation();
+  const { retryLocation } = useSystemState();
 
-  // Sync location state with system state machine
-  useEffect(() => {
-    // If we have location and permission is granted, transition to ACTIVE
-    if (hasLocation && permissionStatus === 'granted') {
-      if (state.phase !== 'ACTIVE') {
-        locationGranted();
-      }
-      return;
-    }
-
-    // If permission is denied and not already blocked, transition to BLOCKED
-    if (permissionStatus === 'denied' && !isBlocked) {
-      locationDenied();
-      return;
-    }
-  }, [
-    hasLocation, 
-    permissionStatus, 
-    state.phase,
-    isBlocked, 
-    locationGranted, 
-    locationDenied,
-  ]);
-
-  // Handle retry with proper state transitions
+  // Handle retry: transition state FIRST, then request location
   const handleRetry = useCallback(async () => {
-    // Transition to TRANSITION state before requesting location
+    // Transition BLOCKED → TRANSITION
     retryLocation();
-    // Request location after state transition
+    // Request location permission again
     await requestLocation();
   }, [retryLocation, requestLocation]);
 
-  // Show location permission request UI
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <motion.div
@@ -89,7 +54,7 @@ export function LocationGate() {
           SwapSpot needs your location to show items near you and connect you with local swappers.
         </p>
 
-        {error && isBlocked && (
+        {error && (
           <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20">
             <div className="flex items-center gap-2 text-destructive mb-1">
               <AlertCircle className="w-4 h-4" />
@@ -112,15 +77,10 @@ export function LocationGate() {
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Getting Location...
             </>
-          ) : isBlocked ? (
-            <>
-              <MapPin className="w-4 h-4 mr-2" />
-              Retry Location Access
-            </>
           ) : (
             <>
               <MapPin className="w-4 h-4 mr-2" />
-              Allow Location Access
+              {error ? 'Retry Location Access' : 'Allow Location Access'}
             </>
           )}
         </Button>
