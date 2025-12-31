@@ -195,7 +195,7 @@ function SystemOverview() {
           <strong>BOOTSTRAPPING</strong> → Auth loads → Profile loads → Subscription loads → 
           <strong>isFullyBootstrapped</strong> → Location check → <strong>ACTIVE</strong> or <strong>BLOCKED</strong>
         </p>
-        <p><strong>BOOTSTRAPPING is a blocking phase.</strong> During BOOTSTRAPPING:</p>
+        <p><strong>BOOTSTRAPPING is a temporary blocking phase that MUST always exit.</strong> During BOOTSTRAPPING:</p>
         <ul>
           <li>No LocationGate is shown</li>
           <li>No upgrade prompts are shown</li>
@@ -208,6 +208,18 @@ function SystemOverview() {
           <li><strong>PROFILE_READY:</strong> Profile is loaded (or user is not logged in)</li>
           <li><strong>SUBSCRIPTION_READY:</strong> Subscription data is fetched</li>
         </ol>
+        <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20 mt-4">
+          <strong>CRITICAL INVARIANT:</strong> BOOTSTRAPPING is temporary and must always resolve within 5 seconds.<br/>
+          A timeout mechanism forces exit to a safe state if data loading fails or hangs.<br/>
+          SYSTEM_PHASE must never remain BOOTSTRAPPING after initial load.
+        </p>
+        <p><strong>Fallback Behavior:</strong></p>
+        <ul>
+          <li>If loading completes normally → <code>bootstrapExitReason = 'NORMAL'</code></li>
+          <li>If 5-second timeout fires → <code>bootstrapExitReason = 'TIMEOUT'</code> → force exit to safe state</li>
+          <li>If auth/profile/subscription errors → <code>bootstrapExitReason = 'AUTH_FAILED' | 'PROFILE_FAILED' | 'SUBSCRIPTION_FAILED'</code></li>
+          <li>Errors are logged but app continues to function</li>
+        </ul>
         <p>Only after <code>isFullyBootstrapped === true</code>:</p>
         <ul>
           <li>If location is missing → enter <strong>BLOCKED</strong></li>
@@ -299,7 +311,7 @@ MATCH_PHASE:
         </pre>
 
         <h4>BOOTSTRAPPING Phase (Fixed Dec 31, 2024)</h4>
-        <p><strong>BOOTSTRAPPING is a real blocking phase.</strong> Nothing renders or executes until fully bootstrapped.</p>
+        <p><strong>BOOTSTRAPPING is a temporary blocking phase that MUST always exit.</strong></p>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`During BOOTSTRAPPING:
   - NO LocationGate shown
@@ -307,10 +319,23 @@ MATCH_PHASE:
   - NO recommendations fetched
   - NO swipe, map, or background jobs run
 
-BOOTSTRAPPING ends ONLY after:
-  1. AUTH_READY        → Auth loading complete
-  2. PROFILE_READY     → Profile loaded (or user not logged in)
-  3. SUBSCRIPTION_READY → Subscription data fetched
+BOOTSTRAPPING ends via:
+  1. NORMAL: All data loaded (auth, profile, subscription)
+  2. TIMEOUT: 5-second fallback timer fires
+  3. ERROR: Individual loader fails (logged, app continues)
+
+CRITICAL INVARIANT:
+  - BOOTSTRAPPING is temporary and must always resolve
+  - 5-second timeout prevents infinite loading
+  - Errors are logged but never block app permanently
+  - SYSTEM_PHASE must NEVER remain BOOTSTRAPPING
+
+Exit Reasons (bootstrapExitReason):
+  'NORMAL'              → All data loaded successfully
+  'TIMEOUT'             → Forced exit after 5 seconds
+  'AUTH_FAILED'         → Auth loading failed
+  'PROFILE_FAILED'      → Profile loading failed
+  'SUBSCRIPTION_FAILED' → Subscription loading failed
 
 After isFullyBootstrapped === true:
   - If location missing → BLOCKED → LocationGate shown
@@ -1116,7 +1141,14 @@ function SystemInvariants() {
 3. recommend-items Violations:
    ✗ Running during UPGRADING phase
    ✗ Running during TRANSITION phase
-   ✗ Running during BOOTSTRAPPING phase`}
+    ✗ Running during BOOTSTRAPPING phase
+
+4. BOOTSTRAPPING Violations:
+   ✗ SYSTEM_PHASE remaining BOOTSTRAPPING indefinitely
+   ✗ No timeout mechanism for bootstrap
+   ✗ Errors during bootstrap causing infinite loading
+   ✗ Promise chains blocking bootstrap exit
+   ✗ Location checks running before isFullyBootstrapped`}
         </pre>
 
         <h3>Rendering Authority Invariants</h3>
@@ -1327,6 +1359,9 @@ function ChangeLog() {
         
         <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>
         <ul>
+          <li><strong>BOOTSTRAPPING Deadlock Fix:</strong> Added 5-second timeout to guarantee BOOTSTRAPPING always exits. SYSTEM_PHASE can never remain BOOTSTRAPPING indefinitely.</li>
+          <li><strong>Bootstrap Exit Tracking:</strong> Added bootstrapExitReason ('NORMAL', 'TIMEOUT', 'AUTH_FAILED', 'PROFILE_FAILED', 'SUBSCRIPTION_FAILED') to diagnose bootstrap issues.</li>
+          <li><strong>Bootstrap Error Logging:</strong> All bootstrap errors are logged but never block app permanently. Timeout forces safe state exit.</li>
           <li><strong>Safe Routes vs Geo Routes:</strong> Defined GEO_REQUIRED_ROUTES (/, /map, /search) vs safe routes (/matches, /chat/*, /profile, /items). Safe routes bypass LocationGate entirely.</li>
           <li><strong>/matches Decoupled:</strong> /matches no longer requires location permission, selected item, or SWIPE_PHASE. Renders as soon as user is authenticated and profile is loaded.</li>
           <li><strong>LocationGate Scope:</strong> LocationGate now ONLY blocks geo-required routes. BLOCKED state on safe routes renders children immediately.</li>
