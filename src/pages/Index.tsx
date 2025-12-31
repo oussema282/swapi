@@ -65,20 +65,36 @@ export default function Index() {
   // Loading spinner shown ONLY when a request is in progress
   useEffect(() => {
     if (!selectedItemId) return;
-    
+
+    // Never overwrite swipe phases during an active swipe/commit/undo
+    if (globalPhase === 'SWIPING' || globalPhase === 'COMMITTING' || globalPhase === 'UNDOING') {
+      return;
+    }
+
     // Only set LOADING if we're actually fetching
-    if (swipeLoading && globalPhase !== 'LOADING') {
-      actions.setLoading();
-    } else if (!swipeLoading && swipeableItems) {
-      // Request completed - determine stable state
-      if (swipeableItems.length > 0 && hasMoreCards) {
-        actions.setReady();
-      } else if (swipeableItems.length === 0 || !hasMoreCards) {
-        // No cards available - transition to EXHAUSTED (stable empty state)
-        // This is item-scoped: exhaustion for this item does not affect other items
-        if (globalPhase !== 'EXHAUSTED' && globalPhase !== 'REFRESHING') {
-          actions.setExhausted();
-        }
+    if (swipeLoading) {
+      if (globalPhase !== 'LOADING') {
+        actions.setLoading();
+      }
+      return;
+    }
+
+    if (!swipeableItems) return;
+
+    // Only transition to READY/EXHAUSTED from stable phases
+    const stablePhases = ['IDLE', 'LOADING', 'REFRESHING', 'EXHAUSTED'] as const;
+    if (!stablePhases.includes(globalPhase as (typeof stablePhases)[number])) {
+      return;
+    }
+
+    // Request completed - determine stable state
+    if (swipeableItems.length > 0 && hasMoreCards) {
+      actions.setReady();
+    } else if (swipeableItems.length === 0 || !hasMoreCards) {
+      // No cards available - transition to EXHAUSTED (stable empty state)
+      // This is item-scoped: exhaustion for this item does not affect other items
+      if (globalPhase !== 'EXHAUSTED' && globalPhase !== 'REFRESHING') {
+        actions.setExhausted();
       }
     }
   }, [swipeLoading, swipeableItems, selectedItemId, hasMoreCards, globalPhase]);
