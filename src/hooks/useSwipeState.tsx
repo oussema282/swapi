@@ -168,11 +168,9 @@ export function useSwipeState() {
         console.log(`[SWIPE] blocked: phase=${phaseNow}, systemBlocked=${isSystemBlocked}`);
         return false;
       }
-      // Check lock to prevent double commits
-      if (isCommittingRef.current) {
-        console.log('[SWIPE] blocked: commit in progress');
-        return false;
-      }
+      // Commit lock is managed by the caller (Index) via acquireCommitLock/releaseCommitLock
+      // so we must NOT block here based on isCommittingRef.
+
       console.log(`[SWIPE] READY → SWIPING (${direction})`);
       globalPhaseRef.current = 'SWIPING';
       setSwipePhase('SWIPING');
