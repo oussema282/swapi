@@ -615,12 +615,16 @@ Debug Logs (one line per transition):
           with a stable empty state. Loading spinner is shown ONLY while a request is in progress.
         </p>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
-{`Card Exhaustion Flow (Fixed Dec 31, 2024):
+{`Card Exhaustion Flow (Updated Dec 31, 2024):
 
-1. When recommend-items returns empty array:
-   - Do NOT keep loading=true
-   - Transition SWIPE_PHASE to EXHAUSTED (stable empty state)
-   - Show clear empty state UI with retry option
+1. Strict → Expanded → Exhausted Flow:
+   a. Call recommend-items with strict mode (myItemId, limit=50)
+   b. If strict returns 0 items:
+      - Automatically retry with expandedSearch=true (ONCE)
+   c. If expanded also returns 0 items:
+      - Set SWIPE_PHASE = EXHAUSTED (stable state)
+      - Show EmptyState with "Switch Item" + "Check for new items"
+   d. Spinner shown ONLY during active request
 
 2. Exhaustion is ITEM-SCOPED:
    - Each item has its own exhaustion state
@@ -644,7 +648,13 @@ Debug Logs (one line per transition):
 5. Loading Spinner Rules:
    - Show spinner ONLY when request is in progress
    - Never use loading as fallback for empty state
-   - EXHAUSTED is a stable state, NOT a loading state`}
+   - EXHAUSTED is a stable state, NOT a loading state
+   - NEVER show permanent spinner when exhausted
+
+6. Empty State UI (src/components/discover/EmptyState.tsx):
+   - "Switch Item" button (if user has multiple items)
+   - "Check for new items" refresh button
+   - Info text: "New items may appear as users add listings"`}
         </pre>
 
         <h3>System State Blocking</h3>

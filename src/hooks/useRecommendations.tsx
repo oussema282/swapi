@@ -19,9 +19,15 @@ interface RecommendationResult {
   score: number;
 }
 
+interface RecommendationResponse {
+  items: SwipeableItem[];
+  searchExpanded: boolean;
+  exhausted: boolean;
+}
+
 export function useRecommendedItems(myItemId: string | null) {
   const { user } = useAuth();
-  const { state: systemState } = useSystemState();
+  const { state: systemState, setSwipePhase } = useSystemState();
   
   // Gate recommendations on system phase
   // Do NOT fetch during TRANSITION or UPGRADING
@@ -38,39 +44,56 @@ export function useRecommendedItems(myItemId: string | null) {
       
       // Double-check phase gating (in case enabled changed after query started)
       if (isBlocked) {
-        console.log('Recommendations blocked: system in transition or upgrading');
+        console.log('[RECO] blocked: system in transition or upgrading');
         return [];
       }
 
-       try {
-         const { data, error: invokeError } = await supabase.functions.invoke('recommend-items', {
-           body: { myItemId, limit: 50 },
-         });
+      console.log('[RECO] fetching strict mode for item:', myItemId);
 
-         if (invokeError) {
-           console.error('Recommendation API error:', invokeError.message);
-           return fallbackFetch(user.id, myItemId);
-         }
+      try {
+        // Step 1: Try strict mode first
+        const { data, error: invokeError } = await supabase.functions.invoke('recommend-items', {
+          body: { myItemId, limit: 50 },
+        });
 
-         const result = data as { rankedItems?: RecommendationResult[]; searchExpanded?: boolean } | null;
-         const rankedItems = result?.rankedItems;
+        if (invokeError) {
+          console.error('[RECO] API error:', invokeError.message);
+          return fallbackFetch(user.id, myItemId);
+        }
 
-         if (!rankedItems || rankedItems.length === 0) {
-           // Pool exhausted - silently retry with expanded criteria
-           console.log('Pool exhausted, trying expanded search...');
-           const { data: expandedData } = await supabase.functions.invoke('recommend-items', {
-             body: { myItemId, limit: 50, expandedSearch: true },
-           });
-           const expandedItems = (expandedData as { rankedItems?: RecommendationResult[] } | null)?.rankedItems;
-           if (!expandedItems || expandedItems.length === 0) {
-             return [];
-           }
-           return fetchItemDetails(expandedItems);
-         }
+        const result = data as { rankedItems?: RecommendationResult[]; searchExpanded?: boolean } | null;
+        const rankedItems = result?.rankedItems;
 
+        if (!rankedItems || rankedItems.length === 0) {
+          // Step 2: Pool exhausted - automatically retry with expanded criteria ONCE
+          console.log('[RECO] strict=0, trying expandedSearch=true');
+          const { data: expandedData, error: expandedError } = await supabase.functions.invoke('recommend-items', {
+            body: { myItemId, limit: 50, expandedSearch: true },
+          });
+          
+          if (expandedError) {
+            console.error('[RECO] expanded API error:', expandedError.message);
+            // Exhausted - return empty, let UI handle EXHAUSTED state
+            console.log('[RECO] exhausted after expanded error');
+            return [];
+          }
+
+          const expandedItems = (expandedData as { rankedItems?: RecommendationResult[] } | null)?.rankedItems;
+          
+          if (!expandedItems || expandedItems.length === 0) {
+            // Step 3: Both strict and expanded returned 0 - truly exhausted
+            console.log('[RECO] exhausted: strict=0, expanded=0');
+            return [];
+          }
+          
+          console.log('[RECO] expanded returned', expandedItems.length, 'items');
+          return fetchItemDetails(expandedItems);
+        }
+
+        console.log('[RECO] strict returned', rankedItems.length, 'items');
         return fetchItemDetails(rankedItems);
       } catch (error) {
-        console.error('Error fetching recommendations:', error);
+        console.error('[RECO] exception:', error);
         return fallbackFetch(user.id, myItemId);
       }
     },
@@ -78,6 +101,9 @@ export function useRecommendedItems(myItemId: string | null) {
     enabled: !!user && !!myItemId && !isBlocked,
     staleTime: 30000, // Cache for 30 seconds
     refetchInterval: 60000, // Silently refresh every 60 seconds
+    // CRITICAL: Ensure we get fresh data and don't hang
+    retry: 1,
+    retryDelay: 1000,
   });
 }
 
