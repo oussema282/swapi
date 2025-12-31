@@ -26,6 +26,7 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
   const { 
     state, 
     isBootstrapping,
+    isFullyBootstrapped,
     checkingLocation,
     locationGranted,
     locationDenied,
@@ -38,10 +39,10 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
     requestLocation,
   } = useDeviceLocation();
 
-  // After AUTH_READY, automatically check location to transition out of BOOTSTRAPPING
+  // After fully bootstrapped, automatically check location to transition out of BOOTSTRAPPING
   useEffect(() => {
-    // Only proceed when auth is ready but still in BOOTSTRAPPING
-    if (!state.authReady || state.phase !== 'BOOTSTRAPPING') {
+    // Only proceed when fully bootstrapped and still in BOOTSTRAPPING phase
+    if (!isFullyBootstrapped || state.phase !== 'BOOTSTRAPPING') {
       return;
     }
 
@@ -63,7 +64,7 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
       requestLocation();
     }
   }, [
-    state.authReady,
+    isFullyBootstrapped,
     state.phase,
     hasLocation,
     permissionStatus,

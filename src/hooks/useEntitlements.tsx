@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
@@ -69,7 +69,7 @@ interface FeatureUpgrade {
 export function useEntitlements() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { setSubscriptionPhase, state: systemState } = useSystemState();
+  const { setSubscriptionPhase, markSubscriptionReady, state: systemState } = useSystemState();
 
   // ============================================
   // SUBSCRIPTION DATA
@@ -78,7 +78,8 @@ export function useEntitlements() {
   const { 
     data: subscription, 
     isLoading: subscriptionLoading,
-    refetch: refetchSubscription 
+    refetch: refetchSubscription,
+    isFetched: subscriptionFetched,
   } = useQuery({
     queryKey: ['subscription', user?.id],
     queryFn: async (): Promise<Subscription | null> => {
@@ -119,6 +120,13 @@ export function useEntitlements() {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });
+
+  // Mark subscription as ready when query completes (or no user)
+  useEffect(() => {
+    if (!user || subscriptionFetched) {
+      markSubscriptionReady();
+    }
+  }, [user, subscriptionFetched, markSubscriptionReady]);
 
   // ============================================
   // FEATURE UPGRADES (Bonus Packs)
