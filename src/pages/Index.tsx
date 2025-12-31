@@ -8,14 +8,15 @@ import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { useSystemState } from '@/hooks/useSystemState';
+import { useMissedMatches } from '@/hooks/useMissedMatches';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Button } from '@/components/ui/button';
-import { X, Heart, Undo2 } from 'lucide-react';
-import { Navigate } from 'react-router-dom';
+import { X, Heart, Undo2, HeartOff } from 'lucide-react';
+import { Navigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -28,6 +29,11 @@ export default function Index() {
   const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
   const { state: systemState } = useSystemState();
   const queryClient = useQueryClient();
+  
+  // Fetch missed matches to show notification banner
+  const { data: missedMatches } = useMissedMatches();
+  const missedCount = missedMatches?.length || 0;
+  const [dismissedMissedBanner, setDismissedMissedBanner] = useState(false);
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
   const { 
@@ -297,6 +303,38 @@ export default function Index() {
             onSelect={handleSelectItem}
           />
         </div>
+
+        {/* Missed Match Notification Banner */}
+        {missedCount > 0 && !dismissedMissedBanner && (
+          <Link 
+            to="/matches?tab=missed"
+            className="mx-4 mb-2 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-3 hover:bg-destructive/15 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
+              <HeartOff className="w-5 h-5 text-destructive" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-destructive">
+                You missed {missedCount} match{missedCount > 1 ? 'es' : ''}!
+              </p>
+              <p className="text-xs text-muted-foreground truncate">
+                Someone wanted to swap with you
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="flex-shrink-0 h-8 w-8"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setDismissedMissedBanner(true);
+              }}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </Link>
+        )}
 
         {/* Main Swipe Area */}
         <div className="flex-1 relative min-h-[400px]">

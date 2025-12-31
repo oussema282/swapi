@@ -49,20 +49,22 @@ export function useMissedMatches() {
       if (!myDislikes?.length) return [];
 
       // Find missed matches: where someone liked my item but I disliked theirs
+      // CRITICAL: The dislike must be from THE SAME item that received the like
       const missedMatchPairs: Array<{ myItemId: string; theirItemId: string; missedAt: string }> = [];
       
       for (const like of incomingLikes) {
-        const theirItemId = like.swiper_item_id;
-        const myItemId = like.swiped_item_id;
+        const theirItemId = like.swiper_item_id; // The item that liked my item
+        const myItemId = like.swiped_item_id;    // My item that received the like
         
-        // Check if I disliked their item with any of my items
+        // Check if I disliked their item WITH THE SAME ITEM that received the like
+        // This is the correct pairing: myItemId disliked theirItemId
         const iDisliked = myDislikes.find(d => 
-          d.swiped_item_id === theirItemId && myItemIds.includes(d.swiper_item_id)
+          d.swiper_item_id === myItemId && d.swiped_item_id === theirItemId
         );
         
         if (iDisliked) {
           missedMatchPairs.push({
-            myItemId: iDisliked.swiper_item_id,
+            myItemId,
             theirItemId,
             missedAt: like.created_at,
           });
