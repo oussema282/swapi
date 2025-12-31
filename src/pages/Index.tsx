@@ -40,6 +40,7 @@ export default function Index() {
     isAnimating,
     isRefreshing,
     isLoading: isSwipeLoading,
+    isExhausted,
     isSystemBlocked 
   } = useSwipeState();
   
@@ -61,31 +62,45 @@ export default function Index() {
   const hasMoreCards = swipeableItems && currentIndex < swipeableItems.length;
 
   // Update SWIPE_PHASE based on data loading state
+  // Loading spinner shown ONLY when a request is in progress
   useEffect(() => {
     if (!selectedItemId) return;
     
-    if (swipeLoading) {
+    // Only set LOADING if we're actually fetching
+    if (swipeLoading && globalPhase !== 'LOADING') {
       actions.setLoading();
-    } else if (swipeableItems && swipeableItems.length > 0 && hasMoreCards) {
-      actions.setReady();
-    } else if (swipeableItems && !hasMoreCards && !isRefreshing) {
-      // Cards exhausted - enter REFRESHING_POOL
-      handlePoolExhausted();
+    } else if (!swipeLoading && swipeableItems) {
+      // Request completed - determine stable state
+      if (swipeableItems.length > 0 && hasMoreCards) {
+        actions.setReady();
+      } else if (swipeableItems.length === 0 || !hasMoreCards) {
+        // No cards available - transition to EXHAUSTED (stable empty state)
+        // This is item-scoped: exhaustion for this item does not affect other items
+        if (globalPhase !== 'EXHAUSTED' && globalPhase !== 'REFRESHING') {
+          actions.setExhausted();
+        }
+      }
     }
-  }, [swipeLoading, swipeableItems, currentIndex, selectedItemId, hasMoreCards, isRefreshing]);
+  }, [swipeLoading, swipeableItems, selectedItemId, hasMoreCards, globalPhase]);
 
-  // Handle pool exhaustion - silent refresh
-  const handlePoolExhausted = useCallback(async () => {
+  // Handle manual pool refresh (e.g., retry button in exhausted state)
+  const handlePoolRefresh = useCallback(async () => {
     if (isRefreshing || globalPhase === 'REFRESHING') return;
     
     actions.startRefresh();
     
     // Invalidate and refetch recommendations
     await queryClient.invalidateQueries({ queryKey: ['recommended-items', selectedItemId] });
-    await refetchItems();
+    const result = await refetchItems();
     
-    // Complete refresh - reset to start if we got new items
-    actions.completeRefresh(0);
+    // After refresh completes, let the useEffect handle state transition
+    // If still no items, will transition to EXHAUSTED
+    if (result.data && result.data.length > 0) {
+      actions.completeRefresh(0);
+    } else {
+      // No new items found - transition to exhausted
+      actions.setExhausted();
+    }
   }, [isRefreshing, globalPhase, actions, queryClient, selectedItemId, refetchItems]);
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
@@ -188,10 +203,19 @@ export default function Index() {
     }
   }, [selectedItemId, swipeState.historyStack, actions, undoMutation, checkUndoMutation]);
 
+  // Handle item selection - reset swipe state and clear cache for fresh fetch
   const handleSelectItem = useCallback((id: string) => {
-    setSelectedItemId(id);
+    if (id === selectedItemId) return;
+    
+    // Reset to IDLE and clear local state
     actions.reset();
-  }, [actions]);
+    
+    // Clear the cache for the new item to force fresh fetch
+    queryClient.removeQueries({ queryKey: ['recommended-items', id] });
+    
+    // Set the new item - will trigger LOADING when fetch starts
+    setSelectedItemId(id);
+  }, [actions, queryClient, selectedItemId]);
 
   if (authLoading) {
     return (
@@ -205,12 +229,14 @@ export default function Index() {
     return <Navigate to="/auth" replace />;
   }
 
-  const isLoading = itemsLoading || swipeLoading || isRefreshing;
+  // Only show loading when actually fetching (request in progress)
+  const isActuallyLoading = (itemsLoading || swipeLoading) && globalPhase === 'LOADING';
   const noItems = !myItems?.length;
   
-  // Never show "no more cards" - always show loading/refreshing state
-  const showLoadingState = isLoading || isRefreshing || globalPhase === 'REFRESHING' || globalPhase === 'LOADING';
-  const hasCards = !showLoadingState && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
+  // Exhaustion is a stable state - NOT a loading state
+  const showExhaustedState = isExhausted && !swipeLoading && swipeableItems?.length === 0;
+  const showLoadingState = isActuallyLoading || (isRefreshing && globalPhase === 'REFRESHING');
+  const hasCards = !showLoadingState && !showExhaustedState && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
 
   return (
     <AppLayout>
@@ -239,9 +265,30 @@ export default function Index() {
               description="Choose one of your items above to find potential swaps"
             />
           ) : showLoadingState ? (
-            // Loading/Refreshing state - never show empty
+            // Loading state - only when request is in progress
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+            </div>
+          ) : showExhaustedState ? (
+            // Exhausted state - stable empty state for THIS item (item-scoped)
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+              <div className="text-center space-y-4">
+                <div className="text-6xl">🎯</div>
+                <h3 className="text-xl font-semibold text-foreground">
+                  No more matches for this item
+                </h3>
+                <p className="text-muted-foreground max-w-sm">
+                  You've seen all available swaps for this item. Try selecting a different item or check back later for new listings.
+                </p>
+                <Button
+                  onClick={handlePoolRefresh}
+                  variant="outline"
+                  className="mt-4"
+                  disabled={isRefreshing}
+                >
+                  {isRefreshing ? 'Checking...' : 'Check for new items'}
+                </Button>
+              </div>
             </div>
           ) : hasCards ? (
             /* Card Stack - centered and sized properly */
@@ -260,12 +307,7 @@ export default function Index() {
                 ))}
               </div>
             </div>
-          ) : (
-            // Fallback loading state - should rarely show due to REFRESHING_POOL
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
-            </div>
-          )}
+          ) : null}
         </div>
 
         {/* Action Buttons - Just above navbar */}

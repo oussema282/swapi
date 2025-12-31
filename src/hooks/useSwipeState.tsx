@@ -216,7 +216,7 @@ export function useSwipeState() {
   }, [setSwipePhase]);
 
   const setReady = useCallback(() => {
-    if (globalPhase === 'LOADING' || globalPhase === 'IDLE' || globalPhase === 'REFRESHING') {
+    if (globalPhase === 'LOADING' || globalPhase === 'IDLE' || globalPhase === 'REFRESHING' || globalPhase === 'EXHAUSTED') {
       setSwipePhase('READY');
     }
   }, [globalPhase, setSwipePhase]);
@@ -227,6 +227,12 @@ export function useSwipeState() {
 
   const setPaused = useCallback(() => {
     setSwipePhase('PAUSED');
+  }, [setSwipePhase]);
+
+  // Transition to EXHAUSTED - stable empty state for current item
+  const setExhausted = useCallback(() => {
+    setSwipePhase('EXHAUSTED');
+    dispatch({ type: 'COMPLETE_REFRESH' }); // Clear isRefreshing flag
   }, [setSwipePhase]);
 
   const reset = useCallback(() => {
@@ -261,6 +267,7 @@ export function useSwipeState() {
   const isUndoing = globalPhase === 'UNDOING';
   const isRefreshing = globalPhase === 'REFRESHING';
   const isLoading = globalPhase === 'LOADING';
+  const isExhausted = globalPhase === 'EXHAUSTED';
 
   return {
     state: {
@@ -282,6 +289,7 @@ export function useSwipeState() {
       setReady,
       setLoading,
       setPaused,
+      setExhausted,
       reset,
       clearUndo,
     },
@@ -292,6 +300,7 @@ export function useSwipeState() {
     isUndoing,
     isRefreshing,
     isLoading,
+    isExhausted,
     isSystemBlocked,
   };
 }

@@ -499,25 +499,28 @@ function SwipeLifecycle() {
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`SWIPE_PHASE values:
   IDLE        → No swiping context (no item selected)
-  LOADING     → Fetching card pool
+  LOADING     → Fetching card pool (request in progress)
   READY       → Cards available, gestures ALLOWED
   SWIPING     → Mid-swipe animation
   COMMITTING  → Persisting decision to database
   UNDOING     → Reverting a previous swipe
-  REFRESHING  → Silently fetching more cards (pool exhausted)
-  EXHAUSTED   → (DEPRECATED - now uses REFRESHING instead)
+  REFRESHING  → Actively fetching more cards (user-triggered retry)
+  EXHAUSTED   → Stable empty state (no cards for THIS item)
   PAUSED      → Swiping paused (e.g., viewing map)
 
 Phase Transitions:
-  IDLE → LOADING      (item selected)
+  IDLE → LOADING      (item selected, fetch starts)
   LOADING → READY     (cards fetched successfully)
+  LOADING → EXHAUSTED (empty array returned)
   READY → SWIPING     (gesture started)
   SWIPING → COMMITTING (animation complete)
   COMMITTING → READY  (decision persisted)
   READY → UNDOING     (undo initiated)
   UNDOING → READY     (undo complete)
-  READY → REFRESHING  (cards exhausted)
-  REFRESHING → READY  (new cards fetched)`}
+  READY → EXHAUSTED   (swiped through all cards)
+  EXHAUSTED → REFRESHING (user clicks retry)
+  REFRESHING → READY  (new cards fetched)
+  REFRESHING → EXHAUSTED (still no cards)`}
         </pre>
 
         <h3>Gesture Control</h3>
@@ -570,22 +573,43 @@ Phase Transitions:
 8. If error: SWIPE_PHASE = READY (abort undo)`}
         </pre>
 
-        <h3>Card Exhaustion → REFRESHING_POOL</h3>
+        <h3>Card Exhaustion (Item-Scoped)</h3>
         <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
-          <strong>CRITICAL:</strong> Swipe never ends, only refreshes. Empty state is NEVER shown for card exhaustion.
+          <strong>CRITICAL:</strong> Swipe exhaustion is <strong>item-scoped</strong>, not global. 
+          When no cards are available for the current item, the system transitions to <code>EXHAUSTED</code> phase
+          with a stable empty state. Loading spinner is shown ONLY while a request is in progress.
         </p>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
-{`When currentIndex >= swipeableItems.length:
-  1. Check not already REFRESHING
-  2. startRefresh() → SWIPE_PHASE = REFRESHING
-  3. Show loading spinner (NOT empty state)
-  4. Invalidate recommendations cache
-  5. Refetch with expanded criteria if needed:
-     - expandedSearch: true
-     - Recycles items swiped >7 days ago
-     - Adjusts weights for reciprocal boost
-  6. completeRefresh(0) → reset index, SWIPE_PHASE = READY
-  7. If still no items: keep showing loading/searching UI`}
+{`Card Exhaustion Flow (Fixed Dec 31, 2024):
+
+1. When recommend-items returns empty array:
+   - Do NOT keep loading=true
+   - Transition SWIPE_PHASE to EXHAUSTED (stable empty state)
+   - Show clear empty state UI with retry option
+
+2. Exhaustion is ITEM-SCOPED:
+   - Each item has its own exhaustion state
+   - Switching items resets SWIPE_PHASE to IDLE
+   - Previous item's exhaustion does not affect new item
+   - Cache is cleared when switching items
+
+3. Item Switch Flow:
+   - User selects different item
+   - actions.reset() → SWIPE_PHASE = IDLE
+   - Clear React Query cache for new item
+   - Fresh recommend-items request
+   - LOADING → READY (if items) or EXHAUSTED (if empty)
+
+4. Retry from EXHAUSTED state:
+   - User clicks "Check for new items"
+   - EXHAUSTED → REFRESHING
+   - Invalidate and refetch recommendations
+   - REFRESHING → READY (if items) or EXHAUSTED (if still empty)
+
+5. Loading Spinner Rules:
+   - Show spinner ONLY when request is in progress
+   - Never use loading as fallback for empty state
+   - EXHAUSTED is a stable state, NOT a loading state`}
         </pre>
 
         <h3>System State Blocking</h3>
@@ -1114,11 +1138,16 @@ function SystemInvariants() {
    ✗ Swipe logic running during TRANSITION or UPGRADING
    ✗ canGesture returning true when not in READY phase
 
-2. Pool Exhaustion Violations:
-   ✗ Empty array returned as final state
-   ✗ Empty state UI shown to user
-   ✗ "Opportunity" UI displayed
-   ✗ Swipe ending rather than refreshing`}
+2. Loading State Violations:
+   ✗ Loading spinner shown when no request is in progress
+   ✗ Loading used as fallback for empty state
+   ✗ Infinite loading when recommendations return empty
+
+3. Exhaustion Violations:
+   ✗ Exhaustion treated as global state (must be item-scoped)
+   ✗ Switching items without resetting SWIPE_PHASE to IDLE
+   ✗ Previous item's exhaustion blocking new item
+   ✗ Cache not cleared when switching items`}
         </pre>
 
         <h3>Background Process Invariants</h3>
@@ -1359,6 +1388,10 @@ function ChangeLog() {
         
         <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>
         <ul>
+          <li><strong>Item-Scoped Exhaustion (Dec 31):</strong> Swipe exhaustion is now per-item. EXHAUSTED is a stable empty state, not a loading state. Loading spinner shown ONLY when request is in progress.</li>
+          <li><strong>Item Switch Reset (Dec 31):</strong> Switching items resets SWIPE_PHASE to IDLE, clears cache, and triggers fresh fetch. Previous item's exhaustion does not affect new item.</li>
+          <li><strong>EXHAUSTED Phase (Dec 31):</strong> Added setExhausted() action to useSwipeState. Shows clear empty state UI with "Check for new items" retry button.</li>
+          <li><strong>No Loading Fallback (Dec 31):</strong> Loading is never used as fallback. Empty recommendations → EXHAUSTED (stable state), not infinite loading.</li>
           <li><strong>BOOTSTRAPPING Deadlock Fix:</strong> Added 5-second timeout to guarantee BOOTSTRAPPING always exits. SYSTEM_PHASE can never remain BOOTSTRAPPING indefinitely.</li>
           <li><strong>Bootstrap Exit Tracking:</strong> Added bootstrapExitReason ('NORMAL', 'TIMEOUT', 'AUTH_FAILED', 'PROFILE_FAILED', 'SUBSCRIPTION_FAILED') to diagnose bootstrap issues.</li>
           <li><strong>Bootstrap Error Logging:</strong> All bootstrap errors are logged but never block app permanently. Timeout forces safe state exit.</li>
@@ -1370,7 +1403,6 @@ function ChangeLog() {
           <li><strong>White Paper as Authority:</strong> Audited codebase against White Paper. Fixed all discrepancies. If behavior is not documented, it must not exist.</li>
           <li><strong>Strict SWIPE_PHASE Lifecycle:</strong> Gestures ONLY allowed in READY phase. Decisions commit ONLY from COMMITTING phase. Undo enters UNDOING phase and fully reverts decision state.</li>
           <li><strong>No Swipe During TRANSITION/UPGRADING:</strong> isSystemBlocked gates all swipe operations when SYSTEM_PHASE is TRANSITION or SUBSCRIPTION_PHASE is UPGRADING.</li>
-          <li><strong>REFRESHING_POOL Phase:</strong> Card exhaustion triggers REFRESHING instead of showing empty state. Swipe never ends, only refreshes.</li>
           <li><strong>canGesture Prop:</strong> SwipeCard now receives explicit canGesture prop from parent, disabling drag when not in READY phase.</li>
           <li><strong>SystemPhaseRenderer:</strong> Created new component as single authority for top-level UI rendering based on SYSTEM_PHASE</li>
           <li><strong>LocationGate Refactor:</strong> Simplified to only sync location state and provide UI. No longer decides when it appears.</li>
