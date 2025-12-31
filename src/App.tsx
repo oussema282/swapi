@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SystemStateProvider } from "@/hooks/useSystemState";
-import { LocationGate } from "@/components/LocationGate";
+import { SystemPhaseRenderer } from "@/components/layout/SystemPhaseRenderer";
 import { SetupGate } from "@/components/SetupGate";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -36,7 +36,7 @@ const App = () => (
         <SetupGate>
           <AuthProvider>
             <SystemStateProvider>
-              <LocationGate>
+              <SystemPhaseRenderer>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
@@ -56,7 +56,7 @@ const App = () => (
                   <Route path="/whitepaper" element={<WhitePaper />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </LocationGate>
+              </SystemPhaseRenderer>
             </SystemStateProvider>
           </AuthProvider>
         </SetupGate>

@@ -161,9 +161,14 @@ function SystemOverview() {
               <td>User authentication context</td>
             </tr>
             <tr>
+              <td>SystemPhaseRenderer</td>
+              <td><code>src/components/layout/SystemPhaseRenderer.tsx</code></td>
+              <td>Single authority for top-level UI based on SYSTEM_PHASE</td>
+            </tr>
+            <tr>
               <td>LocationGate</td>
               <td><code>src/components/LocationGate.tsx</code></td>
-              <td>Enforces geolocation permission via state machine</td>
+              <td>Location sync & permission UI (rendered only when BLOCKED)</td>
             </tr>
             <tr>
               <td>SetupGate</td>
@@ -186,16 +191,32 @@ function SystemOverview() {
         <h3>Startup Sequence</h3>
         <p className="bg-muted p-4 rounded-md border">
           <strong>BOOTSTRAPPING</strong> → AuthProvider loads → <strong>AUTH_READY</strong> → 
-          LocationGate checks permission → <strong>LOCATION_GRANTED</strong> → <strong>ACTIVE</strong>
+          SystemPhaseRenderer checks phase → <strong>LOCATION_GRANTED</strong> → <strong>ACTIVE</strong>
         </p>
         <ol>
-          <li>App enters BOOTSTRAPPING phase</li>
+          <li>App enters BOOTSTRAPPING phase, SystemPhaseRenderer shows loading</li>
           <li>AuthProvider completes (AUTH_READY action fires)</li>
-          <li>LocationGate becomes visible (not during BOOTSTRAPPING)</li>
-          <li>User grants location → LOCATION_GRANTED → ACTIVE phase</li>
-          <li>User denies location → LOCATION_DENIED → BLOCKED phase</li>
+          <li>LocationGate syncs location status with state machine</li>
+          <li>SystemPhaseRenderer renders based on SYSTEM_PHASE only</li>
+          <li>User grants location → LOCATION_GRANTED → ACTIVE → children render</li>
+          <li>User denies location → LOCATION_DENIED → BLOCKED → LocationGate shown</li>
           <li>Retry button → LOCATION_RETRY → TRANSITION → re-request</li>
         </ol>
+
+        <h3>Root Rendering Authority</h3>
+        <p><strong>Location:</strong> <code>src/components/layout/SystemPhaseRenderer.tsx</code></p>
+        <p>The SystemPhaseRenderer is the SINGLE AUTHORITY for what top-level UI is rendered:</p>
+        <ul>
+          <li><strong>BOOTSTRAPPING:</strong> Loading screen ("Initializing...")</li>
+          <li><strong>TRANSITION:</strong> Loading screen ("Getting your location...")</li>
+          <li><strong>BLOCKED:</strong> LocationGate component (permission UI)</li>
+          <li><strong>ACTIVE:</strong> Main application content (children)</li>
+          <li><strong>BACKGROUND_ONLY:</strong> Main application content (children)</li>
+        </ul>
+        <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20">
+          <strong>Critical Invariant:</strong> No component below SystemPhaseRenderer may bypass SYSTEM_PHASE checks.
+          LocationGate does NOT decide when it appears—it is rendered ONLY when SYSTEM_PHASE === 'BLOCKED'.
+        </p>
 
         <h3>User Flow</h3>
         <ol>
@@ -246,8 +267,9 @@ MATCH_PHASE:
   COMPLETED / ABANDONED`}
         </pre>
 
-        <h4>Location State Integration (Fixed Dec 30, 2024)</h4>
-        <p><strong>Key Insight:</strong> LocationGate is a CONSEQUENCE of the BLOCKED state, not an entry point.</p>
+        <h4>Location State Integration (Fixed Dec 31, 2024)</h4>
+        <p><strong>Key Insight:</strong> LocationGate is a CONSEQUENCE of the BLOCKED state, not an entry point. 
+        Top-level rendering is fully controlled by SYSTEM_PHASE via SystemPhaseRenderer.</p>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`Location Actions:
   AUTH_READY        → Marks auth loading complete, stays in BOOTSTRAPPING
@@ -256,11 +278,17 @@ MATCH_PHASE:
   LOCATION_DENIED   → Transitions to BLOCKED
   LOCATION_RETRY    → Transitions to TRANSITION before re-requesting
 
+Root Rendering (SystemPhaseRenderer):
+  - BOOTSTRAPPING → Loading screen (never LocationGate)
+  - TRANSITION    → Loading screen (location check in progress)
+  - BLOCKED       → LocationGate rendered
+  - ACTIVE        → Children rendered
+
 Behavior Rules:
-  - LocationGate is NOT shown during BOOTSTRAPPING (auth loading)
-  - LocationGate appears ONLY after AUTH_READY fires
+  - LocationGate syncs state, does NOT decide when it appears
+  - SystemPhaseRenderer is the ONLY top-level rendering authority
   - BLOCKED is a waiting state, NOT a terminal state
-  - Retry button triggers LOCATION_RETRY → re-requests permission
+  - Retry triggers LOCATION_RETRY → TRANSITION → re-request
   - No feature runs while SYSTEM_PHASE is BOOTSTRAPPING or BLOCKED`}
         </pre>
 
@@ -276,6 +304,9 @@ Behavior Rules:
 
         <h4>Fixed Issues</h4>
         <ul>
+          <li><strong>Dec 31, 2024 (Rendering):</strong> SystemPhaseRenderer is now single authority for top-level UI</li>
+          <li><strong>Dec 31, 2024 (Location):</strong> LocationGate no longer decides when it appears</li>
+          <li><strong>Dec 31, 2024 (Location):</strong> LocationGate rendered ONLY when SYSTEM_PHASE === 'BLOCKED'</li>
           <li><strong>Dec 30, 2024 (Location):</strong> LocationGate now waits for AUTH_READY before showing UI</li>
           <li><strong>Dec 30, 2024 (Location):</strong> BLOCKED is recoverable - retry properly transitions state</li>
           <li><strong>Dec 30, 2024 (Location):</strong> No features execute during BOOTSTRAPPING or BLOCKED</li>
@@ -852,6 +883,13 @@ function ChangeLog() {
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>December 2024</h3>
         
+        <h4>Week 5 (Dec 31)</h4>
+        <ul>
+          <li><strong>SystemPhaseRenderer:</strong> Created new component as single authority for top-level UI rendering based on SYSTEM_PHASE</li>
+          <li><strong>LocationGate Refactor:</strong> Simplified to only sync location state and provide UI. No longer decides when it appears.</li>
+          <li><strong>Root Rendering Control:</strong> All conditional rendering moved to SystemPhaseRenderer: BOOTSTRAPPING → loading, TRANSITION → loading, BLOCKED → LocationGate, ACTIVE → children</li>
+        </ul>
+
         <h4>Week 4 (Dec 23-30)</h4>
         <ul>
           <li><strong>Location State Machine Integration:</strong> LocationGate now properly integrates with SystemStateProvider. Shows loading during BOOTSTRAPPING, transitions through TRANSITION when checking location, and correctly handles BLOCKED state with working retry button.</li>
