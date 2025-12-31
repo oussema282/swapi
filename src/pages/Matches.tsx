@@ -44,12 +44,13 @@ export default function Matches() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: matches, isLoading, refetch } = useMatches();
-  const { data: missedMatches = [], isLoading: missedLoading } = useMissedMatches();
+  const { data: matches, isLoading, isError: matchesError, refetch } = useMatches();
+  const { data: missedMatches = [], isLoading: missedLoading, isError: missedError } = useMissedMatches();
   const [selectedMatch, setSelectedMatch] = useState<any>(null);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('active');
 
+  // Redirect to auth if not logged in - this is the ONLY requirement for /matches
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');
@@ -172,11 +173,24 @@ export default function Matches() {
     toast.success('Swap completed successfully!');
   };
 
-  if (authLoading || isLoading) {
+  // Show loading only during auth check - matches will load after
+  if (authLoading) {
     return (
       <AppLayout>
         <div className="flex items-center justify-center min-h-[80vh]">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  // Show error state if data failed to load - NOT infinite loading
+  if (matchesError) {
+    return (
+      <AppLayout>
+        <div className="flex flex-col items-center justify-center min-h-[80vh] gap-4">
+          <p className="text-destructive">Failed to load matches</p>
+          <Button onClick={() => refetch()} variant="outline">Try Again</Button>
         </div>
       </AppLayout>
     );
@@ -214,7 +228,11 @@ export default function Matches() {
                 exit={{ opacity: 0, x: 20 }}
                 className="space-y-2"
               >
-                {activeMatches.length > 0 ? (
+                {isLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : activeMatches.length > 0 ? (
                   activeMatches.map((match, index) => (
                     <MatchCard
                       key={match.id}
@@ -241,7 +259,11 @@ export default function Matches() {
                 exit={{ opacity: 0, x: 20 }}
                 className="space-y-2"
               >
-                {completedMatches.length > 0 ? (
+                {isLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : completedMatches.length > 0 ? (
                   completedMatches.map((match, index) => (
                     <CompletedMatchCard
                       key={match.id}
