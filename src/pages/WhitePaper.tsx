@@ -36,10 +36,11 @@ export default function WhitePaper() {
     { id: 'subscription', title: '5. Pro Subscription System', icon: Users },
     { id: 'database', title: '6. Database Schema', icon: Database },
     { id: 'background', title: '7. Background Processes', icon: Settings },
-    { id: 'constraints', title: '8. Known Constraints', icon: AlertTriangle },
-    { id: 'mapping', title: '9. Prompt-to-Code Mapping', icon: Code },
-    { id: 'changelog', title: '10. Change Log', icon: History },
-    { id: 'extension', title: '11. Extension Points', icon: Puzzle },
+    { id: 'invariants', title: '8. System Invariants', icon: AlertTriangle },
+    { id: 'constraints', title: '9. Known Constraints', icon: AlertTriangle },
+    { id: 'mapping', title: '10. Prompt-to-Code Mapping', icon: Code },
+    { id: 'changelog', title: '11. Change Log', icon: History },
+    { id: 'extension', title: '12. Extension Points', icon: Puzzle },
   ];
 
   return (
@@ -106,6 +107,7 @@ export default function WhitePaper() {
               {activeSection === 'subscription' && <SubscriptionSystem />}
               {activeSection === 'database' && <DatabaseSchema />}
               {activeSection === 'background' && <BackgroundProcesses />}
+              {activeSection === 'invariants' && <SystemInvariants />}
               {activeSection === 'constraints' && <KnownConstraints />}
               {activeSection === 'mapping' && <PromptMapping />}
               {activeSection === 'changelog' && <ChangeLog />}
@@ -1005,10 +1007,159 @@ UI (useRecommendedItems hook):
   );
 }
 
+function SystemInvariants() {
+  return (
+    <section className="space-y-6">
+      <h2 className="text-2xl font-bold">8. System Invariants – What Must Never Happen</h2>
+      
+      <div className="prose prose-sm dark:prose-invert max-w-none">
+        <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20 text-destructive-foreground">
+          <strong>This section defines the contract of the system.</strong> These invariants must never be violated.
+          If behavior is not documented here, it must not exist. If a rule is documented here, code must enforce it.
+        </p>
+        
+        <h3>Phase Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. BOOTSTRAPPING Phase Violations:
+   ✗ LocationGate rendering during BOOTSTRAPPING
+   ✗ Upgrade prompts shown during BOOTSTRAPPING
+   ✗ Recommendations fetching during BOOTSTRAPPING
+   ✗ Swipe, map, or background jobs running during BOOTSTRAPPING
+   ✗ Any feature executing before isFullyBootstrapped === true
+
+2. BLOCKED Phase Violations:
+   ✗ Treating BLOCKED as a terminal/error state
+   ✗ Features running while SYSTEM_PHASE === BLOCKED
+   ✗ LocationGate appearing outside of BLOCKED phase
+   ✗ Retry button failing to transition state
+
+3. TRANSITION Phase Violations:
+   ✗ Swipe logic running during TRANSITION
+   ✗ recommend-items fetching during TRANSITION
+   ✗ reciprocal-optimizer running during TRANSITION
+   ✗ User-facing UI actions during TRANSITION`}
+        </pre>
+
+        <h3>Subscription Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. Decision Authority Violations:
+   ✗ Using is_pro from database for access decisions
+   ✗ Checking subscription table directly for feature gating
+   ✗ Bypassing SUBSCRIPTION_PHASE for Pro status
+   ✗ Any Pro check not going through useEntitlements
+
+2. UPGRADING Phase Violations:
+   ✗ Limit checks enforced during UPGRADING
+   ✗ Upgrade prompts shown during UPGRADING
+   ✗ daily_usage incremented during UPGRADING
+   ✗ Feature access denied during UPGRADING
+
+3. PRO_ACTIVE Violations:
+   ✗ daily_usage being read or written for Pro users
+   ✗ Upgrade prompts ever shown to Pro users
+   ✗ Any limit being enforced on Pro users
+   ✗ shouldShowUpgradePrompt returning true for Pro`}
+        </pre>
+
+        <h3>Swipe Lifecycle Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. Phase Violations:
+   ✗ Gestures allowed outside of READY phase
+   ✗ Decisions committed outside of COMMITTING phase
+   ✗ Undo logic running outside of UNDOING phase
+   ✗ Swipe logic running during TRANSITION or UPGRADING
+   ✗ canGesture returning true when not in READY phase
+
+2. Pool Exhaustion Violations:
+   ✗ Empty array returned as final state
+   ✗ Empty state UI shown to user
+   ✗ "Opportunity" UI displayed
+   ✗ Swipe ending rather than refreshing`}
+        </pre>
+
+        <h3>Background Process Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. reciprocal-optimizer Violations:
+   ✗ Running during ACTIVE phase
+   ✗ Running during TRANSITION phase
+   ✗ Running during SWIPING phase
+   ✗ Running outside of BACKGROUND_ONLY phase
+   ✗ reciprocal_boost written outside BACKGROUND_ONLY
+
+2. Data Isolation Violations:
+   ✗ swap_opportunities read by UI components
+   ✗ swap_opportunities read by any hook
+   ✗ swap_opportunities queried client-side
+   ✗ Background AI affecting active UI directly
+
+3. recommend-items Violations:
+   ✗ Running during UPGRADING phase
+   ✗ Running during TRANSITION phase
+   ✗ Running during BOOTSTRAPPING phase`}
+        </pre>
+
+        <h3>Rendering Authority Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. SystemPhaseRenderer Violations:
+   ✗ Components bypassing SYSTEM_PHASE checks
+   ✗ LocationGate deciding when it appears
+   ✗ Multiple components controlling top-level UI
+   ✗ Loading states not shown during BOOTSTRAPPING
+   ✗ Loading states not shown during TRANSITION
+
+2. Entitlement Resolver Violations:
+   ✗ Multiple sources of truth for Pro status
+   ✗ Feature access not going through canUse()
+   ✗ useSubscription used instead of useEntitlements
+   ✗ Direct is_pro checks for access decisions`}
+        </pre>
+
+        <h3>Data Integrity Invariants</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`MUST NEVER HAPPEN:
+
+1. Match Creation Violations:
+   ✗ Matches created without mutual likes
+   ✗ Matches created between same user's items
+   ✗ Duplicate matches for same item pair
+
+2. Swipe Recording Violations:
+   ✗ Swipe recorded without valid swiper_item_id
+   ✗ Swipe recorded without valid swiped_item_id
+   ✗ Swipe recorded on own item
+   ✗ Undo performed more than once per 24h per item`}
+        </pre>
+
+        <h3>Enforcement</h3>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>Code-level Enforcement:</strong> Each invariant is enforced by specific code patterns:
+        </p>
+        <ul>
+          <li><code>isSystemBlocked</code> in useSwipeState gates all swipe operations</li>
+          <li><code>isBlocked</code> check in useRecommendations prevents fetching</li>
+          <li><code>isProOrUpgrading</code> in useEntitlements unlocks all features</li>
+          <li><code>SystemPhaseRenderer</code> controls all top-level UI rendering</li>
+          <li>RLS policies enforce database-level access control</li>
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 function KnownConstraints() {
   return (
     <section className="space-y-6">
-      <h2 className="text-2xl font-bold">7. Known Constraints & Trade-offs</h2>
+      <h2 className="text-2xl font-bold">9. Known Constraints & Trade-offs</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>Performance Constraints</h3>
@@ -1055,7 +1206,7 @@ function KnownConstraints() {
 function PromptMapping() {
   return (
     <section className="space-y-6">
-      <h2 className="text-2xl font-bold">8. Prompt-to-Code Mapping</h2>
+      <h2 className="text-2xl font-bold">10. Prompt-to-Code Mapping</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>System Prompt → Implementation</h3>
@@ -1086,7 +1237,7 @@ function PromptMapping() {
             </tr>
             <tr>
               <td>"Pro subscription with limits"</td>
-              <td><code>src/hooks/useSubscription.tsx</code><br/>FREE_LIMITS, PRO_LIMITS, daily_usage</td>
+              <td><code>src/hooks/useEntitlements.tsx</code><br/>FREE_LIMITS, PRO_LIMITS, SUBSCRIPTION_PHASE</td>
             </tr>
             <tr>
               <td>"Verified badge for Pro"</td>
@@ -1151,13 +1302,16 @@ function PromptMapping() {
 function ChangeLog() {
   return (
     <section className="space-y-6">
-      <h2 className="text-2xl font-bold">9. Change Log</h2>
+      <h2 className="text-2xl font-bold">11. Change Log</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>December 2024</h3>
         
-        <h4>Week 5 (Dec 31)</h4>
+        <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>
         <ul>
+          <li><strong>System Invariants Section:</strong> Added "What Must Never Happen" section documenting all forbidden behaviors. This document is now the contract of the system.</li>
+          <li><strong>useSubscription Deprecated:</strong> Converted useSubscription.tsx to a thin re-export wrapper for useEntitlements. All direct is_pro checks removed from feature access logic.</li>
+          <li><strong>White Paper as Authority:</strong> Audited codebase against White Paper. Fixed all discrepancies. If behavior is not documented, it must not exist.</li>
           <li><strong>Strict SWIPE_PHASE Lifecycle:</strong> Gestures ONLY allowed in READY phase. Decisions commit ONLY from COMMITTING phase. Undo enters UNDOING phase and fully reverts decision state.</li>
           <li><strong>No Swipe During TRANSITION/UPGRADING:</strong> isSystemBlocked gates all swipe operations when SYSTEM_PHASE is TRANSITION or SUBSCRIPTION_PHASE is UPGRADING.</li>
           <li><strong>REFRESHING_POOL Phase:</strong> Card exhaustion triggers REFRESHING instead of showing empty state. Swipe never ends, only refreshes.</li>
@@ -1219,7 +1373,7 @@ function ChangeLog() {
 function ExtensionPoints() {
   return (
     <section className="space-y-6">
-      <h2 className="text-2xl font-bold">10. Extension Points</h2>
+      <h2 className="text-2xl font-bold">12. Extension Points</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>Safe to Extend</h3>
@@ -1245,7 +1399,7 @@ function ExtensionPoints() {
         <ol>
           <li>Add tier column to <code>user_subscriptions</code></li>
           <li>Create tier-specific limit constants</li>
-          <li>Update <code>useSubscription</code> hook logic</li>
+          <li>Add new SUBSCRIPTION_PHASE values and update <code>useEntitlements</code> hook</li>
         </ol>
 
         <h4>4. Push Notifications</h4>
