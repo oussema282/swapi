@@ -545,16 +545,51 @@ Phase Transitions:
         <h3>Decision Commit Flow</h3>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
 {`1. User initiates swipe (gesture or button)
-2. Check SWIPE_PHASE === READY
-3. startSwipe(direction) → SWIPE_PHASE = SWIPING
-4. Animation plays (300ms)
-5. completeSwipe(itemId):
-   a. SWIPE_PHASE = COMMITTING
-   b. Persist to swipes table
-   c. Check for match (DB trigger)
-   d. Update history stack
-   e. SWIPE_PHASE = READY
-6. If error: force SWIPE_PHASE = READY (recovery)`}
+2. acquireCommitLock() → If lock held, ABORT (prevents double commits)
+3. Check SWIPE_PHASE === READY
+4. startSwipe(direction) → SWIPE_PHASE = SWIPING
+5. Animation plays (300ms)
+6. try {
+     a. Persist to swipes table
+     b. Check for match (DB trigger)
+     c. completeSwipe(itemId):
+        - SWIPE_PHASE = COMMITTING
+        - Update history stack
+        - SWIPE_PHASE = READY
+   } catch (error) {
+     forceReady() → Reset phase to READY, show error toast
+   } finally {
+     releaseCommitLock() → ALWAYS release lock
+   }
+
+CRITICAL: The finally block MUST always run to release the lock.
+          forceReady() resets UI/phase on ANY error.`}
+        </pre>
+
+        <h4>Commit Lock (isCommittingRef)</h4>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Purpose: Prevent double commits during rapid swipes
+
+Location: src/hooks/useSwipeState.tsx
+  - isCommittingRef = useRef(false)
+  - acquireCommitLock() → Returns false if lock held
+  - releaseCommitLock() → Always called in finally
+
+Usage in src/pages/Index.tsx handleSwipe():
+  1. acquireCommitLock() → If false, return early
+  2. startSwipe(direction)
+  3. setTimeout(async () => {
+       try { ... DB call ... }
+       catch { forceReady(); toast.error() }
+       finally { releaseCommitLock() }
+     }, 300)
+
+Debug Logs (one line per transition):
+  [SWIPE] READY → SWIPING (left|right)
+  [SWIPE] SWIPING → COMMITTING
+  [SWIPE] COMMITTING → READY
+  [SWIPE] forceReady from phase=X
+  [SWIPE] blocked: commit lock held`}
         </pre>
 
         <h3>Undo Flow</h3>

@@ -108,7 +108,7 @@ export default function Index() {
     
     // Block if system is in TRANSITION or UPGRADING
     if (isSystemBlocked) {
-      console.log('Swipe blocked: system is transitioning');
+      console.log('[SWIPE] blocked: system is transitioning');
       return;
     }
 
@@ -118,12 +118,22 @@ export default function Index() {
       return;
     }
 
+    // Acquire commit lock to prevent double swipes
+    if (!actions.acquireCommitLock()) {
+      console.log('[SWIPE] blocked: commit lock held');
+      return;
+    }
+
     // Start swipe - this checks SWIPE_PHASE internally
     const started = actions.startSwipe(direction);
     if (!started) {
-      console.log('Swipe not started: wrong phase');
+      console.log('[SWIPE] not started: wrong phase');
+      actions.releaseCommitLock();
       return;
     }
+
+    // Capture itemId before async to avoid stale closure
+    const swipedItemId = currentItem.id;
     
     // Wait for animation, then commit
     setTimeout(async () => {
@@ -135,7 +145,7 @@ export default function Index() {
 
         const result = await swipeMutation.mutateAsync({
           swiperItemId: selectedItemId,
-          swipedItemId: currentItem.id,
+          swipedItemId,
           liked: direction === 'right',
         });
 
@@ -144,11 +154,15 @@ export default function Index() {
         }
 
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
-        actions.completeSwipe(currentItem.id);
+        actions.completeSwipe(swipedItemId);
       } catch (error) {
         // On error, force back to READY
-        actions.setReady();
-        console.error('Swipe failed:', error);
+        console.error('[SWIPE] mutation failed:', error);
+        toast.error('Swipe failed. Please try again.');
+        actions.forceReady();
+      } finally {
+        // ALWAYS release lock
+        actions.releaseCommitLock();
       }
     }, 300);
   }, [selectedItemId, currentItem, swipeMutation, actions, canUse.swipes, isPro, incrementUsage, isSystemBlocked]);
