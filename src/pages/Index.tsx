@@ -83,6 +83,17 @@ export default function Index() {
     }
   }, [swipeLoading, swipeableItems, selectedItemId, hasMoreCards, globalPhase]);
 
+  // Recovery mechanism: If stuck in SWIPING or COMMITTING for too long, auto-recover
+  useEffect(() => {
+    if (globalPhase === 'SWIPING' || globalPhase === 'COMMITTING') {
+      const timeout = setTimeout(() => {
+        console.log(`[SWIPE] Auto-recovery: stuck in ${globalPhase} for 5s, forcing READY`);
+        actions.forceReady();
+      }, 5000); // 5 second timeout
+      return () => clearTimeout(timeout);
+    }
+  }, [globalPhase, actions]);
+
   // Handle manual pool refresh (e.g., retry button in exhausted state)
   const handlePoolRefresh = useCallback(async () => {
     if (isRefreshing || globalPhase === 'REFRESHING') return;
