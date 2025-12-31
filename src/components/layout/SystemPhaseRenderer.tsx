@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useSystemState } from '@/hooks/useSystemState';
@@ -10,19 +11,33 @@ interface SystemPhaseRendererProps {
 }
 
 /**
+ * Routes that require geo features (Discover, Map) - these are blocked by LocationGate
+ * Safe routes (Matches, Chat, Profile, Items, Auth, etc.) bypass LocationGate entirely
+ */
+const GEO_REQUIRED_ROUTES = ['/', '/map', '/search'];
+
+function isGeoRequiredRoute(pathname: string): boolean {
+  return GEO_REQUIRED_ROUTES.some(route => {
+    if (route === '/') return pathname === '/';
+    return pathname.startsWith(route);
+  });
+}
+
+/**
  * SystemPhaseRenderer - The single authority for top-level UI rendering.
  * 
  * This component checks SYSTEM_PHASE and renders:
  * - BOOTSTRAPPING: Loading screen (waiting for auth)
- * - TRANSITION: Loading screen (checking location)
- * - BLOCKED: LocationGate (location permission UI)
+ * - TRANSITION: Loading screen (checking location) - ONLY for geo routes
+ * - BLOCKED: LocationGate (location permission UI) - ONLY for geo routes
  * - ACTIVE: Children (main application content)
  * - BACKGROUND_ONLY: Children (app visible, background jobs only)
  * 
- * NO component below this may bypass SYSTEM_PHASE checks.
- * LocationGate does NOT decide when it appears—it is a consequence of BLOCKED.
+ * SAFE ROUTES (Matches, Chat, Profile, Items, Auth) bypass LocationGate entirely.
+ * They render as soon as user is authenticated and profile is loaded.
  */
 export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
+  const location = useLocation();
   const { 
     state, 
     isBootstrapping,
@@ -39,10 +54,20 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
     requestLocation,
   } = useDeviceLocation();
 
+  // Determine if current route requires geo features
+  const requiresGeo = isGeoRequiredRoute(location.pathname);
+
   // After fully bootstrapped, automatically check location to transition out of BOOTSTRAPPING
+  // BUT only if on a geo-required route
   useEffect(() => {
     // Only proceed when fully bootstrapped and still in BOOTSTRAPPING phase
     if (!isFullyBootstrapped || state.phase !== 'BOOTSTRAPPING') {
+      return;
+    }
+
+    // If not on a geo-required route, skip location check and go directly to ACTIVE
+    if (!requiresGeo) {
+      locationGranted();
       return;
     }
 
@@ -69,6 +94,7 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
     hasLocation,
     permissionStatus,
     locationLoading,
+    requiresGeo,
     checkingLocation,
     locationGranted,
     locationDenied,
@@ -102,8 +128,8 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
     );
   }
 
-  // TRANSITION: Show loading screen while checking location
-  if (state.phase === 'TRANSITION') {
+  // TRANSITION: Show loading screen while checking location - ONLY for geo routes
+  if (state.phase === 'TRANSITION' && requiresGeo) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <motion.div
@@ -118,11 +144,12 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
     );
   }
 
-  // BLOCKED: Show LocationGate for permission request/retry
-  if (state.phase === 'BLOCKED') {
+  // BLOCKED: Show LocationGate for permission request/retry - ONLY for geo routes
+  // Safe routes (Matches, Chat, Profile, etc.) bypass LocationGate entirely
+  if (state.phase === 'BLOCKED' && requiresGeo) {
     return <LocationGate />;
   }
 
-  // ACTIVE or BACKGROUND_ONLY: Render main application content
+  // ACTIVE, BACKGROUND_ONLY, or safe route during BLOCKED/TRANSITION: Render main application content
   return <>{children}</>;
 }

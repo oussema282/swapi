@@ -219,15 +219,28 @@ function SystemOverview() {
         <p>The SystemPhaseRenderer is the SINGLE AUTHORITY for what top-level UI is rendered:</p>
         <ul>
           <li><strong>BOOTSTRAPPING:</strong> Loading screen ("Initializing...") - blocks everything</li>
-          <li><strong>TRANSITION:</strong> Loading screen ("Getting your location...")</li>
-          <li><strong>BLOCKED:</strong> LocationGate component (permission UI)</li>
+          <li><strong>TRANSITION:</strong> Loading screen ("Getting your location...") - <strong>geo routes only</strong></li>
+          <li><strong>BLOCKED:</strong> LocationGate component (permission UI) - <strong>geo routes only</strong></li>
           <li><strong>ACTIVE:</strong> Main application content (children)</li>
           <li><strong>BACKGROUND_ONLY:</strong> Main application content (children)</li>
         </ul>
+
+        <h3>Safe Routes vs Geo Routes</h3>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>Safe Routes:</strong> /matches, /chat/*, /profile, /items, /auth, /checkout, /whitepaper<br/>
+          <strong>Geo Routes:</strong> /, /map, /search<br/><br/>
+          <strong>Rule:</strong> Safe routes must NEVER be blocked by LocationGate. They render as soon as user is authenticated and profile is loaded.
+        </p>
+        <ul>
+          <li><strong>/matches:</strong> Non-geo, non-swipe route. Shows matches immediately after auth.</li>
+          <li><strong>/chat/*:</strong> Non-geo route. Enables messaging regardless of location status.</li>
+          <li><strong>/profile, /items:</strong> Non-geo routes. User can manage profile and items without location.</li>
+        </ul>
+
         <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20">
           <strong>Critical Invariant:</strong> No component below SystemPhaseRenderer may bypass SYSTEM_PHASE checks.
-          LocationGate does NOT decide when it appears—it is rendered ONLY when SYSTEM_PHASE === 'BLOCKED'.
-          No features execute during BOOTSTRAPPING.
+          LocationGate does NOT decide when it appears—it is rendered ONLY when SYSTEM_PHASE === 'BLOCKED' AND on a geo route.
+          Safe routes bypass LocationGate entirely. No features execute during BOOTSTRAPPING.
         </p>
 
         <h3>User Flow</h3>
@@ -1115,9 +1128,14 @@ function SystemInvariants() {
    ✗ LocationGate deciding when it appears
    ✗ Multiple components controlling top-level UI
    ✗ Loading states not shown during BOOTSTRAPPING
-   ✗ Loading states not shown during TRANSITION
 
-2. Entitlement Resolver Violations:
+2. Safe Route Violations:
+   ✗ LocationGate blocking /matches, /chat/*, /profile, /items
+   ✗ Safe routes waiting for location permission
+   ✗ /matches depending on selected item or SWIPE_PHASE
+   ✗ Safe routes showing infinite loading due to location
+
+3. Entitlement Resolver Violations:
    ✗ Multiple sources of truth for Pro status
    ✗ Feature access not going through canUse()
    ✗ useSubscription used instead of useEntitlements
@@ -1309,6 +1327,9 @@ function ChangeLog() {
         
         <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>
         <ul>
+          <li><strong>Safe Routes vs Geo Routes:</strong> Defined GEO_REQUIRED_ROUTES (/, /map, /search) vs safe routes (/matches, /chat/*, /profile, /items). Safe routes bypass LocationGate entirely.</li>
+          <li><strong>/matches Decoupled:</strong> /matches no longer requires location permission, selected item, or SWIPE_PHASE. Renders as soon as user is authenticated and profile is loaded.</li>
+          <li><strong>LocationGate Scope:</strong> LocationGate now ONLY blocks geo-required routes. BLOCKED state on safe routes renders children immediately.</li>
           <li><strong>System Invariants Section:</strong> Added "What Must Never Happen" section documenting all forbidden behaviors. This document is now the contract of the system.</li>
           <li><strong>useSubscription Deprecated:</strong> Converted useSubscription.tsx to a thin re-export wrapper for useEntitlements. All direct is_pro checks removed from feature access logic.</li>
           <li><strong>White Paper as Authority:</strong> Audited codebase against White Paper. Fixed all discrepancies. If behavior is not documented, it must not exist.</li>
@@ -1318,7 +1339,7 @@ function ChangeLog() {
           <li><strong>canGesture Prop:</strong> SwipeCard now receives explicit canGesture prop from parent, disabling drag when not in READY phase.</li>
           <li><strong>SystemPhaseRenderer:</strong> Created new component as single authority for top-level UI rendering based on SYSTEM_PHASE</li>
           <li><strong>LocationGate Refactor:</strong> Simplified to only sync location state and provide UI. No longer decides when it appears.</li>
-          <li><strong>Root Rendering Control:</strong> All conditional rendering moved to SystemPhaseRenderer: BOOTSTRAPPING → loading, TRANSITION → loading, BLOCKED → LocationGate, ACTIVE → children</li>
+          <li><strong>Root Rendering Control:</strong> All conditional rendering moved to SystemPhaseRenderer: BOOTSTRAPPING → loading, TRANSITION → loading (geo only), BLOCKED → LocationGate (geo only), ACTIVE → children</li>
           <li><strong>BOOTSTRAPPING Blocking:</strong> No features execute until authReady, profileReady, AND subscriptionReady are all true.</li>
           <li><strong>SUBSCRIPTION_PHASE Authority:</strong> is_pro is persistence only. SUBSCRIPTION_PHASE is the decision authority for all Pro/limit checks.</li>
           <li><strong>UPGRADING State:</strong> All limit checks disabled, all features optimistically unlocked during payment processing.</li>
