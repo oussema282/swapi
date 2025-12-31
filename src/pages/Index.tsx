@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { X, Heart, Undo2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Index() {
   const { user, loading: authLoading } = useAuth();
@@ -25,11 +26,24 @@ export default function Index() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
   const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
-  const { setSwipePhase } = useSystemState();
+  const { state: systemState } = useSystemState();
+  const queryClient = useQueryClient();
   
-  // Use the new swipe state machine
-  const { state: swipeState, actions, canSwipe, canGoBack } = useSwipeState();
-  const { currentIndex, swipeDirection, isAnimating, showMatch, matchedItem, lastUndoneItemId, cardKey } = swipeState;
+  // Use the new swipe state machine with strict SWIPE_PHASE control
+  const { 
+    state: swipeState, 
+    globalPhase,
+    actions, 
+    canSwipe, 
+    canGoBack, 
+    canGesture,
+    isAnimating,
+    isRefreshing,
+    isLoading: isSwipeLoading,
+    isSystemBlocked 
+  } = useSwipeState();
+  
+  const { currentIndex, swipeDirection, showMatch, matchedItem, lastUndoneItemId, cardKey } = swipeState;
 
   // Auto-select first item when items load
   useEffect(() => {
@@ -38,15 +52,50 @@ export default function Index() {
     }
   }, [myItems, selectedItemId]);
 
-  const { data: swipeableItems, isLoading: swipeLoading } = useRecommendedItems(selectedItemId);
+  const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(selectedItemId);
   const swipeMutation = useSwipe();
   const undoMutation = useUndoSwipe();
   const checkUndoMutation = useCheckUndoEligibility();
 
   const currentItem = swipeableItems?.[currentIndex];
+  const hasMoreCards = swipeableItems && currentIndex < swipeableItems.length;
+
+  // Update SWIPE_PHASE based on data loading state
+  useEffect(() => {
+    if (!selectedItemId) return;
+    
+    if (swipeLoading) {
+      actions.setLoading();
+    } else if (swipeableItems && swipeableItems.length > 0 && hasMoreCards) {
+      actions.setReady();
+    } else if (swipeableItems && !hasMoreCards && !isRefreshing) {
+      // Cards exhausted - enter REFRESHING_POOL
+      handlePoolExhausted();
+    }
+  }, [swipeLoading, swipeableItems, currentIndex, selectedItemId, hasMoreCards, isRefreshing]);
+
+  // Handle pool exhaustion - silent refresh
+  const handlePoolExhausted = useCallback(async () => {
+    if (isRefreshing || globalPhase === 'REFRESHING') return;
+    
+    actions.startRefresh();
+    
+    // Invalidate and refetch recommendations
+    await queryClient.invalidateQueries({ queryKey: ['recommended-items', selectedItemId] });
+    await refetchItems();
+    
+    // Complete refresh - reset to start if we got new items
+    actions.completeRefresh(0);
+  }, [isRefreshing, globalPhase, actions, queryClient, selectedItemId, refetchItems]);
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
-    if (!selectedItemId || !currentItem || !canSwipe) return;
+    if (!selectedItemId || !currentItem) return;
+    
+    // Block if system is in TRANSITION or UPGRADING
+    if (isSystemBlocked) {
+      console.log('Swipe blocked: system is transitioning');
+      return;
+    }
 
     // Check swipe limit for free users
     if (!canUse.swipes) {
@@ -54,10 +103,14 @@ export default function Index() {
       return;
     }
 
-    // Start swipe animation - this locks the state
-    actions.startSwipe(direction);
+    // Start swipe - this checks SWIPE_PHASE internally
+    const started = actions.startSwipe(direction);
+    if (!started) {
+      console.log('Swipe not started: wrong phase');
+      return;
+    }
     
-    // Wait for animation, then complete
+    // Wait for animation, then commit
     setTimeout(async () => {
       try {
         // Increment usage for free users
@@ -75,31 +128,38 @@ export default function Index() {
           actions.setMatch(currentItem);
         }
 
-        // Complete the swipe - this unlocks and advances
+        // Complete the swipe - transitions SWIPING → COMMITTING → READY
         actions.completeSwipe(currentItem.id);
       } catch (error) {
-        // On error, unlock the state so user can try again
-        actions.unlock();
+        // On error, force back to READY
+        actions.setReady();
         console.error('Swipe failed:', error);
       }
     }, 300);
-  }, [selectedItemId, currentItem, swipeMutation, canSwipe, actions, canUse.swipes, isPro, incrementUsage]);
+  }, [selectedItemId, currentItem, swipeMutation, actions, canUse.swipes, isPro, incrementUsage, isSystemBlocked]);
 
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
-    if (canSwipe) {
+    if (canGesture) {
       handleSwipe(direction);
     }
-  }, [handleSwipe, canSwipe]);
+  }, [handleSwipe, canGesture]);
 
   const handleGoBack = useCallback(async () => {
-    if (!canGoBack || !selectedItemId) return;
+    if (!selectedItemId) return;
     
     // Get the item ID from history before going back
     const lastEntry = swipeState.historyStack[swipeState.historyStack.length - 1];
     if (!lastEntry) return;
 
-    // First check if undo is allowed (24h limit)
+    // Start undo - this checks SWIPE_PHASE internally
+    const started = actions.startUndo();
+    if (!started) {
+      console.log('Undo not started: wrong phase or no history');
+      return;
+    }
+
     try {
+      // Check if undo is allowed (24h limit)
       const { canUndo } = await checkUndoMutation.mutateAsync({
         swiperItemId: selectedItemId,
         swipedItemId: lastEntry.itemId,
@@ -107,24 +167,26 @@ export default function Index() {
 
       if (!canUndo) {
         toast.error('You can only undo once per item every 24 hours');
+        actions.setReady(); // Abort undo
         return;
       }
 
-      // Go back in UI state
-      actions.goBack();
-
-      // Then delete the swipe record and record the undo
+      // Delete the swipe record and record the undo
       await undoMutation.mutateAsync({
         swiperItemId: selectedItemId,
         swipedItemId: lastEntry.itemId,
       });
+
+      // Complete undo - transitions UNDOING → READY
+      actions.completeUndo();
       actions.clearUndo();
     } catch (error: any) {
       console.error('Failed to undo swipe:', error);
       toast.error(error.message || 'Failed to undo swipe');
+      actions.setReady(); // Abort undo
       actions.clearUndo();
     }
-  }, [canGoBack, selectedItemId, swipeState.historyStack, actions, undoMutation, checkUndoMutation]);
+  }, [selectedItemId, swipeState.historyStack, actions, undoMutation, checkUndoMutation]);
 
   const handleSelectItem = useCallback((id: string) => {
     setSelectedItemId(id);
@@ -143,10 +205,12 @@ export default function Index() {
     return <Navigate to="/auth" replace />;
   }
 
-  const isLoading = itemsLoading || swipeLoading;
+  const isLoading = itemsLoading || swipeLoading || isRefreshing;
   const noItems = !myItems?.length;
-  const noMoreCards = !isLoading && swipeableItems && currentIndex >= swipeableItems.length;
-  const hasCards = !isLoading && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
+  
+  // Never show "no more cards" - always show loading/refreshing state
+  const showLoadingState = isLoading || isRefreshing || globalPhase === 'REFRESHING' || globalPhase === 'LOADING';
+  const hasCards = !showLoadingState && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
 
   return (
     <AppLayout>
@@ -159,8 +223,6 @@ export default function Index() {
             onSelect={handleSelectItem}
           />
         </div>
-
-        {/* Main Swipe Area */}
 
         {/* Main Swipe Area */}
         <div className="flex-1 relative min-h-[400px]">
@@ -176,18 +238,12 @@ export default function Index() {
               title="Select an item"
               description="Choose one of your items above to find potential swaps"
             />
-          ) : isLoading ? (
+          ) : showLoadingState ? (
+            // Loading/Refreshing state - never show empty
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
             </div>
-          ) : noMoreCards ? (
-            <EmptyState
-              title="You've seen everything!"
-              description="No more items to swipe right now. Use Search to explore items by category, distance, or budget."
-              actionLabel="Explore Search"
-              actionHref="/search"
-            />
-          ) : (
+          ) : hasCards ? (
             /* Card Stack - centered and sized properly */
             <div className="absolute inset-0 p-4">
               <div className="relative w-full h-full max-w-md mx-auto">
@@ -199,9 +255,15 @@ export default function Index() {
                     onSwipeComplete={handleSwipeComplete}
                     swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
                     userLocation={{ latitude, longitude }}
+                    canGesture={canGesture && idx === arr.length - 1}
                   />
                 ))}
               </div>
+            </div>
+          ) : (
+            // Fallback loading state - should rarely show due to REFRESHING_POOL
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
             </div>
           )}
         </div>
@@ -214,7 +276,7 @@ export default function Index() {
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-destructive/40 bg-background hover:bg-destructive hover:border-destructive hover:text-destructive-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('left')}
-              disabled={swipeMutation.isPending || !hasCards || isAnimating}
+              disabled={swipeMutation.isPending || !hasCards || isAnimating || !canGesture}
             >
               <X className="w-7 h-7" />
             </Button>
@@ -234,7 +296,7 @@ export default function Index() {
               variant="outline"
               className="w-16 h-16 rounded-full border-2 border-success/40 bg-background hover:bg-success hover:border-success hover:text-success-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
               onClick={() => handleSwipe('right')}
-              disabled={swipeMutation.isPending || !hasCards || isAnimating}
+              disabled={swipeMutation.isPending || !hasCards || isAnimating || !canGesture}
             >
               <Heart className="w-7 h-7" />
             </Button>

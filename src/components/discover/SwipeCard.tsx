@@ -23,6 +23,8 @@ interface SwipeCardProps {
   onSwipeComplete: (direction: 'left' | 'right') => void;
   swipeDirection: 'left' | 'right' | null;
   userLocation?: { latitude: number | null; longitude: number | null };
+  /** When false, gestures are disabled (controlled by SWIPE_PHASE) */
+  canGesture?: boolean;
 }
 
 const SWIPE_THRESHOLD = 100;
@@ -63,7 +65,7 @@ function RatingStars({ rating, totalInteractions }: { rating?: number; totalInte
   );
 }
 
-export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation }: SwipeCardProps) {
+export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, canGesture = true }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false);
@@ -100,6 +102,9 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
   const nopeOpacity = useTransform(x, [-200, -100, 0], [1, 0.8, 0]);
 
   const handleDragEnd = (_: any, info: PanInfo) => {
+    // Only process swipe completion if gestures are allowed
+    if (!canGesture) return;
+    
     const threshold = SWIPE_THRESHOLD;
     if (info.offset.x > threshold) {
       onSwipeComplete('right');
@@ -143,7 +148,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
       }}
       animate={swipeDirection ? getExitAnimation() : {}}
       transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-      drag={isTop ? 'x' : false}
+      drag={isTop && canGesture ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
