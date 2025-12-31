@@ -52,6 +52,7 @@ export type Database = {
       }
       deal_invites: {
         Row: {
+          attempt: number
           created_at: string
           id: string
           receiver_item_id: string
@@ -60,6 +61,7 @@ export type Database = {
           status: string
         }
         Insert: {
+          attempt?: number
           created_at?: string
           id?: string
           receiver_item_id: string
@@ -68,6 +70,7 @@ export type Database = {
           status?: string
         }
         Update: {
+          attempt?: number
           created_at?: string
           id?: string
           receiver_item_id?: string

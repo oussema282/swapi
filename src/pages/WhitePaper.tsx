@@ -871,6 +871,55 @@ deal_invites_count integer DEFAULT 0
 map_uses_count    integer DEFAULT 0`}
         </pre>
 
+        <h4>deal_invites</h4>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`id               uuid PRIMARY KEY
+sender_item_id   uuid NOT NULL    -- Item being offered
+receiver_item_id uuid NOT NULL    -- Item being requested
+status           text DEFAULT 'pending'  -- 'pending', 'accepted', 'rejected'
+attempt          integer DEFAULT 1       -- Attempt number (max 2)
+responded_at     timestamp with time zone
+created_at       timestamp with time zone
+
+CONSTRAINTS:
+- check_max_attempts: attempt <= 2
+- Trigger: validate_deal_invite_attempt() enforces rules
+
+INDEXES:
+- idx_deal_invites_item_pair_status (sender_item_id, receiver_item_id, status)
+- idx_deal_invites_receiver_pending (receiver_item_id, status) WHERE status = 'pending'`}
+        </pre>
+
+        <h3>Deal Invite Rules (Added Dec 31, 2024)</h3>
+        <pre className="bg-primary/10 p-4 rounded-md overflow-x-auto text-xs border border-primary/20">
+{`DEAL INVITE RESEND RULES:
+
+A) Pending Lock:
+   - If (sender_item_id, receiver_item_id) has status='pending',
+     that sender_item is LOCKED for this receiver_item
+   - UI shows "Pending" badge, item is unselectable
+
+B) Rejection Resend:
+   - First rejection → can resend exactly ONE more time (attempt #2)
+   - Second rejection → pair is permanently BLOCKED
+   - UI shows "Resend (1 left)" or "Blocked"
+
+C) Different Sender Item:
+   - After 2 rejections, user can still try with a DIFFERENT sender_item_id
+   - Each (sender_item_id, receiver_item_id) pair has its own attempt counter
+
+D) Acceptance Flow:
+   - When status='accepted':
+     1. Database trigger creates match (LEAST/GREATEST ordering)
+     2. Frontend finds match_id for the exact item pair
+     3. Navigate to /chat/:matchId
+
+VALIDATION TRIGGER (validate_deal_invite_attempt):
+   1. Check no pending invite exists for same pair → error if exists
+   2. Count rejections for same pair → error if >= 2
+   3. Set attempt = rejection_count + 1`}
+        </pre>
+
         <h3>Recommendation Tables</h3>
         <h4>swap_opportunities</h4>
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
@@ -1388,6 +1437,9 @@ function ChangeLog() {
         
         <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>
         <ul>
+          <li><strong>Deal Invite Attempt Tracking (Dec 31):</strong> Added attempt column and validate_deal_invite_attempt trigger. Max 2 attempts per (sender_item_id, receiver_item_id) pair.</li>
+          <li><strong>Deal Invite Chat Routing (Dec 31):</strong> Accept now finds exact match_id and navigates to /chat/:matchId. No more generic navigation.</li>
+          <li><strong>Deal Invite UI States (Dec 31):</strong> Shows Pending (locked), Resend (1 left), Blocked, or Matched! badges per item pair.</li>
           <li><strong>Item-Scoped Exhaustion (Dec 31):</strong> Swipe exhaustion is now per-item. EXHAUSTED is a stable empty state, not a loading state. Loading spinner shown ONLY when request is in progress.</li>
           <li><strong>Item Switch Reset (Dec 31):</strong> Switching items resets SWIPE_PHASE to IDLE, clears cache, and triggers fresh fetch. Previous item's exhaustion does not affect new item.</li>
           <li><strong>EXHAUSTED Phase (Dec 31):</strong> Added setExhausted() action to useSwipeState. Shows clear empty state UI with "Check for new items" retry button.</li>
@@ -1443,6 +1495,51 @@ function ChangeLog() {
           <li><strong>Search Page:</strong> Category and keyword filtering</li>
           <li><strong>Map View:</strong> Mapbox integration for location-based discovery</li>
         </ul>
+
+        <h3>Deal Invite Test Plan</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`STEP-BY-STEP TEST PLAN FOR DEAL INVITES:
+
+Setup: User A has Item1, Item2. User B has ItemX.
+
+Test 1: First Invite (Happy Path)
+1. User A opens ItemX detail
+2. Clicks "Invite Deal" → sees Item1, Item2 as available
+3. Selects Item1 → invite sent
+4. User A sees "Pending" badge on Item1 for ItemX
+✓ Expected: deal_invites record with attempt=1, status='pending'
+
+Test 2: Pending Lock
+1. User A tries to resend Item1 for ItemX
+✓ Expected: Item1 shows "Pending", is unselectable
+✓ Expected: Item2 is still selectable (different pair)
+
+Test 3: Accept → Chat Routing
+1. User B goes to /matches → Invites tab
+2. Sees invite from User A's Item1
+3. Clicks Accept
+✓ Expected: Match created with correct item_a_id, item_b_id
+✓ Expected: User B navigates to /chat/:matchId
+✓ Expected: Chat shows both items and users
+
+Test 4: Rejection + Resend
+1. User A sends Item2 for ItemX (new pair)
+2. User B declines → status='rejected', attempt=1
+3. User A opens ItemX → sees Item2 with "Resend (1 left)"
+4. User A clicks Item2 → second invite sent
+✓ Expected: New record with attempt=2, status='pending'
+
+Test 5: Double Rejection → Block
+1. User B declines second invite → status='rejected'
+2. User A opens ItemX → sees Item2 with "Blocked"
+✓ Expected: Item2 is unselectable for ItemX
+✓ Expected: Database has 2 rejected records for (Item2, ItemX)
+
+Test 6: Different Sender After Block
+1. User A tries Item1 (not blocked) for ItemX
+✓ Expected: Item1 is available (different sender_item_id)
+✓ Expected: Can send new invite with attempt=1`}
+        </pre>
 
         <h4>Week 1 (Dec 2-8)</h4>
         <ul>
