@@ -60,11 +60,17 @@ interface FeatureUpgrade {
 /**
  * Central entitlement hook - THE SINGLE SOURCE OF TRUTH for all Pro/limit checks.
  * 
+ * CRITICAL DESIGN PRINCIPLE:
+ * - is_pro (from DB) is persistence only, NOT the decision authority
+ * - SUBSCRIPTION_PHASE (from SystemState) IS the decision authority
+ * - During UPGRADING: disable all limit checks, allow all features
+ * - When PRO_ACTIVE: ignore daily_usage entirely, never show upgrade prompts
+ * 
  * Design Principles:
- * 1. Pro users NEVER have usage tracked or limits enforced
- * 2. Subscription state changes trigger cache invalidation
- * 3. All feature access goes through canUse() resolver
- * 4. Integrates with SystemState for state-driven access control
+ * 1. SUBSCRIPTION_PHASE is the SOLE decision authority for Pro status
+ * 2. Pro users NEVER have usage tracked or limits enforced
+ * 3. Subscription state changes trigger cache invalidation
+ * 4. All feature access goes through canUse() resolver
  */
 export function useEntitlements() {
   const { user } = useAuth();
@@ -72,7 +78,17 @@ export function useEntitlements() {
   const { setSubscriptionPhase, markSubscriptionReady, state: systemState } = useSystemState();
 
   // ============================================
-  // SUBSCRIPTION DATA
+  // DECISION AUTHORITY: SUBSCRIPTION_PHASE
+  // ============================================
+  
+  // isPro is derived from SUBSCRIPTION_PHASE, NOT from database is_pro field
+  const subscriptionPhase = systemState.subscription;
+  const isPro = subscriptionPhase === 'PRO_ACTIVE';
+  const isUpgrading = subscriptionPhase === 'UPGRADING';
+  const isProOrUpgrading = isPro || isUpgrading;
+
+  // ============================================
+  // SUBSCRIPTION DATA (Persistence only)
   // ============================================
   
   const { 
@@ -106,11 +122,14 @@ export function useEntitlements() {
         }
       }
 
-      // Update system state based on subscription
-      if (data?.is_pro) {
-        setSubscriptionPhase('PRO_ACTIVE');
-      } else {
-        setSubscriptionPhase('FREE_ACTIVE');
+      // Sync database state to SUBSCRIPTION_PHASE (initial load only)
+      // During UPGRADING, don't override - let the upgrade flow control state
+      if (subscriptionPhase !== 'UPGRADING') {
+        if (data?.is_pro) {
+          setSubscriptionPhase('PRO_ACTIVE');
+        } else {
+          setSubscriptionPhase('FREE_ACTIVE');
+        }
       }
 
       return data as Subscription | null;
@@ -157,12 +176,10 @@ export function useEntitlements() {
   });
 
   // ============================================
-  // DAILY USAGE (Only for FREE users)
+  // DAILY USAGE (Only for FREE users - skipped for Pro/Upgrading)
   // ============================================
 
-  const isPro = subscription?.is_pro ?? false;
-
-  // Skip daily usage fetch entirely for Pro users
+  // Skip daily usage fetch entirely for Pro users or during upgrade
   const { data: dailyUsage, isLoading: usageLoading } = useQuery({
     queryKey: ['daily-usage', user?.id],
     queryFn: async (): Promise<DailyUsage | null> => {
@@ -184,20 +201,20 @@ export function useEntitlements() {
 
       return data as DailyUsage | null;
     },
-    enabled: !!user && !isPro, // CRITICAL: Pro users don't need this
+    enabled: !!user && !isProOrUpgrading, // CRITICAL: Pro/Upgrading users don't need this
   });
 
   // ============================================
-  // INCREMENT USAGE (Only for FREE users)
+  // INCREMENT USAGE (Only for FREE users - skipped for Pro/Upgrading)
   // ============================================
 
   const incrementUsageMutation = useMutation({
     mutationFn: async (field: UsageField) => {
       if (!user) throw new Error('Not authenticated');
       
-      // Pro users NEVER have usage tracked
-      if (isPro) {
-        console.log('Pro user - skipping usage increment');
+      // Pro/Upgrading users NEVER have usage tracked
+      if (isProOrUpgrading) {
+        console.log('Pro/Upgrading user - skipping usage increment');
         return;
       }
 
@@ -237,14 +254,14 @@ export function useEntitlements() {
       if (error) throw error;
     },
     onSuccess: () => {
-      if (!isPro) {
+      if (!isProOrUpgrading) {
         queryClient.invalidateQueries({ queryKey: ['daily-usage', user?.id] });
       }
     },
   });
 
   // ============================================
-  // COMPUTED VALUES
+  // COMPUTED VALUES (State-driven)
   // ============================================
 
   const getBonus = useCallback((featureType: string): number => {
@@ -252,8 +269,9 @@ export function useEntitlements() {
     return upgrade?.bonus_amount || 0;
   }, [featureUpgrades]);
 
+  // Limits: Pro/Upgrading users get unlimited, others get free limits + bonuses
   const limits = useMemo(() => {
-    if (isPro) return PRO_LIMITS;
+    if (isProOrUpgrading) return PRO_LIMITS;
     return {
       swipes: FREE_LIMITS.swipes + getBonus('swipes'),
       searches: FREE_LIMITS.searches + getBonus('search'),
@@ -261,46 +279,70 @@ export function useEntitlements() {
       mapUses: FREE_LIMITS.mapUses + getBonus('map'),
       maxItems: FREE_LIMITS.maxItems + getBonus('items'),
     };
-  }, [isPro, getBonus]);
+  }, [isProOrUpgrading, getBonus]);
 
-  const usage = useMemo(() => ({
-    swipes: dailyUsage?.swipes_count ?? 0,
-    searches: dailyUsage?.searches_count ?? 0,
-    dealInvites: dailyUsage?.deal_invites_count ?? 0,
-    mapUses: dailyUsage?.map_uses_count ?? 0,
-  }), [dailyUsage]);
+  // Usage: Pro/Upgrading users have zero usage (ignored)
+  const usage = useMemo(() => {
+    if (isProOrUpgrading) {
+      return { swipes: 0, searches: 0, dealInvites: 0, mapUses: 0 };
+    }
+    return {
+      swipes: dailyUsage?.swipes_count ?? 0,
+      searches: dailyUsage?.searches_count ?? 0,
+      dealInvites: dailyUsage?.deal_invites_count ?? 0,
+      mapUses: dailyUsage?.map_uses_count ?? 0,
+    };
+  }, [isProOrUpgrading, dailyUsage]);
 
-  const remaining = useMemo(() => ({
-    swipes: limits.swipes === -1 ? -1 : Math.max(0, limits.swipes - usage.swipes),
-    searches: limits.searches === -1 ? -1 : Math.max(0, limits.searches - usage.searches),
-    dealInvites: limits.dealInvites === -1 ? -1 : Math.max(0, limits.dealInvites - usage.dealInvites),
-    mapUses: limits.mapUses === -1 ? -1 : Math.max(0, limits.mapUses - usage.mapUses),
-  }), [limits, usage]);
+  // Remaining: Pro/Upgrading users have unlimited (-1)
+  const remaining = useMemo(() => {
+    if (isProOrUpgrading) {
+      return { swipes: -1, searches: -1, dealInvites: -1, mapUses: -1 };
+    }
+    return {
+      swipes: limits.swipes === -1 ? -1 : Math.max(0, limits.swipes - usage.swipes),
+      searches: limits.searches === -1 ? -1 : Math.max(0, limits.searches - usage.searches),
+      dealInvites: limits.dealInvites === -1 ? -1 : Math.max(0, limits.dealInvites - usage.dealInvites),
+      mapUses: limits.mapUses === -1 ? -1 : Math.max(0, limits.mapUses - usage.mapUses),
+    };
+  }, [isProOrUpgrading, limits, usage]);
 
   // ============================================
-  // ENTITLEMENT RESOLVER
+  // ENTITLEMENT RESOLVER (State-driven)
   // ============================================
 
   /**
    * Central entitlement check - THE ONLY way to determine feature access
+   * Decision is based on SUBSCRIPTION_PHASE, not database is_pro
+   * 
+   * - PRO_ACTIVE: all features available
+   * - UPGRADING: all features available (optimistic unlock)
+   * - FREE_ACTIVE/FREE_LIMITED: check remaining limits
    */
   const canUse = useMemo(() => ({
-    swipes: isPro || remaining.swipes > 0,
-    searches: isPro || remaining.searches > 0,
-    dealInvites: isPro || remaining.dealInvites > 0,
-    mapUses: isPro || remaining.mapUses > 0,
-  }), [isPro, remaining]);
+    swipes: isProOrUpgrading || remaining.swipes > 0,
+    searches: isProOrUpgrading || remaining.searches > 0,
+    dealInvites: isProOrUpgrading || remaining.dealInvites > 0,
+    mapUses: isProOrUpgrading || remaining.mapUses > 0,
+  }), [isProOrUpgrading, remaining]);
+
+  /**
+   * Should we show upgrade prompts?
+   * Never show when PRO_ACTIVE or UPGRADING
+   */
+  const shouldShowUpgradePrompt = !isProOrUpgrading;
 
   /**
    * Check if system is in a valid state for feature use
+   * During UPGRADING, all features are available (optimistic unlock)
    */
   const isFeatureAvailable = useCallback((feature: keyof typeof canUse): boolean => {
-    // Block during transitions
-    if (systemState.subscription === 'UPGRADING') {
-      return false;
+    // During UPGRADING, all features are available
+    if (isUpgrading) {
+      return true;
     }
     return canUse[feature];
-  }, [canUse, systemState.subscription]);
+  }, [canUse, isUpgrading]);
 
   // ============================================
   // SUBSCRIPTION REFRESH (For post-payment)
@@ -323,30 +365,34 @@ export function useEntitlements() {
   // ============================================
 
   const incrementUsage = useCallback(async (field: UsageField) => {
-    // Pro users NEVER increment usage
-    if (isPro) return;
+    // Pro/Upgrading users NEVER increment usage
+    if (isProOrUpgrading) return;
     await incrementUsageMutation.mutateAsync(field);
-  }, [isPro, incrementUsageMutation]);
+  }, [isProOrUpgrading, incrementUsageMutation]);
 
   return {
-    // Core state
+    // Core state (derived from SUBSCRIPTION_PHASE, not DB)
     isPro,
+    isUpgrading,
+    isProOrUpgrading,
     subscription,
+    subscriptionPhase,
     
-    // Usage data (Pro users have empty usage)
-    usage: isPro ? { swipes: 0, searches: 0, dealInvites: 0, mapUses: 0 } : usage,
-    remaining: isPro ? { swipes: -1, searches: -1, dealInvites: -1, mapUses: -1 } : remaining,
+    // Usage data (Pro/Upgrading users have empty usage)
+    usage,
+    remaining,
     limits,
     
     // Entitlement resolver
     canUse,
     isFeatureAvailable,
+    shouldShowUpgradePrompt,
     
     // Feature upgrades
     featureUpgrades,
     
     // Loading states
-    isLoading: subscriptionLoading || (!isPro && usageLoading),
+    isLoading: subscriptionLoading || (!isProOrUpgrading && usageLoading),
     
     // Actions
     incrementUsage,

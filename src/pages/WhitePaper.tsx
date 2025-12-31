@@ -373,6 +373,9 @@ Behavior Rules:
           <li><strong>Dec 31, 2024 (Rendering):</strong> LocationGate is now pure UI with no state sync logic</li>
           <li><strong>Dec 31, 2024 (Rendering):</strong> SystemPhaseRenderer is single authority for top-level UI</li>
           <li><strong>Dec 31, 2024 (Location):</strong> LocationGate rendered ONLY when SYSTEM_PHASE === 'BLOCKED'</li>
+          <li><strong>Dec 31, 2024 (Subscription):</strong> SUBSCRIPTION_PHASE is now decision authority, not is_pro</li>
+          <li><strong>Dec 31, 2024 (Subscription):</strong> UPGRADING state unlocks all features optimistically</li>
+          <li><strong>Dec 31, 2024 (Subscription):</strong> All entitlement checks go through single resolver</li>
           <li><strong>Dec 30, 2024 (Location):</strong> BLOCKED is recoverable - retry properly transitions state</li>
           <li><strong>Dec 30, 2024 (Pro):</strong> Pro features unlock immediately after payment</li>
           <li><strong>Dec 30, 2024 (Pro):</strong> daily_usage completely ignored for Pro users</li>
@@ -512,9 +515,52 @@ function SubscriptionSystem() {
       <h2 className="text-2xl font-bold">4. Pro Subscription & Entitlement System</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
-        <h3>Subscription Model</h3>
-        <p><strong>Source of Truth:</strong> <code>user_subscriptions.is_pro</code></p>
-        <p><strong>Hook:</strong> <code>src/hooks/useSubscription.tsx</code></p>
+        <h3>Subscription State Machine</h3>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>CRITICAL:</strong> <code>is_pro</code> in the database is persistence only, NOT the decision authority.
+          <code>SUBSCRIPTION_PHASE</code> from SystemState IS the decision authority.
+        </p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`SUBSCRIPTION_PHASE values:
+  FREE_ACTIVE  → Free user, within limits
+  FREE_LIMITED → Free user, some limits reached
+  UPGRADING    → Payment in progress (all features unlocked)
+  PRO_ACTIVE   → Pro subscription active
+  PRO_EXPIRED  → Pro subscription expired
+
+Decision Authority:
+  - Database is_pro is for PERSISTENCE only
+  - All access decisions use SUBSCRIPTION_PHASE
+  - During UPGRADING: all limit checks DISABLED
+  - When PRO_ACTIVE: daily_usage IGNORED`}
+        </pre>
+
+        <h3>Upgrade Flow</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`1. User initiates payment
+2. startUpgrade() → SUBSCRIPTION_PHASE = UPGRADING
+   - All limit checks disabled
+   - All caches invalidated
+   - Features optimistically unlocked
+3. Payment processes
+4. Database updated: is_pro = true
+5. refreshEntitlements() → refetch subscription
+6. completeUpgrade(true) → SUBSCRIPTION_PHASE = PRO_ACTIVE
+   - All Pro features permanently unlocked
+   - Upgrade prompts hidden
+   - daily_usage completely ignored`}
+        </pre>
+
+        <h3>Entitlement Resolver</h3>
+        <p><strong>Location:</strong> <code>src/hooks/useEntitlements.tsx</code></p>
+        <p>THE SINGLE SOURCE OF TRUTH for all Pro/limit checks:</p>
+        <ul>
+          <li><code>isPro</code> derived from SUBSCRIPTION_PHASE, NOT database</li>
+          <li><code>isUpgrading</code> = true during payment processing</li>
+          <li><code>isProOrUpgrading</code> = combined check for unlocked features</li>
+          <li><code>canUse</code> = feature-specific access resolver</li>
+          <li><code>shouldShowUpgradePrompt</code> = false when Pro/Upgrading</li>
+        </ul>
 
         <h3>Free vs Pro Limits</h3>
         <table className="w-full text-sm">
@@ -522,7 +568,7 @@ function SubscriptionSystem() {
             <tr>
               <th className="text-left">Feature</th>
               <th className="text-left">Free</th>
-              <th className="text-left">Pro</th>
+              <th className="text-left">Pro/Upgrading</th>
             </tr>
           </thead>
           <tbody>
@@ -539,8 +585,8 @@ function SubscriptionSystem() {
         <ul>
           <li><code>daily_usage</code> table stores per-day counts</li>
           <li>Reset daily via <code>usage_date</code> column</li>
-          <li><code>get_or_create_daily_usage()</code> function ensures record exists</li>
-          <li><code>increment_usage()</code> function atomically increments counters</li>
+          <li><strong>Pro/Upgrading users: usage is NEVER tracked or fetched</strong></li>
+          <li><code>incrementUsage()</code> skips for Pro/Upgrading users</li>
         </ul>
 
         <h3>Feature Upgrades (Bonus Packs)</h3>
@@ -556,7 +602,7 @@ function SubscriptionSystem() {
         <h3>Payment Integration</h3>
         <p><strong>Provider:</strong> Dodo Payments</p>
         <p><strong>Edge Function:</strong> <code>supabase/functions/dodo-checkout/index.ts</code></p>
-        <p>After successful payment, <code>user_subscriptions.is_pro</code> is set to true and <code>subscribed_at</code> is recorded.</p>
+        <p>After successful payment, <code>user_subscriptions.is_pro</code> is set to true and the system transitions to PRO_ACTIVE.</p>
       </div>
     </section>
   );
