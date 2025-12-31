@@ -32,6 +32,16 @@ interface Suggestion {
   text: string;
   icon: 'item' | 'category' | 'trending';
   category?: ItemCategory;
+  // Extended item data for rich previews
+  itemData?: {
+    id: string;
+    photo: string | null;
+    valueMin: number | null;
+    valueMax: number | null;
+    latitude: number | null;
+    longitude: number | null;
+    distance?: number;
+  };
 }
 
 const categories: { value: ItemCategory; label: string }[] = [
@@ -172,9 +182,18 @@ export default function Search() {
       }
     });
 
-    // Item title matches
+    // Item title matches - with full item data for rich previews
     if (items) {
-      const titleMatches = items
+      // Calculate distance for items if we have location
+      const itemsWithDistance = items.map(item => {
+        let distance: number | undefined;
+        if (hasLocation && latitude && longitude && item.owner_latitude && item.owner_longitude) {
+          distance = calculateDistance(latitude, longitude, item.owner_latitude, item.owner_longitude);
+        }
+        return { ...item, distance };
+      });
+
+      const titleMatches = itemsWithDistance
         .filter(item => item.title.toLowerCase().includes(query))
         .slice(0, 5 - newSuggestions.length);
       
@@ -184,6 +203,15 @@ export default function Search() {
             type: 'item',
             text: item.title,
             icon: 'item',
+            itemData: {
+              id: item.id,
+              photo: item.photos && item.photos.length > 0 ? item.photos[0] : null,
+              valueMin: item.value_min,
+              valueMax: item.value_max,
+              latitude: item.latitude,
+              longitude: item.longitude,
+              distance: item.distance,
+            },
           });
         }
       });
@@ -204,7 +232,7 @@ export default function Search() {
 
     setSuggestions(newSuggestions.slice(0, 5));
     setSelectedSuggestionIndex(-1);
-  }, [debouncedQuery, items]);
+  }, [debouncedQuery, items, hasLocation, latitude, longitude]);
 
   // Determine if search/filters are active
   useEffect(() => {
@@ -438,31 +466,72 @@ export default function Search() {
                   >
                     {suggestions.map((suggestion, index) => (
                       <button
-                        key={`${suggestion.type}-${suggestion.text}`}
+                        key={`${suggestion.type}-${suggestion.text}-${suggestion.itemData?.id || index}`}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
                           index === selectedSuggestionIndex
                             ? 'bg-primary/10'
                             : 'hover:bg-muted/50'
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                          suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
-                          suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
-                          'bg-muted text-muted-foreground'
-                        }`}>
-                          {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
-                          {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
-                          {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                        {/* Thumbnail or Icon - Fixed 40x40 */}
+                        <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden">
+                          {suggestion.itemData?.photo ? (
+                            <img 
+                              src={suggestion.itemData.photo} 
+                              alt="" 
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className={`w-full h-full flex items-center justify-center ${
+                              suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
+                              suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
+                              'bg-muted text-muted-foreground'
+                            }`}>
+                              {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
+                              {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
+                              {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                            </div>
+                          )}
                         </div>
+                        
+                        {/* Content - with line clamp */}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">
                             {highlightMatch(suggestion.text, searchQuery)}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-muted-foreground truncate">
                             {suggestion.type === 'category' ? 'Category' : 
                              suggestion.type === 'popular' ? 'Popular search' : 'Item'}
                           </p>
+                        </div>
+                        
+                        {/* Fixed metadata column - icons/badges */}
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          {suggestion.itemData?.distance !== undefined && (
+                            <Badge variant="outline" className="text-[10px] py-0 px-1.5 flex items-center gap-0.5">
+                              <MapPin className="w-2.5 h-2.5" />
+                              {formatDistance(suggestion.itemData.distance)}
+                            </Badge>
+                          )}
+                          {suggestion.itemData?.valueMin !== null && suggestion.itemData?.valueMin !== undefined && (
+                            <Badge className="text-[10px] py-0 px-1.5 bg-price/15 text-price border-price/30">
+                              €{suggestion.itemData.valueMin}
+                            </Badge>
+                          )}
+                          {suggestion.itemData?.latitude && suggestion.itemData?.longitude && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/map?focusItemId=${suggestion.itemData!.id}`);
+                              }}
+                              className="p-1 rounded-full hover:bg-muted transition-colors"
+                              title="View on map"
+                            >
+                              <MapPin className="w-3.5 h-3.5 text-primary" />
+                            </button>
+                          )}
                         </div>
                       </button>
                     ))}
@@ -631,7 +700,7 @@ export default function Search() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.03 }}
                   className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => navigate(`/map?itemId=${item.id}`)}
+                  onClick={() => navigate(`/map?focusItemId=${item.id}`)}
                 >
                   <div className="flex gap-3 p-3">
                     {/* Fixed size image */}
