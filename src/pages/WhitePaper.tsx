@@ -841,6 +841,37 @@ function BackgroundProcesses() {
       <h2 className="text-2xl font-bold">6. Background AI & Batch Processes</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
+        <h3>Critical Invariant: Background Isolation</h3>
+        <p className="bg-destructive/10 p-4 rounded-md border border-destructive/20">
+          <strong>Background AI and batch processes must NEVER affect active UI directly.</strong><br/>
+          They can only write to hidden fields (e.g., <code>reciprocal_boost</code>) that realtime ranking reads passively.
+        </p>
+        
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`BACKGROUND PROCESS RULES:
+
+1. reciprocal-optimizer:
+   - May run ONLY when SYSTEM_PHASE === BACKGROUND_ONLY
+   - NEVER runs during ACTIVE, TRANSITION, or SWIPING
+   - reciprocal_boost may ONLY be written in BACKGROUND_ONLY phase
+   - swap_opportunities table is NEVER read by UI or hooks
+
+2. recommend-items:
+   - Must NOT run during:
+     • SUBSCRIPTION_PHASE === UPGRADING
+     • SYSTEM_PHASE === TRANSITION
+     • SYSTEM_PHASE === BLOCKED
+     • SYSTEM_PHASE === BOOTSTRAPPING
+   - Query is disabled (enabled: false) during these phases
+   - Returns empty array if called during blocked phase
+
+3. swap_opportunities table:
+   - Written ONLY by reciprocal-optimizer edge function
+   - Read ONLY by reciprocal-optimizer for cycle detection
+   - NEVER queried by any UI component or hook
+   - No RLS policy allows client-side reads`}
+        </pre>
+
         <h3>Edge Functions</h3>
         
         <table className="w-full text-sm">
@@ -848,6 +879,7 @@ function BackgroundProcesses() {
             <tr>
               <th className="text-left">Function</th>
               <th className="text-left">Trigger</th>
+              <th className="text-left">Phase Gating</th>
               <th className="text-left">Purpose</th>
             </tr>
           </thead>
@@ -855,35 +887,62 @@ function BackgroundProcesses() {
             <tr>
               <td><code>recommend-items</code></td>
               <td>On-demand (API call)</td>
+              <td>NOT in TRANSITION/UPGRADING</td>
               <td>Realtime item ranking for swipe feed</td>
             </tr>
             <tr>
               <td><code>reciprocal-optimizer</code></td>
               <td>Manual / Scheduled</td>
+              <td>ONLY in BACKGROUND_ONLY</td>
               <td>Batch optimization for swap cycles</td>
             </tr>
             <tr>
               <td><code>dodo-checkout</code></td>
               <td>On-demand</td>
+              <td>None (triggers UPGRADING)</td>
               <td>Initiate payment session</td>
             </tr>
             <tr>
               <td><code>get-mapbox-token</code></td>
               <td>On-demand</td>
+              <td>None</td>
               <td>Securely fetch Mapbox token</td>
             </tr>
             <tr>
               <td><code>setup-test-data</code></td>
               <td>Manual (dev only)</td>
+              <td>None</td>
               <td>Create test users and items</td>
             </tr>
             <tr>
               <td><code>add-sample-photos</code></td>
               <td>Manual (dev only)</td>
+              <td>None</td>
               <td>Add placeholder photos to items</td>
             </tr>
           </tbody>
         </table>
+
+        <h3>Background → UI Data Flow</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`reciprocal-optimizer (BACKGROUND_ONLY only):
+  ├── Reads: items, swipes, user_preferences_learned
+  ├── Writes: swap_opportunities (internal use only)
+  ├── Writes: user_preferences_learned (category affinities)
+  └── Writes: items.reciprocal_boost (silent boost)
+                    │
+                    ▼ (passive read via items table)
+                    
+recommend-items (ACTIVE phase only):
+  ├── Reads: items (including reciprocal_boost)
+  ├── Reads: swipes, profiles
+  └── Returns: ranked item IDs with scores
+  
+UI (useRecommendedItems hook):
+  ├── Gated by: SYSTEM_PHASE !== TRANSITION/BOOTSTRAPPING/BLOCKED
+  ├── Gated by: SUBSCRIPTION_PHASE !== UPGRADING
+  └── Only sees: final ranked items (never sees swap_opportunities)`}
+        </pre>
 
         <h3>Database Triggers</h3>
         <table className="w-full text-sm">
@@ -1109,6 +1168,8 @@ function ChangeLog() {
           <li><strong>BOOTSTRAPPING Blocking:</strong> No features execute until authReady, profileReady, AND subscriptionReady are all true.</li>
           <li><strong>SUBSCRIPTION_PHASE Authority:</strong> is_pro is persistence only. SUBSCRIPTION_PHASE is the decision authority for all Pro/limit checks.</li>
           <li><strong>UPGRADING State:</strong> All limit checks disabled, all features optimistically unlocked during payment processing.</li>
+          <li><strong>Background Process Isolation:</strong> reciprocal-optimizer runs ONLY in BACKGROUND_ONLY phase. recommend-items blocked during TRANSITION/UPGRADING. swap_opportunities never read by UI.</li>
+          <li><strong>useRecommendedItems Gating:</strong> Query disabled when SYSTEM_PHASE is TRANSITION/BLOCKED/BOOTSTRAPPING or SUBSCRIPTION_PHASE is UPGRADING.</li>
         </ul>
 
         <h4>Week 4 (Dec 23-30)</h4>

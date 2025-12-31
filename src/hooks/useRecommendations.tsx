@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Item, ItemCategory } from '@/types/database';
 import { useAuth } from './useAuth';
+import { useSystemState } from './useSystemState';
 
 interface SwipeableItem extends Item {
   owner_display_name: string;
@@ -20,11 +21,26 @@ interface RecommendationResult {
 
 export function useRecommendedItems(myItemId: string | null) {
   const { user } = useAuth();
+  const { state: systemState } = useSystemState();
+  
+  // Gate recommendations on system phase
+  // Do NOT fetch during TRANSITION or UPGRADING
+  const isBlocked = 
+    systemState.phase === 'TRANSITION' || 
+    systemState.phase === 'BOOTSTRAPPING' ||
+    systemState.phase === 'BLOCKED' ||
+    systemState.subscription === 'UPGRADING';
 
   return useQuery({
     queryKey: ['recommended-items', myItemId, user?.id],
     queryFn: async (): Promise<SwipeableItem[]> => {
       if (!user || !myItemId) return [];
+      
+      // Double-check phase gating (in case enabled changed after query started)
+      if (isBlocked) {
+        console.log('Recommendations blocked: system in transition or upgrading');
+        return [];
+      }
 
        try {
          const { data, error: invokeError } = await supabase.functions.invoke('recommend-items', {
@@ -58,7 +74,8 @@ export function useRecommendedItems(myItemId: string | null) {
         return fallbackFetch(user.id, myItemId);
       }
     },
-    enabled: !!user && !!myItemId,
+    // Only enable when not blocked
+    enabled: !!user && !!myItemId && !isBlocked,
     staleTime: 30000, // Cache for 30 seconds
     refetchInterval: 60000, // Silently refresh every 60 seconds
   });
