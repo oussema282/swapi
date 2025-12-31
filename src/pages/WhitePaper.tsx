@@ -302,6 +302,31 @@ After isFullyBootstrapped === true:
   - If location granted → ACTIVE → main app renders`}
         </pre>
 
+        <h4>BLOCKED State Semantics</h4>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>BLOCKED is a recoverable waiting state, NOT a dead-end or error state.</strong><br/>
+          It means "missing required condition" (e.g., location permission), not "fatal error".
+        </p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`BLOCKED State Rules:
+  - BLOCKED means "waiting for required condition"
+  - Retry must ALWAYS allow recovery
+  - BLOCKED is NEVER terminal
+  - No features run while SYSTEM_PHASE === BLOCKED
+
+Retry Flow:
+  1. User clicks retry button
+  2. LOCATION_RETRY dispatched → BLOCKED → TRANSITION
+  3. Location permission re-requested
+  4. If granted: TRANSITION → ACTIVE (recovery successful)
+  5. If denied again: TRANSITION → BLOCKED (remain waiting)
+
+State Transitions:
+  BLOCKED + retry click → TRANSITION
+  TRANSITION + location granted → ACTIVE
+  TRANSITION + location denied → BLOCKED (can retry again)`}
+        </pre>
+
         <h4>Location State Integration</h4>
         <p><strong>Key Insight:</strong> LocationGate is a CONSEQUENCE of the BLOCKED state, not an entry point. 
         Top-level rendering is fully controlled by SYSTEM_PHASE via SystemPhaseRenderer.</p>
