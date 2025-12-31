@@ -449,42 +449,147 @@ function SwipeLifecycle() {
       <h2 className="text-2xl font-bold">3. Swipe Lifecycle & State Management</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
-        <h3>State Flow</h3>
+        <h3>SWIPE_PHASE State Machine</h3>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>CRITICAL:</strong> All swipe operations are strictly controlled by <code>SWIPE_PHASE</code>.
+          Gestures are ONLY allowed in <code>READY</code> phase. Decisions commit ONLY from <code>COMMITTING</code>.
+          No swipe logic runs during <code>TRANSITION</code> or when <code>SUBSCRIPTION_PHASE === UPGRADING</code>.
+        </p>
+        
         <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
-{`┌─────────────┐    ┌───────────────────┐    ┌─────────────┐
-│ Select Item │ -> │ Fetch Recommendations │ -> │ Swipe Cards │
-└─────────────┘    └───────────────────┘    └─────────────┘
-                            │                      │
-                   useRecommendedItems()    ┌──────┴──────┐
-                            │              Like       Skip
-                   recommend-items API      │             │
-                            │              ▼             ▼
-                            └──────> swipes table <─────┘
-                                          │
-                                   DB Trigger: check_for_match()
-                                          │
-                                   ┌──────┴──────┐
-                                 Match         No Match
-                                   │
-                            matches table`}
+{`SWIPE_PHASE values:
+  IDLE        → No swiping context (no item selected)
+  LOADING     → Fetching card pool
+  READY       → Cards available, gestures ALLOWED
+  SWIPING     → Mid-swipe animation
+  COMMITTING  → Persisting decision to database
+  UNDOING     → Reverting a previous swipe
+  REFRESHING  → Silently fetching more cards (pool exhausted)
+  EXHAUSTED   → (DEPRECATED - now uses REFRESHING instead)
+  PAUSED      → Swiping paused (e.g., viewing map)
+
+Phase Transitions:
+  IDLE → LOADING      (item selected)
+  LOADING → READY     (cards fetched successfully)
+  READY → SWIPING     (gesture started)
+  SWIPING → COMMITTING (animation complete)
+  COMMITTING → READY  (decision persisted)
+  READY → UNDOING     (undo initiated)
+  UNDOING → READY     (undo complete)
+  READY → REFRESHING  (cards exhausted)
+  REFRESHING → READY  (new cards fetched)`}
         </pre>
 
-        <h3>Card Exhaustion Handling</h3>
-        <p><strong>Location:</strong> <code>src/hooks/useRecommendations.tsx</code></p>
-        <ol>
-          <li>Initial fetch via <code>recommend-items</code> edge function</li>
-          <li>If zero items returned, retry with <code>expandedSearch: true</code></li>
-          <li>Expanded search recycles items swiped &gt;7 days ago</li>
-          <li>Adjusted weights favor reciprocal boost (0.20) and behavioral affinity (0.15)</li>
-          <li>If still empty, return empty array (user sees empty state)</li>
-        </ol>
+        <h3>Gesture Control</h3>
+        <p><strong>Location:</strong> <code>src/hooks/useSwipeState.tsx</code>, <code>src/components/discover/SwipeCard.tsx</code></p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Gesture Rules:
+  - Drag gestures ONLY enabled when:
+    • SWIPE_PHASE === READY
+    • SYSTEM_PHASE !== TRANSITION
+    • SYSTEM_PHASE !== BLOCKED
+    • SYSTEM_PHASE !== BOOTSTRAPPING
+    • SUBSCRIPTION_PHASE !== UPGRADING
+
+  - SwipeCard receives canGesture prop from parent
+  - When canGesture === false:
+    • drag prop set to false
+    • handleDragEnd returns early
+
+  - Button swipes check canGesture before initiating`}
+        </pre>
+
+        <h3>Decision Commit Flow</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`1. User initiates swipe (gesture or button)
+2. Check SWIPE_PHASE === READY
+3. startSwipe(direction) → SWIPE_PHASE = SWIPING
+4. Animation plays (300ms)
+5. completeSwipe(itemId):
+   a. SWIPE_PHASE = COMMITTING
+   b. Persist to swipes table
+   c. Check for match (DB trigger)
+   d. Update history stack
+   e. SWIPE_PHASE = READY
+6. If error: force SWIPE_PHASE = READY (recovery)`}
+        </pre>
+
+        <h3>Undo Flow</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`1. User clicks undo button
+2. Check SWIPE_PHASE === READY && historyStack.length > 0
+3. startUndo() → SWIPE_PHASE = UNDOING
+4. Verify 24-hour eligibility (swipe_undos table)
+5. Delete swipe record from swipes table
+6. Insert record into swipe_undos table
+7. completeUndo():
+   a. Revert currentIndex to previous entry
+   b. Remove entry from historyStack
+   c. Increment cardKey (force remount)
+   d. SWIPE_PHASE = READY
+8. If error: SWIPE_PHASE = READY (abort undo)`}
+        </pre>
+
+        <h3>Card Exhaustion → REFRESHING_POOL</h3>
+        <p className="bg-primary/10 p-4 rounded-md border border-primary/20">
+          <strong>CRITICAL:</strong> Swipe never ends, only refreshes. Empty state is NEVER shown for card exhaustion.
+        </p>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`When currentIndex >= swipeableItems.length:
+  1. Check not already REFRESHING
+  2. startRefresh() → SWIPE_PHASE = REFRESHING
+  3. Show loading spinner (NOT empty state)
+  4. Invalidate recommendations cache
+  5. Refetch with expanded criteria if needed:
+     - expandedSearch: true
+     - Recycles items swiped >7 days ago
+     - Adjusts weights for reciprocal boost
+  6. completeRefresh(0) → reset index, SWIPE_PHASE = READY
+  7. If still no items: keep showing loading/searching UI`}
+        </pre>
+
+        <h3>System State Blocking</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`No swipe logic runs when:
+  - SYSTEM_PHASE === TRANSITION (location check, upgrade)
+  - SYSTEM_PHASE === BLOCKED (location denied)
+  - SYSTEM_PHASE === BOOTSTRAPPING (app initializing)
+  - SUBSCRIPTION_PHASE === UPGRADING (payment in progress)
+
+isSystemBlocked = TRANSITION || BLOCKED || BOOTSTRAPPING || UPGRADING`}
+        </pre>
+
+        <h3>State Flow Diagram</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`┌─────────────┐    ┌───────────────────┐    ┌─────────────┐
+│ Select Item │ -> │ LOADING           │ -> │ READY       │
+└─────────────┘    └───────────────────┘    └─────────────┘
+                           │                      │
+                   useRecommendedItems()    ┌──────┴──────┐
+                           │               Swipe       Undo
+                   recommend-items API      │             │
+                           │               ▼             ▼
+                           └──────> SWIPING      UNDOING
+                                       │             │
+                                       ▼             ▼
+                                  COMMITTING    (revert)
+                                       │             │
+                                       └──────┬──────┘
+                                              ▼
+                                   ┌─────────────────┐
+                                   │ READY (or       │
+                                   │ REFRESHING if   │
+                                   │ pool exhausted) │
+                                   └─────────────────┘`}
+        </pre>
 
         <h3>Swipe Undo System</h3>
         <p><strong>Location:</strong> <code>src/hooks/useSwipe.tsx</code></p>
         <ul>
           <li>Users can undo a swipe once per item per 24 hours</li>
           <li>Tracked in <code>swipe_undos</code> table</li>
-          <li>Undo deletes the swipe record and inserts an undo record</li>
+          <li>Undo fully reverts the decision state (index, history)</li>
+          <li>Undo respects SWIPE_PHASE gating (only from READY)</li>
         </ul>
 
         <h3>Match Creation</h3>
@@ -994,9 +1099,16 @@ function ChangeLog() {
         
         <h4>Week 5 (Dec 31)</h4>
         <ul>
+          <li><strong>Strict SWIPE_PHASE Lifecycle:</strong> Gestures ONLY allowed in READY phase. Decisions commit ONLY from COMMITTING phase. Undo enters UNDOING phase and fully reverts decision state.</li>
+          <li><strong>No Swipe During TRANSITION/UPGRADING:</strong> isSystemBlocked gates all swipe operations when SYSTEM_PHASE is TRANSITION or SUBSCRIPTION_PHASE is UPGRADING.</li>
+          <li><strong>REFRESHING_POOL Phase:</strong> Card exhaustion triggers REFRESHING instead of showing empty state. Swipe never ends, only refreshes.</li>
+          <li><strong>canGesture Prop:</strong> SwipeCard now receives explicit canGesture prop from parent, disabling drag when not in READY phase.</li>
           <li><strong>SystemPhaseRenderer:</strong> Created new component as single authority for top-level UI rendering based on SYSTEM_PHASE</li>
           <li><strong>LocationGate Refactor:</strong> Simplified to only sync location state and provide UI. No longer decides when it appears.</li>
           <li><strong>Root Rendering Control:</strong> All conditional rendering moved to SystemPhaseRenderer: BOOTSTRAPPING → loading, TRANSITION → loading, BLOCKED → LocationGate, ACTIVE → children</li>
+          <li><strong>BOOTSTRAPPING Blocking:</strong> No features execute until authReady, profileReady, AND subscriptionReady are all true.</li>
+          <li><strong>SUBSCRIPTION_PHASE Authority:</strong> is_pro is persistence only. SUBSCRIPTION_PHASE is the decision authority for all Pro/limit checks.</li>
+          <li><strong>UPGRADING State:</strong> All limit checks disabled, all features optimistically unlocked during payment processing.</li>
         </ul>
 
         <h4>Week 4 (Dec 23-30)</h4>
