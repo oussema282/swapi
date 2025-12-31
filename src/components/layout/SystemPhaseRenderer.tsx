@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useSystemState } from '@/hooks/useSystemState';
+import { useDeviceLocation } from '@/hooks/useLocation';
 import { LocationGate } from '@/components/LocationGate';
 
 interface SystemPhaseRendererProps {
@@ -19,9 +20,70 @@ interface SystemPhaseRendererProps {
  * - BACKGROUND_ONLY: Children (app visible, background jobs only)
  * 
  * NO component below this may bypass SYSTEM_PHASE checks.
+ * LocationGate does NOT decide when it appears—it is a consequence of BLOCKED.
  */
 export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
-  const { state, isBootstrapping } = useSystemState();
+  const { 
+    state, 
+    isBootstrapping,
+    checkingLocation,
+    locationGranted,
+    locationDenied,
+  } = useSystemState();
+  
+  const { 
+    hasLocation, 
+    permissionStatus, 
+    loading: locationLoading,
+    requestLocation,
+  } = useDeviceLocation();
+
+  // After AUTH_READY, automatically check location to transition out of BOOTSTRAPPING
+  useEffect(() => {
+    // Only proceed when auth is ready but still in BOOTSTRAPPING
+    if (!state.authReady || state.phase !== 'BOOTSTRAPPING') {
+      return;
+    }
+
+    // If we already have location from saved profile, grant immediately
+    if (hasLocation && permissionStatus === 'granted') {
+      locationGranted();
+      return;
+    }
+
+    // If permission is already denied, block immediately
+    if (permissionStatus === 'denied') {
+      locationDenied();
+      return;
+    }
+
+    // Otherwise, request location (will transition through TRANSITION)
+    if (!locationLoading) {
+      checkingLocation();
+      requestLocation();
+    }
+  }, [
+    state.authReady,
+    state.phase,
+    hasLocation,
+    permissionStatus,
+    locationLoading,
+    checkingLocation,
+    locationGranted,
+    locationDenied,
+    requestLocation,
+  ]);
+
+  // Sync location results with system state during TRANSITION
+  useEffect(() => {
+    if (state.phase !== 'TRANSITION') return;
+
+    if (hasLocation && permissionStatus === 'granted') {
+      locationGranted();
+    } else if (permissionStatus === 'denied') {
+      locationDenied();
+    }
+  }, [state.phase, hasLocation, permissionStatus, locationGranted, locationDenied]);
 
   // BOOTSTRAPPING: Show loading screen while auth initializes
   if (isBootstrapping) {

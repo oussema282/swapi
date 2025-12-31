@@ -281,13 +281,22 @@ MATCH_PHASE:
 Root Rendering (SystemPhaseRenderer):
   - BOOTSTRAPPING → Loading screen (never LocationGate)
   - TRANSITION    → Loading screen (location check in progress)
-  - BLOCKED       → LocationGate rendered
+  - BLOCKED       → LocationGate rendered (pure UI, no state decisions)
   - ACTIVE        → Children rendered
 
+Location Sync Flow (in SystemPhaseRenderer):
+  1. Auth completes → AUTH_READY fires
+  2. SystemPhaseRenderer detects authReady + BOOTSTRAPPING
+  3. Checks existing permission/location
+  4. Dispatches LOCATION_CHECKING → requests location
+  5. On grant: LOCATION_GRANTED → ACTIVE
+  6. On deny: LOCATION_DENIED → BLOCKED → LocationGate shown
+
 Behavior Rules:
-  - LocationGate syncs state, does NOT decide when it appears
-  - SystemPhaseRenderer is the ONLY top-level rendering authority
-  - BLOCKED is a waiting state, NOT a terminal state
+  - SystemPhaseRenderer handles ALL location sync logic
+  - LocationGate is PURE UI - no useEffect syncing
+  - LocationGate does NOT decide when it appears
+  - BLOCKED is a waiting state, NOT terminal
   - Retry triggers LOCATION_RETRY → TRANSITION → re-request
   - No feature runs while SYSTEM_PHASE is BOOTSTRAPPING or BLOCKED`}
         </pre>
@@ -304,15 +313,13 @@ Behavior Rules:
 
         <h4>Fixed Issues</h4>
         <ul>
-          <li><strong>Dec 31, 2024 (Rendering):</strong> SystemPhaseRenderer is now single authority for top-level UI</li>
-          <li><strong>Dec 31, 2024 (Location):</strong> LocationGate no longer decides when it appears</li>
+          <li><strong>Dec 31, 2024 (Rendering):</strong> Location sync moved to SystemPhaseRenderer</li>
+          <li><strong>Dec 31, 2024 (Rendering):</strong> LocationGate is now pure UI with no state sync logic</li>
+          <li><strong>Dec 31, 2024 (Rendering):</strong> SystemPhaseRenderer is single authority for top-level UI</li>
           <li><strong>Dec 31, 2024 (Location):</strong> LocationGate rendered ONLY when SYSTEM_PHASE === 'BLOCKED'</li>
-          <li><strong>Dec 30, 2024 (Location):</strong> LocationGate now waits for AUTH_READY before showing UI</li>
           <li><strong>Dec 30, 2024 (Location):</strong> BLOCKED is recoverable - retry properly transitions state</li>
-          <li><strong>Dec 30, 2024 (Location):</strong> No features execute during BOOTSTRAPPING or BLOCKED</li>
           <li><strong>Dec 30, 2024 (Pro):</strong> Pro features unlock immediately after payment</li>
           <li><strong>Dec 30, 2024 (Pro):</strong> daily_usage completely ignored for Pro users</li>
-          <li><strong>Dec 30, 2024 (Pro):</strong> Subscription upgrades treated as state transitions</li>
         </ul>
       </div>
     </section>
