@@ -74,6 +74,7 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                 <span className="font-medium text-sm">
                   <VerifiedName 
                     name={match.other_user_profile?.display_name || 'Unknown'} 
+                    isPro={match.other_user_profile?.is_pro}
                     badgeClassName="w-3.5 h-3.5"
                     userId={match.other_user_id}
                     clickable

@@ -94,6 +94,7 @@ export default function Chat() {
           theirItemTitle={match?.their_item?.title}
           myItemPhoto={match?.my_item?.photos?.[0]}
           theirItemPhoto={match?.their_item?.photos?.[0]}
+          isPro={match?.other_user_profile?.is_pro}
         />
 
         {/* Messages Area */}

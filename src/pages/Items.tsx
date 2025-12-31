@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useMyItems, useDeleteItem } from '@/hooks/useItems';
+import { useMyItems, useDeleteItem, useUnarchiveItem } from '@/hooks/useItems';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Package, Trash2, Edit, Loader2 } from 'lucide-react';
+import { Plus, Package, Trash2, Edit, Loader2, Archive, ArchiveRestore } from 'lucide-react';
 import { CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,6 +27,7 @@ export default function Items() {
   const { toast } = useToast();
   const { data: items, isLoading } = useMyItems();
   const deleteItem = useDeleteItem();
+  const unarchiveItem = useUnarchiveItem();
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -50,6 +51,19 @@ export default function Items() {
     }
   };
 
+  const handleUnarchive = async (id: string) => {
+    try {
+      await unarchiveItem.mutateAsync(id);
+      toast({ title: 'Item restored for trading!' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Failed to restore item' });
+    }
+  };
+
+  // Separate active and archived items
+  const activeItems = items?.filter(item => !item.is_archived) || [];
+  const archivedItems = items?.filter(item => item.is_archived) || [];
+
   if (authLoading || isLoading) {
     return (
       <AppLayout>
@@ -72,7 +86,9 @@ export default function Items() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-display font-bold">My Items</h1>
-              <p className="text-sm text-muted-foreground">{items?.length || 0} items listed</p>
+              <p className="text-sm text-muted-foreground">
+                {activeItems.length} active{archivedItems.length > 0 ? `, ${archivedItems.length} archived` : ''}
+              </p>
             </div>
             <Button onClick={() => navigate('/items/new')} className="gradient-primary shadow-lg">
               <Plus className="w-4 h-4 mr-2" />
@@ -83,10 +99,11 @@ export default function Items() {
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto px-4 pb-24">
-          {items && items.length > 0 ? (
-            <div className="space-y-3">
+          {/* Active Items */}
+          {activeItems.length > 0 && (
+            <div className="space-y-3 mb-6">
               <AnimatePresence mode="popLayout">
-                {items.map((item, index) => (
+                {activeItems.map((item, index) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -140,7 +157,76 @@ export default function Items() {
                 ))}
               </AnimatePresence>
             </div>
-          ) : (
+          )}
+
+          {/* Archived Items Section */}
+          {archivedItems.length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 py-2">
+                <Archive className="w-4 h-4 text-muted-foreground" />
+                <h2 className="text-sm font-medium text-muted-foreground">Archived Items</h2>
+              </div>
+              <AnimatePresence mode="popLayout">
+                {archivedItems.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ delay: index * 0.05 }}
+                    layout
+                  >
+                    <Card className="p-4 flex gap-4 bg-muted/30 border-border/50">
+                      <div className="w-20 h-20 rounded-xl bg-muted flex-shrink-0 overflow-hidden opacity-60">
+                        {item.photos?.[0] ? (
+                          <img src={item.photos[0]} alt={item.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Package className="w-8 h-8 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold truncate text-muted-foreground">{item.title}</h3>
+                          <Badge variant="secondary" className="text-xs bg-muted">Swapped</Badge>
+                        </div>
+                        <div className="flex gap-2 mt-2 flex-wrap">
+                          <Badge variant="outline" className="text-xs opacity-60">{CATEGORY_LABELS[item.category]}</Badge>
+                          <Badge variant="secondary" className="text-xs opacity-60">{CONDITION_LABELS[item.condition]}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          This item was swapped and is no longer available for trading.
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-9 w-9 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
+                          onClick={() => handleUnarchive(item.id)}
+                          title="Restore for trading"
+                        >
+                          <ArchiveRestore className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-9 w-9 border-destructive/50 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                          onClick={() => setDeleteId(item.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {activeItems.length === 0 && archivedItems.length === 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

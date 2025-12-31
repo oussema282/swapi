@@ -186,6 +186,7 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean
+          is_archived: boolean
           latitude: number | null
           longitude: number | null
           photos: string[] | null
@@ -204,6 +205,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          is_archived?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
@@ -222,6 +224,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          is_archived?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
