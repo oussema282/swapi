@@ -5,11 +5,16 @@ import { Button } from '@/components/ui/button';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useSystemState } from '@/hooks/useSystemState';
 
-interface LocationGateProps {
-  children: React.ReactNode;
-}
-
-export function LocationGate({ children }: LocationGateProps) {
+/**
+ * LocationGate - Syncs device location with the system state machine.
+ * 
+ * IMPORTANT: This component does NOT decide when it appears.
+ * The App component renders this ONLY when SYSTEM_PHASE === 'BLOCKED'.
+ * This component's only job is to:
+ * 1. Sync location status with the system state machine
+ * 2. Provide UI for requesting/retrying location permission
+ */
+export function LocationGate() {
   const { 
     hasLocation, 
     loading, 
@@ -20,25 +25,14 @@ export function LocationGate({ children }: LocationGateProps) {
   
   const { 
     state, 
-    isBootstrapping, 
     isBlocked,
-    checkingLocation,
     locationGranted,
     locationDenied,
     retryLocation,
   } = useSystemState();
 
-  // Determine if we're still in the initial bootstrapping (auth not ready)
-  const isAuthBootstrapping = state.phase === 'BOOTSTRAPPING' && !state.authReady;
-  
-  // Determine if auth is ready but we need location check
-  const needsLocationCheck = state.authReady && (state.phase === 'BOOTSTRAPPING' || isBlocked);
-
   // Sync location state with system state machine
   useEffect(() => {
-    // Wait for auth to complete first
-    if (!state.authReady) return;
-
     // If we have location and permission is granted, transition to ACTIVE
     if (hasLocation && permissionStatus === 'granted') {
       if (state.phase !== 'ACTIVE') {
@@ -47,26 +41,18 @@ export function LocationGate({ children }: LocationGateProps) {
       return;
     }
 
-    // If permission is denied, transition to BLOCKED
+    // If permission is denied and not already blocked, transition to BLOCKED
     if (permissionStatus === 'denied' && !isBlocked) {
       locationDenied();
       return;
     }
-
-    // If loading, set to TRANSITION
-    if (loading && state.phase !== 'TRANSITION') {
-      checkingLocation();
-    }
   }, [
     hasLocation, 
     permissionStatus, 
-    loading, 
-    state.authReady,
     state.phase,
     isBlocked, 
     locationGranted, 
-    locationDenied, 
-    checkingLocation
+    locationDenied,
   ]);
 
   // Handle retry with proper state transitions
@@ -77,44 +63,7 @@ export function LocationGate({ children }: LocationGateProps) {
     await requestLocation();
   }, [retryLocation, requestLocation]);
 
-  // During initial BOOTSTRAPPING (auth not ready), show loading
-  if (isAuthBootstrapping) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-4"
-        >
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          <p className="text-muted-foreground text-sm">Initializing...</p>
-        </motion.div>
-      </div>
-    );
-  }
-
-  // If we have valid location and system is ACTIVE, render children
-  if (hasLocation && permissionStatus !== 'denied' && state.phase === 'ACTIVE') {
-    return <>{children}</>;
-  }
-
-  // If system is in TRANSITION (checking location), show loading
-  if (state.phase === 'TRANSITION' && loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-4"
-        >
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          <p className="text-muted-foreground text-sm">Getting your location...</p>
-        </motion.div>
-      </div>
-    );
-  }
-
-  // Show location permission request UI (BLOCKED state, BOOTSTRAPPING with auth ready, or initial prompt)
+  // Show location permission request UI
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <motion.div
