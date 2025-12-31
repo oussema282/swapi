@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Lock, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,6 +19,7 @@ import { Item, CATEGORY_LABELS } from '@/types/database';
 interface ExistingInvite {
   sender_item_id: string;
   status: string;
+  attempt: number;
 }
 
 interface DealInviteButtonProps {
@@ -27,6 +28,8 @@ interface DealInviteButtonProps {
   className?: string;
   iconOnly?: boolean;
 }
+
+type InviteStatus = 'available' | 'pending' | 'can_resend' | 'blocked' | 'matched';
 
 export function DealInviteButton({ targetItemId, targetItemTitle, className, iconOnly }: DealInviteButtonProps) {
   const { user } = useAuth();
@@ -51,7 +54,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
     enabled: !!user && showModal,
   });
 
-  // Check existing invites to this item
+  // Check existing invites to this item (all statuses)
   const { data: existingInvites = [] } = useQuery<ExistingInvite[]>({
     queryKey: ['my-invites-to-item', targetItemId, user?.id, myItems.map(i => i.id)],
     queryFn: async (): Promise<ExistingInvite[]> => {
@@ -59,7 +62,7 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
       const myItemIds = myItems.map(i => i.id);
       const { data, error } = await supabase
         .from('deal_invites' as any)
-        .select('sender_item_id, status')
+        .select('sender_item_id, status, attempt')
         .eq('receiver_item_id', targetItemId)
         .in('sender_item_id', myItemIds);
       if (error) {
@@ -97,12 +100,15 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
       toast.success('Deal invite sent!');
       queryClient.invalidateQueries({ queryKey: ['my-invites-to-item'] });
       queryClient.invalidateQueries({ queryKey: ['deal-invites'] });
-      // Just close modal - don't navigate anywhere
       setShowModal(false);
     },
     onError: (error: any) => {
       if (error.message === 'limit_reached') return;
-      if (error.message?.includes('duplicate')) {
+      if (error.message?.includes('pending invite already exists')) {
+        toast.error('A pending invite already exists for this pair');
+      } else if (error.message?.includes('Maximum resend attempts')) {
+        toast.error('You cannot send more invites for this item pair (max 2 attempts)');
+      } else if (error.message?.includes('duplicate')) {
         toast.error('You already sent an invite for this item');
       } else {
         toast.error('Failed to send invite');
@@ -110,9 +116,62 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
     },
   });
 
-  const getInviteStatus = (itemId: string) => {
-    const invite = existingInvites.find(i => i.sender_item_id === itemId);
-    return invite?.status;
+  // Determine invite status for each item
+  const getInviteStatus = (itemId: string): InviteStatus => {
+    const invites = existingInvites.filter(i => i.sender_item_id === itemId);
+    
+    if (invites.length === 0) return 'available';
+    
+    // Check for pending
+    const pendingInvite = invites.find(i => i.status === 'pending');
+    if (pendingInvite) return 'pending';
+    
+    // Check for accepted (matched)
+    const acceptedInvite = invites.find(i => i.status === 'accepted');
+    if (acceptedInvite) return 'matched';
+    
+    // Check rejection count
+    const rejectedInvites = invites.filter(i => i.status === 'rejected');
+    if (rejectedInvites.length >= 2) return 'blocked';
+    if (rejectedInvites.length === 1) return 'can_resend';
+    
+    return 'available';
+  };
+
+  const getStatusBadge = (status: InviteStatus, attempt?: number) => {
+    switch (status) {
+      case 'pending':
+        return (
+          <span className="flex items-center gap-1 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+            <Lock className="w-3 h-3" />
+            Pending
+          </span>
+        );
+      case 'can_resend':
+        return (
+          <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+            <RotateCcw className="w-3 h-3" />
+            Resend (1 left)
+          </span>
+        );
+      case 'blocked':
+        return (
+          <span className="flex items-center gap-1 text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+            <Lock className="w-3 h-3" />
+            Blocked
+          </span>
+        );
+      case 'matched':
+        return (
+          <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Matched!</span>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const canSendInvite = (status: InviteStatus) => {
+    return status === 'available' || status === 'can_resend';
   };
 
   return (
@@ -152,16 +211,18 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
             ) : (
               myItems.map((item) => {
                 const status = getInviteStatus(item.id);
-                const isPending = status === 'pending';
-                const isRejected = status === 'rejected';
-                const isAccepted = status === 'accepted';
+                const canSend = canSendInvite(status);
 
                 return (
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer"
+                    className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                      canSend 
+                        ? 'hover:bg-muted/50 cursor-pointer' 
+                        : 'opacity-60 cursor-not-allowed'
+                    }`}
                     onClick={() => {
-                      if (!isPending && !isAccepted) {
+                      if (canSend) {
                         sendInviteMutation.mutate(item.id);
                       }
                     }}
@@ -179,16 +240,8 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
                       <p className="font-medium text-sm truncate">{item.title}</p>
                       <p className="text-xs text-muted-foreground">{CATEGORY_LABELS[item.category]}</p>
                     </div>
-                    {isPending && (
-                      <span className="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">Pending</span>
-                    )}
-                    {isRejected && (
-                      <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">Rejected</span>
-                    )}
-                    {isAccepted && (
-                      <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Matched!</span>
-                    )}
-                    {!status && sendInviteMutation.isPending && (
+                    {getStatusBadge(status)}
+                    {canSend && sendInviteMutation.isPending && (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     )}
                   </div>
@@ -196,6 +249,10 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
               })
             )}
           </div>
+
+          <p className="text-xs text-muted-foreground text-center">
+            Items can be resent once after rejection. 2 rejections = blocked.
+          </p>
         </DialogContent>
       </Dialog>
 

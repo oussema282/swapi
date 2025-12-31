@@ -128,7 +128,12 @@ export default function Matches() {
   });
 
   const respondMutation = useMutation({
-    mutationFn: async ({ inviteId, accept }: { inviteId: string; accept: boolean }) => {
+    mutationFn: async ({ inviteId, accept, senderItemId, receiverItemId }: { 
+      inviteId: string; 
+      accept: boolean;
+      senderItemId: string;
+      receiverItemId: string;
+    }) => {
       const { error } = await supabase
         .from('deal_invites' as any)
         .update({ 
@@ -137,16 +142,48 @@ export default function Matches() {
         })
         .eq('id', inviteId);
       if (error) throw error;
-    },
-    onSuccess: (_, { accept }) => {
+      
+      // If accepted, find the match that was created by the trigger
       if (accept) {
-        toast.success('Deal accepted! You can now message each other.');
+        // The trigger creates match with LEAST/GREATEST ordering
+        const itemA = senderItemId < receiverItemId ? senderItemId : receiverItemId;
+        const itemB = senderItemId < receiverItemId ? receiverItemId : senderItemId;
+        
+        // Wait a moment for the trigger to create the match
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const { data: match, error: matchError } = await supabase
+          .from('matches')
+          .select('id')
+          .eq('item_a_id', itemA)
+          .eq('item_b_id', itemB)
+          .single();
+        
+        if (matchError) {
+          console.error('Error finding match:', matchError);
+          return { matchId: null };
+        }
+        
+        return { matchId: match?.id };
+      }
+      
+      return { matchId: null };
+    },
+    onSuccess: (result, { accept }) => {
+      if (accept) {
+        toast.success('Deal accepted! Opening chat...');
         queryClient.invalidateQueries({ queryKey: ['matches'] });
+        
+        // Navigate to the specific chat if match was found
+        if (result?.matchId) {
+          navigate(`/chat/${result.matchId}`);
+        }
       } else {
         toast.info('Deal invite declined.');
       }
       queryClient.invalidateQueries({ queryKey: ['pending-deal-invites'] });
       queryClient.invalidateQueries({ queryKey: ['deal-invites'] });
+      queryClient.invalidateQueries({ queryKey: ['my-invites-to-item'] });
     },
     onError: () => {
       toast.error('Failed to respond to invite');
@@ -342,7 +379,12 @@ export default function Matches() {
                           size="sm"
                           className="flex-1"
                           disabled={respondMutation.isPending}
-                          onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: true })}
+                          onClick={() => respondMutation.mutate({ 
+                            inviteId: invite.id, 
+                            accept: true,
+                            senderItemId: invite.sender_item_id,
+                            receiverItemId: invite.receiver_item_id,
+                          })}
                         >
                           <Check className="w-4 h-4 mr-1" />
                           Accept
@@ -352,7 +394,12 @@ export default function Matches() {
                           size="sm"
                           className="flex-1"
                           disabled={respondMutation.isPending}
-                          onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: false })}
+                          onClick={() => respondMutation.mutate({ 
+                            inviteId: invite.id, 
+                            accept: false,
+                            senderItemId: invite.sender_item_id,
+                            receiverItemId: invite.receiver_item_id,
+                          })}
                         >
                           <X className="w-4 h-4 mr-1" />
                           Decline
