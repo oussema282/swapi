@@ -23,6 +23,7 @@ interface ChatHeaderProps {
   theirItemTitle?: string;
   myItemPhoto?: string;
   theirItemPhoto?: string;
+  isPro?: boolean;
 }
 
 export function ChatHeader({ 
@@ -35,7 +36,8 @@ export function ChatHeader({
   myItemTitle,
   theirItemTitle,
   myItemPhoto,
-  theirItemPhoto
+  theirItemPhoto,
+  isPro = false
 }: ChatHeaderProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -98,7 +100,7 @@ export function ChatHeader({
         
         <div className="flex flex-col min-w-0 flex-1">
           <h1 className="font-semibold text-foreground text-sm">
-            <VerifiedName name={displayName} />
+            <VerifiedName name={displayName} isPro={isPro} />
           </h1>
           <p className="text-xs truncate">
             {isOnline ? (

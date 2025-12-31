@@ -127,3 +127,25 @@ export function useDeleteItem() {
     },
   });
 }
+
+export function useUnarchiveItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data: item, error } = await supabase
+        .from('items')
+        .update({ is_archived: false })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return item as Item;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-items'] });
+      queryClient.invalidateQueries({ queryKey: ['map-items'] });
+    },
+  });
+}

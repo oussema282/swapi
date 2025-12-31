@@ -38,6 +38,7 @@ export interface Item {
   value_min: number;
   value_max: number | null;
   is_active: boolean;
+  is_archived: boolean;
   latitude: number | null;
   longitude: number | null;
   created_at: string;

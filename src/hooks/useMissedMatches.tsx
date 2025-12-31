@@ -7,7 +7,7 @@ export interface MissedMatch {
   id: string;
   my_item_id: string;
   their_item_id: string;
-  their_item: Item & { owner_display_name: string; owner_avatar_url: string | null };
+  their_item: Item & { owner_display_name: string; owner_avatar_url: string | null; owner_is_pro: boolean };
   my_item: Item;
   missed_at: string;
 }
@@ -93,8 +93,18 @@ export function useMissedMatches() {
         .select('user_id, display_name, avatar_url')
         .in('user_id', theirUserIds);
 
+      // Fetch subscription status for Pro badges
+      const { data: subscriptions } = await supabase
+        .from('user_subscriptions')
+        .select('user_id, is_pro')
+        .in('user_id', theirUserIds);
+
+      const subscriptionMap = new Map(
+        (subscriptions || []).map(s => [s.user_id, s.is_pro])
+      );
+
       const itemMap = new Map(items.map(i => [i.id, i]));
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+      const profileMap = new Map(profiles?.map(p => [p.user_id, { ...p, is_pro: subscriptionMap.get(p.user_id) || false }]) || []);
 
       return missedMatchPairs.slice(0, 10).map((pair, idx) => {
         const theirItem = itemMap.get(pair.theirItemId)!;
@@ -109,6 +119,7 @@ export function useMissedMatches() {
             ...theirItem,
             owner_display_name: profile?.display_name || 'Unknown',
             owner_avatar_url: profile?.avatar_url || null,
+            owner_is_pro: profile?.is_pro || false,
           },
           my_item: myItem,
           missed_at: pair.missedAt,

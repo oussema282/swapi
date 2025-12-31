@@ -18,6 +18,7 @@ interface OtherUserProfile {
   display_name: string;
   avatar_url: string | null;
   last_seen: string | null;
+  is_pro: boolean;
 }
 
 interface MatchWithItems extends Match {
@@ -69,8 +70,18 @@ export function useMatches() {
         .select('user_id, display_name, avatar_url, last_seen')
         .in('user_id', Array.from(userIds));
 
+      // Fetch subscription status for Pro badges
+      const { data: subscriptions } = await supabase
+        .from('user_subscriptions')
+        .select('user_id, is_pro')
+        .in('user_id', Array.from(userIds));
+
+      const subscriptionMap = new Map(
+        (subscriptions || []).map(s => [s.user_id, s.is_pro])
+      );
+
       const profileMap = new Map(
-        (profiles || []).map(p => [p.user_id, p])
+        (profiles || []).map(p => [p.user_id, { ...p, is_pro: subscriptionMap.get(p.user_id) || false }])
       );
 
       // Fetch last messages for each match
@@ -116,6 +127,7 @@ export function useMatches() {
             display_name: otherUserProfile?.display_name || 'Unknown',
             avatar_url: otherUserProfile?.avatar_url || null,
             last_seen: otherUserProfile?.last_seen || null,
+            is_pro: otherUserProfile?.is_pro || false,
           },
           last_message: lastMessage,
         } as MatchWithItems;
