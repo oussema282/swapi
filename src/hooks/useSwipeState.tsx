@@ -125,6 +125,7 @@ function swipeReducer(state: LocalSwipeState, action: SwipeAction): LocalSwipeSt
 export function useSwipeState() {
   const [localState, dispatch] = useReducer(swipeReducer, initialState);
   const debounceRef = useRef<number | null>(null);
+  const isCommittingRef = useRef(false); // Lock to prevent double commits
   const { state: systemState, setSwipePhase } = useSystemState();
 
   // Sync local state changes to global SWIPE_PHASE
@@ -147,15 +148,22 @@ export function useSwipeState() {
     // Cleanup on unmount
     return () => {
       setSwipePhase('IDLE');
+      isCommittingRef.current = false;
     };
   }, []);
 
   const startSwipe = useCallback((direction: 'left' | 'right') => {
     // Only allow if in READY phase and system not blocked
     if (globalPhase !== 'READY' || isSystemBlocked) {
-      console.warn(`Swipe blocked: phase=${globalPhase}, systemBlocked=${isSystemBlocked}`);
+      console.log(`[SWIPE] blocked: phase=${globalPhase}, systemBlocked=${isSystemBlocked}`);
       return false;
     }
+    // Check lock to prevent double commits
+    if (isCommittingRef.current) {
+      console.log('[SWIPE] blocked: commit in progress');
+      return false;
+    }
+    console.log(`[SWIPE] READY → SWIPING (${direction})`);
     setSwipePhase('SWIPING');
     dispatch({ type: 'START_SWIPE', direction });
     return true;
@@ -164,14 +172,39 @@ export function useSwipeState() {
   const completeSwipe = useCallback((itemId: string) => {
     // Only allow commit from SWIPING phase
     if (globalPhase !== 'SWIPING') {
-      console.warn(`Complete swipe blocked: phase=${globalPhase}`);
+      console.log(`[SWIPE] completeSwipe blocked: phase=${globalPhase}`);
       return;
     }
+    console.log('[SWIPE] SWIPING → COMMITTING');
     setSwipePhase('COMMITTING');
     dispatch({ type: 'COMPLETE_SWIPE', itemId });
-    // Transition back to READY after commit
+    console.log('[SWIPE] COMMITTING → READY');
     setSwipePhase('READY');
   }, [globalPhase, setSwipePhase]);
+
+  // Force reset to READY (for error recovery)
+  const forceReady = useCallback(() => {
+    console.log(`[SWIPE] forceReady from phase=${globalPhase}`);
+    isCommittingRef.current = false;
+    dispatch({ type: 'START_SWIPE', direction: 'left' }); // Clear any pending direction
+    dispatch({ type: 'COMPLETE_SWIPE', itemId: '' }); // This won't add to history if no direction
+    setSwipePhase('READY');
+  }, [globalPhase, setSwipePhase]);
+
+  // Acquire commit lock
+  const acquireCommitLock = useCallback(() => {
+    if (isCommittingRef.current) {
+      console.log('[SWIPE] lock already held');
+      return false;
+    }
+    isCommittingRef.current = true;
+    return true;
+  }, []);
+
+  // Release commit lock
+  const releaseCommitLock = useCallback(() => {
+    isCommittingRef.current = false;
+  }, []);
 
   const setMatch = useCallback((item: Item) => {
     dispatch({ type: 'SET_MATCH', item });
@@ -279,6 +312,9 @@ export function useSwipeState() {
     actions: {
       startSwipe,
       completeSwipe,
+      forceReady,
+      acquireCommitLock,
+      releaseCommitLock,
       setMatch,
       clearMatch,
       startUndo,
