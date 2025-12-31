@@ -325,10 +325,12 @@ BOOTSTRAPPING ends via:
   3. ERROR: Individual loader fails (logged, app continues)
 
 CRITICAL INVARIANT:
+  - BOOTSTRAPPING always exits to ACTIVE (normal/timeout/error)
   - BOOTSTRAPPING is temporary and must always resolve
   - 5-second timeout prevents infinite loading
   - Errors are logged but never block app permanently
   - SYSTEM_PHASE must NEVER remain BOOTSTRAPPING
+  - Index must never overwrite SWIPE_PHASE during SWIPING/COMMITTING
 
 Exit Reasons (bootstrapExitReason):
   'NORMAL'              → All data loaded successfully

@@ -129,6 +129,9 @@ function systemReducer(state: SystemState, action: SystemAction): SystemState {
       console.warn('[SystemState] BOOTSTRAPPING timeout - forcing exit to safe state');
       return {
         ...state,
+        // Safe exit: never remain BOOTSTRAPPING
+        phase: 'ACTIVE',
+        isInitialized: true,
         // Mark all as "ready" to prevent re-blocking
         authReady: true,
         profileReady: true,
@@ -142,6 +145,9 @@ function systemReducer(state: SystemState, action: SystemAction): SystemState {
       console.error('[SystemState] BOOTSTRAPPING error:', action.error);
       return {
         ...state,
+        // Safe exit: never remain BOOTSTRAPPING
+        phase: 'ACTIVE',
+        isInitialized: true,
         // Mark all as "ready" to prevent re-blocking
         authReady: true,
         profileReady: true,
@@ -384,6 +390,15 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
   // BOOTSTRAPPING is true until all required data is loaded
   // INVARIANT: BOOTSTRAPPING always exits (via normal completion OR timeout)
   const isFullyBootstrapped = state.authReady && state.profileReady && state.subscriptionReady;
+
+  // Safety: if all readiness flags are true but we never left BOOTSTRAPPING, force INITIALIZE
+  useEffect(() => {
+    if (state.phase === 'BOOTSTRAPPING' && isFullyBootstrapped) {
+      console.log('[SystemState] Bootstrapping -> ACTIVE');
+      dispatch({ type: 'INITIALIZE' });
+    }
+  }, [state.phase, isFullyBootstrapped]);
+
   const isBootstrapping = state.phase === 'BOOTSTRAPPING' && !isFullyBootstrapped;
   const isBlocked = state.phase === 'BLOCKED';
   const bootstrapTimedOut = state.bootstrapExitReason === 'TIMEOUT';
