@@ -44,17 +44,23 @@ interface SystemState {
   swipe: SwipePhase;
   match: MatchPhase;
   isInitialized: boolean;
+  authReady: boolean;
 }
 
 type SystemAction =
   | { type: 'INITIALIZE' }
+  | { type: 'AUTH_READY' }
   | { type: 'SET_SYSTEM_PHASE'; phase: SystemPhase }
   | { type: 'SET_SUBSCRIPTION_PHASE'; phase: SubscriptionPhase }
   | { type: 'SET_SWIPE_PHASE'; phase: SwipePhase }
   | { type: 'SET_MATCH_PHASE'; phase: MatchPhase }
   | { type: 'UPGRADE_START' }
   | { type: 'UPGRADE_COMPLETE'; isPro: boolean }
-  | { type: 'UPGRADE_FAIL' };
+  | { type: 'UPGRADE_FAIL' }
+  | { type: 'LOCATION_CHECKING' }
+  | { type: 'LOCATION_GRANTED' }
+  | { type: 'LOCATION_DENIED' }
+  | { type: 'LOCATION_RETRY' };
 
 const initialState: SystemState = {
   phase: 'BOOTSTRAPPING',
@@ -62,6 +68,7 @@ const initialState: SystemState = {
   swipe: 'IDLE',
   match: 'NONE',
   isInitialized: false,
+  authReady: false,
 };
 
 function systemReducer(state: SystemState, action: SystemAction): SystemState {
@@ -71,6 +78,14 @@ function systemReducer(state: SystemState, action: SystemAction): SystemState {
         ...state,
         phase: 'ACTIVE',
         isInitialized: true,
+      };
+
+    case 'AUTH_READY':
+      // Auth is ready, but stay in BOOTSTRAPPING until location is checked
+      // This just marks that we can proceed to location check
+      return {
+        ...state,
+        authReady: true,
       };
 
     case 'SET_SYSTEM_PHASE':
@@ -106,6 +121,31 @@ function systemReducer(state: SystemState, action: SystemAction): SystemState {
         subscription: 'FREE_ACTIVE',
       };
 
+    case 'LOCATION_CHECKING':
+      return {
+        ...state,
+        phase: 'TRANSITION',
+      };
+
+    case 'LOCATION_GRANTED':
+      return {
+        ...state,
+        phase: 'ACTIVE',
+        isInitialized: true,
+      };
+
+    case 'LOCATION_DENIED':
+      return {
+        ...state,
+        phase: 'BLOCKED',
+      };
+
+    case 'LOCATION_RETRY':
+      return {
+        ...state,
+        phase: 'TRANSITION',
+      };
+
     default:
       return state;
   }
@@ -127,11 +167,18 @@ interface SystemStateContextValue {
   startUpgrade: () => void;
   completeUpgrade: (isPro: boolean) => void;
   failUpgrade: () => void;
+  // Location actions
+  checkingLocation: () => void;
+  locationGranted: () => void;
+  locationDenied: () => void;
+  retryLocation: () => void;
   // State checks
   canSwipe: boolean;
   canUseFeatures: boolean;
   isTransitioning: boolean;
   isPro: boolean;
+  isBootstrapping: boolean;
+  isBlocked: boolean;
 }
 
 const SystemStateContext = createContext<SystemStateContextValue | null>(null);
@@ -140,12 +187,12 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(systemReducer, initialState);
   const { user, loading: authLoading } = useAuth();
 
-  // Initialize when auth is ready
+  // Mark auth as ready when auth loading completes (for both logged-in and logged-out users)
   useEffect(() => {
-    if (!authLoading && user && !state.isInitialized) {
-      dispatch({ type: 'INITIALIZE' });
+    if (!authLoading && !state.authReady) {
+      dispatch({ type: 'AUTH_READY' });
     }
-  }, [authLoading, user, state.isInitialized]);
+  }, [authLoading, state.authReady]);
 
   const initialize = useCallback(() => {
     dispatch({ type: 'INITIALIZE' });
@@ -179,6 +226,22 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'UPGRADE_FAIL' });
   }, []);
 
+  const checkingLocation = useCallback(() => {
+    dispatch({ type: 'LOCATION_CHECKING' });
+  }, []);
+
+  const locationGranted = useCallback(() => {
+    dispatch({ type: 'LOCATION_GRANTED' });
+  }, []);
+
+  const locationDenied = useCallback(() => {
+    dispatch({ type: 'LOCATION_DENIED' });
+  }, []);
+
+  const retryLocation = useCallback(() => {
+    dispatch({ type: 'LOCATION_RETRY' });
+  }, []);
+
   // Derived state checks
   const canSwipe = 
     state.phase === 'ACTIVE' && 
@@ -195,6 +258,9 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
   const isPro = 
     state.subscription === 'PRO_ACTIVE';
 
+  const isBootstrapping = state.phase === 'BOOTSTRAPPING' && !state.authReady;
+  const isBlocked = state.phase === 'BLOCKED';
+
   const value: SystemStateContextValue = {
     state,
     dispatch,
@@ -206,10 +272,16 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
     startUpgrade,
     completeUpgrade,
     failUpgrade,
+    checkingLocation,
+    locationGranted,
+    locationDenied,
+    retryLocation,
     canSwipe,
     canUseFeatures,
     isTransitioning,
     isPro,
+    isBootstrapping,
+    isBlocked,
   };
 
   return (
