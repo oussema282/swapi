@@ -248,9 +248,16 @@ export default function Index() {
   const noItems = !myItems?.length;
   
   // Exhaustion is a stable state - NOT a loading state
-  const showExhaustedState = isExhausted && !swipeLoading && swipeableItems?.length === 0;
+  // Never show spinner when exhausted
+  const showExhaustedState = isExhausted && !swipeLoading;
   const showLoadingState = isActuallyLoading || (isRefreshing && globalPhase === 'REFRESHING');
   const hasCards = !showLoadingState && !showExhaustedState && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
+
+  // Handler for switching item from exhausted state
+  const handleSwitchItemFromExhausted = useCallback(() => {
+    // Focus the item selector - scroll to top where selector is
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   return (
     <AppLayout>
@@ -279,31 +286,22 @@ export default function Index() {
               description="Choose one of your items above to find potential swaps"
             />
           ) : showLoadingState ? (
-            // Loading state - only when request is in progress
+            // Loading state - ONLY when request is in progress
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
             </div>
           ) : showExhaustedState ? (
             // Exhausted state - stable empty state for THIS item (item-scoped)
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-              <div className="text-center space-y-4">
-                <div className="text-6xl">🎯</div>
-                <h3 className="text-xl font-semibold text-foreground">
-                  No more matches for this item
-                </h3>
-                <p className="text-muted-foreground max-w-sm">
-                  You've seen all available swaps for this item. Try selecting a different item or check back later for new listings.
-                </p>
-                <Button
-                  onClick={handlePoolRefresh}
-                  variant="outline"
-                  className="mt-4"
-                  disabled={isRefreshing}
-                >
-                  {isRefreshing ? 'Checking...' : 'Check for new items'}
-                </Button>
-              </div>
-            </div>
+            <EmptyState
+              variant="exhausted"
+              title="No more matches for this item"
+              description="You've seen all available swaps. Try selecting a different item or check back later for new listings."
+              showSwitchItem={myItems && myItems.length > 1}
+              onSwitchItem={handleSwitchItemFromExhausted}
+              showRefresh
+              onRefresh={handlePoolRefresh}
+              isRefreshing={isRefreshing}
+            />
           ) : hasCards ? (
             /* Card Stack - centered and sized properly */
             <div className="absolute inset-0 p-4">
