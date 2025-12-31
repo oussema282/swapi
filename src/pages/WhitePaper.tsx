@@ -1426,14 +1426,79 @@ function PromptMapping() {
             </tr>
             <tr>
               <td>"Map view for nearby items"</td>
-              <td><code>src/pages/MapView.tsx</code><br/>Mapbox GL integration</td>
+              <td><code>src/pages/MapView.tsx</code><br/>Mapbox GL integration with focusItemId routing</td>
             </tr>
             <tr>
               <td>"No opportunity section"</td>
               <td>Removed SwapOpportunitiesSection<br/>Reciprocal boosts are silent</td>
             </tr>
+            <tr>
+              <td>"Search with rich previews"</td>
+              <td><code>src/pages/Search.tsx</code><br/>Autocomplete with thumbnails, distance, price badges</td>
+            </tr>
           </tbody>
         </table>
+
+        <h3>Map Focus Navigation (focusItemId)</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Search → Map Item Focus Flow:
+
+1. From Search page, clicking item card or location icon:
+   navigate('/map?focusItemId=<ITEM_ID>')
+
+2. MapView reads focusItemId from URL:
+   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId')
+
+3. Map initialization:
+   - If focusItemId exists AND item has coordinates:
+     → Center map on item location (not user location)
+     → Set zoom to 15 (street level)
+     → Auto-select and show popup for that item
+   - If no focusItemId:
+     → Center on user location (default behavior)
+     → Set zoom to 12
+
+4. Item focus after map load:
+   - hasNavigatedToFocusItem ref prevents re-centering
+   - flyTo animation when items load after map init
+
+Query Parameters:
+  - focusItemId: Item ID to focus on (preferred)
+  - itemId: Legacy support (backward compatible)`}
+        </pre>
+
+        <h3>Search Preview Item Contract</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Search Suggestion Interface:
+
+interface Suggestion {
+  type: 'item' | 'category' | 'popular';
+  text: string;
+  icon: 'item' | 'category' | 'trending';
+  category?: ItemCategory;
+  itemData?: {
+    id: string;
+    photo: string | null;      // First photo for thumbnail
+    valueMin: number | null;   // For price badge
+    valueMax: number | null;
+    latitude: number | null;   // For map icon visibility
+    longitude: number | null;
+    distance?: number;         // Calculated if user has location
+  };
+}
+
+UI Layout (fixed grid):
+┌─────────────────────────────────────────────────┐
+│ [40x40 Thumb] │ Title (truncate)     │ [📍 €X] │
+│               │ Type label (truncate) │         │
+└─────────────────────────────────────────────────┘
+
+- Thumbnail: 40x40 fixed, object-cover, fallback icon
+- Title: truncate (single line)
+- Type: truncate (single line)
+- Badges: flex-shrink-0, never wrap or push layout
+- Map icon: Only shown if item has coordinates`}
+        </pre>
 
         <h3>Algorithm Parameters</h3>
         <table className="w-full text-sm">

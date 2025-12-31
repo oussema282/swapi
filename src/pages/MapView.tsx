@@ -44,7 +44,8 @@ const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'book
 export default function MapView() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const focusItemId = searchParams.get('itemId');
+  // Support both focusItemId (new) and itemId (legacy) for backward compatibility
+  const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
   const { user } = useAuth();
   const { latitude, longitude } = useDeviceLocation();
   const mapContainer = useRef<HTMLDivElement>(null);
