@@ -182,12 +182,13 @@ export function useSwipeState() {
     setSwipePhase('READY');
   }, [globalPhase, setSwipePhase]);
 
-  // Force reset to READY (for error recovery)
+  // Force reset to READY (for error recovery) - can be called from ANY phase
   const forceReady = useCallback(() => {
     console.log(`[SWIPE] forceReady from phase=${globalPhase}`);
     isCommittingRef.current = false;
-    dispatch({ type: 'START_SWIPE', direction: 'left' }); // Clear any pending direction
-    dispatch({ type: 'COMPLETE_SWIPE', itemId: '' }); // This won't add to history if no direction
+    // Clear any pending swipe direction without adding to history
+    dispatch({ type: 'RESET' });
+    // Restore to initial state but keep cardKey for fresh render
     setSwipePhase('READY');
   }, [globalPhase, setSwipePhase]);
 
@@ -249,7 +250,12 @@ export function useSwipeState() {
   }, [setSwipePhase]);
 
   const setReady = useCallback(() => {
-    if (globalPhase === 'LOADING' || globalPhase === 'IDLE' || globalPhase === 'REFRESHING' || globalPhase === 'EXHAUSTED') {
+    // Allow transitioning to READY from multiple phases for recovery
+    // SWIPING and COMMITTING can also transition to READY in case of stuck state
+    const allowedPhases = ['LOADING', 'IDLE', 'REFRESHING', 'EXHAUSTED', 'SWIPING', 'COMMITTING'];
+    if (allowedPhases.includes(globalPhase)) {
+      console.log(`[SWIPE] ${globalPhase} → READY`);
+      isCommittingRef.current = false; // Always clear lock when setting ready
       setSwipePhase('READY');
     }
   }, [globalPhase, setSwipePhase]);
