@@ -290,6 +290,30 @@ serve(async (req) => {
     const swipedItemIds = swipeHistory.map(s => s.swiped_item_id);
     const likedItemIds = swipeHistory.filter(s => s.liked).map(s => s.swiped_item_id);
 
+    // Get existing matches involving my item - items with completed matches should not appear
+    const { data: existingMatches } = await supabaseAdmin
+      .from("matches")
+      .select("item_a_id, item_b_id")
+      .or(`item_a_id.eq.${myItemId},item_b_id.eq.${myItemId}`);
+
+    const matchedItemIds = (existingMatches || []).flatMap(m => 
+      [m.item_a_id, m.item_b_id].filter(id => id !== myItemId)
+    );
+
+    // Get accepted deal invitations involving my item - items with accepted deals should not appear
+    const { data: acceptedDeals } = await supabaseAdmin
+      .from("deal_invites")
+      .select("sender_item_id, receiver_item_id")
+      .eq("status", "accepted")
+      .or(`sender_item_id.eq.${myItemId},receiver_item_id.eq.${myItemId}`);
+
+    const dealItemIds = (acceptedDeals || []).flatMap(d => 
+      [d.sender_item_id, d.receiver_item_id].filter(id => id !== myItemId)
+    );
+
+    // Combine all excluded item IDs
+    const excludedItemIds = new Set([...swipedItemIds, ...matchedItemIds, ...dealItemIds]);
+
     // Get all candidate items - less strict filtering to show more items
     // We'll score them by exchange compatibility instead of filtering strictly
     const { data: candidateItems, error: itemsError } = await supabaseAdmin
@@ -306,9 +330,9 @@ serve(async (req) => {
       });
     }
 
-    // Filter out already swiped items
+    // Filter out already swiped, matched, and deal-accepted items
     let unswiped = (candidateItems || []).filter(
-      (item: Item) => !swipedItemIds.includes(item.id)
+      (item: Item) => !excludedItemIds.has(item.id)
     );
 
     // If pool is exhausted, silently expand search criteria

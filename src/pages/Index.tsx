@@ -30,10 +30,12 @@ export default function Index() {
   const { state: systemState } = useSystemState();
   const queryClient = useQueryClient();
   
-  // Fetch missed matches to show notification banner
+  // Fetch missed matches for the currently selected item only
   const { data: missedMatches } = useMissedMatches();
-  const missedCount = missedMatches?.length || 0;
-  const [dismissedMissedBanner, setDismissedMissedBanner] = useState(false);
+  // Filter to only show missed matches for the currently selected item
+  const missedForSelectedItem = missedMatches?.filter(m => m.my_item_id === selectedItemId) || [];
+  const hasMissedForSelectedItem = missedForSelectedItem.length > 0;
+  const [dismissedMissedBanner, setDismissedMissedBanner] = useState<string | null>(null); // track dismissed by item ID
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
   const { 
@@ -304,8 +306,8 @@ export default function Index() {
           />
         </div>
 
-        {/* Missed Match Notification Banner */}
-        {missedCount > 0 && !dismissedMissedBanner && (
+        {/* Missed Match Notification Banner - shows only for the currently selected item */}
+        {hasMissedForSelectedItem && dismissedMissedBanner !== selectedItemId && (
           <Link 
             to="/matches?tab=missed"
             className="mx-4 mb-2 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-3 hover:bg-destructive/15 transition-colors"
@@ -315,10 +317,10 @@ export default function Index() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-destructive">
-                You missed {missedCount} match{missedCount > 1 ? 'es' : ''}!
+                You missed a match!
               </p>
               <p className="text-xs text-muted-foreground truncate">
-                Someone wanted to swap with you
+                Someone wanted to swap for this item
               </p>
             </div>
             <Button
@@ -328,7 +330,7 @@ export default function Index() {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setDismissedMissedBanner(true);
+                setDismissedMissedBanner(selectedItemId);
               }}
             >
               <X className="w-4 h-4" />
