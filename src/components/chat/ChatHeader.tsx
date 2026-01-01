@@ -87,6 +87,7 @@ export function ChatHeader({
       queryClient.invalidateQueries({ queryKey: ['completed-swaps-count'] });
       queryClient.invalidateQueries({ queryKey: ['map-items'] });
       queryClient.invalidateQueries({ queryKey: ['my-items'] });
+      queryClient.invalidateQueries({ queryKey: ['recommendations'] });
     },
     onError: (error) => {
       console.error('Confirm exchange error:', error);

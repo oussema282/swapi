@@ -617,6 +617,23 @@ export type Database = {
           match_id: string
         }[]
       }
+      get_my_matches_with_items: {
+        Args: never
+        Returns: {
+          completed_at: string
+          confirmed_by_user_a: boolean
+          confirmed_by_user_b: boolean
+          created_at: string
+          is_completed: boolean
+          item_a_data: Json
+          item_a_id: string
+          item_b_data: Json
+          item_b_id: string
+          match_id: string
+          user_a_id: string
+          user_b_id: string
+        }[]
+      }
       get_or_create_daily_usage: {
         Args: { p_user_id: string }
         Returns: {
