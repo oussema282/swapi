@@ -320,6 +320,7 @@ serve(async (req) => {
       .from("items")
       .select("*")
       .eq("is_active", true)
+      .eq("is_archived", false)
       .neq("user_id", ownerUserId);
 
     if (itemsError) {

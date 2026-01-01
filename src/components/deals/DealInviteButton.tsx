@@ -38,16 +38,17 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
-  // Fetch user's own items
+  // Fetch user's own active, non-archived items
   const { data: myItems = [], isLoading: itemsLoading } = useQuery({
-    queryKey: ['my-items', user?.id],
+    queryKey: ['my-items-for-deal', user?.id],
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('user_id', user.id)
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .eq('is_archived', false);
       if (error) throw error;
       return data as Item[];
     },
