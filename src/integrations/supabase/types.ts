@@ -597,6 +597,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_match_with_items: {
+        Args: { p_match_id: string }
+        Returns: {
+          completed_at: string
+          created_at: string
+          is_completed: boolean
+          item_a_data: Json
+          item_a_id: string
+          item_b_data: Json
+          item_b_id: string
+          match_id: string
+        }[]
+      }
       get_or_create_daily_usage: {
         Args: { p_user_id: string }
         Returns: {
