@@ -70,6 +70,8 @@ export interface Match {
   created_at: string;
   is_completed: boolean;
   completed_at: string | null;
+  confirmed_by_user_a: boolean;
+  confirmed_by_user_b: boolean;
 }
 
 export type MessageStatus = 'sending' | 'sent' | 'delivered' | 'read';

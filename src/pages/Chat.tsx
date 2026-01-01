@@ -95,6 +95,9 @@ export default function Chat() {
           myItemPhoto={match?.my_item?.photos?.[0]}
           theirItemPhoto={match?.their_item?.photos?.[0]}
           isPro={match?.other_user_profile?.is_pro}
+          confirmedByMe={match?.confirmed_by_me}
+          confirmedByOther={match?.confirmed_by_other}
+          isCompleted={match?.is_completed}
         />
 
         {/* Messages Area */}

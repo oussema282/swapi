@@ -241,6 +241,8 @@ export type Database = {
       matches: {
         Row: {
           completed_at: string | null
+          confirmed_by_user_a: boolean
+          confirmed_by_user_b: boolean
           created_at: string
           id: string
           is_completed: boolean
@@ -249,6 +251,8 @@ export type Database = {
         }
         Insert: {
           completed_at?: string | null
+          confirmed_by_user_a?: boolean
+          confirmed_by_user_b?: boolean
           created_at?: string
           id?: string
           is_completed?: boolean
@@ -257,6 +261,8 @@ export type Database = {
         }
         Update: {
           completed_at?: string | null
+          confirmed_by_user_a?: boolean
+          confirmed_by_user_b?: boolean
           created_at?: string
           id?: string
           is_completed?: boolean
@@ -597,6 +603,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      confirm_exchange: { Args: { p_match_id: string }; Returns: Json }
       get_match_with_items: {
         Args: { p_match_id: string }
         Returns: {
