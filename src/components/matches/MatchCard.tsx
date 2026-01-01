@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Package, ArrowLeftRight } from 'lucide-react';
+import { Package, ArrowLeftRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -17,6 +17,11 @@ interface MatchCardProps {
 export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) {
   const lastMessagePreview = match.last_message?.content || 'Start a conversation...';
   const lastActivityTime = match.last_message?.created_at || match.created_at;
+  
+  // Determine confirmation status
+  const isCompleted = match.is_completed;
+  const pendingMyConfirmation = match.confirmed_by_other && !match.confirmed_by_me;
+  const waitingForOther = match.confirmed_by_me && !match.confirmed_by_other;
 
   return (
     <motion.div
@@ -29,7 +34,8 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
         className={cn(
           "p-3 cursor-pointer transition-all duration-200 border-border/50",
           "hover:shadow-md hover:border-primary/20 active:bg-muted/50",
-          hasUnread && "bg-primary/5 border-primary/30"
+          hasUnread && "bg-primary/5 border-primary/30",
+          pendingMyConfirmation && "border-orange-400/50 bg-orange-500/5"
         )}
         onClick={onClick}
       >
@@ -59,6 +65,14 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                 )}
               </div>
             </div>
+            
+            {/* Pending confirmation indicator */}
+            {pendingMyConfirmation && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              </span>
+            )}
           </div>
 
           {/* Content */}
@@ -83,14 +97,29 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
               </div>
               
               {/* Status Chip */}
-              <span className={cn(
-                "text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0",
-                hasUnread 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-muted text-muted-foreground"
-              )}>
-                {hasUnread ? 'New' : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
-              </span>
+              {isCompleted ? (
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-green-500/10 text-green-500 flex items-center gap-0.5">
+                  <CheckCircle2 className="w-2.5 h-2.5" />
+                  Done
+                </span>
+              ) : pendingMyConfirmation ? (
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-orange-500/10 text-orange-500">
+                  Confirm
+                </span>
+              ) : waitingForOther ? (
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-muted text-muted-foreground">
+                  Waiting
+                </span>
+              ) : (
+                <span className={cn(
+                  "text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0",
+                  hasUnread 
+                    ? "bg-primary text-primary-foreground" 
+                    : "bg-muted text-muted-foreground"
+                )}>
+                  {hasUnread ? 'New' : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+                </span>
+              )}
             </div>
             
             <p className="text-xs text-muted-foreground truncate mb-0.5">

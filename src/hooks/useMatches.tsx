@@ -29,6 +29,9 @@ interface MatchWithItems extends Match {
   other_user_id: string;
   other_user_profile: OtherUserProfile;
   last_message?: MessageWithStatus;
+  // Confirmation state for the current user
+  confirmed_by_me: boolean;
+  confirmed_by_other: boolean;
 }
 
 export type { MatchWithItems, OtherUserProfile };
@@ -108,6 +111,10 @@ export function useMatches() {
         const otherUserProfile = profileMap.get(otherUserId);
         const lastMessage = lastMessageMap.get(match.id);
         
+        // Determine confirmation state based on which item belongs to current user
+        const confirmedByMe = isMyItemA ? match.confirmed_by_user_a : match.confirmed_by_user_b;
+        const confirmedByOther = isMyItemA ? match.confirmed_by_user_b : match.confirmed_by_user_a;
+        
         return {
           ...match,
           item_a: { 
@@ -130,6 +137,8 @@ export function useMatches() {
             is_pro: otherUserProfile?.is_pro || false,
           },
           last_message: lastMessage,
+          confirmed_by_me: confirmedByMe ?? false,
+          confirmed_by_other: confirmedByOther ?? false,
         } as MatchWithItems;
       });
 
