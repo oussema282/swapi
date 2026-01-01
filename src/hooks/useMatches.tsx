@@ -44,28 +44,17 @@ export function useMatches() {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data: matches, error } = await supabase
-        .from('matches')
-        .select(`
-          *,
-          item_a:items!matches_item_a_id_fkey (*),
-          item_b:items!matches_item_b_id_fkey (*)
-        `)
-        .order('created_at', { ascending: false });
+      // Use SECURITY DEFINER RPC to get matches with full item data (including archived)
+      const { data: matchesData, error } = await supabase.rpc('get_my_matches_with_items');
 
       if (error) throw error;
+      if (!matchesData || matchesData.length === 0) return [];
 
-      const userMatches = (matches || []).filter(match => 
-        (match.item_a as any)?.user_id === user.id || 
-        (match.item_b as any)?.user_id === user.id
-      );
-
-      if (userMatches.length === 0) return [];
-
+      // Extract user IDs from the RPC result
       const userIds = new Set<string>();
-      userMatches.forEach(match => {
-        if ((match.item_a as any)?.user_id) userIds.add((match.item_a as any).user_id);
-        if ((match.item_b as any)?.user_id) userIds.add((match.item_b as any).user_id);
+      matchesData.forEach((match: any) => {
+        if (match.user_a_id) userIds.add(match.user_a_id);
+        if (match.user_b_id) userIds.add(match.user_b_id);
       });
 
       const { data: profiles } = await supabase
@@ -88,7 +77,7 @@ export function useMatches() {
       );
 
       // Fetch last messages for each match
-      const matchIds = userMatches.map(m => m.id);
+      const matchIds = matchesData.map((m: any) => m.match_id);
       const { data: lastMessages } = await supabase
         .from('messages')
         .select('*')
@@ -103,32 +92,43 @@ export function useMatches() {
         }
       });
 
-      const transformedMatches = userMatches.map(match => {
-        const itemA = match.item_a as any;
-        const itemB = match.item_b as any;
-        const isMyItemA = itemA?.user_id === user.id;
-        const otherUserId = isMyItemA ? itemB?.user_id : itemA?.user_id;
+      const transformedMatches = matchesData.map((match: any) => {
+        // Parse item data from JSONB
+        const itemA = match.item_a_data as any;
+        const itemB = match.item_b_data as any;
+        const userAId = match.user_a_id;
+        const userBId = match.user_b_id;
+        
+        const isMyItemA = userAId === user.id;
+        const otherUserId = isMyItemA ? userBId : userAId;
         const otherUserProfile = profileMap.get(otherUserId);
-        const lastMessage = lastMessageMap.get(match.id);
+        const lastMessage = lastMessageMap.get(match.match_id);
         
         // Determine confirmation state based on which item belongs to current user
         const confirmedByMe = isMyItemA ? match.confirmed_by_user_a : match.confirmed_by_user_b;
         const confirmedByOther = isMyItemA ? match.confirmed_by_user_b : match.confirmed_by_user_a;
         
         return {
-          ...match,
+          id: match.match_id,
+          item_a_id: match.item_a_id,
+          item_b_id: match.item_b_id,
+          is_completed: match.is_completed,
+          completed_at: match.completed_at,
+          created_at: match.created_at,
+          confirmed_by_user_a: match.confirmed_by_user_a,
+          confirmed_by_user_b: match.confirmed_by_user_b,
           item_a: { 
             ...itemA, 
-            owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown'
+            owner_display_name: profileMap.get(userAId)?.display_name || 'Unknown'
           },
           item_b: { 
             ...itemB, 
-            owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown'
+            owner_display_name: profileMap.get(userBId)?.display_name || 'Unknown'
           },
           my_item: isMyItemA ? itemA : itemB,
           their_item: isMyItemA 
-            ? { ...itemB, owner_display_name: profileMap.get(itemB?.user_id)?.display_name || 'Unknown' }
-            : { ...itemA, owner_display_name: profileMap.get(itemA?.user_id)?.display_name || 'Unknown' },
+            ? { ...itemB, owner_display_name: profileMap.get(userBId)?.display_name || 'Unknown' }
+            : { ...itemA, owner_display_name: profileMap.get(userAId)?.display_name || 'Unknown' },
           other_user_id: otherUserId,
           other_user_profile: {
             display_name: otherUserProfile?.display_name || 'Unknown',

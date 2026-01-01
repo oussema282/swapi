@@ -159,13 +159,13 @@ export default function Items() {
             </div>
           )}
 
-          {/* Archived Items Section */}
-          {archivedItems.length > 0 && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 py-2">
-                <Archive className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-sm font-medium text-muted-foreground">Archived Items</h2>
-              </div>
+          {/* Archived Items Section - Always show header */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 py-2">
+              <Archive className="w-4 h-4 text-muted-foreground" />
+              <h2 className="text-sm font-medium text-muted-foreground">Archived Items</h2>
+            </div>
+            {archivedItems.length > 0 ? (
               <AnimatePresence mode="popLayout">
                 {archivedItems.map((item, index) => (
                   <motion.div
@@ -222,8 +222,12 @@ export default function Items() {
                   </motion.div>
                 ))}
               </AnimatePresence>
-            </div>
-          )}
+            ) : (
+              <div className="py-6 text-center text-muted-foreground text-sm">
+                No archived items yet
+              </div>
+            )}
+          </div>
 
           {/* Empty State */}
           {activeItems.length === 0 && archivedItems.length === 0 && (
