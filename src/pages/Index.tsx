@@ -11,11 +11,14 @@ import { useSystemState } from '@/hooks/useSystemState';
 import { useMissedMatches } from '@/hooks/useMissedMatches';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
+import { SwipeTopBar } from '@/components/discover/SwipeTopBar';
+import { SwipeActions } from '@/components/discover/SwipeActions';
+import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
+import { X, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { X, Heart, Undo2, HeartOff } from 'lucide-react';
 import { Navigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -25,6 +28,8 @@ export default function Index() {
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
+  const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
   const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
   const { state: systemState } = useSystemState();
@@ -297,7 +302,16 @@ export default function Index() {
   return (
     <AppLayout>
       <div className="flex flex-col h-full">
-        {/* Header with Item Selector */}
+        {/* Premium Top Bar */}
+        <SwipeTopBar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onFilterClick={() => toast.info('Filters coming soon!')}
+          onBoostClick={() => setShowUpgradePrompt(true)}
+          hasNotifications={hasMissedForSelectedItem}
+        />
+
+        {/* Item Selector */}
         <div className="px-4 py-3 border-b border-border/50 bg-background/80 backdrop-blur-sm shrink-0">
           <ItemSelector
             items={myItems || []}
@@ -370,7 +384,6 @@ export default function Index() {
               isRefreshing={isRefreshing}
             />
           ) : hasCards ? (
-            /* Card Stack - centered and sized properly */
             <div className="absolute inset-0 p-4">
               <div className="relative w-full h-full max-w-md mx-auto">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
@@ -382,6 +395,7 @@ export default function Index() {
                     swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
                     userLocation={{ latitude, longitude }}
                     canGesture={canGesture && idx === arr.length - 1}
+                    onInfoTap={idx === arr.length - 1 ? () => setShowDetailsSheet(true) : undefined}
                   />
                 ))}
               </div>
@@ -389,41 +403,28 @@ export default function Index() {
           ) : null}
         </div>
 
-        {/* Action Buttons - Just above navbar */}
-        {selectedItemId && !noItems && (
-          <div className="py-3 flex justify-center items-center gap-4 shrink-0 bg-background">
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-16 h-16 rounded-full border-2 border-destructive/40 bg-background hover:bg-destructive hover:border-destructive hover:text-destructive-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-              onClick={() => handleSwipe('left')}
-              disabled={swipeMutation.isPending || !hasCards || isAnimating || !canGesture}
-            >
-              <X className="w-7 h-7" />
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-12 h-12 rounded-full border-2 border-muted-foreground/30 bg-background hover:bg-muted transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
-              onClick={handleGoBack}
-              disabled={!canGoBack}
-            >
-              <Undo2 className="w-5 h-5" />
-            </Button>
-            
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-16 h-16 rounded-full border-2 border-success/40 bg-background hover:bg-success hover:border-success hover:text-success-foreground transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 disabled:opacity-50"
-              onClick={() => handleSwipe('right')}
-              disabled={swipeMutation.isPending || !hasCards || isAnimating || !canGesture}
-            >
-              <Heart className="w-7 h-7" />
-            </Button>
+        {/* Tinder-style Action Buttons */}
+        {selectedItemId && !noItems && hasCards && (
+          <div className="py-4 shrink-0 bg-background">
+            <SwipeActions
+              onDislike={() => handleSwipe('left')}
+              onLike={() => handleSwipe('right')}
+              onUndo={handleGoBack}
+              canSwipe={canGesture && !swipeMutation.isPending}
+              canUndo={canGoBack}
+              isLoading={swipeMutation.isPending}
+            />
           </div>
         )}
       </div>
+
+      {/* Item Details Sheet */}
+      <ItemDetailsSheet
+        open={showDetailsSheet}
+        onOpenChange={setShowDetailsSheet}
+        item={currentItem || null}
+        userLocation={{ latitude, longitude }}
+      />
 
       {/* Match Modal */}
       <MatchModal
