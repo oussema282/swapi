@@ -656,7 +656,36 @@ Debug Logs (one line per transition):
 6. Empty State UI (src/components/discover/EmptyState.tsx):
    - "Switch Item" button (if user has multiple items)
    - "Check for new items" refresh button
-   - Info text: "New items may appear as users add listings"`}
+   - Info text: "New items may appear as users add listings"
+
+7. Photo Navigation (Story-like, Added Jan 2025):
+   - Tap zones: left 1/3 = prev photo, right 1/3 = next photo
+   - Center 1/3 allows swipe gestures to pass through
+   - Progress bars at top show photo position
+   - Image error fallback shows placeholder icon`}
+         </pre>
+
+        <h3>Map Focus & Item Coordinates</h3>
+        <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
+{`Map Focus Flow (Updated Jan 2025):
+
+1. From Search/other page, tap location icon:
+   - Navigate to /map?focusItemId=<id>
+   
+2. MapView initialization:
+   - If focusItemId provided AND item has coordinates:
+     - Center map on item location (zoom 15)
+     - Select and highlight the item
+   - If focusItemId provided but item has NO coordinates:
+     - Show toast: "This item has no location data"
+     - Do NOT silently center on user location
+   - If no focusItemId:
+     - Center on user location (zoom 12)
+
+3. Item Coordinate Auto-population:
+   - DB trigger: trg_set_item_location
+   - On INSERT to items: if lat/lng null, copy from profiles
+   - Ensures new items inherit user's location if not set`}
         </pre>
 
         <h3>System State Blocking</h3>
@@ -1545,6 +1574,19 @@ function ChangeLog() {
       <h2 className="text-2xl font-bold">11. Change Log</h2>
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
+        <h3>January 2025</h3>
+        
+        <h4>Week 1 (Jan 2) – UX Polish & Reliability</h4>
+        <ul>
+          <li><strong>Story-like Photo Navigation:</strong> SwipeCard now uses Instagram-style tap zones (left 1/3 = prev, right 1/3 = next) instead of arrow buttons. Progress bars at top show photo position. Middle zone allows swipe gestures to pass through.</li>
+          <li><strong>Smart Back Navigation:</strong> Created useSmartBack hook that uses navigate(-1) when history exists, otherwise falls back to a safe route. Applied to UserProfile and MapView. Prevents stuck users when opening pages directly.</li>
+          <li><strong>Map Focus from Search:</strong> When navigating to Map with focusItemId param, map now correctly centers on item location and highlights it. If item lacks coordinates, shows toast error instead of silently centering on user location.</li>
+          <li><strong>Missing Coordinates Handling:</strong> Added DB trigger trg_set_item_location that copies profile lat/lng to new items if not provided. Toast notification shows when viewing item with no location.</li>
+          <li><strong>Search Thumbnail Reliability:</strong> Suggestion thumbnails now show placeholder on image load error instead of breaking layout.</li>
+          <li><strong>Header Safe Area:</strong> UserProfile header now respects safe-area-inset-top for notched devices.</li>
+          <li><strong>Exhaustion State Stability:</strong> EXHAUSTED is now a stable terminal state - never shows infinite spinner. Loading only shown during actual request.</li>
+        </ul>
+        
         <h3>December 2024</h3>
         
         <h4>Week 5 (Dec 31) – Audit & Contract Enforcement</h4>

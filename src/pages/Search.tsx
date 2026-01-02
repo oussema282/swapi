@@ -15,6 +15,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { ExpandableDescription } from '@/components/search/ExpandableDescription';
 
@@ -475,25 +476,37 @@ export default function Search() {
                         }`}
                       >
                         {/* Thumbnail or Icon - Fixed 40x40 */}
-                        <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden">
+                        <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
                           {suggestion.itemData?.photo ? (
                             <img 
                               src={suggestion.itemData.photo} 
                               alt="" 
                               className="w-full h-full object-cover"
                               loading="lazy"
+                              onError={(e) => {
+                                // Replace with placeholder on error
+                                e.currentTarget.style.display = 'none';
+                                const placeholder = e.currentTarget.nextElementSibling;
+                                if (placeholder) {
+                                  (placeholder as HTMLElement).style.display = 'flex';
+                                }
+                              }}
                             />
-                          ) : (
-                            <div className={`w-full h-full flex items-center justify-center ${
+                          ) : null}
+                          {/* Placeholder - hidden by default when image present, shown on error or no image */}
+                          <div 
+                            className={cn(
+                              'w-full h-full items-center justify-center',
                               suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
                               suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
-                              'bg-muted text-muted-foreground'
-                            }`}>
-                              {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
-                              {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
-                              {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
-                            </div>
-                          )}
+                              'bg-muted text-muted-foreground',
+                              suggestion.itemData?.photo ? 'hidden' : 'flex'
+                            )}
+                          >
+                            {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
+                            {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
+                            {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                          </div>
                         </div>
                         
                         {/* Content - with line clamp */}

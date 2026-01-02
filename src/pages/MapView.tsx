@@ -7,17 +7,19 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter } from 'lucide-react';
+import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter, AlertTriangle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
+import { useSmartBack } from '@/hooks/useSmartBack';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
+import { toast } from 'sonner';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -48,6 +50,7 @@ export default function MapView() {
   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
   const { user } = useAuth();
   const { latitude, longitude } = useDeviceLocation();
+  const goBack = useSmartBack('/');
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -62,6 +65,7 @@ export default function MapView() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [hasTrackedUsage, setHasTrackedUsage] = useState(false);
   const hasNavigatedToFocusItem = useRef(false);
+  const [missingCoordsShown, setMissingCoordsShown] = useState(false);
   const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
   // Fetch completed swap item IDs to exclude from map
@@ -271,23 +275,37 @@ export default function MapView() {
   }, [filteredItems]);
 
   // Focus on item from URL param (after map is loaded and items change)
+  // Also handle missing coordinates case
   useEffect(() => {
-    if (!focusItemId || !map.current || hasNavigatedToFocusItem.current) return;
+    if (!focusItemId || hasNavigatedToFocusItem.current) return;
     
+    // Find the item in our loaded data or try to fetch it
     const focusItem = items.find(item => item.id === focusItemId);
-    if (focusItem && focusItem.latitude && focusItem.longitude) {
-      hasNavigatedToFocusItem.current = true;
-      setSelectedItem(focusItem);
-      // Only fly if map was already initialized (e.g., items loaded later)
-      if (map.current.loaded()) {
-        map.current.flyTo({
-          center: [focusItem.longitude, focusItem.latitude],
-          zoom: 15,
-          duration: 1200,
+    
+    if (focusItem) {
+      // Item found - check if it has coordinates
+      if (focusItem.latitude && focusItem.longitude) {
+        hasNavigatedToFocusItem.current = true;
+        setSelectedItem(focusItem);
+        // Only fly if map was already initialized (e.g., items loaded later)
+        if (map.current?.loaded()) {
+          map.current.flyTo({
+            center: [focusItem.longitude, focusItem.latitude],
+            zoom: 15,
+            duration: 1200,
+          });
+        }
+      } else if (!missingCoordsShown) {
+        // Item has no coordinates - show toast and don't center on it
+        setMissingCoordsShown(true);
+        hasNavigatedToFocusItem.current = true;
+        toast.error('This item has no location data', {
+          description: 'The item owner has not set their location.',
+          icon: <AlertTriangle className="w-4 h-4" />,
         });
       }
     }
-  }, [focusItemId, items]);
+  }, [focusItemId, items, missingCoordsShown]);
 
   if (tokenLoading) {
     return (
@@ -306,7 +324,7 @@ export default function MapView() {
         <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-background to-transparent">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="secondary" size="icon" onClick={() => navigate(-1)}>
+              <Button variant="secondary" size="icon" onClick={goBack} className="touch-manipulation">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>

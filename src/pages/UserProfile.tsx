@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useSmartBack } from '@/hooks/useSmartBack';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -15,6 +16,7 @@ export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const goBack = useSmartBack('/');
 
   // Redirect if viewing own profile
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function UserProfile() {
           <p className="text-muted-foreground text-center mb-4">
             This user doesn't exist or has been removed.
           </p>
-          <Button onClick={() => navigate(-1)}>Go Back</Button>
+          <Button onClick={goBack}>Go Back</Button>
         </div>
       </AppLayout>
     );
@@ -139,8 +141,8 @@ export default function UserProfile() {
           className="max-w-lg mx-auto px-4 pt-4 pb-24"
         >
           {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <div className="flex items-center gap-3 mb-6 sticky top-0 z-10 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4" style={{ paddingTop: 'max(0.5rem, env(safe-area-inset-top))' }}>
+            <Button variant="ghost" size="icon" onClick={goBack} className="touch-manipulation">
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <h1 className="text-lg font-display font-bold">Profile</h1>
