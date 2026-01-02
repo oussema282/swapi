@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star, ChevronDown, MapPin, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin, Sparkles } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -123,15 +123,26 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     return {};
   };
 
-  const handlePrevPhoto = (e: React.MouseEvent) => {
+  // Story-like tap zones for mobile - handle both click and touch
+  const handlePhotoTapLeft = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCurrentPhotoIndex(prev => (prev > 0 ? prev - 1 : photos.length - 1));
-  };
+  }, [photos.length]);
 
-  const handleNextPhoto = (e: React.MouseEvent) => {
+  const handlePhotoTapRight = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCurrentPhotoIndex(prev => (prev < photos.length - 1 ? prev + 1 : 0));
-  };
+  }, [photos.length]);
+
+  // Image load error state
+  const [imageError, setImageError] = useState(false);
+  
+  // Reset image error when photo changes
+  useEffect(() => {
+    setImageError(false);
+  }, [currentPhotoIndex, item.id]);
 
   return (
     <motion.div
@@ -157,7 +168,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
       <div className="absolute inset-0 bg-card flex flex-col">
         {/* Photo Area with Navigation */}
         <div className="relative flex-1 min-h-0 bg-muted overflow-hidden">
-          {photos.length > 0 ? (
+          {photos.length > 0 && !imageError ? (
             <>
               <img
                 src={photos[currentPhotoIndex]}
@@ -166,44 +177,45 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 draggable={false}
                 loading="lazy"
                 decoding="async"
+                onError={() => setImageError(true)}
               />
 
-              {/* Photo Navigation Arrows */}
+              {/* Story-like progress bars at top */}
               {hasMultiplePhotos && isTop && (
-                <>
-                  <button
-                    onClick={handlePrevPhoto}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-black/70 transition-all active:scale-95"
-                  >
-                    <ChevronLeft className="w-6 h-6 text-white" />
-                  </button>
-                  <button
-                    onClick={handleNextPhoto}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-black/70 transition-all active:scale-95"
-                  >
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </button>
-                </>
+                <div className="absolute top-3 left-3 right-3 flex gap-1 z-20">
+                  {photos.map((_, index) => (
+                    <div key={index} className="flex-1 h-1 rounded-full bg-white/30 overflow-hidden">
+                      <div 
+                        className={cn(
+                          'h-full rounded-full transition-all duration-200',
+                          index === currentPhotoIndex ? 'bg-white w-full' :
+                          index < currentPhotoIndex ? 'bg-white/80 w-full' : 'w-0'
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
 
-              {/* Photo Dots Indicator */}
-              {hasMultiplePhotos && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2 py-1.5">
-                  {photos.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentPhotoIndex(index);
-                      }}
-                      className={cn(
-                        'w-2 h-2 rounded-full transition-all',
-                        index === currentPhotoIndex
-                          ? 'bg-white w-5'
-                          : 'bg-white/50 hover:bg-white/75'
-                      )}
-                    />
-                  ))}
+              {/* Story-like tap zones - invisible overlay split in half */}
+              {hasMultiplePhotos && isTop && (
+                <div className="absolute inset-0 flex z-10" style={{ touchAction: 'manipulation' }}>
+                  {/* Left tap zone - previous photo */}
+                  <button
+                    onClick={handlePhotoTapLeft}
+                    onTouchEnd={handlePhotoTapLeft}
+                    className="w-1/3 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/10 transition-colors"
+                    aria-label="Previous photo"
+                  />
+                  {/* Center zone - no action, allows swipe through */}
+                  <div className="w-1/3 h-full" />
+                  {/* Right tap zone - next photo */}
+                  <button
+                    onClick={handlePhotoTapRight}
+                    onTouchEnd={handlePhotoTapRight}
+                    className="w-1/3 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/10 transition-colors"
+                    aria-label="Next photo"
+                  />
                 </div>
               )}
             </>
