@@ -1576,15 +1576,19 @@ function ChangeLog() {
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>January 2025</h3>
         
-        <h4>Week 1 (Jan 2) – UX Polish & Reliability</h4>
+        <h4>Week 1 (Jan 2) – Tinder-Level UI Upgrade</h4>
         <ul>
-          <li><strong>Story-like Photo Navigation:</strong> SwipeCard now uses Instagram-style tap zones (left 1/3 = prev, right 1/3 = next) instead of arrow buttons. Progress bars at top show photo position. Middle zone allows swipe gestures to pass through.</li>
-          <li><strong>Smart Back Navigation:</strong> Created useSmartBack hook that uses navigate(-1) when history exists, otherwise falls back to a safe route. Applied to UserProfile and MapView. Prevents stuck users when opening pages directly.</li>
-          <li><strong>Map Focus from Search:</strong> When navigating to Map with focusItemId param, map now correctly centers on item location and highlights it. If item lacks coordinates, shows toast error instead of silently centering on user location.</li>
-          <li><strong>Missing Coordinates Handling:</strong> Added DB trigger trg_set_item_location that copies profile lat/lng to new items if not provided. Toast notification shows when viewing item with no location.</li>
-          <li><strong>Search Thumbnail Reliability:</strong> Suggestion thumbnails now show placeholder on image load error instead of breaking layout.</li>
-          <li><strong>Header Safe Area:</strong> UserProfile header now respects safe-area-inset-top for notched devices.</li>
-          <li><strong>Exhaustion State Stability:</strong> EXHAUSTED is now a stable terminal state - never shows infinite spinner. Loading only shown during actual request.</li>
+          <li><strong>SwipeTopBar Component:</strong> New sticky top bar with "For You" / "Nearby" tabs, filter icon (left), and boost icon (right). Follows Tinder design pattern. Safe area padding for notched devices.</li>
+          <li><strong>SwipeActions Component:</strong> Circular Tinder-style action buttons with Framer Motion tap animations. Dislike (red), Undo (small, center), Like (green). Clean separation from Index.tsx.</li>
+          <li><strong>ItemDetailsSheet Component:</strong> Bottom sheet that opens on info tap showing full item details: photo, category, condition, value, distance, description, swap preferences, owner info. Actions: View on Map, Invite to Deal.</li>
+          <li><strong>SwipeCard Enhancements:</strong> Added info button (top-right) to open details sheet. Compact rating display with NEW badge. More refined badge styling with consistent sizing.</li>
+          <li><strong>EmptyState Upgrade:</strong> Premium exhausted state with animated icon, decorative rings, and helpful tips ("New items added daily", "Try different swap preferences"). Uses Framer Motion for staggered animations.</li>
+          <li><strong>Index.tsx Refactor:</strong> Extracted action buttons to SwipeActions. Added SwipeTopBar. Integrated ItemDetailsSheet. Cleaner component architecture with single-responsibility components.</li>
+          <li><strong>Story-like Photo Navigation:</strong> SwipeCard uses Instagram-style tap zones (left 1/3 = prev, right 1/3 = next). Progress bars at top show photo position. Middle zone allows swipe gestures.</li>
+          <li><strong>Smart Back Navigation:</strong> useSmartBack hook uses navigate(-1) when history exists, otherwise falls back to a safe route. Applied to UserProfile and MapView.</li>
+          <li><strong>Map Focus from Search:</strong> When navigating to Map with focusItemId param, map correctly centers on item location and highlights it.</li>
+          <li><strong>Missing Coordinates Handling:</strong> DB trigger trg_set_item_location copies profile lat/lng to new items if not provided. Toast notification for items with no location.</li>
+          <li><strong>Exhaustion State Stability:</strong> EXHAUSTED is a stable terminal state - never shows infinite spinner. Loading only shown during actual request.</li>
         </ul>
         
         <h3>December 2024</h3>

@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star, ChevronDown, MapPin, Sparkles } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin, Sparkles, Info } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -25,47 +25,31 @@ interface SwipeCardProps {
   userLocation?: { latitude: number | null; longitude: number | null };
   /** When false, gestures are disabled (controlled by SWIPE_PHASE) */
   canGesture?: boolean;
+  /** Callback when info button is tapped */
+  onInfoTap?: () => void;
 }
 
 const SWIPE_THRESHOLD = 100;
 
-// Convert rating (1-5) to star display
-function RatingStars({ rating, totalInteractions }: { rating?: number; totalInteractions?: number }) {
+// Compact rating display for cards
+function CompactRating({ rating, isNew }: { rating?: number; isNew?: boolean }) {
   const displayRating = rating ?? 3;
-  const roundedRating = Math.round(displayRating * 2) / 2;
-  const clampedRating = Math.min(5, Math.max(1, roundedRating));
+  const clampedRating = Math.min(5, Math.max(1, displayRating));
   
-  const fullStars = Math.floor(clampedRating);
-  const hasHalfStar = clampedRating - fullStars >= 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-  const isNewItem = (totalInteractions ?? 0) < 5;
-
   return (
-    <div className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-      <div className="flex items-center gap-0.5">
-        {Array.from({ length: fullStars }).map((_, i) => (
-          <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-        ))}
-        {hasHalfStar && (
-          <div className="relative">
-            <Star className="w-4 h-4 text-muted-foreground/30" />
-            <div className="absolute inset-0 overflow-hidden w-[50%]">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            </div>
-          </div>
-        )}
-        {Array.from({ length: emptyStars }).map((_, i) => (
-          <Star key={`empty-${i}`} className="w-4 h-4 text-muted-foreground/30" />
-        ))}
-      </div>
-      {isNewItem && (
-        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">New</span>
+    <div className="flex items-center gap-1.5 bg-card/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-lg">
+      <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+      <span className="text-xs font-semibold text-foreground">{clampedRating.toFixed(1)}</span>
+      {isNew && (
+        <Badge variant="secondary" className="h-4 px-1.5 text-[10px] bg-accent text-accent-foreground">
+          NEW
+        </Badge>
       )}
     </div>
   );
 }
 
-export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, canGesture = true }: SwipeCardProps) {
+export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, canGesture = true, onInfoTap }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false);
@@ -249,22 +233,37 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             </div>
           </motion.div>
 
-          {/* Community Rating - Top Left */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
-            <RatingStars rating={item.community_rating} totalInteractions={item.total_interactions} />
-            {hasReciprocalBoost && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full px-3 py-1.5 shadow-lg">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-semibold">High Match Potential</span>
-              </div>
-            )}
-          </div>
-
-          {/* Condition Badge - Top Right */}
-          <div className="absolute top-4 right-4">
-            <Badge variant="secondary" className="backdrop-blur-md bg-white/90 text-foreground font-semibold px-3 py-1.5 shadow-lg">
-              {CONDITION_LABELS[item.condition]}
-            </Badge>
+          {/* Top Row - Rating + Condition + Info */}
+          <div className="absolute top-4 left-4 right-4 flex items-start justify-between gap-2 z-20">
+            <div className="flex flex-col gap-2">
+              <CompactRating 
+                rating={item.community_rating} 
+                isNew={(item.total_interactions ?? 0) < 5}
+              />
+              {hasReciprocalBoost && (
+                <div className="flex items-center gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full px-2.5 py-1 shadow-lg">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase tracking-wide">Match+</span>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="backdrop-blur-md bg-card/95 text-foreground font-semibold px-2.5 py-1 shadow-lg text-xs">
+                {CONDITION_LABELS[item.condition]}
+              </Badge>
+              {onInfoTap && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onInfoTap();
+                  }}
+                  className="w-8 h-8 rounded-full bg-card/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-card transition-colors"
+                >
+                  <Info className="w-4 h-4 text-muted-foreground" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
