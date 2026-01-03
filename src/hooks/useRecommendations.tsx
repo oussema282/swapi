@@ -3,8 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { Item, ItemCategory } from '@/types/database';
 import { useAuth } from './useAuth';
 import { useSystemState } from './useSystemState';
+import { useDeviceLocation, calculateDistance } from './useLocation';
 
-interface SwipeableItem extends Item {
+export interface SwipeableItem extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
   owner_is_pro?: boolean;
@@ -12,6 +13,7 @@ interface SwipeableItem extends Item {
   community_rating?: number;
   total_interactions?: number;
   reciprocal_boost?: number;
+  distance_km?: number;
 }
 
 interface RecommendationResult {
@@ -25,9 +27,12 @@ interface RecommendationResponse {
   exhausted: boolean;
 }
 
-export function useRecommendedItems(myItemId: string | null) {
+export type FeedMode = 'foryou' | 'nearby';
+
+export function useRecommendedItems(myItemId: string | null, feedMode: FeedMode = 'foryou') {
   const { user } = useAuth();
   const { state: systemState, setSwipePhase } = useSystemState();
+  const { latitude, longitude, hasLocation } = useDeviceLocation();
   
   // Gate recommendations on system phase
   // Do NOT fetch during TRANSITION or UPGRADING
@@ -38,7 +43,7 @@ export function useRecommendedItems(myItemId: string | null) {
     systemState.subscription === 'UPGRADING';
 
   return useQuery({
-    queryKey: ['recommended-items', myItemId, user?.id],
+    queryKey: ['recommended-items', myItemId, user?.id, feedMode, latitude, longitude],
     queryFn: async (): Promise<SwipeableItem[]> => {
       if (!user || !myItemId) return [];
       
@@ -48,7 +53,13 @@ export function useRecommendedItems(myItemId: string | null) {
         return [];
       }
 
-      console.log('[RECO] fetching strict mode for item:', myItemId);
+      // For "nearby" mode, sort purely by distance
+      if (feedMode === 'nearby') {
+        console.log('[RECO] fetching nearby mode for item:', myItemId);
+        return fetchNearbyItems(user.id, myItemId, latitude, longitude);
+      }
+
+      console.log('[RECO] fetching foryou mode for item:', myItemId);
 
       try {
         // Step 1: Try strict mode first
@@ -58,7 +69,7 @@ export function useRecommendedItems(myItemId: string | null) {
 
         if (invokeError) {
           console.error('[RECO] API error:', invokeError.message);
-          return fallbackFetch(user.id, myItemId);
+          return fallbackFetch(user.id, myItemId, latitude, longitude);
         }
 
         const result = data as { rankedItems?: RecommendationResult[]; searchExpanded?: boolean } | null;
@@ -87,14 +98,14 @@ export function useRecommendedItems(myItemId: string | null) {
           }
           
           console.log('[RECO] expanded returned', expandedItems.length, 'items');
-          return fetchItemDetails(expandedItems);
+          return fetchItemDetails(expandedItems, latitude, longitude);
         }
 
         console.log('[RECO] strict returned', rankedItems.length, 'items');
-        return fetchItemDetails(rankedItems);
+        return fetchItemDetails(rankedItems, latitude, longitude);
       } catch (error) {
         console.error('[RECO] exception:', error);
-        return fallbackFetch(user.id, myItemId);
+        return fallbackFetch(user.id, myItemId, latitude, longitude);
       }
     },
     // Only enable when not blocked
@@ -107,8 +118,101 @@ export function useRecommendedItems(myItemId: string | null) {
   });
 }
 
+// Nearby mode: purely distance-based sorting
+async function fetchNearbyItems(
+  userId: string, 
+  myItemId: string, 
+  userLat: number | null, 
+  userLon: number | null
+): Promise<SwipeableItem[]> {
+  // Get my item
+  const { data: myItem, error: myItemError } = await supabase
+    .from('items')
+    .select('*')
+    .eq('id', myItemId)
+    .single();
+
+  if (myItemError || !myItem) return [];
+
+  // Get items I've already swiped on
+  const { data: existingSwipes } = await supabase
+    .from('swipes')
+    .select('swiped_item_id')
+    .eq('swiper_item_id', myItemId);
+
+  const swipedItemIds = existingSwipes?.map(s => s.swiped_item_id) || [];
+
+  // Get all active items from other users
+  const { data: items, error } = await supabase
+    .from('items')
+    .select('*')
+    .neq('user_id', userId)
+    .eq('is_active', true)
+    .eq('is_archived', false);
+
+  if (error) throw error;
+
+  // Filter out already swiped items
+  const filteredItems = (items || []).filter(item => !swipedItemIds.includes(item.id));
+
+  if (filteredItems.length === 0) return [];
+
+  // Get profiles
+  const userIds = [...new Set(filteredItems.map(item => item.user_id))];
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('user_id, display_name, avatar_url')
+    .in('user_id', userIds);
+
+  // Get subscriptions
+  const { data: subscriptions } = await supabase
+    .from('user_subscriptions')
+    .select('user_id, is_pro')
+    .in('user_id', userIds);
+
+  // Get community ratings
+  const itemIds = filteredItems.map(item => item.id);
+  const { data: ratings } = await supabase
+    .from('item_ratings')
+    .select('item_id, rating, total_interactions')
+    .in('item_id', itemIds);
+
+  const profileMap = new Map((profiles || []).map(p => [p.user_id, p]));
+  const subscriptionMap = new Map((subscriptions || []).map(s => [s.user_id, s.is_pro]));
+  const ratingsMap = new Map((ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }]));
+
+  // Map with distance calculation
+  const itemsWithDistance = filteredItems.map(item => {
+    let distance_km: number | undefined;
+    if (userLat && userLon && item.latitude && item.longitude) {
+      distance_km = calculateDistance(userLat, userLon, item.latitude, item.longitude);
+    }
+    return {
+      ...item,
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+      owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+      community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+      total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
+      distance_km,
+    } as SwipeableItem;
+  });
+
+  // Sort by distance (closest first), items without location go to end
+  return itemsWithDistance.sort((a, b) => {
+    if (a.distance_km === undefined && b.distance_km === undefined) return 0;
+    if (a.distance_km === undefined) return 1;
+    if (b.distance_km === undefined) return -1;
+    return a.distance_km - b.distance_km;
+  });
+}
+
 // Helper to fetch full item details from ranked IDs
-async function fetchItemDetails(rankedItems: RecommendationResult[]): Promise<SwipeableItem[]> {
+async function fetchItemDetails(
+  rankedItems: RecommendationResult[],
+  userLat: number | null = null,
+  userLon: number | null = null
+): Promise<SwipeableItem[]> {
   const itemIds = rankedItems.map(r => r.id);
   const scoreMap = new Map(rankedItems.map(r => [r.id, r.score]));
 
@@ -152,23 +256,35 @@ async function fetchItemDetails(rankedItems: RecommendationResult[]): Promise<Sw
 
   // Combine items with profile data, scores, and community ratings
   const swipeableItems: SwipeableItem[] = (items || [])
-    .map(item => ({
-      ...item,
-      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
-      owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
-      owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
-      recommendation_score: scoreMap.get(item.id),
-      community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
-      total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
-      reciprocal_boost: item.reciprocal_boost ?? 0,
-    }))
+    .map(item => {
+      let distance_km: number | undefined;
+      if (userLat && userLon && item.latitude && item.longitude) {
+        distance_km = calculateDistance(userLat, userLon, item.latitude, item.longitude);
+      }
+      return {
+        ...item,
+        owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+        owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+        owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+        recommendation_score: scoreMap.get(item.id),
+        community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+        total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
+        reciprocal_boost: item.reciprocal_boost ?? 0,
+        distance_km,
+      };
+    })
     .sort((a, b) => (b.recommendation_score || 0) - (a.recommendation_score || 0));
 
   return swipeableItems;
 }
 
 // Fallback function if recommendation API fails
-async function fallbackFetch(userId: string, myItemId: string): Promise<SwipeableItem[]> {
+async function fallbackFetch(
+  userId: string, 
+  myItemId: string,
+  userLat: number | null = null,
+  userLon: number | null = null
+): Promise<SwipeableItem[]> {
   // Get my item
   const { data: myItem, error: myItemError } = await supabase
     .from('items')
@@ -237,12 +353,19 @@ async function fallbackFetch(userId: string, myItemId: string): Promise<Swipeabl
     (ratings || []).map(r => [r.item_id, { rating: r.rating, total_interactions: r.total_interactions }])
   );
 
-  return filteredItems.map(item => ({
-    ...item,
-    owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
-    owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
-    owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
-    community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
-    total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
-  }));
+  return filteredItems.map(item => {
+    let distance_km: number | undefined;
+    if (userLat && userLon && item.latitude && item.longitude) {
+      distance_km = calculateDistance(userLat, userLon, item.latitude, item.longitude);
+    }
+    return {
+      ...item,
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
+      owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+      community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
+      total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
+      distance_km,
+    };
+  });
 }
