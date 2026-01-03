@@ -79,12 +79,13 @@ export default function UserProfile() {
     enabled: !!userId,
   });
 
-  // Fetch completed swaps count
+  // Fetch completed swaps count (GLOBAL count for this user, not relative to viewer)
   const { data: completedSwapsCount = 0 } = useQuery({
-    queryKey: ['user-completed-swaps', userId],
+    queryKey: ['user-completed-swaps-global', userId],
     queryFn: async () => {
       if (!userId) return 0;
       
+      // Get all items owned by this user (including archived ones for historical accuracy)
       const { data: userItems } = await supabase
         .from('items')
         .select('id')
@@ -94,6 +95,8 @@ export default function UserProfile() {
       
       const itemIds = userItems.map(i => i.id);
       
+      // Count all completed matches involving any of this user's items
+      // This gives the total swaps this user has completed with ANYONE
       const { count } = await supabase
         .from('matches')
         .select('*', { count: 'exact', head: true })

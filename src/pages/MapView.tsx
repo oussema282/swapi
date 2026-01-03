@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter, AlertTriangle, MapPin } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -49,7 +49,7 @@ export default function MapView() {
   // Support both focusItemId (new) and itemId (legacy) for backward compatibility
   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
   const { user } = useAuth();
-  const { latitude, longitude } = useDeviceLocation();
+  const { latitude, longitude, permissionStatus, hasLocation } = useDeviceLocation();
   const goBack = useSmartBack('/');
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -67,6 +67,9 @@ export default function MapView() {
   const hasNavigatedToFocusItem = useRef(false);
   const [missingCoordsShown, setMissingCoordsShown] = useState(false);
   const { canUse, usage, incrementUsage, isPro } = useEntitlements();
+
+  // Block map access entirely when location is not available
+  const locationBlocked = !hasLocation || permissionStatus === 'denied';
 
   // Fetch completed swap item IDs to exclude from map
   const { data: completedItemIds = [] } = useQuery({
@@ -306,6 +309,32 @@ export default function MapView() {
       }
     }
   }, [focusItemId, items, missingCoordsShown]);
+
+  // Block map access entirely if location permission is denied
+  if (locationBlocked) {
+    return (
+      <AppLayout showNav>
+        <div className="flex flex-col items-center justify-center h-[80vh] px-6 text-center">
+          <div className="w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
+            <MapPin className="w-10 h-10 text-destructive" />
+          </div>
+          <h2 className="text-xl font-display font-bold mb-2">Location Required</h2>
+          <p className="text-muted-foreground mb-6 max-w-sm">
+            Map access requires your location to show nearby items. Please enable location permissions in your browser settings.
+          </p>
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={goBack}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Go Back
+            </Button>
+            <Button onClick={() => navigate('/')}>
+              Go to Discover
+            </Button>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
 
   if (tokenLoading) {
     return (
