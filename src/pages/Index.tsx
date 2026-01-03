@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
-import { useRecommendedItems } from '@/hooks/useRecommendations';
+import { useRecommendedItems, FeedMode } from '@/hooks/useRecommendations';
 import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -66,7 +66,7 @@ export default function Index() {
     }
   }, [myItems, selectedItemId]);
 
-  const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(selectedItemId);
+  const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(selectedItemId, activeTab as FeedMode);
   const swipeMutation = useSwipe();
   const undoMutation = useUndoSwipe();
   const checkUndoMutation = useCheckUndoEligibility();
