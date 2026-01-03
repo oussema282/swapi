@@ -410,6 +410,7 @@ export default function Index() {
               onDislike={() => handleSwipe('left')}
               onLike={() => handleSwipe('right')}
               onUndo={handleGoBack}
+              onUpgradeClick={() => setShowUpgradePrompt(true)}
               canSwipe={canGesture && !swipeMutation.isPending}
               canUndo={canGoBack}
               isLoading={swipeMutation.isPending}
