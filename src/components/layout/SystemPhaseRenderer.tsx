@@ -14,13 +14,22 @@ interface SystemPhaseRendererProps {
  * Routes that require geo features (Discover, Map) - these are blocked by LocationGate
  * Safe routes (Matches, Chat, Profile, Items, Auth, etc.) bypass LocationGate entirely
  */
-const GEO_REQUIRED_ROUTES = ['/', '/map', '/search'];
+const GEO_REQUIRED_ROUTES = ['/discover', '/map', '/search'];
+
+/**
+ * Public routes that don't require authentication or system bootstrapping
+ */
+const PUBLIC_ROUTES = ['/', '/auth'];
 
 function isGeoRequiredRoute(pathname: string): boolean {
   return GEO_REQUIRED_ROUTES.some(route => {
-    if (route === '/') return pathname === '/';
+    if (route === '/discover') return pathname === '/discover';
     return pathname.startsWith(route);
   });
+}
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some(route => pathname === route);
 }
 
 /**
@@ -56,6 +65,9 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
 
   // Determine if current route requires geo features
   const requiresGeo = isGeoRequiredRoute(location.pathname);
+  
+  // Determine if current route is public (no auth/bootstrap required)
+  const isPublic = isPublicRoute(location.pathname);
 
   // After fully bootstrapped, automatically check location to transition out of BOOTSTRAPPING
   // BUT only if on a geo-required route
@@ -111,6 +123,11 @@ export function SystemPhaseRenderer({ children }: SystemPhaseRendererProps) {
       locationDenied();
     }
   }, [state.phase, hasLocation, permissionStatus, locationGranted, locationDenied]);
+
+  // PUBLIC ROUTES: Render immediately without waiting for bootstrapping
+  if (isPublic) {
+    return <>{children}</>;
+  }
 
   // BOOTSTRAPPING: Show loading screen while auth initializes
   if (isBootstrapping) {

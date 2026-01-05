@@ -51,7 +51,7 @@ export function LocationGate() {
         </h1>
         
         <p className="text-muted-foreground mb-6">
-          SwapSpot needs your location to show items near you and connect you with local swappers.
+          Valexo needs your location to show items near you and connect you with local traders.
         </p>
 
         {error && (

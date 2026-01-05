@@ -16,7 +16,7 @@ export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const goBack = useSmartBack('/');
+  const goBack = useSmartBack('/discover');
 
   // Redirect if viewing own profile
   useEffect(() => {

@@ -197,7 +197,7 @@ export function CompleteSwapModal({
                 className="text-center"
               >
                 <h3 className="text-xl font-semibold mb-1">Swap Complete!</h3>
-                <p className="text-sm text-muted-foreground">Thanks for using SwapSpace</p>
+                <p className="text-sm text-muted-foreground">Thanks for using Valexo</p>
               </motion.div>
               <Button onClick={handleClose} variant="outline" className="mt-2">
                 Done

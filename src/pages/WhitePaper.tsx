@@ -48,7 +48,7 @@ export default function WhitePaper() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" onClick={() => navigate('/discover')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
@@ -1576,6 +1576,32 @@ function ChangeLog() {
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>January 2025</h3>
         
+        <h4>Week 1 (Jan 5) – Landing Page, Branding & Google OAuth</h4>
+        <ul>
+          <li><strong>Professional Landing Page:</strong> Created new public landing page at "/" with Hero, Features, How It Works, Pricing, and Footer sections. Animated gradient backgrounds, scroll animations, and responsive design.</li>
+          <li><strong>Branding Centralization:</strong> Added <code>src/config/branding.ts</code> as single source of truth for app name "Valexo". All display names now import from this config.</li>
+          <li><strong>Global Rename to Valexo:</strong> Replaced all instances of "SwapIt", "SwapSpace", "SwapSpot" with "Valexo" across Auth, Checkout, CheckoutSuccess, FeatureUpgradeModal, CompleteSwapModal, LocationGate, and WhitePaper.</li>
+          <li><strong>Google OAuth:</strong> Added "Continue with Google" button to Sign In and Sign Up screens. Uses Supabase OAuth with proper redirectTo handling for both dev and production.</li>
+          <li><strong>Route Restructure:</strong> Landing page now at "/" (public), authenticated app at "/discover". Updated all navigate('/') calls to navigate('/discover') for authenticated user flows.</li>
+          <li><strong>Auth Redirect URLs:</strong> Updated email redirect URLs to "/discover" in useAuth and supabase services. Google OAuth redirects to "/discover" after successful authentication.</li>
+          <li><strong>Landing Components:</strong> Created modular components: <code>src/components/landing/Hero.tsx</code>, <code>Features.tsx</code>, <code>HowItWorks.tsx</code>, <code>Pricing.tsx</code>, <code>Footer.tsx</code>.</li>
+          <li><strong>Framer Motion Animations:</strong> Hero elements fade/slide in on load. Background gradient shifts slowly. Feature cards have hover lift effects. Respects prefers-reduced-motion via Framer Motion defaults.</li>
+        </ul>
+
+        <div className="p-4 bg-muted rounded-lg mt-4">
+          <h4 className="font-semibold mb-2">How to Test (Jan 5 Release)</h4>
+          <ol className="list-decimal list-inside space-y-1 text-sm">
+            <li><strong>Landing Page:</strong> Navigate to "/" – should see public landing page with Hero, Features, How It Works, Pricing sections without being logged in.</li>
+            <li><strong>Email Sign Up:</strong> Go to "/auth", sign up with email/password – should create account and redirect to "/discover".</li>
+            <li><strong>Email Sign In:</strong> Sign out, then sign in with existing email – should redirect to "/discover".</li>
+            <li><strong>Google Sign In:</strong> Click "Continue with Google" – should redirect to Google OAuth, then back to "/discover" with profile created.</li>
+            <li><strong>Google Sign Up:</strong> New Google user – profile should be created with display_name from Google metadata.</li>
+            <li><strong>Post-Login Routing:</strong> All authenticated navigation (checkout, matches, etc.) should work correctly with "/discover" as home.</li>
+            <li><strong>Branding Check:</strong> Search for "SwapIt", "SwapSpace", "SwapSpot" in UI – none should remain. Only "Valexo" branding.</li>
+            <li><strong>Responsive Design:</strong> Test landing page on mobile, tablet, and desktop – should be fully responsive.</li>
+          </ol>
+        </div>
+
         <h4>Week 1 (Jan 2) – Tinder-Level UI Upgrade</h4>
         <ul>
           <li><strong>SwipeTopBar Component:</strong> New sticky top bar with "For You" / "Nearby" tabs, filter icon (left), and boost icon (right). Follows Tinder design pattern. Safe area padding for notched devices.</li>

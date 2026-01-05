@@ -33,7 +33,7 @@ export function EmptyMatchesState() {
       </p>
       
       <Button 
-        onClick={() => navigate('/')} 
+        onClick={() => navigate('/discover')} 
         className="gradient-primary text-primary-foreground gap-2"
         size="lg"
       >

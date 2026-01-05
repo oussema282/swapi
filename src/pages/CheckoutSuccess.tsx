@@ -122,7 +122,7 @@ const CheckoutSuccess = () => {
             <Button 
               variant="outline"
               className="w-full"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/discover')}
             >
               Go Home
             </Button>
@@ -154,7 +154,7 @@ const CheckoutSuccess = () => {
               Payment Successful!
             </CardTitle>
             <CardDescription className="text-base">
-              Welcome to SwapIt Pro
+              Welcome to Valexo Pro
             </CardDescription>
           </CardHeader>
           
@@ -186,7 +186,7 @@ const CheckoutSuccess = () => {
           <CardFooter className="flex flex-col gap-3">
             <Button 
               className="w-full"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/discover')}
             >
               <Home className="w-4 h-4 mr-2" />
               Start Swapping

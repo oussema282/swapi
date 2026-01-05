@@ -8,7 +8,7 @@ import { useCallback, useRef, useEffect } from 'react';
  * @param fallbackPath - The path to navigate to if no history exists (default: '/')
  * @returns goBack function that handles navigation safely
  */
-export function useSmartBack(fallbackPath: string = '/') {
+export function useSmartBack(fallbackPath: string = '/discover') {
   const navigate = useNavigate();
   const location = useLocation();
   const hasInternalReferrer = useRef(false);

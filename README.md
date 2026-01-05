@@ -1,8 +1,8 @@
-# Welcome to your Lovable project
+# Valexo
+
+A smart exchange platform connecting people across Europe. Trade what you have, get what you want.
 
 ## Project info
-
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
 ## How can I edit this code?
 
