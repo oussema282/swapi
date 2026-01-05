@@ -44,7 +44,7 @@ export function UpgradePrompt({
   const handleOpenChange = (newOpen: boolean) => {
     if (required && !newOpen) {
       // Redirect to discover page when closing required prompt
-      navigate('/');
+      navigate('/discover');
       onOpenChange(false);
       return;
     }

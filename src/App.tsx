@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { SystemStateProvider } from "@/hooks/useSystemState";
 import { SystemPhaseRenderer } from "@/components/layout/SystemPhaseRenderer";
 import { SetupGate } from "@/components/SetupGate";
+import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Items from "./pages/Items";
@@ -38,8 +39,11 @@ const App = () => (
             <SystemStateProvider>
               <SystemPhaseRenderer>
                 <Routes>
-                  <Route path="/" element={<Index />} />
+                  {/* Public landing page */}
+                  <Route path="/" element={<Landing />} />
                   <Route path="/auth" element={<Auth />} />
+                  {/* Authenticated app routes */}
+                  <Route path="/discover" element={<Index />} />
                   <Route path="/setup" element={<Setup />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/map" element={<MapView />} />

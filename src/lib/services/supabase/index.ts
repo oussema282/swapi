@@ -73,7 +73,7 @@ export const authService: AuthService = {
   },
   
   async signUp(email: string, password: string, displayName: string) {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/discover`;
     const { error } = await getSupabaseClient().auth.signUp({
       email,
       password,

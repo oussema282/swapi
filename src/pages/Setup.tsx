@@ -59,7 +59,7 @@ export default function Setup() {
   // Check if already configured
   useEffect(() => {
     if (isAppConfigured()) {
-      navigate('/', { replace: true });
+      navigate('/discover', { replace: true });
     }
   }, [navigate]);
 
@@ -142,7 +142,7 @@ export default function Setup() {
     
     // Reload to apply new config
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = '/discover';
     }, 1000);
   };
 

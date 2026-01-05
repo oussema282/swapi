@@ -327,7 +327,7 @@ export default function MapView() {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Go Back
             </Button>
-            <Button onClick={() => navigate('/')}>
+            <Button onClick={() => navigate('/discover')}>
               Go to Discover
             </Button>
           </div>
