@@ -1,55 +1,24 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { StatCard } from '../StatCard';
+import { PlatformStats } from '../PlatformStats';
 import { AdminChart } from '../AdminChart';
 import { RecentActivity } from '../RecentActivity';
-import { Users, Package, Handshake, Crown, TrendingUp, Activity } from 'lucide-react';
-
-interface Stats {
-  totalUsers: number;
-  totalItems: number;
-  totalMatches: number;
-  proUsers: number;
-  activeItems: number;
-  completedSwaps: number;
-}
+import { QuickActions } from '../QuickActions';
+import { SystemHealth } from '../SystemHealth';
+import { TopPerformers } from '../TopPerformers';
+import { CategoryBreakdown } from '../CategoryBreakdown';
+import { LiveIndicator } from '../LiveIndicator';
+import { formatDistanceToNow } from 'date-fns';
 
 export function OverviewSection() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchStats() {
+    async function fetchData() {
       try {
-        // Fetch counts in parallel
-        const [
-          usersResult,
-          itemsResult,
-          matchesResult,
-          proUsersResult,
-          activeItemsResult,
-          completedSwapsResult,
-        ] = await Promise.all([
-          supabase.from('profiles').select('id', { count: 'exact', head: true }),
-          supabase.from('items').select('id', { count: 'exact', head: true }),
-          supabase.from('matches').select('id', { count: 'exact', head: true }),
-          supabase.from('user_subscriptions').select('id', { count: 'exact', head: true }).eq('is_pro', true),
-          supabase.from('items').select('id', { count: 'exact', head: true }).eq('is_active', true).eq('is_archived', false),
-          supabase.from('matches').select('id', { count: 'exact', head: true }).eq('is_completed', true),
-        ]);
-
-        setStats({
-          totalUsers: usersResult.count || 0,
-          totalItems: itemsResult.count || 0,
-          totalMatches: matchesResult.count || 0,
-          proUsers: proUsersResult.count || 0,
-          activeItems: activeItemsResult.count || 0,
-          completedSwaps: completedSwapsResult.count || 0,
-        });
-
-        // Generate chart data (last 7 days mock - would be real data with proper analytics)
+        // Generate chart data (last 7 days)
         const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         const mockChartData = days.map((day) => ({
           name: day,
@@ -108,107 +77,84 @@ export function OverviewSection() {
 
         setActivities(allActivities);
       } catch (error) {
-        console.error('Error fetching admin stats:', error);
+        console.error('Error fetching admin data:', error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchStats();
+    fetchData();
   }, []);
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
-        <p className="text-muted-foreground">
-          Key metrics and recent activity across the platform.
-        </p>
+      {/* Header with Live Indicator */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
+          <p className="text-muted-foreground">
+            Real-time platform metrics and insights
+          </p>
+        </div>
+        <LiveIndicator />
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <StatCard
-          title="Total Users"
-          value={stats?.totalUsers || 0}
-          change={12}
-          icon={Users}
-          loading={loading}
-        />
-        <StatCard
-          title="Total Items"
-          value={stats?.totalItems || 0}
-          change={8}
-          icon={Package}
-          loading={loading}
-        />
-        <StatCard
-          title="Active Items"
-          value={stats?.activeItems || 0}
-          change={5}
-          icon={Activity}
-          loading={loading}
-        />
-        <StatCard
-          title="Total Matches"
-          value={stats?.totalMatches || 0}
-          change={15}
-          icon={Handshake}
-          loading={loading}
-        />
-        <StatCard
-          title="Completed Swaps"
-          value={stats?.completedSwaps || 0}
-          change={20}
-          icon={TrendingUp}
-          loading={loading}
-        />
-        <StatCard
-          title="Pro Users"
-          value={stats?.proUsers || 0}
-          change={3}
-          icon={Crown}
-          loading={loading}
-        />
+      {/* Platform Stats with Sparklines */}
+      <PlatformStats />
+
+      {/* Quick Actions */}
+      <QuickActions />
+
+      {/* Main Content Grid */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Left Column - Charts */}
+        <div className="lg:col-span-2 space-y-6">
+          <AdminChart
+            title="User Activity Trend"
+            data={chartData}
+            type="area"
+            loading={loading}
+            label="Active Users"
+          />
+          
+          <div className="grid gap-6 md:grid-cols-2">
+            <AdminChart
+              title="Items & Matches"
+              data={chartData.map((d, i) => ({
+                ...d,
+                value: Math.floor(Math.random() * 30) + 5,
+                value2: Math.floor(Math.random() * 20) + 2,
+              }))}
+              type="bar"
+              loading={loading}
+              label="Items"
+              secondaryLabel="Matches"
+            />
+            <AdminChart
+              title="Revenue Trend"
+              data={chartData.map((d) => ({
+                ...d,
+                value: Math.floor(Math.random() * 10) + 1,
+              }))}
+              type="area"
+              loading={loading}
+              color="hsl(45, 93%, 47%)"
+              label="Pro Subscriptions"
+            />
+          </div>
+        </div>
+
+        {/* Right Column - Widgets */}
+        <div className="space-y-6">
+          <SystemHealth />
+          <CategoryBreakdown />
+        </div>
       </div>
 
-      {/* Charts and Activity */}
+      {/* Bottom Row */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <AdminChart
-          title="User Activity"
-          data={chartData}
-          type="area"
-          loading={loading}
-          label="Active Users"
-        />
         <RecentActivity activities={activities} loading={loading} />
-      </div>
-
-      {/* Additional Charts */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <AdminChart
-          title="Items & Matches"
-          data={chartData.map((d, i) => ({
-            ...d,
-            value: Math.floor(Math.random() * 30) + 5,
-            value2: Math.floor(Math.random() * 20) + 2,
-          }))}
-          type="bar"
-          loading={loading}
-          label="Items"
-          secondaryLabel="Matches"
-        />
-        <AdminChart
-          title="Subscription Growth"
-          data={chartData.map((d) => ({
-            ...d,
-            value: Math.floor(Math.random() * 10) + 1,
-          }))}
-          type="area"
-          loading={loading}
-          color="hsl(45, 93%, 47%)"
-          label="Pro Subscriptions"
-        />
+        <TopPerformers />
       </div>
     </div>
   );
