@@ -24,6 +24,7 @@ import Checkout from "./pages/Checkout";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import Setup from "./pages/Setup";
 import WhitePaper from "./pages/WhitePaper";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const App = () => (
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/checkout/success" element={<CheckoutSuccess />} />
                   <Route path="/whitepaper" element={<WhitePaper />} />
+                  <Route path="/admin" element={<Admin />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </SystemPhaseRenderer>

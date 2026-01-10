@@ -18,8 +18,9 @@ const GEO_REQUIRED_ROUTES = ['/discover', '/map', '/search'];
 
 /**
  * Public routes that don't require authentication or system bootstrapping
+ * Also includes admin route which handles its own access control
  */
-const PUBLIC_ROUTES = ['/', '/auth'];
+const PUBLIC_ROUTES = ['/', '/auth', '/admin'];
 
 function isGeoRequiredRoute(pathname: string): boolean {
   return GEO_REQUIRED_ROUTES.some(route => {

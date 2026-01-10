@@ -1382,7 +1382,7 @@ function KnownConstraints() {
 
         <h3>Intentional Simplifications</h3>
         <ul>
-          <li><strong>No Admin Dashboard:</strong> Admin actions performed via edge functions with service_role key.</li>
+          <li><strong>Admin Dashboard:</strong> Available at /admin with role-based access control via user_roles table.</li>
           <li><strong>No Email Verification:</strong> Auto-confirm enabled for faster onboarding.</li>
           <li><strong>No Image Compression:</strong> Photos uploaded as-is to Supabase Storage.</li>
           <li><strong>No Push Notifications:</strong> Not yet implemented.</li>
@@ -1575,6 +1575,32 @@ function ChangeLog() {
       
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <h3>January 2025</h3>
+
+        <h4>Week 2 (Jan 10) – Admin Dashboard</h4>
+        <ul>
+          <li><strong>Admin Dashboard:</strong> Created comprehensive admin panel at "/admin" with role-based access control.</li>
+          <li><strong>User Roles System:</strong> Added <code>user_roles</code> table with <code>app_role</code> enum ('admin', 'moderator', 'user'). Security definer functions <code>has_role()</code> and <code>is_admin()</code> prevent RLS recursion.</li>
+          <li><strong>Admin Hook:</strong> Created <code>useAdminRole</code> hook for checking admin status securely via RPC.</li>
+          <li><strong>Dashboard Sections:</strong> Overview (stats, charts, recent activity), Users (manage accounts), Items (manage listings), Matches (view/manage matches), Analytics (trends), Role Management (assign admin/moderator).</li>
+          <li><strong>Reusable Components:</strong> <code>AdminSidebar</code>, <code>AdminHeader</code>, <code>StatCard</code>, <code>AdminChart</code>, <code>DataTable</code>, <code>RecentActivity</code>.</li>
+          <li><strong>Access Control:</strong> Non-admin users see "Access Denied" and are redirected to /discover after 3 seconds.</li>
+          <li><strong>RLS Policies:</strong> Only admins can view/modify user_roles table. All admin checks use security definer functions.</li>
+        </ul>
+
+        <div className="p-4 bg-muted rounded-lg mt-4">
+          <h4 className="font-semibold mb-2">How to Test (Jan 10 Release)</h4>
+          <ol className="list-decimal list-inside space-y-1 text-sm">
+            <li><strong>Add Admin Role:</strong> Insert into user_roles: <code>INSERT INTO user_roles (user_id, role) VALUES ('your-user-id', 'admin');</code></li>
+            <li><strong>Access Dashboard:</strong> Navigate to "/admin" – should see full admin dashboard with sidebar and sections.</li>
+            <li><strong>Non-Admin Access:</strong> Sign in as regular user, go to "/admin" – should see "Access Denied" and redirect.</li>
+            <li><strong>Overview Section:</strong> Check stats display total users, items, matches, and recent activity.</li>
+            <li><strong>Users Section:</strong> Search and filter users, view profiles.</li>
+            <li><strong>Items Section:</strong> Filter by category, search items, view item details.</li>
+            <li><strong>Matches Section:</strong> View matches, filter by status (active/completed).</li>
+            <li><strong>Role Management:</strong> Add/remove admin roles (requires existing admin).</li>
+            <li><strong>Mobile Responsive:</strong> Test sidebar collapses on mobile, header shows menu button.</li>
+          </ol>
+        </div>
         
         <h4>Week 1 (Jan 5) – Landing Page, Branding & Google OAuth</h4>
         <ul>
