@@ -7,7 +7,6 @@ import {
   Users, 
   Package, 
   Handshake, 
-  Settings, 
   Shield,
   ArrowLeft,
   BarChart3,
@@ -18,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { APP_NAME } from '@/config/branding';
-import { LiveIndicator } from './LiveIndicator';
 
 interface AdminSidebarProps {
   activeSection: string;
@@ -31,7 +29,6 @@ const navItems = [
   { id: 'items', label: 'Items', icon: Package, badge: null },
   { id: 'matches', label: 'Matches', icon: Handshake, badge: null },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, badge: null },
-  { id: 'algorithm', label: 'Algorithm', icon: Brain, badge: 'New' },
   { id: 'roles', label: 'Role Management', icon: Shield, badge: null },
 ];
 
@@ -97,8 +94,18 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
         <div className="mt-6 px-3">
           <div className="h-px bg-border mb-4" />
           <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-            Resources
+            Advanced
           </p>
+          <button
+            onClick={() => navigate('/valhalla')}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200"
+          >
+            <Brain className="h-4 w-4" />
+            <span className="flex-1 text-left">Valhalla</span>
+            <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 text-[10px] px-1.5">
+              Algorithm
+            </Badge>
+          </button>
           <button
             onClick={() => navigate('/whitepaper')}
             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200"
