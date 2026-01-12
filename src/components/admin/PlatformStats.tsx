@@ -8,12 +8,11 @@ import {
   Crown, 
   TrendingUp, 
   TrendingDown,
-  Activity,
   Zap,
-  Target,
-  BarChart3
+  Target
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { subDays, format, parseISO } from 'date-fns';
 
 interface StatWithSparkline {
   title: string;
@@ -33,92 +32,121 @@ export function PlatformStats() {
   useEffect(() => {
     async function fetchStats() {
       try {
+        // Get dates for comparison
+        const today = new Date();
+        const lastWeekStart = subDays(today, 14);
+        const thisWeekStart = subDays(today, 7);
+
+        // Fetch all data
         const [
-          usersResult,
+          profilesResult,
           itemsResult,
           matchesResult,
           proUsersResult,
           swipesResult,
-          completedResult,
         ] = await Promise.all([
-          supabase.from('profiles').select('id', { count: 'exact', head: true }),
-          supabase.from('items').select('id', { count: 'exact', head: true }).eq('is_archived', false),
-          supabase.from('matches').select('id', { count: 'exact', head: true }),
-          supabase.from('user_subscriptions').select('id', { count: 'exact', head: true }).eq('is_pro', true),
-          supabase.from('swipes').select('id', { count: 'exact', head: true }),
-          supabase.from('matches').select('id', { count: 'exact', head: true }).eq('is_completed', true),
+          supabase.from('profiles').select('created_at'),
+          supabase.from('items').select('id, created_at, is_archived'),
+          supabase.from('matches').select('id, created_at, is_completed'),
+          supabase.from('user_subscriptions').select('id, created_at').eq('is_pro', true),
+          supabase.from('swipes').select('id, created_at'),
         ]);
 
-        const totalUsers = usersResult.count || 0;
-        const activeItems = itemsResult.count || 0;
-        const totalMatches = matchesResult.count || 0;
-        const proUsers = proUsersResult.count || 0;
-        const totalSwipes = swipesResult.count || 0;
-        const completedSwaps = completedResult.count || 0;
+        const profiles = profilesResult.data || [];
+        const items = itemsResult.data || [];
+        const matches = matchesResult.data || [];
+        const proUsers = proUsersResult.data || [];
+        const swipes = swipesResult.data || [];
 
-        // Generate fake sparkline data for visual effect
-        const generateSparkline = () => 
-          Array.from({ length: 7 }, () => Math.random() * 100);
+        // Calculate totals
+        const totalUsers = profiles.length;
+        const activeItems = items.filter(i => !i.is_archived).length;
+        const totalMatches = matches.length;
+        const totalProUsers = proUsers.length;
+        const totalSwipes = swipes.length;
+        const completedSwaps = matches.filter(m => m.is_completed).length;
+
+        // Calculate weekly changes
+        const calcWeeklyChange = (data: { created_at: string }[]) => {
+          const thisWeekCount = data.filter(d => 
+            parseISO(d.created_at) >= thisWeekStart
+          ).length;
+          const lastWeekCount = data.filter(d => 
+            parseISO(d.created_at) >= lastWeekStart && parseISO(d.created_at) < thisWeekStart
+          ).length;
+          if (lastWeekCount === 0) return thisWeekCount > 0 ? 100 : 0;
+          return Math.round(((thisWeekCount - lastWeekCount) / lastWeekCount) * 100);
+        };
+
+        // Generate real sparkline data (last 7 days)
+        const generateSparkline = (data: { created_at: string }[]) => {
+          return Array.from({ length: 7 }, (_, i) => {
+            const date = format(subDays(today, 6 - i), 'yyyy-MM-dd');
+            return data.filter(d => 
+              format(parseISO(d.created_at), 'yyyy-MM-dd') === date
+            ).length;
+          });
+        };
 
         const statsData: StatWithSparkline[] = [
           {
             title: 'Total Users',
             value: totalUsers.toLocaleString(),
-            change: 12.5,
-            changeLabel: 'vs last month',
+            change: calcWeeklyChange(profiles),
+            changeLabel: 'vs last week',
             icon: Users,
             iconColor: 'text-blue-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(profiles),
             sparklineColor: '#3b82f6',
           },
           {
             title: 'Active Items',
             value: activeItems.toLocaleString(),
-            change: 8.2,
+            change: calcWeeklyChange(items.filter(i => !i.is_archived)),
             changeLabel: 'vs last week',
             icon: Package,
             iconColor: 'text-purple-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(items),
             sparklineColor: '#a855f7',
           },
           {
             title: 'Total Matches',
             value: totalMatches.toLocaleString(),
-            change: 23.1,
-            changeLabel: 'vs last month',
+            change: calcWeeklyChange(matches),
+            changeLabel: 'vs last week',
             icon: Handshake,
             iconColor: 'text-emerald-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(matches),
             sparklineColor: '#10b981',
           },
           {
             title: 'Pro Subscribers',
-            value: proUsers.toLocaleString(),
-            change: 5.7,
+            value: totalProUsers.toLocaleString(),
+            change: calcWeeklyChange(proUsers),
             changeLabel: 'vs last week',
             icon: Crown,
             iconColor: 'text-amber-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(proUsers),
             sparklineColor: '#f59e0b',
           },
           {
             title: 'Total Swipes',
             value: totalSwipes.toLocaleString(),
-            change: 34.2,
+            change: calcWeeklyChange(swipes),
             changeLabel: 'this week',
             icon: Zap,
             iconColor: 'text-pink-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(swipes),
             sparklineColor: '#ec4899',
           },
           {
             title: 'Completed Swaps',
             value: completedSwaps.toLocaleString(),
-            change: totalMatches > 0 ? Number(((completedSwaps / totalMatches) * 100).toFixed(0)) : 0,
+            change: totalMatches > 0 ? Math.round((completedSwaps / totalMatches) * 100) : 0,
             changeLabel: 'success rate',
             icon: Target,
             iconColor: 'text-teal-500',
-            sparklineData: generateSparkline(),
+            sparklineData: generateSparkline(matches.filter(m => m.is_completed)),
             sparklineColor: '#14b8a6',
           },
         ];
@@ -154,8 +182,9 @@ export function PlatformStats() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       {stats.map((stat) => {
-        const isPositive = stat.change > 0;
-        const chartData = stat.sparklineData.map((value, index) => ({ value }));
+        const isPositive = stat.change >= 0;
+        const chartData = stat.sparklineData.map((value) => ({ value }));
+        const hasData = stat.sparklineData.some(v => v > 0);
 
         return (
           <div
@@ -194,23 +223,29 @@ export function PlatformStats() {
             </div>
 
             <div className="h-10">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
-                  <defs>
-                    <linearGradient id={`gradient-${stat.title}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={stat.sparklineColor} stopOpacity={0.3} />
-                      <stop offset="95%" stopColor={stat.sparklineColor} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke={stat.sparklineColor}
-                    fill={`url(#gradient-${stat.title})`}
-                    strokeWidth={1.5}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              {hasData ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={chartData}>
+                    <defs>
+                      <linearGradient id={`gradient-${stat.title.replace(/\s/g, '-')}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={stat.sparklineColor} stopOpacity={0.3} />
+                        <stop offset="95%" stopColor={stat.sparklineColor} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <Area
+                      type="monotone"
+                      dataKey="value"
+                      stroke={stat.sparklineColor}
+                      fill={`url(#gradient-${stat.title.replace(/\s/g, '-')})`}
+                      strokeWidth={1.5}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-end">
+                  <div className="w-full h-[1px] bg-muted" />
+                </div>
+              )}
             </div>
           </div>
         );

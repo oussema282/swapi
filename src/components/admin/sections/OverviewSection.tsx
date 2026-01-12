@@ -8,23 +8,71 @@ import { SystemHealth } from '../SystemHealth';
 import { TopPerformers } from '../TopPerformers';
 import { CategoryBreakdown } from '../CategoryBreakdown';
 import { LiveIndicator } from '../LiveIndicator';
-import { formatDistanceToNow } from 'date-fns';
+import { format, subDays, parseISO } from 'date-fns';
+
+interface DailyData {
+  date: string;
+  name: string;
+  users: number;
+  items: number;
+  matches: number;
+  swipes: number;
+}
 
 export function OverviewSection() {
-  const [chartData, setChartData] = useState<{ name: string; value: number }[]>([]);
+  const [chartData, setChartData] = useState<DailyData[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        // Generate chart data (last 7 days)
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        const mockChartData = days.map((day) => ({
-          name: day,
-          value: Math.floor(Math.random() * 50) + 10,
-        }));
-        setChartData(mockChartData);
+        // Get the last 7 days
+        const last7Days = Array.from({ length: 7 }, (_, i) => {
+          const date = subDays(new Date(), 6 - i);
+          return {
+            date: format(date, 'yyyy-MM-dd'),
+            name: format(date, 'EEE'),
+          };
+        });
+
+        // Fetch real data for charts
+        const [profilesResult, itemsResult, matchesResult, swipesResult] = await Promise.all([
+          supabase.from('profiles').select('created_at'),
+          supabase.from('items').select('created_at'),
+          supabase.from('matches').select('created_at, is_completed'),
+          supabase.from('swipes').select('created_at, liked'),
+        ]);
+
+        // Process daily data
+        const dailyData: DailyData[] = last7Days.map(({ date, name }) => {
+          const dayUsers = profilesResult.data?.filter(p => 
+            format(parseISO(p.created_at), 'yyyy-MM-dd') === date
+          ).length || 0;
+
+          const dayItems = itemsResult.data?.filter(i => 
+            format(parseISO(i.created_at), 'yyyy-MM-dd') === date
+          ).length || 0;
+
+          const dayMatches = matchesResult.data?.filter(m => 
+            format(parseISO(m.created_at), 'yyyy-MM-dd') === date
+          ).length || 0;
+
+          const daySwipes = swipesResult.data?.filter(s => 
+            format(parseISO(s.created_at), 'yyyy-MM-dd') === date
+          ).length || 0;
+
+          return {
+            date,
+            name,
+            users: dayUsers,
+            items: dayItems,
+            matches: dayMatches,
+            swipes: daySwipes,
+          };
+        });
+
+        setChartData(dailyData);
 
         // Fetch recent activity
         const { data: recentMatches } = await supabase
@@ -86,6 +134,23 @@ export function OverviewSection() {
     fetchData();
   }, []);
 
+  // Transform data for different chart types
+  const userActivityData = chartData.map(d => ({
+    name: d.name,
+    value: d.swipes,
+  }));
+
+  const itemsMatchesData = chartData.map(d => ({
+    name: d.name,
+    value: d.items,
+    value2: d.matches,
+  }));
+
+  const signupsData = chartData.map(d => ({
+    name: d.name,
+    value: d.users,
+  }));
+
   return (
     <div className="space-y-6">
       {/* Header with Live Indicator */}
@@ -110,36 +175,29 @@ export function OverviewSection() {
         {/* Left Column - Charts */}
         <div className="lg:col-span-2 space-y-6">
           <AdminChart
-            title="User Activity Trend"
-            data={chartData}
+            title="Daily Swipe Activity"
+            data={userActivityData}
             type="area"
             loading={loading}
-            label="Active Users"
+            label="Swipes"
           />
           
           <div className="grid gap-6 md:grid-cols-2">
             <AdminChart
               title="Items & Matches"
-              data={chartData.map((d, i) => ({
-                ...d,
-                value: Math.floor(Math.random() * 30) + 5,
-                value2: Math.floor(Math.random() * 20) + 2,
-              }))}
+              data={itemsMatchesData}
               type="bar"
               loading={loading}
-              label="Items"
-              secondaryLabel="Matches"
+              label="New Items"
+              secondaryLabel="New Matches"
             />
             <AdminChart
-              title="Revenue Trend"
-              data={chartData.map((d) => ({
-                ...d,
-                value: Math.floor(Math.random() * 10) + 1,
-              }))}
+              title="New Users"
+              data={signupsData}
               type="area"
               loading={loading}
-              color="hsl(45, 93%, 47%)"
-              label="Pro Subscriptions"
+              color="hsl(142, 76%, 36%)"
+              label="Signups"
             />
           </div>
         </div>
