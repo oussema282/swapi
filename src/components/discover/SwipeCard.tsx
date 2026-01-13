@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Package, Star, ChevronDown, MapPin, Sparkles, Info } from 'lucide-react';
+import { Package, Star, ChevronDown, MapPin, Sparkles, Info, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -23,13 +23,11 @@ interface SwipeCardProps {
   onSwipeComplete: (direction: 'left' | 'right') => void;
   swipeDirection: 'left' | 'right' | null;
   userLocation?: { latitude: number | null; longitude: number | null };
-  /** When false, gestures are disabled (controlled by SWIPE_PHASE) */
-  canGesture?: boolean;
   /** Callback when info button is tapped */
   onInfoTap?: () => void;
+  /** Show persistent overlay feedback */
+  showFeedbackOverlay?: 'like' | 'nope' | null;
 }
-
-const SWIPE_THRESHOLD = 100;
 
 // Compact rating display for cards
 function CompactRating({ rating, isNew }: { rating?: number; isNew?: boolean }) {
@@ -49,7 +47,7 @@ function CompactRating({ rating, isNew }: { rating?: number; isNew?: boolean }) 
   );
 }
 
-export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, canGesture = true, onInfoTap }: SwipeCardProps) {
+export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, onInfoTap, showFeedbackOverlay }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(false);
@@ -80,29 +78,14 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     ? calculateDistance(userLocation.latitude, userLocation.longitude, item.latitude, item.longitude)
     : null;
 
-  const rotate = useTransform(x, [-300, 0, 300], [-25, 0, 25]);
-  const opacity = useTransform(x, [-300, -100, 0, 100, 300], [0, 1, 1, 1, 0]);
-  const likeOpacity = useTransform(x, [0, 100, 200], [0, 0.8, 1]);
-  const nopeOpacity = useTransform(x, [-200, -100, 0], [1, 0.8, 0]);
-
-  const handleDragEnd = (_: any, info: PanInfo) => {
-    // Only process swipe completion if gestures are allowed
-    if (!canGesture) return;
-    
-    const threshold = SWIPE_THRESHOLD;
-    if (info.offset.x > threshold) {
-      onSwipeComplete('right');
-    } else if (info.offset.x < -threshold) {
-      onSwipeComplete('left');
-    }
-  };
+  const scale = useTransform(x, [-300, 0, 300], [0.95, 1, 0.95]);
 
   const getExitAnimation = () => {
     if (swipeDirection === 'left') {
-      return { x: -500, rotate: -30, opacity: 0 };
+      return { x: -400, rotate: -15, opacity: 0, scale: 0.9 };
     }
     if (swipeDirection === 'right') {
-      return { x: 500, rotate: 30, opacity: 0 };
+      return { x: 400, rotate: 15, opacity: 0, scale: 0.9 };
     }
     return {};
   };
@@ -132,22 +115,22 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
     <motion.div
       ref={cardRef}
       className={cn(
-        'absolute inset-0 rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing swipe-card-shadow',
+        'absolute inset-0 rounded-3xl overflow-hidden swipe-card-shadow',
         !isTop && 'pointer-events-none'
       )}
       style={{ 
-        x: isTop ? x : 0, 
-        rotate: isTop ? rotate : 0,
+        x: 0,
         scale: isTop ? 1 : 0.95,
         zIndex: isTop ? 10 : 5,
       }}
-      animate={swipeDirection ? getExitAnimation() : {}}
-      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-      drag={isTop && canGesture ? 'x' : false}
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.9}
-      onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 1.02 }}
+      initial={false}
+      animate={swipeDirection ? getExitAnimation() : { x: 0, rotate: 0, opacity: 1, scale: isTop ? 1 : 0.95 }}
+      transition={{ 
+        type: 'spring', 
+        damping: 25, 
+        stiffness: 200,
+        duration: 0.5
+      }}
     >
       <div className="absolute inset-0 bg-card flex flex-col">
         {/* Photo Area with Navigation */}
@@ -213,25 +196,69 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
 
-          {/* Like Overlay */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-success/30"
-            style={{ opacity: isTop ? likeOpacity : 0 }}
-          >
-            <div className="px-12 py-6 rounded-3xl bg-success border-4 border-white transform -rotate-12 shadow-2xl">
-              <span className="text-white font-bold text-5xl tracking-wider">LIKE</span>
-            </div>
-          </motion.div>
+          {/* Like Overlay - Artistic Full Screen */}
+          <AnimatePresence>
+            {(showFeedbackOverlay === 'like' || swipeDirection === 'right') && isTop && (
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center z-30"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {/* Radial gradient background */}
+                <div className="absolute inset-0 bg-gradient-radial from-success/60 via-success/30 to-transparent" />
+                
+                {/* Animated stamp */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -30 }}
+                  animate={{ scale: 1, rotate: -12 }}
+                  exit={{ scale: 1.5, opacity: 0 }}
+                  transition={{ type: 'spring', damping: 12, stiffness: 200 }}
+                  className="relative"
+                >
+                  <div className="px-8 py-4 rounded-2xl bg-success border-4 border-white shadow-2xl flex items-center gap-3">
+                    <ThumbsUp className="w-10 h-10 text-white fill-white/30" />
+                    <span className="text-white font-black text-5xl tracking-widest uppercase">Like</span>
+                  </div>
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 rounded-2xl bg-success blur-xl opacity-50 -z-10" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Nope Overlay */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-destructive/30"
-            style={{ opacity: isTop ? nopeOpacity : 0 }}
-          >
-            <div className="px-12 py-6 rounded-3xl bg-destructive border-4 border-white transform rotate-12 shadow-2xl">
-              <span className="text-white font-bold text-5xl tracking-wider">NOPE</span>
-            </div>
-          </motion.div>
+          {/* Nope Overlay - Artistic Full Screen */}
+          <AnimatePresence>
+            {(showFeedbackOverlay === 'nope' || swipeDirection === 'left') && isTop && (
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center z-30"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {/* Radial gradient background */}
+                <div className="absolute inset-0 bg-gradient-radial from-destructive/60 via-destructive/30 to-transparent" />
+                
+                {/* Animated stamp */}
+                <motion.div
+                  initial={{ scale: 0, rotate: 30 }}
+                  animate={{ scale: 1, rotate: 12 }}
+                  exit={{ scale: 1.5, opacity: 0 }}
+                  transition={{ type: 'spring', damping: 12, stiffness: 200 }}
+                  className="relative"
+                >
+                  <div className="px-8 py-4 rounded-2xl bg-destructive border-4 border-white shadow-2xl flex items-center gap-3">
+                    <ThumbsDown className="w-10 h-10 text-white fill-white/30" />
+                    <span className="text-white font-black text-5xl tracking-widest uppercase">Nope</span>
+                  </div>
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 rounded-2xl bg-destructive blur-xl opacity-50 -z-10" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Top Row - Rating + Condition + Info */}
           <div className="absolute top-4 left-4 right-4 flex items-start justify-between gap-2 z-20">

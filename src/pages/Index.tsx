@@ -49,7 +49,6 @@ export default function Index() {
     actions, 
     canSwipe, 
     canGoBack, 
-    canGesture,
     isAnimating,
     isRefreshing,
     isLoading: isSwipeLoading,
@@ -58,6 +57,9 @@ export default function Index() {
   } = useSwipeState();
   
   const { currentIndex, swipeDirection, showMatch, matchedItem, lastUndoneItemId, cardKey } = swipeState;
+  
+  // Track feedback overlay for artistic animations
+  const [feedbackOverlay, setFeedbackOverlay] = useState<'like' | 'nope' | null>(null);
 
   // Auto-select first item when items load
   useEffect(() => {
@@ -171,6 +173,9 @@ export default function Index() {
       actions.releaseCommitLock();
       return;
     }
+    
+    // Show feedback overlay immediately
+    setFeedbackOverlay(direction === 'right' ? 'like' : 'nope');
 
     // Capture itemId before async to avoid stale closure
     const swipedItemId = currentItem.id;
@@ -195,23 +200,27 @@ export default function Index() {
 
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
         actions.completeSwipe(swipedItemId);
+        
+        // Clear feedback overlay after card exits
+        setTimeout(() => setFeedbackOverlay(null), 200);
       } catch (error) {
         // On error, force back to READY
         console.error('[SWIPE] mutation failed:', error);
         toast.error('Swipe failed. Please try again.');
         actions.forceReady();
+        setFeedbackOverlay(null);
       } finally {
         // ALWAYS release lock
         actions.releaseCommitLock();
       }
-    }, 300);
+    }, 400);
   }, [selectedItemId, currentItem, swipeMutation, actions, canUse.swipes, isPro, incrementUsage, isSystemBlocked]);
 
+  // Swipe is triggered by button click, not gesture
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
-    if (canGesture) {
-      handleSwipe(direction);
-    }
-  }, [handleSwipe, canGesture]);
+    // This is now only called programmatically from button clicks
+    handleSwipe(direction);
+  }, [handleSwipe]);
 
   const handleGoBack = useCallback(async () => {
     if (!selectedItemId) return;
@@ -384,7 +393,7 @@ export default function Index() {
               isRefreshing={isRefreshing}
             />
           ) : hasCards ? (
-            <div className="absolute inset-0 p-4">
+            <div className="absolute inset-0 p-3">
               <div className="relative w-full h-full max-w-md mx-auto">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
@@ -394,8 +403,8 @@ export default function Index() {
                     onSwipeComplete={handleSwipeComplete}
                     swipeDirection={idx === arr.length - 1 ? swipeDirection : null}
                     userLocation={{ latitude, longitude }}
-                    canGesture={canGesture && idx === arr.length - 1}
                     onInfoTap={idx === arr.length - 1 ? () => setShowDetailsSheet(true) : undefined}
+                    showFeedbackOverlay={idx === arr.length - 1 ? feedbackOverlay : null}
                   />
                 ))}
               </div>
@@ -403,15 +412,15 @@ export default function Index() {
           ) : null}
         </div>
 
-        {/* Tinder-style Action Buttons */}
+        {/* Thumb Action Buttons */}
         {selectedItemId && !noItems && hasCards && (
-          <div className="py-4 shrink-0 bg-background">
+          <div className="py-4 pb-6 shrink-0 bg-background/95 backdrop-blur-sm border-t border-border/30">
             <SwipeActions
               onDislike={() => handleSwipe('left')}
               onLike={() => handleSwipe('right')}
               onUndo={handleGoBack}
               onUpgradeClick={() => setShowUpgradePrompt(true)}
-              canSwipe={canGesture && !swipeMutation.isPending}
+              canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
               canUndo={canGoBack}
               isLoading={swipeMutation.isPending}
             />
