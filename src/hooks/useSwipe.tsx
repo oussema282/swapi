@@ -122,8 +122,7 @@ export function useSwipe() {
         const { data: match } = await supabase
           .from('matches')
           .select('*')
-          .or(`item_a_id.eq.${swiperItemId},item_b_id.eq.${swiperItemId}`)
-          .or(`item_a_id.eq.${swipedItemId},item_b_id.eq.${swipedItemId}`)
+          .or(`and(item_a_id.eq.${swiperItemId},item_b_id.eq.${swipedItemId}),and(item_a_id.eq.${swipedItemId},item_b_id.eq.${swiperItemId})`)
           .maybeSingle();
 
         return { swipe: data, match };

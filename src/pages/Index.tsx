@@ -393,8 +393,8 @@ export default function Index() {
               isRefreshing={isRefreshing}
             />
           ) : hasCards ? (
-            <div className="absolute inset-0 p-3">
-              <div className="relative w-full h-full max-w-md mx-auto">
+            <div className="absolute inset-0 p-4 flex items-center justify-center">
+              <div className="relative w-full max-w-[320px] h-full max-h-[520px]">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
                     key={`${item.id}-${cardKey}`}
