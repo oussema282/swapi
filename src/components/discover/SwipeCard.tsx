@@ -82,10 +82,10 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
 
   const getExitAnimation = () => {
     if (swipeDirection === 'left') {
-      return { x: -400, rotate: -15, opacity: 0, scale: 0.9 };
+      return { y: 400, x: 0, rotate: 0, opacity: 0, scale: 0.85 };
     }
     if (swipeDirection === 'right') {
-      return { x: 400, rotate: 15, opacity: 0, scale: 0.9 };
+      return { y: -400, x: 0, rotate: 0, opacity: 0, scale: 0.85 };
     }
     return {};
   };
