@@ -208,20 +208,22 @@ export default function Index() {
           queryClient.invalidateQueries({ queryKey: ['missed-matches'] });
           
           // Use a slight delay to let the cache invalidate, then check
-          setTimeout(async () => {
-            const result = await refetchMissedMatches();
-            const updatedMissedMatches = result.data;
-            
-            // Check if this swipe created a missed match
-            const newMissedMatch = updatedMissedMatches?.find(
-              m => m.their_item_id === swipedItemId && m.my_item_id === selectedItemId
-            );
-            
-            if (newMissedMatch) {
-              setCurrentMissedMatch(newMissedMatch);
-              setShowMissedMatchModal(true);
-            }
-          }, 100);
+          const checkMissedMatch = () => {
+            refetchMissedMatches().then((result) => {
+              const updatedMissedMatches = result.data;
+              
+              // Check if this swipe created a missed match
+              const newMissedMatch = updatedMissedMatches?.find(
+                (m) => m.their_item_id === swipedItemId && m.my_item_id === selectedItemId
+              );
+              
+              if (newMissedMatch) {
+                setCurrentMissedMatch(newMissedMatch);
+                setShowMissedMatchModal(true);
+              }
+            });
+          };
+          setTimeout(checkMissedMatch, 100);
         }
 
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
