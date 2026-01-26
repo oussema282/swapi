@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { Shield, Zap, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import featureSecureImage from '@/assets/landing/feature-secure.png';
+import featureChatImage from '@/assets/landing/feature-chat.png';
 
 export function FeatureShowcase() {
   const { t } = useTranslation();
@@ -17,8 +19,12 @@ export function FeatureShowcase() {
           className="flex min-h-[60vh] items-center justify-center gap-[10%] max-lg:flex-col max-lg:gap-10"
         >
           <div className="flex">
-            <div className="flex h-[350px] w-[250px] items-center justify-center rounded-3xl bg-gradient-to-br from-primary/20 to-secondary/20">
-              <Shield className="h-24 w-24 text-primary" />
+            <div className="h-[450px] w-[300px] max-lg:h-[350px] max-lg:w-[220px]">
+              <img
+                src={featureSecureImage}
+                alt="Secure Trading"
+                className="h-full w-full object-contain"
+              />
             </div>
           </div>
           <div className="mt-6 flex max-w-[450px] flex-col gap-4">
@@ -53,7 +59,7 @@ export function FeatureShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex min-h-[60vh] items-center justify-center gap-[10%] max-lg:flex-col max-lg:gap-10"
+          className="flex min-h-[60vh] items-center justify-center gap-[10%] max-lg:flex-col-reverse max-lg:gap-10"
         >
           <div className="mt-6 flex max-w-[450px] flex-col gap-4">
             <h3 className="text-4xl font-medium">{t('landing.features.instantNotifications.title')}</h3>
@@ -79,8 +85,12 @@ export function FeatureShowcase() {
           </div>
 
           <div className="flex">
-            <div className="flex h-[350px] w-[250px] items-center justify-center rounded-3xl bg-gradient-to-br from-secondary/20 to-accent/20">
-              <Zap className="h-24 w-24 text-secondary" />
+            <div className="h-[450px] w-[300px] max-lg:h-[350px] max-lg:w-[220px]">
+              <img
+                src={featureChatImage}
+                alt="Lightning Fast"
+                className="h-full w-full object-contain"
+              />
             </div>
           </div>
         </motion.div>
