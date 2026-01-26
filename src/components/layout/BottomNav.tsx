@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 const navItems = [
   { icon: Search, label: 'Search', path: '/search' },
   { icon: Map, label: 'Map', path: '/map' },
-  { icon: Compass, label: 'Discover', path: '/' },
+  { icon: Compass, label: 'Discover', path: '/discover' },
   { icon: Plus, label: 'Add', path: '/items/new' },
   { icon: ArrowLeftRight, label: 'Matches', path: '/matches' },
   { icon: User, label: 'Profile', path: '/profile' },
