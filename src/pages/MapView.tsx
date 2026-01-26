@@ -325,22 +325,58 @@ export default function MapView() {
     return (
       <AppLayout showNav>
         <div className="flex flex-col items-center justify-center h-[80vh] px-6 text-center">
-          <div className="w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
-            <MapPin className="w-10 h-10 text-destructive" />
-          </div>
-          <h2 className="text-xl font-display font-bold mb-2">Location Required</h2>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+            className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6"
+          >
+            <MapPin className="w-12 h-12 text-primary" />
+          </motion.div>
+          <h2 className="text-2xl font-display font-bold mb-3">Enable Location</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            Map access requires your location to show nearby items. Please enable location permissions in your browser settings.
+            Map view needs your location to show items near you and connect you with local traders.
           </p>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={goBack}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Go Back
-            </Button>
-            <Button onClick={() => navigate('/discover')}>
-              Go to Discover
-            </Button>
-          </div>
+          
+          {permissionStatus === 'denied' && (
+            <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 max-w-sm">
+              <div className="flex items-center gap-2 text-destructive mb-1">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="font-medium text-sm">Location Access Denied</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Please enable location in your browser settings and try again.
+              </p>
+            </div>
+          )}
+
+          <Button
+            size="lg"
+            className="w-full max-w-xs mb-3"
+            onClick={requestLocation}
+            disabled={locationLoading}
+          >
+            {locationLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Getting Location...
+              </>
+            ) : (
+              <>
+                <MapPin className="w-4 h-4 mr-2" />
+                {permissionStatus === 'denied' ? 'Retry Location Access' : 'Allow Location Access'}
+              </>
+            )}
+          </Button>
+          
+          <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
+          
+          <p className="text-xs text-muted-foreground mt-4 max-w-xs">
+            Your location is only used to find nearby items and is never shared publicly.
+          </p>
         </div>
       </AppLayout>
     );
