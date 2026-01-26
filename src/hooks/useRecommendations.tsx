@@ -44,7 +44,7 @@ export function useRecommendedItems(myItemId: string | null, feedMode: FeedMode 
     systemState.subscription === 'UPGRADING';
 
   return useQuery({
-    queryKey: ['recommended-items', myItemId, user?.id, feedMode, latitude, longitude],
+    queryKey: ['recommended-items', myItemId, user?.id, feedMode],
     queryFn: async (): Promise<SwipeableItem[]> => {
       if (!user || !myItemId) return [];
       
@@ -111,8 +111,11 @@ export function useRecommendedItems(myItemId: string | null, feedMode: FeedMode 
     },
     // Only enable when not blocked
     enabled: !!user && !!myItemId && !isBlocked,
-    staleTime: 30000, // Cache for 30 seconds
-    refetchInterval: 60000, // Silently refresh every 60 seconds
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes - items stay stable during session
+    gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    refetchOnMount: false, // Don't refetch if data exists
+    refetchInterval: false, // Disable automatic refetching - only manual refresh
     // CRITICAL: Ensure we get fresh data and don't hang
     retry: 1,
     retryDelay: 1000,
