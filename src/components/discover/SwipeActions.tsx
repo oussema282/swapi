@@ -72,8 +72,8 @@ export function SwipeActions({
               disabled={isPro ? !canUndo : false}
               className={cn(
                 "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-                "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
-                "hover:scale-110 hover:bg-white/80 active:scale-95",
+                "bg-white/50 backdrop-blur-md shadow-lg border border-white/20",
+                "hover:scale-110 hover:bg-white/60 active:scale-95",
                 "disabled:opacity-40 disabled:hover:scale-100"
               )}
               whileTap={{ scale: 0.9 }}
@@ -96,8 +96,8 @@ export function SwipeActions({
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white/70 backdrop-blur-md shadow-xl border border-white/30",
-          "hover:scale-110 hover:bg-white/80 active:scale-95",
+          "bg-white/50 backdrop-blur-md shadow-xl border border-white/20",
+          "hover:scale-110 hover:bg-white/60 active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'dislike' && "ring-4 ring-tinder-red/30"
         )}
@@ -121,8 +121,8 @@ export function SwipeActions({
               disabled={!canSwipe || isLoading}
               className={cn(
                 "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-                "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
-                "hover:scale-110 hover:bg-white/80 active:scale-95",
+                "bg-white/50 backdrop-blur-md shadow-lg border border-white/20",
+                "hover:scale-110 hover:bg-white/60 active:scale-95",
                 "disabled:opacity-40 disabled:hover:scale-100"
               )}
               whileTap={{ scale: 0.9 }}
@@ -145,8 +145,8 @@ export function SwipeActions({
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white/70 backdrop-blur-md shadow-xl border border-white/30",
-          "hover:scale-110 hover:bg-white/80 active:scale-95",
+          "bg-white/50 backdrop-blur-md shadow-xl border border-white/20",
+          "hover:scale-110 hover:bg-white/60 active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'like' && "ring-4 ring-tinder-green/30"
         )}
@@ -171,8 +171,8 @@ export function SwipeActions({
                 disabled={!canSwipe || isLoading}
                 className={cn(
                   "flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-                  "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
-                  "hover:scale-110 hover:bg-white/80 active:scale-95",
+                  "bg-white/50 backdrop-blur-md shadow-lg border border-white/20",
+                  "hover:scale-110 hover:bg-white/60 active:scale-95",
                   "disabled:opacity-40 disabled:hover:scale-100"
                 )}
                 whileTap={{ scale: 0.9 }}
