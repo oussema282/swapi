@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Item, CATEGORY_LABELS } from '@/types/database';
+import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
 import { Package, MapPin, Home, ChevronUp, Star } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
@@ -158,6 +158,13 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 <div className="absolute top-8 left-3 z-20 flex items-center gap-1 px-2 py-1 bg-black/40 backdrop-blur-sm rounded-full">
                   <Star className="w-3.5 h-3.5 text-tinder-gold fill-tinder-gold" />
                   <span className="text-xs font-semibold text-white">{item.community_rating.toFixed(1)}</span>
+                </div>
+              )}
+
+              {/* Condition Badge - Top Right */}
+              {isTop && item.condition && (
+                <div className="absolute top-8 right-3 z-20 px-2.5 py-1 bg-black/40 backdrop-blur-sm rounded-full">
+                  <span className="text-xs font-semibold text-white">{CONDITION_LABELS[item.condition]}</span>
                 </div>
               )}
 
