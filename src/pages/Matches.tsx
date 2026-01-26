@@ -177,7 +177,7 @@ export default function Matches() {
   });
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/discover');
   };
 
   const handleNext = () => {
@@ -246,16 +246,31 @@ export default function Matches() {
 
           {/* Progress Bar - FIXED HEIGHT: 40px (includes padding) */}
           <div className="h-[40px] flex items-center gap-2 px-4 shrink-0">
-            {SECTIONS.map((section, idx) => (
-              <button
-                key={section.id}
-                onClick={() => setCurrentStep(idx)}
-                className={cn(
-                  'h-1.5 flex-1 rounded-full transition-all duration-300',
-                  idx <= currentStep ? 'bg-primary' : 'bg-muted'
-                )}
-              />
-            ))}
+            {SECTIONS.map((section, idx) => {
+              // Determine if section has notifications
+              const hasNotification = 
+                (idx === 0 && activeMatches.some(m => hasUnreadMessages(m))) || // Active with unread
+                (idx === 2 && pendingInvites.length > 0) || // Deal invites
+                (idx === 3 && missedMatches.length > 0); // Missed matches
+              
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => setCurrentStep(idx)}
+                  className="relative h-1.5 flex-1"
+                >
+                  {/* Progress bar segment */}
+                  <div className={cn(
+                    'h-full w-full rounded-full transition-all duration-300',
+                    idx <= currentStep ? 'bg-primary' : 'bg-muted'
+                  )} />
+                  {/* Red notification dot */}
+                  {hasNotification && idx !== currentStep && (
+                    <span className="absolute -top-1 right-1/2 translate-x-1/2 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Center Container - FIXED: flex-1 fills remaining space, overflow hidden */}
