@@ -27,8 +27,10 @@ import {
   EyeOff,
   Camera,
   Save,
-  AlertTriangle
+  AlertTriangle,
+  Globe
 } from 'lucide-react';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { z } from 'zod';
@@ -629,6 +631,28 @@ export default function Settings() {
                         checked={showLocation}
                         onCheckedChange={setShowLocation}
                       />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Language Settings */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Globe className="w-5 h-5" />
+                      Language
+                    </CardTitle>
+                    <CardDescription>Choose your preferred language</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>App Language</Label>
+                        <p className="text-sm text-muted-foreground">
+                          Select display language
+                        </p>
+                      </div>
+                      <LanguageSwitcher variant="full" />
                     </div>
                   </CardContent>
                 </Card>
