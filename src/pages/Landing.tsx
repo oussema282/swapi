@@ -12,7 +12,27 @@ import { Footer } from '@/components/landing/Footer';
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-secondary/10">
+    <div className="relative min-h-screen">
+      {/* Smoothie gradient background */}
+      <div 
+        className="fixed inset-0 -z-10"
+        style={{
+          background: `linear-gradient(
+            180deg,
+            hsl(262, 83%, 95%) 0%,
+            hsl(280, 70%, 92%) 10%,
+            hsl(300, 60%, 90%) 20%,
+            hsl(330, 70%, 92%) 30%,
+            hsl(340, 82%, 92%) 40%,
+            hsl(20, 80%, 93%) 50%,
+            hsl(45, 90%, 92%) 60%,
+            hsl(172, 66%, 90%) 70%,
+            hsl(200, 70%, 92%) 80%,
+            hsl(240, 60%, 94%) 90%,
+            hsl(262, 83%, 95%) 100%
+          )`
+        }}
+      />
       <Hero />
       <TrustBadges />
       <FeatureShowcase />
