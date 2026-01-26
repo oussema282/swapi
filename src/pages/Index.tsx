@@ -280,6 +280,12 @@ export default function Index() {
     setSelectedItemId(id);
   }, [actions, queryClient, selectedItemId]);
 
+  // Handler for switching item from exhausted state - must be before early returns
+  const handleSwitchItemFromExhausted = useCallback(() => {
+    // Focus the item selector - scroll to top where selector is
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -301,12 +307,6 @@ export default function Index() {
   const showExhaustedState = isExhausted && !swipeLoading;
   const showLoadingState = isActuallyLoading || (isRefreshing && globalPhase === 'REFRESHING');
   const hasCards = !showLoadingState && !showExhaustedState && swipeableItems && swipeableItems.length > 0 && currentIndex < swipeableItems.length;
-
-  // Handler for switching item from exhausted state
-  const handleSwitchItemFromExhausted = useCallback(() => {
-    // Focus the item selector - scroll to top where selector is
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
 
   return (
     <AppLayout>
@@ -361,8 +361,8 @@ export default function Index() {
           </Link>
         )}
 
-        {/* Main Swipe Area */}
-        <div className="flex-1 relative min-h-[400px]">
+        {/* Main Swipe Area - Full height to bottom nav */}
+        <div className="flex-1 relative">
           {noItems ? (
             <EmptyState
               title="Add your first item"
@@ -393,8 +393,8 @@ export default function Index() {
               isRefreshing={isRefreshing}
             />
           ) : hasCards ? (
-            <div className="absolute inset-4 flex items-center justify-center">
-              <div className="relative w-full h-full max-w-md mx-auto">
+            <div className="absolute inset-0">
+              <div className="relative w-full h-full">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
                     key={`${item.id}-${cardKey}`}
@@ -407,27 +407,24 @@ export default function Index() {
                     showFeedbackOverlay={idx === arr.length - 1 ? feedbackOverlay : null}
                   />
                 ))}
+                
+                {/* Overlayed Action Buttons */}
+                <SwipeActions
+                  onDislike={() => handleSwipe('left')}
+                  onLike={() => handleSwipe('right')}
+                  onUndo={handleGoBack}
+                  onSuperLike={() => setShowUpgradePrompt(true)}
+                  onDealInvite={() => toast.info('Deal invite coming soon!')}
+                  onUpgradeClick={() => setShowUpgradePrompt(true)}
+                  canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
+                  canUndo={canGoBack}
+                  isLoading={swipeMutation.isPending}
+                  className="absolute bottom-6 left-0 right-0 z-20"
+                />
               </div>
             </div>
           ) : null}
         </div>
-
-        {/* Tinder-style Action Buttons */}
-        {selectedItemId && !noItems && hasCards && (
-          <div className="py-4 pb-6 shrink-0 bg-background">
-            <SwipeActions
-              onDislike={() => handleSwipe('left')}
-              onLike={() => handleSwipe('right')}
-              onUndo={handleGoBack}
-              onSuperLike={() => setShowUpgradePrompt(true)}
-              onInfo={() => setShowDetailsSheet(true)}
-              onUpgradeClick={() => setShowUpgradePrompt(true)}
-              canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
-              canUndo={canGoBack}
-              isLoading={swipeMutation.isPending}
-            />
-          </div>
-        )}
       </div>
 
       {/* Item Details Sheet */}

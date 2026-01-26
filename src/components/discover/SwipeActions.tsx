@@ -15,7 +15,7 @@ interface SwipeActionsProps {
   onLike: () => void;
   onUndo: () => void;
   onSuperLike?: () => void;
-  onInfo?: () => void;
+  onDealInvite?: () => void;
   onUpgradeClick?: () => void;
   canSwipe: boolean;
   canUndo: boolean;
@@ -28,7 +28,7 @@ export function SwipeActions({
   onLike,
   onUndo,
   onSuperLike,
-  onInfo,
+  onDealInvite,
   onUpgradeClick,
   canSwipe,
   canUndo,
@@ -72,14 +72,11 @@ export function SwipeActions({
               disabled={isPro ? !canUndo : false}
               className={cn(
                 "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-                "bg-white shadow-lg border border-gray-100",
-                "hover:scale-110 active:scale-95",
+                "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
+                "hover:scale-110 hover:bg-white/80 active:scale-95",
                 "disabled:opacity-40 disabled:hover:scale-100"
               )}
               whileTap={{ scale: 0.9 }}
-              style={{
-                boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)',
-              }}
             >
               <Undo2 className="w-5 h-5 text-tinder-gold" />
               {!isPro && (
@@ -99,15 +96,12 @@ export function SwipeActions({
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white shadow-xl border border-gray-100",
-          "hover:scale-110 active:scale-95",
+          "bg-white/70 backdrop-blur-md shadow-xl border border-white/30",
+          "hover:scale-110 hover:bg-white/80 active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'dislike' && "ring-4 ring-tinder-red/30"
         )}
         whileTap={{ scale: 0.85 }}
-        style={{
-          boxShadow: '0 6px 20px rgba(255, 68, 88, 0.25)',
-        }}
       >
         <X 
           className={cn(
@@ -127,14 +121,11 @@ export function SwipeActions({
               disabled={!canSwipe || isLoading}
               className={cn(
                 "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-                "bg-white shadow-lg border border-gray-100",
-                "hover:scale-110 active:scale-95",
+                "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
+                "hover:scale-110 hover:bg-white/80 active:scale-95",
                 "disabled:opacity-40 disabled:hover:scale-100"
               )}
               whileTap={{ scale: 0.9 }}
-              style={{
-                boxShadow: '0 4px 15px rgba(0, 122, 255, 0.3)',
-              }}
             >
               <Star className="w-5 h-5 text-tinder-blue fill-tinder-blue" />
               {!isPro && (
@@ -154,15 +145,12 @@ export function SwipeActions({
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white shadow-xl border border-gray-100",
-          "hover:scale-110 active:scale-95",
+          "bg-white/70 backdrop-blur-md shadow-xl border border-white/30",
+          "hover:scale-110 hover:bg-white/80 active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'like' && "ring-4 ring-tinder-green/30"
         )}
         whileTap={{ scale: 0.85 }}
-        style={{
-          boxShadow: '0 6px 20px rgba(0, 212, 106, 0.25)',
-        }}
       >
         <Heart 
           className={cn(
@@ -173,24 +161,30 @@ export function SwipeActions({
         />
       </motion.button>
 
-      {/* Info/Send Button - Small Blue */}
-      {onInfo && (
-        <motion.button
-          onClick={onInfo}
-          disabled={!canSwipe || isLoading}
-          className={cn(
-            "flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
-            "bg-white shadow-lg border border-gray-100",
-            "hover:scale-110 active:scale-95",
-            "disabled:opacity-40 disabled:hover:scale-100"
-          )}
-          whileTap={{ scale: 0.9 }}
-          style={{
-            boxShadow: '0 4px 15px rgba(0, 122, 255, 0.2)',
-          }}
-        >
-          <Send className="w-5 h-5 text-tinder-blue" />
-        </motion.button>
+      {/* Deal Invite Button - Small Blue */}
+      {onDealInvite && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <motion.button
+                onClick={onDealInvite}
+                disabled={!canSwipe || isLoading}
+                className={cn(
+                  "flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
+                  "bg-white/70 backdrop-blur-md shadow-lg border border-white/30",
+                  "hover:scale-110 hover:bg-white/80 active:scale-95",
+                  "disabled:opacity-40 disabled:hover:scale-100"
+                )}
+                whileTap={{ scale: 0.9 }}
+              >
+                <Send className="w-5 h-5 text-tinder-blue" />
+              </motion.button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="text-xs">Send Deal Invite</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </div>
   );
