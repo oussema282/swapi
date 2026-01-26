@@ -19,9 +19,9 @@ import { EmptyState } from '@/components/discover/EmptyState';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
-import { X, HeartOff } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -40,12 +40,9 @@ export default function Index() {
   const { state: systemState } = useSystemState();
   const queryClient = useQueryClient();
   
-  // Fetch missed matches for the currently selected item only
+  // Fetch missed matches count for notification indicator only
   const { data: missedMatches } = useMissedMatches();
-  // Filter to only show missed matches for the currently selected item
-  const missedForSelectedItem = missedMatches?.filter(m => m.my_item_id === selectedItemId) || [];
-  const hasMissedForSelectedItem = missedForSelectedItem.length > 0;
-  const [dismissedMissedBanner, setDismissedMissedBanner] = useState<string | null>(null); // track dismissed by item ID
+  const hasMissedMatches = (missedMatches?.length ?? 0) > 0;
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
   const { 
@@ -279,7 +276,7 @@ export default function Index() {
           onTabChange={setActiveTab}
           onFilterClick={() => setShowFilterSheet(true)}
           onBoostClick={() => setShowUpgradePrompt(true)}
-          hasNotifications={hasMissedForSelectedItem}
+          hasNotifications={hasMissedMatches}
         />
 
         {/* Item Selector */}
@@ -291,37 +288,6 @@ export default function Index() {
           />
         </div>
 
-        {/* Missed Match Notification Banner - shows only for the currently selected item */}
-        {hasMissedForSelectedItem && dismissedMissedBanner !== selectedItemId && (
-          <Link 
-            to="/matches?tab=missed"
-            className="mx-4 mb-2 p-3 bg-destructive/10 border border-destructive/20 rounded-xl flex items-center gap-3 hover:bg-destructive/15 transition-colors"
-          >
-            <div className="w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
-              <HeartOff className="w-5 h-5 text-destructive" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-destructive">
-                You missed a match!
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                Someone wanted to swap for this item
-              </p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="flex-shrink-0 h-8 w-8"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setDismissedMissedBanner(selectedItemId);
-              }}
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </Link>
-        )}
 
         {/* Main Swipe Area - Full height to bottom nav */}
         <div className="flex-1 relative">
