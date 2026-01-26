@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMatches } from '@/hooks/useMatches';
-import { useMissedMatches } from '@/hooks/useMissedMatches';
+import { useMissedMatches, MissedMatch } from '@/hooks/useMissedMatches';
+import { useEntitlements } from '@/hooks/useEntitlements';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { Loader2, Check, X, ArrowLeft, ArrowRight, ArrowLeftRight, CheckCircle2,
 import { MatchCard } from '@/components/matches/MatchCard';
 import { CompletedMatchCard } from '@/components/matches/CompletedMatchCard';
 import { MissedMatchCard } from '@/components/matches/MissedMatchCard';
+import { MissedMatchModal } from '@/components/matches/MissedMatchModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -51,11 +53,15 @@ export default function Matches() {
   const queryClient = useQueryClient();
   const { data: matches, isLoading, isError: matchesError, refetch } = useMatches();
   const { data: missedMatches = [], isLoading: missedLoading } = useMissedMatches();
+  const { isPro } = useEntitlements();
   
   // Step navigation
   const initialTab = searchParams.get('tab');
   const initialStep = initialTab === 'missed' ? 3 : initialTab === 'invites' ? 2 : initialTab === 'completed' ? 1 : 0;
   const [currentStep, setCurrentStep] = useState(initialStep);
+  
+  // Missed match modal state
+  const [selectedMissedMatch, setSelectedMissedMatch] = useState<MissedMatch | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -479,6 +485,8 @@ export default function Matches() {
                             key={missed.id}
                             missedMatch={missed}
                             index={index}
+                            isPro={isPro}
+                            onClick={() => setSelectedMissedMatch(missed)}
                           />
                         ))}
                       </div>
@@ -522,6 +530,14 @@ export default function Matches() {
           </footer>
         </div>
       </div>
+      
+      {/* Missed Match Modal */}
+      <MissedMatchModal
+        open={!!selectedMissedMatch}
+        onClose={() => setSelectedMissedMatch(null)}
+        missedMatch={selectedMissedMatch}
+        isPro={isPro}
+      />
     </AppLayout>
   );
 }
