@@ -3,7 +3,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import testimonial1 from '@/assets/landing/testimonial-1.jpg';
+import testimonial2 from '@/assets/landing/testimonial-2.jpg';
+import testimonial3 from '@/assets/landing/testimonial-3.jpg';
 
 export function Testimonials() {
   const { t } = useTranslation();
@@ -14,16 +17,19 @@ export function Testimonials() {
       name: 'Sarah M.',
       text: t('landing.testimonials.quote1'),
       initials: 'SM',
+      image: testimonial3,
     },
     {
       name: 'Alex K.',
       text: t('landing.testimonials.quote2'),
       initials: 'AK',
+      image: testimonial1,
     },
     {
       name: 'Maria L.',
       text: t('landing.testimonials.quote3'),
       initials: 'ML',
+      image: testimonial2,
     },
   ];
 
@@ -58,6 +64,11 @@ export function Testimonials() {
           <div className="flex items-center justify-center gap-10 rounded-lg p-4">
             <div className="flex items-center">
               <Avatar className="h-[150px] w-[150px] max-lg:h-[80px] max-lg:w-[80px]">
+                <AvatarImage 
+                  src={testimonials[currentIndex].image} 
+                  alt={testimonials[currentIndex].name}
+                  className="object-cover"
+                />
                 <AvatarFallback className="text-2xl text-foreground">
                   {testimonials[currentIndex].initials}
                 </AvatarFallback>
