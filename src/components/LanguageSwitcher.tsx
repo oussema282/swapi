@@ -12,7 +12,15 @@ import { cn } from "@/lib/utils";
 
 const languages = [
   { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
   { code: "fr", name: "Français", flag: "🇫🇷" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  { code: "pt", name: "Português", flag: "🇧🇷" },
+  { code: "zh", name: "中文", flag: "🇨🇳" },
+  { code: "ja", name: "日本語", flag: "🇯🇵" },
+  { code: "ko", name: "한국어", flag: "🇰🇷" },
+  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+  { code: "ru", name: "Русский", flag: "🇷🇺" },
   { code: "ar", name: "العربية", flag: "🇸🇦" },
 ];
 
@@ -47,7 +55,7 @@ export function LanguageSwitcher({ variant = "icon", className }: LanguageSwitch
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}

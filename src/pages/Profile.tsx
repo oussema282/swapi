@@ -15,11 +15,13 @@ import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
   const { user, profile, loading, signOut } = useAuth();
   const { data: items = [], isLoading: itemsLoading } = useMyItems();
   const { isPro, subscription } = useEntitlements();
+  const { t } = useTranslation();
   
   // Fetch completed swaps count for current user
   const { data: completedSwapsCount = 0 } = useQuery({
@@ -162,11 +164,11 @@ export default function Profile() {
           <div className="grid grid-cols-3 gap-4 mb-6 text-center">
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{activeItems.length}</p>
-              <p className="text-xs text-muted-foreground">Items</p>
+              <p className="text-xs text-muted-foreground">{t('nav.items')}</p>
             </div>
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{completedSwapsCount}</p>
-              <p className="text-xs text-muted-foreground">Swaps</p>
+              <p className="text-xs text-muted-foreground">{t('profile.successfulSwaps')}</p>
             </div>
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">5.0</p>
@@ -179,7 +181,7 @@ export default function Profile() {
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold flex items-center gap-2">
                 <Grid3X3 className="w-4 h-4" />
-                My Items
+                {t('items.title')}
               </h3>
             </div>
             {itemsLoading ? (
@@ -201,7 +203,7 @@ export default function Profile() {
                 <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
                   <Edit className="w-5 h-5 text-blue-500" />
                 </div>
-                <span className="font-medium">Edit Profile</span>
+                <span className="font-medium">{t('profile.editProfile')}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </button>
@@ -213,7 +215,7 @@ export default function Profile() {
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Settings className="w-5 h-5 text-primary" />
                 </div>
-                <span className="font-medium">Account Settings</span>
+                <span className="font-medium">{t('settings.account')}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </button>
@@ -226,7 +228,7 @@ export default function Profile() {
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
+            {t('auth.logout')}
           </Button>
         </motion.div>
       </div>
