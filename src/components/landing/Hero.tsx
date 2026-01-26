@@ -3,8 +3,11 @@ import { ArrowLeftRight, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { APP_NAME, APP_TAGLINE, APP_DESCRIPTION } from '@/config/branding';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function Hero() {
+  const { t } = useTranslation();
+  
   const scrollToHowItWorks = () => {
     document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -97,7 +100,7 @@ export function Hero() {
         >
           <Button asChild size="lg" className="h-14 px-8 text-lg font-semibold gradient-primary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all">
             <Link to="/auth">
-              Get Started
+              {t('landing.hero.getStarted')}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
           </Button>
@@ -107,7 +110,7 @@ export function Hero() {
             className="h-14 px-8 text-lg font-semibold"
             onClick={scrollToHowItWorks}
           >
-            How it Works
+            {t('landing.hero.howItWorks')}
             <ChevronDown className="w-5 h-5 ml-2" />
           </Button>
         </motion.div>
@@ -121,15 +124,15 @@ export function Hero() {
         >
           <div>
             <p className="text-3xl font-bold text-primary">10K+</p>
-            <p className="text-sm text-muted-foreground">Active Users</p>
+            <p className="text-sm text-muted-foreground">{t('landing.hero.stats.activeUsers')}</p>
           </div>
           <div>
             <p className="text-3xl font-bold text-secondary">50K+</p>
-            <p className="text-sm text-muted-foreground">Items Traded</p>
+            <p className="text-sm text-muted-foreground">{t('landing.hero.stats.itemsTraded')}</p>
           </div>
           <div>
             <p className="text-3xl font-bold text-accent">15+</p>
-            <p className="text-sm text-muted-foreground">Countries</p>
+            <p className="text-sm text-muted-foreground">{t('landing.hero.stats.countries')}</p>
           </div>
         </motion.div>
       </div>

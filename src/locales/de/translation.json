@@ -28,6 +28,101 @@
     "search": "Suche",
     "map": "Karte"
   },
+  "landing": {
+    "hero": {
+      "getStarted": "Loslegen",
+      "howItWorks": "So funktioniert's",
+      "stats": {
+        "activeUsers": "Aktive Nutzer",
+        "itemsTraded": "Getauschte Artikel",
+        "countries": "Länder"
+      }
+    },
+    "features": {
+      "title": "Alles was du zum Tauschen brauchst",
+      "subtitle": "Leistungsstarke Funktionen für einfaches, sicheres und angenehmes Tauschen.",
+      "smartMatching": {
+        "title": "Intelligentes Matching",
+        "description": "Unser KI-Algorithmus findet die besten Tausch-Möglichkeiten basierend auf deinen Präferenzen."
+      },
+      "nearbySwaps": {
+        "title": "Tausche in der Nähe",
+        "description": "Entdecke Artikel in deiner Nähe. Triff dich lokal oder versende europaweit."
+      },
+      "secureTrading": {
+        "title": "Sicheres Handeln",
+        "description": "Verifizierte Profile, Bewertungen und sichere Nachrichten für vertrauenswürdige Tausche."
+      },
+      "realTimeChat": {
+        "title": "Echtzeit-Chat",
+        "description": "Verhandle, plane Treffen und schließe Deals mit unserem Instant-Messaging-System ab."
+      },
+      "instantNotifications": {
+        "title": "Sofortige Benachrichtigungen",
+        "description": "Verpasse nie ein Match oder eine Nachricht mit Echtzeit-Benachrichtigungen."
+      },
+      "proBoost": {
+        "title": "Pro Boost",
+        "description": "Upgrade auf Pro für unbegrenztes Wischen, Prioritäts-Matching und ein verifiziertes Abzeichen."
+      }
+    },
+    "howItWorks": {
+      "title": "So funktioniert's",
+      "subtitle": "Starte in drei einfachen Schritten",
+      "step1": {
+        "title": "Liste deine Artikel",
+        "description": "Mache Fotos von Artikeln, die du tauschen möchtest. Füge Details hinzu und setze deine Präferenzen."
+      },
+      "step2": {
+        "title": "Wische & Matche",
+        "description": "Durchstöbere Artikel in der Nähe, wische nach rechts bei dem was dir gefällt. Wenn beide Seiten mögen, ist es ein Match!"
+      },
+      "step3": {
+        "title": "Triff & Tausche",
+        "description": "Chatte mit deinem Match, vereinbare ein Treffen und schließe den Tausch ab. Bewerte deine Erfahrung!"
+      }
+    },
+    "pricing": {
+      "title": "Einfache, transparente Preise",
+      "subtitle": "Starte kostenlos, upgrade wenn du mehr brauchst",
+      "mostPopular": "Am beliebtesten",
+      "free": {
+        "name": "Kostenlos",
+        "period": "für immer",
+        "description": "Perfekt zum Starten",
+        "features": {
+          "swipes": "25 Wischbewegungen pro Tag",
+          "listings": "3 aktive Artikel",
+          "searches": "5 Suchen pro Tag",
+          "mapViews": "3 Kartenansichten pro Tag",
+          "matching": "Basis-Matching"
+        },
+        "cta": "Loslegen"
+      },
+      "pro": {
+        "name": "Pro",
+        "period": "/Monat",
+        "description": "Für ernsthafte Händler",
+        "features": {
+          "swipes": "Unbegrenzte Wischbewegungen",
+          "listings": "Unbegrenzte Artikel",
+          "searches": "Unbegrenzte Suchen",
+          "mapAccess": "Unbegrenzter Kartenzugang",
+          "matching": "Prioritäts-Matching",
+          "badge": "Verifiziertes Pro-Abzeichen",
+          "boost": "1 kostenloser Boost pro Tag"
+        },
+        "cta": "Auf Pro upgraden"
+      }
+    },
+    "footer": {
+      "signIn": "Anmelden",
+      "terms": "Nutzungsbedingungen",
+      "privacy": "Datenschutzrichtlinie",
+      "contact": "Kontakt",
+      "copyright": "© {{year}} {{appName}}. Alle Rechte vorbehalten. 🇪🇺 Made in Europe"
+    }
+  },
   "auth": {
     "login": "Anmelden",
     "signup": "Registrieren",
@@ -38,7 +133,34 @@
     "forgotPassword": "Passwort vergessen?",
     "noAccount": "Noch kein Konto?",
     "hasAccount": "Bereits ein Konto?",
-    "displayName": "Anzeigename"
+    "displayName": "Anzeigename",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "signingIn": "Anmelden...",
+    "creatingAccount": "Konto erstellen...",
+    "createAccount": "Konto erstellen",
+    "continueWithGoogle": "Mit Google fortfahren",
+    "orContinueWithEmail": "oder mit E-Mail fortfahren",
+    "headline": "Tausche was du nicht brauchst gegen das was du liebst",
+    "trustSecure": "Sicher",
+    "trustInstant": "Sofort",
+    "trustEuropeWide": "Europaweit",
+    "welcomeBack": "Willkommen zurück!",
+    "welcomeBackDescription": "Du hast dich erfolgreich angemeldet.",
+    "accountCreated": "Konto erstellt!",
+    "signInFailed": "Anmeldung fehlgeschlagen",
+    "signUpFailed": "Registrierung fehlgeschlagen",
+    "googleSignInFailed": "Google-Anmeldung fehlgeschlagen",
+    "accountExists": "Konto existiert",
+    "accountExistsDescription": "Diese E-Mail ist bereits registriert. Bitte melde dich an.",
+    "displayNameRequired": "Name erforderlich",
+    "displayNameRequiredDescription": "Bitte gib einen Namen ein.",
+    "minPasswordLength": "Mindestens 6 Zeichen",
+    "termsAgreement": "Mit der Registrierung stimmst du unseren",
+    "termsOfService": "Nutzungsbedingungen",
+    "and": "und",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "trustedBy": "Made in Europe · Vertraut von 10.000+ Händlern"
   },
   "discover": {
     "title": "Entdecken",
@@ -161,7 +283,10 @@
     "online": "Online",
     "lastSeen": "Zuletzt gesehen",
     "today": "heute",
-    "yesterday": "gestern"
+    "yesterday": "gestern",
+    "startConversation": "Starte die Unterhaltung!",
+    "startConversationDescription": "Sag Hallo und besprich die Tauschdetails. Du kannst Fotos teilen, verhandeln und planen.",
+    "swapDetails": "Tauschdetails"
   },
   "dealInvite": {
     "title": "Einladung senden",

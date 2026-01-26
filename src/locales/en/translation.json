@@ -17,7 +17,10 @@
     "viewAll": "View All",
     "seeMore": "See More",
     "retry": "Retry",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "continue": "Continue",
+    "create": "Create",
+    "addItem": "Add Item"
   },
   "nav": {
     "discover": "Discover",
@@ -27,6 +30,101 @@
     "settings": "Settings",
     "search": "Search",
     "map": "Map"
+  },
+  "landing": {
+    "hero": {
+      "getStarted": "Get Started",
+      "howItWorks": "How it Works",
+      "stats": {
+        "activeUsers": "Active Users",
+        "itemsTraded": "Items Traded",
+        "countries": "Countries"
+      }
+    },
+    "features": {
+      "title": "Everything You Need to Trade",
+      "subtitle": "Powerful features designed to make swapping simple, safe, and enjoyable.",
+      "smartMatching": {
+        "title": "Smart Matching",
+        "description": "Our AI-powered algorithm finds the perfect swap opportunities based on your preferences and trading history."
+      },
+      "nearbySwaps": {
+        "title": "Nearby Swaps",
+        "description": "Discover items from users in your area. Meet locally or ship across Europe with ease."
+      },
+      "secureTrading": {
+        "title": "Secure Trading",
+        "description": "Verified profiles, ratings, and secure messaging ensure safe and trustworthy exchanges."
+      },
+      "realTimeChat": {
+        "title": "Real-Time Chat",
+        "description": "Negotiate, plan meetups, and finalize deals with our instant messaging system."
+      },
+      "instantNotifications": {
+        "title": "Instant Notifications",
+        "description": "Never miss a match or message with real-time push notifications."
+      },
+      "proBoost": {
+        "title": "Pro Boost",
+        "description": "Upgrade to Pro for unlimited swipes, priority matching, and a verified badge."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Start trading in three simple steps",
+      "step1": {
+        "title": "List Your Items",
+        "description": "Take photos of items you want to trade. Add details and set your swap preferences."
+      },
+      "step2": {
+        "title": "Swipe & Match",
+        "description": "Browse nearby items, swipe right on what you love. When both parties like each other's items, it's a match!"
+      },
+      "step3": {
+        "title": "Meet & Swap",
+        "description": "Chat with your match, arrange a meetup, and complete the trade. Rate your experience!"
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Start free, upgrade when you need more power",
+      "mostPopular": "Most Popular",
+      "free": {
+        "name": "Free",
+        "period": "forever",
+        "description": "Perfect for getting started",
+        "features": {
+          "swipes": "25 swipes per day",
+          "listings": "3 active item listings",
+          "searches": "5 searches per day",
+          "mapViews": "3 map views per day",
+          "matching": "Basic matching"
+        },
+        "cta": "Get Started"
+      },
+      "pro": {
+        "name": "Pro",
+        "period": "/month",
+        "description": "For serious traders",
+        "features": {
+          "swipes": "Unlimited swipes",
+          "listings": "Unlimited item listings",
+          "searches": "Unlimited searches",
+          "mapAccess": "Unlimited map access",
+          "matching": "Priority matching",
+          "badge": "Verified Pro badge",
+          "boost": "1 free boost per day"
+        },
+        "cta": "Upgrade to Pro"
+      }
+    },
+    "footer": {
+      "signIn": "Sign In",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "contact": "Contact",
+      "copyright": "© {{year}} {{appName}}. All rights reserved. 🇪🇺 Made in Europe"
+    }
   },
   "auth": {
     "login": "Log In",
@@ -38,7 +136,34 @@
     "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
-    "displayName": "Display Name"
+    "displayName": "Display Name",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "createAccount": "Create Account",
+    "continueWithGoogle": "Continue with Google",
+    "orContinueWithEmail": "or continue with email",
+    "headline": "Trade what you don't need for what you love",
+    "trustSecure": "Secure",
+    "trustInstant": "Instant",
+    "trustEuropeWide": "Europe-wide",
+    "welcomeBack": "Welcome back!",
+    "welcomeBackDescription": "You have successfully signed in.",
+    "accountCreated": "Account created!",
+    "signInFailed": "Sign in failed",
+    "signUpFailed": "Sign up failed",
+    "googleSignInFailed": "Google sign in failed",
+    "accountExists": "Account exists",
+    "accountExistsDescription": "This email is already registered. Please sign in instead.",
+    "displayNameRequired": "Display name required",
+    "displayNameRequiredDescription": "Please enter a display name.",
+    "minPasswordLength": "Minimum 6 characters",
+    "termsAgreement": "By signing up, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "trustedBy": "Made in Europe · Trusted by 10,000+ traders"
   },
   "discover": {
     "title": "Discover",
@@ -97,22 +222,89 @@
     "active": "Active",
     "archived": "Archived",
     "archive": "Archive",
-    "unarchive": "Unarchive"
+    "unarchive": "Unarchive",
+    "swapped": "Swapped",
+    "noActiveItems": "No active items",
+    "noActiveItemsDescription": "Add your first item to start swapping with others!",
+    "addFirstItem": "Add Your First Item",
+    "noSwappedItems": "No swapped items yet",
+    "noSwappedItemsDescription": "Items that you've successfully swapped will appear here.",
+    "itemWasSwapped": "This item was swapped and is no longer available.",
+    "deleteConfirmTitle": "Delete this item?",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete the item and remove all related matches.",
+    "deleting": "Deleting...",
+    "restoreForTrading": "Restore for trading",
+    "itemDeleted": "Item deleted successfully",
+    "itemRestored": "Item restored for trading!",
+    "failedToDelete": "Failed to delete item",
+    "failedToRestore": "Failed to restore item"
   },
-  "profile": {
-    "title": "Profile",
-    "editProfile": "Edit Profile",
-    "displayName": "Display Name",
-    "bio": "Bio",
-    "location": "Location",
-    "memberSince": "Member since",
-    "itemsListed": "Items Listed",
-    "successfulSwaps": "Successful Swaps",
-    "avatar": "Avatar"
+  "newItem": {
+    "steps": {
+      "photosTitle": "Photos & Title",
+      "photosDescription": "Show off your item",
+      "categoryCondition": "Category & Condition",
+      "categoryConditionDescription": "Tell us about it",
+      "valueRange": "Value Range",
+      "valueRangeDescription": "Set your price range",
+      "swapPreferences": "Swap Preferences",
+      "swapPreferencesDescription": "What do you want?"
+    },
+    "uploadPhotos": "Upload Photos",
+    "addPhoto": "Add Photo",
+    "photoLimit": "Add up to 4 photos • Max 5MB each",
+    "maxPhotos": "Maximum 4 photos allowed",
+    "itemName": "Item Name",
+    "itemNamePlaceholder": "What are you swapping?",
+    "description": "Description (optional)",
+    "descriptionPlaceholder": "Tell us more about your item...",
+    "selectCategory": "Select Category",
+    "itemCondition": "Item Condition",
+    "estimatedValue": "Estimated Value",
+    "valueHelp": "Help others understand the value of your item",
+    "minimum": "Minimum ($)",
+    "maximum": "Maximum ($)",
+    "whatLookingFor": "What would you like in exchange?",
+    "preferencesHelp": "Select all categories you would accept",
+    "categoriesSelected": "{{count}} categories selected",
+    "selectAtLeastOne": "Select at least one category",
+    "itemCreated": "Item Created!",
+    "itemLive": "Your item is now live and ready to be swapped",
+    "createItem": "Create Item",
+    "itemLimitReached": "Item limit reached",
+    "itemLimitDescription": "Free users can only have {{limit}} items. Upgrade to Pro for unlimited items!"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search items, categories, users...",
+    "filters": "Filters",
+    "clearAll": "Clear All",
+    "categories": "Categories",
+    "distance": "Distance",
+    "budget": "Budget",
+    "noResults": "No results found",
+    "noResultsDescription": "Try adjusting your search or filters",
+    "nearbyItems": "Nearby Items",
+    "refreshing": "Refreshing...",
+    "trendingSearches": "Trending Searches",
+    "any": "Any",
+    "km": "km"
+  },
+  "chat": {
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "online": "Online",
+    "lastSeen": "Last seen",
+    "today": "today",
+    "yesterday": "yesterday",
+    "startConversation": "Start the conversation!",
+    "startConversationDescription": "Say hi and discuss the swap details. You can share photos, negotiate, and plan the exchange.",
+    "swapDetails": "Swap Details"
   },
   "settings": {
     "title": "Settings",
     "account": "Account",
+    "accountSettings": "Account Settings",
     "notifications": "Notifications",
     "privacy": "Privacy",
     "language": "Language",
@@ -125,7 +317,63 @@
     "terms": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "deleteAccount": "Delete Account",
-    "version": "Version"
+    "version": "Version",
+    "profile": "Profile",
+    "security": "Security",
+    "alerts": "Alerts",
+    "profilePhoto": "Profile Photo",
+    "updatePhoto": "Update your profile picture",
+    "personalInfo": "Personal Information",
+    "updateDetails": "Update your personal details",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "emailAddress": "Email Address",
+    "newEmail": "New Email Address",
+    "updateEmail": "Update Email",
+    "sendingVerification": "Sending verification...",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "updatePassword": "Change Password",
+    "updating": "Updating...",
+    "twoFactorAuth": "Two-Factor Authentication",
+    "twoFactorDescription": "Add an extra layer of security to your account",
+    "notEnabled": "Not enabled",
+    "comingSoon": "Coming soon",
+    "soon": "Soon",
+    "notificationPreferences": "Notification Preferences",
+    "chooseNotifications": "Choose how you want to be notified",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDescription": "Receive updates via email",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDescription": "Receive push notifications",
+    "matchAlerts": "New Match Alerts",
+    "matchAlertsDescription": "Get notified when you have a new match",
+    "messageAlerts": "Message Alerts",
+    "messageAlertsDescription": "Get notified for new messages",
+    "privacySettings": "Privacy Settings",
+    "controlPrivacy": "Control your privacy preferences",
+    "profileVisibility": "Profile Visibility",
+    "profileVisibilityDescription": "Allow others to view your profile",
+    "showLocation": "Show Location",
+    "showLocationDescription": "Display your approximate location on items",
+    "appLanguage": "App Language",
+    "selectLanguage": "Select display language",
+    "dangerZone": "Danger Zone",
+    "irreversibleActions": "Irreversible actions",
+    "deleteAccountWarning": "Once you delete your account, there is no going back. This action is permanent."
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "location": "Location",
+    "memberSince": "Member since",
+    "itemsListed": "Items Listed",
+    "successfulSwaps": "Successful Swaps",
+    "avatar": "Avatar"
   },
   "subscription": {
     "free": "Free",
@@ -154,14 +402,6 @@
     "like_new": "Like New",
     "good": "Good",
     "fair": "Fair"
-  },
-  "chat": {
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "online": "Online",
-    "lastSeen": "Last seen",
-    "today": "today",
-    "yesterday": "yesterday"
   },
   "dealInvite": {
     "title": "Send Deal Invite",

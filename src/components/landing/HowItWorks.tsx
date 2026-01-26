@@ -1,28 +1,31 @@
 import { motion } from 'framer-motion';
 import { Camera, Heart, ArrowLeftRight } from 'lucide-react';
-
-const steps = [
-  {
-    icon: Camera,
-    step: '01',
-    title: 'List Your Items',
-    description: 'Take photos of items you want to trade. Add details and set your swap preferences.',
-  },
-  {
-    icon: Heart,
-    step: '02',
-    title: 'Swipe & Match',
-    description: 'Browse nearby items, swipe right on what you love. When both parties like each other\'s items, it\'s a match!',
-  },
-  {
-    icon: ArrowLeftRight,
-    step: '03',
-    title: 'Meet & Swap',
-    description: 'Chat with your match, arrange a meetup, and complete the trade. Rate your experience!',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export function HowItWorks() {
+  const { t } = useTranslation();
+
+  const steps = [
+    {
+      icon: Camera,
+      step: '01',
+      titleKey: 'landing.howItWorks.step1.title',
+      descriptionKey: 'landing.howItWorks.step1.description',
+    },
+    {
+      icon: Heart,
+      step: '02',
+      titleKey: 'landing.howItWorks.step2.title',
+      descriptionKey: 'landing.howItWorks.step2.description',
+    },
+    {
+      icon: ArrowLeftRight,
+      step: '03',
+      titleKey: 'landing.howItWorks.step3.title',
+      descriptionKey: 'landing.howItWorks.step3.description',
+    },
+  ];
+
   return (
     <section id="how-it-works" className="py-24 px-4">
       <div className="max-w-5xl mx-auto">
@@ -34,10 +37,10 @@ export function HowItWorks() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-display font-bold text-foreground mb-4">
-            How It Works
+            {t('landing.howItWorks.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Start trading in three simple steps
+            {t('landing.howItWorks.subtitle')}
           </p>
         </motion.div>
 
@@ -66,10 +69,10 @@ export function HowItWorks() {
                 </div>
 
                 <h3 className="text-xl font-semibold text-foreground mb-3">
-                  {step.title}
+                  {t(step.titleKey)}
                 </h3>
                 <p className="text-muted-foreground">
-                  {step.description}
+                  {t(step.descriptionKey)}
                 </p>
               </motion.div>
             ))}

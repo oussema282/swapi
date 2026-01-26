@@ -17,7 +17,10 @@
     "viewAll": "Ver todo",
     "seeMore": "Ver más",
     "retry": "Reintentar",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "continue": "Continuar",
+    "create": "Crear",
+    "addItem": "Añadir artículo"
   },
   "nav": {
     "discover": "Descubrir",
@@ -27,6 +30,101 @@
     "settings": "Configuración",
     "search": "Buscar",
     "map": "Mapa"
+  },
+  "landing": {
+    "hero": {
+      "getStarted": "Comenzar",
+      "howItWorks": "Cómo funciona",
+      "stats": {
+        "activeUsers": "Usuarios activos",
+        "itemsTraded": "Artículos intercambiados",
+        "countries": "Países"
+      }
+    },
+    "features": {
+      "title": "Todo lo que necesitas para intercambiar",
+      "subtitle": "Funciones potentes para hacer el intercambio simple, seguro y agradable.",
+      "smartMatching": {
+        "title": "Matching inteligente",
+        "description": "Nuestro algoritmo IA encuentra las mejores oportunidades de intercambio según tus preferencias."
+      },
+      "nearbySwaps": {
+        "title": "Intercambios cercanos",
+        "description": "Descubre artículos cerca de ti. Encuéntrate localmente o envía por toda Europa."
+      },
+      "secureTrading": {
+        "title": "Comercio seguro",
+        "description": "Perfiles verificados, calificaciones y mensajería segura para intercambios confiables."
+      },
+      "realTimeChat": {
+        "title": "Chat en tiempo real",
+        "description": "Negocia, planifica encuentros y finaliza acuerdos con nuestro sistema de mensajería."
+      },
+      "instantNotifications": {
+        "title": "Notificaciones instantáneas",
+        "description": "Nunca te pierdas un match o mensaje con notificaciones en tiempo real."
+      },
+      "proBoost": {
+        "title": "Boost Pro",
+        "description": "Mejora a Pro para swipes ilimitados, matching prioritario y una insignia verificada."
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "subtitle": "Comienza a intercambiar en tres simples pasos",
+      "step1": {
+        "title": "Lista tus artículos",
+        "description": "Toma fotos de los artículos que quieres intercambiar. Añade detalles y establece tus preferencias."
+      },
+      "step2": {
+        "title": "Desliza y coincide",
+        "description": "Explora artículos cercanos, desliza a la derecha en lo que te gusta. ¡Cuando ambos gusten, es un match!"
+      },
+      "step3": {
+        "title": "Encuéntrate e intercambia",
+        "description": "Chatea con tu match, organiza un encuentro y completa el intercambio. ¡Califica tu experiencia!"
+      }
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes",
+      "subtitle": "Comienza gratis, mejora cuando necesites más",
+      "mostPopular": "Más popular",
+      "free": {
+        "name": "Gratis",
+        "period": "para siempre",
+        "description": "Perfecto para comenzar",
+        "features": {
+          "swipes": "25 swipes por día",
+          "listings": "3 artículos activos",
+          "searches": "5 búsquedas por día",
+          "mapViews": "3 vistas de mapa por día",
+          "matching": "Matching básico"
+        },
+        "cta": "Comenzar"
+      },
+      "pro": {
+        "name": "Pro",
+        "period": "/mes",
+        "description": "Para comerciantes serios",
+        "features": {
+          "swipes": "Swipes ilimitados",
+          "listings": "Artículos ilimitados",
+          "searches": "Búsquedas ilimitadas",
+          "mapAccess": "Acceso ilimitado al mapa",
+          "matching": "Matching prioritario",
+          "badge": "Insignia Pro verificada",
+          "boost": "1 boost gratis por día"
+        },
+        "cta": "Mejorar a Pro"
+      }
+    },
+    "footer": {
+      "signIn": "Iniciar sesión",
+      "terms": "Términos de servicio",
+      "privacy": "Política de privacidad",
+      "contact": "Contacto",
+      "copyright": "© {{year}} {{appName}}. Todos los derechos reservados. 🇪🇺 Hecho en Europa"
+    }
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -38,7 +136,34 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "noAccount": "¿No tienes cuenta?",
     "hasAccount": "¿Ya tienes cuenta?",
-    "displayName": "Nombre para mostrar"
+    "displayName": "Nombre para mostrar",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "signingIn": "Iniciando sesión...",
+    "creatingAccount": "Creando cuenta...",
+    "createAccount": "Crear cuenta",
+    "continueWithGoogle": "Continuar con Google",
+    "orContinueWithEmail": "o continuar con email",
+    "headline": "Intercambia lo que no necesitas por lo que amas",
+    "trustSecure": "Seguro",
+    "trustInstant": "Instantáneo",
+    "trustEuropeWide": "Toda Europa",
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "welcomeBackDescription": "Has iniciado sesión correctamente.",
+    "accountCreated": "¡Cuenta creada!",
+    "signInFailed": "Error al iniciar sesión",
+    "signUpFailed": "Error al registrarse",
+    "googleSignInFailed": "Error de inicio de sesión con Google",
+    "accountExists": "La cuenta existe",
+    "accountExistsDescription": "Este email ya está registrado. Por favor, inicia sesión.",
+    "displayNameRequired": "Nombre requerido",
+    "displayNameRequiredDescription": "Por favor, introduce un nombre.",
+    "minPasswordLength": "Mínimo 6 caracteres",
+    "termsAgreement": "Al registrarte, aceptas nuestros",
+    "termsOfService": "Términos de servicio",
+    "and": "y",
+    "privacyPolicy": "Política de privacidad",
+    "trustedBy": "Hecho en Europa · Confiado por 10.000+ comerciantes"
   },
   "discover": {
     "title": "Descubrir",
@@ -97,22 +222,89 @@
     "active": "Activo",
     "archived": "Archivado",
     "archive": "Archivar",
-    "unarchive": "Desarchivar"
+    "unarchive": "Desarchivar",
+    "swapped": "Intercambiado",
+    "noActiveItems": "Sin artículos activos",
+    "noActiveItemsDescription": "¡Añade tu primer artículo para empezar a intercambiar!",
+    "addFirstItem": "Añadir tu primer artículo",
+    "noSwappedItems": "Sin artículos intercambiados aún",
+    "noSwappedItemsDescription": "Los artículos intercambiados exitosamente aparecerán aquí.",
+    "itemWasSwapped": "Este artículo fue intercambiado y ya no está disponible.",
+    "deleteConfirmTitle": "¿Eliminar este artículo?",
+    "deleteConfirmDescription": "Esta acción no se puede deshacer. Se eliminará permanentemente el artículo y todas las coincidencias relacionadas.",
+    "deleting": "Eliminando...",
+    "restoreForTrading": "Restaurar para intercambio",
+    "itemDeleted": "Artículo eliminado correctamente",
+    "itemRestored": "¡Artículo restaurado para intercambio!",
+    "failedToDelete": "Error al eliminar artículo",
+    "failedToRestore": "Error al restaurar artículo"
   },
-  "profile": {
-    "title": "Perfil",
-    "editProfile": "Editar perfil",
-    "displayName": "Nombre para mostrar",
-    "bio": "Biografía",
-    "location": "Ubicación",
-    "memberSince": "Miembro desde",
-    "itemsListed": "Artículos listados",
-    "successfulSwaps": "Intercambios exitosos",
-    "avatar": "Avatar"
+  "newItem": {
+    "steps": {
+      "photosTitle": "Fotos y título",
+      "photosDescription": "Muestra tu artículo",
+      "categoryCondition": "Categoría y condición",
+      "categoryConditionDescription": "Cuéntanos sobre él",
+      "valueRange": "Rango de valor",
+      "valueRangeDescription": "Establece tu rango de precio",
+      "swapPreferences": "Preferencias de intercambio",
+      "swapPreferencesDescription": "¿Qué quieres?"
+    },
+    "uploadPhotos": "Subir fotos",
+    "addPhoto": "Añadir foto",
+    "photoLimit": "Hasta 4 fotos • Máx 5MB cada una",
+    "maxPhotos": "Máximo 4 fotos permitidas",
+    "itemName": "Nombre del artículo",
+    "itemNamePlaceholder": "¿Qué estás intercambiando?",
+    "description": "Descripción (opcional)",
+    "descriptionPlaceholder": "Cuéntanos más sobre tu artículo...",
+    "selectCategory": "Seleccionar categoría",
+    "itemCondition": "Condición del artículo",
+    "estimatedValue": "Valor estimado",
+    "valueHelp": "Ayuda a otros a entender el valor de tu artículo",
+    "minimum": "Mínimo (€)",
+    "maximum": "Máximo (€)",
+    "whatLookingFor": "¿Qué te gustaría a cambio?",
+    "preferencesHelp": "Selecciona todas las categorías que aceptarías",
+    "categoriesSelected": "{{count}} categorías seleccionadas",
+    "selectAtLeastOne": "Selecciona al menos una categoría",
+    "itemCreated": "¡Artículo creado!",
+    "itemLive": "Tu artículo está ahora en línea y listo para intercambiar",
+    "createItem": "Crear artículo",
+    "itemLimitReached": "Límite de artículos alcanzado",
+    "itemLimitDescription": "Los usuarios gratuitos solo pueden tener {{limit}} artículos. ¡Mejora a Pro para artículos ilimitados!"
+  },
+  "search": {
+    "title": "Búsqueda",
+    "placeholder": "Buscar artículos, categorías, usuarios...",
+    "filters": "Filtros",
+    "clearAll": "Limpiar todo",
+    "categories": "Categorías",
+    "distance": "Distancia",
+    "budget": "Presupuesto",
+    "noResults": "Sin resultados",
+    "noResultsDescription": "Intenta ajustar tu búsqueda o filtros",
+    "nearbyItems": "Artículos cercanos",
+    "refreshing": "Actualizando...",
+    "trendingSearches": "Búsquedas populares",
+    "any": "Cualquiera",
+    "km": "km"
+  },
+  "chat": {
+    "typeMessage": "Escribe un mensaje...",
+    "send": "Enviar",
+    "online": "En línea",
+    "lastSeen": "Última vez",
+    "today": "hoy",
+    "yesterday": "ayer",
+    "startConversation": "¡Inicia la conversación!",
+    "startConversationDescription": "Di hola y discute los detalles del intercambio. Puedes compartir fotos, negociar y planificar.",
+    "swapDetails": "Detalles del intercambio"
   },
   "settings": {
     "title": "Configuración",
     "account": "Cuenta",
+    "accountSettings": "Configuración de cuenta",
     "notifications": "Notificaciones",
     "privacy": "Privacidad",
     "language": "Idioma",
@@ -125,7 +317,63 @@
     "terms": "Términos de servicio",
     "privacyPolicy": "Política de privacidad",
     "deleteAccount": "Eliminar cuenta",
-    "version": "Versión"
+    "version": "Versión",
+    "profile": "Perfil",
+    "security": "Seguridad",
+    "alerts": "Alertas",
+    "profilePhoto": "Foto de perfil",
+    "updatePhoto": "Actualizar tu foto de perfil",
+    "personalInfo": "Información personal",
+    "updateDetails": "Actualizar tus datos",
+    "saveChanges": "Guardar cambios",
+    "saving": "Guardando...",
+    "emailAddress": "Dirección de correo",
+    "newEmail": "Nueva dirección de correo",
+    "updateEmail": "Actualizar correo",
+    "sendingVerification": "Enviando verificación...",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "updatePassword": "Cambiar contraseña",
+    "updating": "Actualizando...",
+    "twoFactorAuth": "Autenticación de dos factores",
+    "twoFactorDescription": "Añade una capa extra de seguridad",
+    "notEnabled": "No habilitado",
+    "comingSoon": "Próximamente",
+    "soon": "Pronto",
+    "notificationPreferences": "Preferencias de notificación",
+    "chooseNotifications": "Elige cómo quieres ser notificado",
+    "emailNotifications": "Notificaciones por correo",
+    "emailNotificationsDescription": "Recibir actualizaciones por correo",
+    "pushNotifications": "Notificaciones push",
+    "pushNotificationsDescription": "Recibir notificaciones push",
+    "matchAlerts": "Alertas de nuevas coincidencias",
+    "matchAlertsDescription": "Ser notificado cuando tengas una nueva coincidencia",
+    "messageAlerts": "Alertas de mensajes",
+    "messageAlertsDescription": "Ser notificado de nuevos mensajes",
+    "privacySettings": "Configuración de privacidad",
+    "controlPrivacy": "Controla tus preferencias de privacidad",
+    "profileVisibility": "Visibilidad del perfil",
+    "profileVisibilityDescription": "Permitir que otros vean tu perfil",
+    "showLocation": "Mostrar ubicación",
+    "showLocationDescription": "Mostrar tu ubicación aproximada en artículos",
+    "appLanguage": "Idioma de la aplicación",
+    "selectLanguage": "Seleccionar idioma de visualización",
+    "dangerZone": "Zona de peligro",
+    "irreversibleActions": "Acciones irreversibles",
+    "deleteAccountWarning": "Una vez que elimines tu cuenta, no hay vuelta atrás. Esta acción es permanente."
+  },
+  "profile": {
+    "title": "Perfil",
+    "editProfile": "Editar perfil",
+    "displayName": "Nombre para mostrar",
+    "bio": "Biografía",
+    "location": "Ubicación",
+    "memberSince": "Miembro desde",
+    "itemsListed": "Artículos listados",
+    "successfulSwaps": "Intercambios exitosos",
+    "avatar": "Avatar"
   },
   "subscription": {
     "free": "Gratis",
@@ -154,14 +402,6 @@
     "like_new": "Como nuevo",
     "good": "Bueno",
     "fair": "Aceptable"
-  },
-  "chat": {
-    "typeMessage": "Escribe un mensaje...",
-    "send": "Enviar",
-    "online": "En línea",
-    "lastSeen": "Última vez",
-    "today": "hoy",
-    "yesterday": "ayer"
   },
   "dealInvite": {
     "title": "Enviar invitación",

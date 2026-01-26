@@ -10,8 +10,10 @@ import { Send, Loader2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { MessageBubble } from '@/components/chat/MessageBubble';
+import { useTranslation } from 'react-i18next';
 
 export default function Chat() {
+  const { t } = useTranslation();
   const { matchId } = useParams<{ matchId: string }>();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -111,9 +113,9 @@ export default function Chat() {
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4">
                 <Send className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Start the conversation!</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-2">{t('chat.startConversation')}</h3>
               <p className="text-sm text-muted-foreground max-w-[260px]">
-                Say hi and discuss the swap details. You can share photos, negotiate, and plan the exchange.
+                {t('chat.startConversationDescription')}
               </p>
             </motion.div>
           ) : (
@@ -170,7 +172,7 @@ export default function Chat() {
               <Input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type a message..."
+                placeholder={t('chat.typeMessage')}
                 className="h-12 pr-4 bg-muted/50 border-border/50 focus:border-primary/50 rounded-2xl text-base"
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
               />

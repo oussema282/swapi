@@ -11,6 +11,7 @@ import { Plus, Package, Trash2, Edit, Loader2, Archive, ArchiveRestore } from 'l
 import { CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function Items() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -44,9 +46,9 @@ export default function Items() {
     setIsDeleting(true);
     try {
       await deleteItem.mutateAsync(deleteId);
-      toast({ title: 'Item deleted successfully' });
+      toast({ title: t('items.itemDeleted') });
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Failed to delete item' });
+      toast({ variant: 'destructive', title: t('items.failedToDelete') });
     } finally {
       setIsDeleting(false);
       setDeleteId(null);
@@ -56,9 +58,9 @@ export default function Items() {
   const handleUnarchive = async (id: string) => {
     try {
       await unarchiveItem.mutateAsync(id);
-      toast({ title: 'Item restored for trading!' });
+      toast({ title: t('items.itemRestored') });
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Failed to restore item' });
+      toast({ variant: 'destructive', title: t('items.failedToRestore') });
     }
   };
 
@@ -87,14 +89,14 @@ export default function Items() {
         <div className="flex-shrink-0 px-4 pt-4 pb-3 bg-background">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-display font-bold">My Items</h1>
+              <h1 className="text-2xl font-display font-bold">{t('items.title')}</h1>
               <p className="text-sm text-muted-foreground">
-                {activeItems.length} active, {archivedItems.length} swapped
+                {activeItems.length} {t('items.active').toLowerCase()}, {archivedItems.length} {t('items.swapped').toLowerCase()}
               </p>
             </div>
             <Button onClick={() => navigate('/items/new')} className="gradient-primary shadow-lg">
               <Plus className="w-4 h-4 mr-2" />
-              Add Item
+              {t('common.addItem')}
             </Button>
           </div>
 
@@ -103,11 +105,11 @@ export default function Items() {
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="active" className="flex items-center gap-2">
                 <Package className="w-4 h-4" />
-                Active ({activeItems.length})
+                {t('items.active')} ({activeItems.length})
               </TabsTrigger>
               <TabsTrigger value="archived" className="flex items-center gap-2">
                 <Archive className="w-4 h-4" />
-                Swapped ({archivedItems.length})
+                {t('items.swapped')} ({archivedItems.length})
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -182,13 +184,13 @@ export default function Items() {
                   <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
                     <Package className="w-10 h-10 text-muted-foreground" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">No active items</h3>
+                  <h3 className="font-semibold text-lg mb-2">{t('items.noActiveItems')}</h3>
                   <p className="text-muted-foreground text-center text-sm mb-6 max-w-xs">
-                    Add your first item to start swapping with others!
+                    {t('items.noActiveItemsDescription')}
                   </p>
                   <Button onClick={() => navigate('/items/new')} className="gradient-primary shadow-lg">
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Your First Item
+                    {t('items.addFirstItem')}
                   </Button>
                 </motion.div>
               )}
@@ -222,14 +224,14 @@ export default function Items() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold truncate text-muted-foreground">{item.title}</h3>
-                            <Badge variant="secondary" className="text-xs bg-muted">Swapped</Badge>
+                            <Badge variant="secondary" className="text-xs bg-muted">{t('items.swapped')}</Badge>
                           </div>
                           <div className="flex gap-2 mt-2 flex-wrap">
                             <Badge variant="outline" className="text-xs opacity-60">{CATEGORY_LABELS[item.category]}</Badge>
                             <Badge variant="secondary" className="text-xs opacity-60">{CONDITION_LABELS[item.condition]}</Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
-                            This item was swapped and is no longer available.
+                            {t('items.itemWasSwapped')}
                           </p>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -238,7 +240,7 @@ export default function Items() {
                             variant="outline"
                             className="h-9 w-9 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
                             onClick={() => handleUnarchive(item.id)}
-                            title="Restore for trading"
+                            title={t('items.restoreForTrading')}
                           >
                             <ArchiveRestore className="w-4 h-4" />
                           </Button>
@@ -260,9 +262,9 @@ export default function Items() {
                   <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
                     <Archive className="w-10 h-10 text-muted-foreground" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">No swapped items yet</h3>
+                  <h3 className="font-semibold text-lg mb-2">{t('items.noSwappedItems')}</h3>
                   <p className="text-muted-foreground text-center text-sm max-w-xs">
-                    Items that you've successfully swapped will appear here.
+                    {t('items.noSwappedItemsDescription')}
                   </p>
                 </div>
               )}
@@ -275,13 +277,13 @@ export default function Items() {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this item?</AlertDialogTitle>
+            <AlertDialogTitle>{t('items.deleteConfirmTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the item and remove all related matches.
+              {t('items.deleteConfirmDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
@@ -290,10 +292,10 @@ export default function Items() {
               {isDeleting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Deleting...
+                  {t('items.deleting')}
                 </>
               ) : (
-                'Delete'
+                t('common.delete')
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
