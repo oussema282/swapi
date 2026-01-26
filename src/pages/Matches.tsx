@@ -225,10 +225,10 @@ export default function Matches() {
 
   return (
     <AppLayout showNav={false}>
-      {/* Main container: min-h-screen ensures full viewport, flex-col for vertical layout */}
-      <div className="min-h-screen flex flex-col bg-background">
-        {/* Inner container with max width */}
-        <div className="max-w-lg mx-auto w-full flex-1 flex flex-col">
+      {/* Main container: h-[100dvh] constrains to viewport, flex-col for vertical layout */}
+      <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
+        {/* Inner container with max width - flex-1 + min-h-0 prevents overflow */}
+        <div className="max-w-lg mx-auto w-full flex-1 flex flex-col min-h-0">
           
           {/* Header - FIXED HEIGHT: 72px */}
           <header className="h-[72px] flex items-center px-4 border-b shrink-0">
