@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
 
 export function Pricing() {
@@ -48,24 +47,24 @@ export function Pricing() {
   ];
 
   return (
-    <section className="py-24 px-4 bg-muted/30">
-      <div className="max-w-4xl mx-auto">
+    <section id="pricing" className="bg-muted/30 px-4 py-24">
+      <div className="mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
-          <h2 className="text-4xl font-display font-bold text-foreground mb-4">
+          <h2 className="mb-4 font-display text-4xl font-bold text-foreground">
             {t('landing.pricing.title')}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             {t('landing.pricing.subtitle')}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-8 md:grid-cols-2">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.nameKey}
@@ -74,18 +73,18 @@ export function Pricing() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className={`h-full relative ${plan.popular ? 'border-2 border-primary shadow-xl' : 'border-border/50'}`}>
+              <Card className={`relative h-full ${plan.popular ? 'border-2 border-primary shadow-xl' : 'border-border/50'}`}>
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground px-3 py-1">
-                      <Sparkles className="w-3 h-3 mr-1" />
+                    <Badge className="bg-primary px-3 py-1 text-primary-foreground">
+                      <Sparkles className="mr-1 h-3 w-3" />
                       {t('landing.pricing.mostPopular')}
                     </Badge>
                   </div>
                 )}
-                <CardHeader className="text-center pb-4">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    {plan.popular && <Crown className="w-5 h-5 text-primary" />}
+                <CardHeader className="pb-4 text-center">
+                  <div className="mb-2 flex items-center justify-center gap-2">
+                    {plan.popular && <Crown className="h-5 w-5 text-primary" />}
                     <CardTitle className="text-xl">{t(plan.nameKey)}</CardTitle>
                   </div>
                   <div className="flex items-baseline justify-center gap-1">
@@ -98,14 +97,14 @@ export function Pricing() {
                   <ul className="space-y-3">
                     {plan.featuresKeys.map((featureKey) => (
                       <li key={featureKey} className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-success flex-shrink-0" />
+                        <Check className="h-4 w-4 flex-shrink-0 text-primary" />
                         <span className="text-sm">{t(featureKey)}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild variant={plan.variant} className={`w-full ${plan.popular ? 'gradient-primary text-primary-foreground' : ''}`}>
+                  <Button asChild variant={plan.variant} className={`w-full ${plan.popular ? 'bg-primary text-primary-foreground' : ''}`}>
                     <Link to="/auth">{t(plan.ctaKey)}</Link>
                   </Button>
                 </CardFooter>

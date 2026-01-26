@@ -33,6 +33,9 @@
   },
   "landing": {
     "hero": {
+      "headline1": "Trade better",
+      "headline2": "with Valexo.",
+      "description": "The smart exchange platform that connects people across Europe. Swap your unused items for things you actually want.",
       "getStarted": "Get Started",
       "howItWorks": "How it Works",
       "stats": {
@@ -40,6 +43,13 @@
         "itemsTraded": "Items Traded",
         "countries": "Countries"
       }
+    },
+    "trust": {
+      "platform1": "App Store",
+      "platform2": "Google Play",
+      "platform3": "Trustpilot",
+      "from": "from",
+      "reviews": "reviews"
     },
     "features": {
       "title": "Everything You Need to Trade",
@@ -54,20 +64,34 @@
       },
       "secureTrading": {
         "title": "Secure Trading",
-        "description": "Verified profiles, ratings, and secure messaging ensure safe and trustworthy exchanges."
+        "description": "Verified profiles, ratings, and secure messaging ensure safe and trustworthy exchanges.",
+        "feature1": "Verified Profiles",
+        "feature1Desc": "All users go through a verification process to ensure safe and trustworthy exchanges.",
+        "feature2": "Secure Messaging",
+        "feature2Desc": "End-to-end encrypted messaging keeps your conversations private and secure."
       },
       "realTimeChat": {
         "title": "Real-Time Chat",
         "description": "Negotiate, plan meetups, and finalize deals with our instant messaging system."
       },
       "instantNotifications": {
-        "title": "Instant Notifications",
-        "description": "Never miss a match or message with real-time push notifications."
+        "title": "Lightning Fast",
+        "description": "Never miss a match or message with real-time push notifications.",
+        "feature1": "Instant Matches",
+        "feature1Desc": "Get matched with compatible traders in seconds, not hours.",
+        "feature2": "Real-time Updates",
+        "feature2Desc": "See new items and matches as they happen with live updates."
       },
       "proBoost": {
         "title": "Pro Boost",
         "description": "Upgrade to Pro for unlimited swipes, priority matching, and a verified badge."
       }
+    },
+    "testimonials": {
+      "title": "Users Love Us",
+      "quote1": "Valexo changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
+      "quote2": "The matching algorithm is incredible. I've completed over 20 successful trades in just two months.",
+      "quote3": "Finally, a trading app that actually works. Simple, secure, and super fast. Highly recommend!"
     },
     "howItWorks": {
       "title": "How It Works",
@@ -118,11 +142,29 @@
         "cta": "Upgrade to Pro"
       }
     },
+    "newsletter": {
+      "title": "Stay Updated",
+      "placeholder": "Enter your email",
+      "signup": "Subscribe",
+      "success": "Thanks for subscribing!"
+    },
     "footer": {
       "signIn": "Sign In",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "contact": "Contact Us",
+      "company": "Company",
+      "resources": "Resources",
+      "aboutUs": "About Us",
+      "blog": "Blog",
       "terms": "Terms of Service",
       "privacy": "Privacy Policy",
-      "contact": "Contact",
+      "followUs": "Follow Us",
+      "address": {
+        "line1": "Trading across Europe",
+        "line2": "Made with ❤️",
+        "line3": "in the EU"
+      },
       "copyright": "© {{year}} {{appName}}. All rights reserved. 🇪🇺 Made in Europe"
     }
   },
