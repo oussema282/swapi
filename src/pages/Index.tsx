@@ -3,7 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems, FeedMode } from '@/hooks/useRecommendations';
-import { useSwipe, useUndoSwipe, useCheckUndoEligibility } from '@/hooks/useSwipe';
+import { useSwipe } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
@@ -50,7 +50,6 @@ export default function Index() {
     globalPhase,
     actions, 
     canSwipe, 
-    canGoBack, 
     isAnimating,
     isRefreshing,
     isLoading: isSwipeLoading,
@@ -58,7 +57,7 @@ export default function Index() {
     isSystemBlocked 
   } = useSwipeState();
   
-  const { currentIndex, swipeDirection, showMatch, matchedItem, lastUndoneItemId, cardKey } = swipeState;
+  const { currentIndex, swipeDirection, showMatch, matchedItem, cardKey } = swipeState;
   
   // Track feedback overlay for artistic animations
   const [feedbackOverlay, setFeedbackOverlay] = useState<'like' | 'nope' | null>(null);
@@ -72,8 +71,6 @@ export default function Index() {
 
   const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(selectedItemId, activeTab as FeedMode);
   const swipeMutation = useSwipe();
-  const undoMutation = useUndoSwipe();
-  const checkUndoMutation = useCheckUndoEligibility();
 
   const currentItem = swipeableItems?.[currentIndex];
   const hasMoreCards = swipeableItems && currentIndex < swipeableItems.length;
@@ -224,50 +221,6 @@ export default function Index() {
     handleSwipe(direction);
   }, [handleSwipe]);
 
-  const handleGoBack = useCallback(async () => {
-    if (!selectedItemId) return;
-    
-    // Get the item ID from history before going back
-    const lastEntry = swipeState.historyStack[swipeState.historyStack.length - 1];
-    if (!lastEntry) return;
-
-    // Start undo - this checks SWIPE_PHASE internally
-    const started = actions.startUndo();
-    if (!started) {
-      console.log('Undo not started: wrong phase or no history');
-      return;
-    }
-
-    try {
-      // Check if undo is allowed (24h limit)
-      const { canUndo } = await checkUndoMutation.mutateAsync({
-        swiperItemId: selectedItemId,
-        swipedItemId: lastEntry.itemId,
-      });
-
-      if (!canUndo) {
-        toast.error('You can only undo once per item every 24 hours');
-        actions.setReady(); // Abort undo
-        return;
-      }
-
-      // Delete the swipe record and record the undo
-      await undoMutation.mutateAsync({
-        swiperItemId: selectedItemId,
-        swipedItemId: lastEntry.itemId,
-      });
-
-      // Complete undo - transitions UNDOING → READY
-      actions.completeUndo();
-      actions.clearUndo();
-    } catch (error: any) {
-      console.error('Failed to undo swipe:', error);
-      toast.error(error.message || 'Failed to undo swipe');
-      actions.setReady(); // Abort undo
-      actions.clearUndo();
-    }
-  }, [selectedItemId, swipeState.historyStack, actions, undoMutation, checkUndoMutation]);
-
   // Handle item selection - reset swipe state and clear cache for fresh fetch
   const handleSelectItem = useCallback((id: string) => {
     if (id === selectedItemId) return;
@@ -414,12 +367,8 @@ export default function Index() {
                 <SwipeActions
                   onDislike={() => handleSwipe('left')}
                   onLike={() => handleSwipe('right')}
-                  onUndo={handleGoBack}
-                  onSuperLike={() => setShowUpgradePrompt(true)}
                   onDealInvite={() => setShowDealInvite(true)}
-                  onUpgradeClick={() => setShowUpgradePrompt(true)}
                   canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
-                  canUndo={canGoBack}
                   isLoading={swipeMutation.isPending}
                   className="absolute bottom-6 left-0 right-0 z-20"
                 />
