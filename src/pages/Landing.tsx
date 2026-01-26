@@ -6,6 +6,7 @@ import { Testimonials } from '@/components/landing/Testimonials';
 import { Features } from '@/components/landing/Features';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { Pricing } from '@/components/landing/Pricing';
+import { AuthSection } from '@/components/landing/AuthSection';
 import { Newsletter } from '@/components/landing/Newsletter';
 import { Footer } from '@/components/landing/Footer';
 
@@ -20,6 +21,7 @@ export default function Landing() {
       <Features />
       <HowItWorks />
       <Pricing />
+      <AuthSection />
       <Newsletter />
       <Footer />
     </div>

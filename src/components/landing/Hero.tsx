@@ -1,13 +1,19 @@
 import { motion } from 'framer-motion';
-import { Download } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/config/branding';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import heroPhoneImage from '@/assets/landing/hero-phone.png';
 
 export function Hero() {
   const { t } = useTranslation();
+
+  const scrollToAuth = () => {
+    const authSection = document.getElementById('auth');
+    if (authSection) {
+      authSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return (
     <section className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
@@ -44,13 +50,15 @@ export function Hero() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="mt-6 flex items-center gap-4 overflow-hidden p-2"
           >
-            <Button asChild size="lg" className="h-12 gap-2 rounded-full pl-6 pr-2 text-lg font-semibold">
-              <Link to="/auth">
-                <span>{t('landing.hero.getStarted')}</span>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <Download className="h-4 w-4" />
-                </div>
-              </Link>
+            <Button 
+              size="lg" 
+              className="h-12 gap-2 rounded-full pl-6 pr-2 text-lg font-semibold"
+              onClick={scrollToAuth}
+            >
+              <span>{t('landing.hero.getStarted')}</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/20">
+                <ArrowDown className="h-4 w-4" />
+              </div>
             </Button>
           </motion.div>
         </div>
