@@ -163,8 +163,8 @@ export function useSwipe() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['swipeable-items', variables.swiperItemId] });
-      // The Discover screen uses recommended-items; ensure it stays consistent after swiping.
-      queryClient.invalidateQueries({ queryKey: ['recommended-items'] });
+      // DO NOT invalidate recommended-items here - the client tracks progress via currentIndex
+      // and invalidating causes the card stack to re-sort mid-session
       queryClient.invalidateQueries({ queryKey: ['matches'] });
     },
   });
