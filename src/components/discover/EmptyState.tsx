@@ -60,14 +60,19 @@ export function EmptyState({
           <Compass className="w-12 h-12 text-primary/60" />
         </motion.div>
 
-        <motion.h3
+        <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-xl font-bold text-foreground"
+          className="text-center"
         >
-          No more matches for this item try again later
-        </motion.h3>
+          <h3 className="text-xl font-bold text-foreground">
+            No more matches for this item
+          </h3>
+          <p className="text-xl font-bold text-foreground mt-1">
+            try again later
+          </p>
+        </motion.div>
       </div>
     );
   }
