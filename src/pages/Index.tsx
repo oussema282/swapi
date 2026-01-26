@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
-import { useRecommendedItems, FeedMode, PriceFilter } from '@/hooks/useRecommendations';
+import { useRecommendedItems, FeedMode, NearbyFilters } from '@/hooks/useRecommendations';
 import { useSwipe } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -18,7 +18,7 @@ import { EmptyState } from '@/components/discover/EmptyState';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
-import { NearbyFilterBar } from '@/components/discover/NearbyFilterBar';
+import { NearbyFilterSheet } from '@/components/discover/NearbyFilterSheet';
 import { X, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navigate, Link } from 'react-router-dom';
@@ -31,7 +31,8 @@ export default function Index() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
-  const [priceFilter, setPriceFilter] = useState<PriceFilter>({ min: 0, max: 1000 });
+  const [nearbyFilters, setNearbyFilters] = useState<NearbyFilters>({ priceMin: 0, priceMax: 1000, maxDistance: 0 });
+  const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const [showDealInvite, setShowDealInvite] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
@@ -74,7 +75,7 @@ export default function Index() {
   const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(
     selectedItemId, 
     activeTab as FeedMode,
-    activeTab === 'nearby' ? priceFilter : undefined
+    activeTab === 'nearby' ? nearbyFilters : undefined
   );
   const swipeMutation = useSwipe();
 
@@ -276,7 +277,13 @@ export default function Index() {
         <SwipeTopBar
           activeTab={activeTab}
           onTabChange={setActiveTab}
-          onFilterClick={() => toast.info('Filters coming soon!')}
+          onFilterClick={() => {
+            if (activeTab === 'nearby') {
+              setShowFilterSheet(true);
+            } else {
+              toast.info('Filters are available in Nearby tab');
+            }
+          }}
           onBoostClick={() => setShowUpgradePrompt(true)}
           hasNotifications={hasMissedForSelectedItem}
         />
@@ -289,14 +296,6 @@ export default function Index() {
             onSelect={handleSelectItem}
           />
         </div>
-
-        {/* Nearby Price Filter - only shown on nearby tab */}
-        {activeTab === 'nearby' && (
-          <NearbyFilterBar
-            priceFilter={priceFilter}
-            onPriceFilterChange={setPriceFilter}
-          />
-        )}
 
         {/* Missed Match Notification Banner - shows only for the currently selected item */}
         {hasMissedForSelectedItem && dismissedMissedBanner !== selectedItemId && (
@@ -427,6 +426,14 @@ export default function Index() {
         featureType="swipes"
         usedCount={usage.swipes}
         limit={FREE_LIMITS.swipes}
+      />
+
+      {/* Nearby Filter Sheet */}
+      <NearbyFilterSheet
+        open={showFilterSheet}
+        onOpenChange={setShowFilterSheet}
+        filters={nearbyFilters}
+        onFiltersChange={setNearbyFilters}
       />
     </AppLayout>
   );
