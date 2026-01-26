@@ -22,9 +22,9 @@ export function Footer() {
 
           {/* Links */}
           <nav className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <Link to="/auth" className="hover:text-foreground transition-colors">
+            <a href="#auth-section" className="hover:text-foreground transition-colors">
               {t('landing.footer.signIn')}
-            </Link>
+            </a>
             <span className="hover:text-foreground transition-colors cursor-pointer">
               {t('landing.footer.terms')}
             </span>

@@ -84,7 +84,7 @@ export default function NewItem() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
     // Wait for subscription data to load before checking limits
     if (!authLoading && !limitLoading && user && !canAddItem) {
