@@ -11,6 +11,7 @@ interface SwipeCardProps {
     owner_display_name: string; 
     owner_avatar_url: string | null;
     owner_is_pro?: boolean;
+    owner_last_seen?: string | null;
     user_id: string;
     recommendation_score?: number;
     community_rating?: number;
@@ -23,6 +24,26 @@ interface SwipeCardProps {
   userLocation?: { latitude: number | null; longitude: number | null };
   onInfoTap?: () => void;
   showFeedbackOverlay?: 'like' | 'nope' | null;
+}
+
+// Helper to determine user activity status
+function getUserActivityStatus(lastSeen: string | null | undefined): 'active' | 'recent' | null {
+  if (!lastSeen) return null;
+  
+  const lastSeenDate = new Date(lastSeen);
+  const now = new Date();
+  const diffMs = now.getTime() - lastSeenDate.getTime();
+  const diffMinutes = diffMs / (1000 * 60);
+  const diffHours = diffMs / (1000 * 60 * 60);
+  
+  // Active: within last 5 minutes
+  if (diffMinutes <= 5) return 'active';
+  
+  // Recently active: within last 24 hours
+  if (diffHours <= 24) return 'recent';
+  
+  // More than 1 day: show nothing
+  return null;
 }
 
 export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, onInfoTap, showFeedbackOverlay }: SwipeCardProps) {
@@ -42,6 +63,9 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
   const distanceKm = userLocation?.latitude && userLocation?.longitude && item.latitude && item.longitude
     ? calculateDistance(userLocation.latitude, userLocation.longitude, item.latitude, item.longitude)
     : null;
+
+  // Get user activity status
+  const activityStatus = getUserActivityStatus(item.owner_last_seen);
 
   const getExitAnimation = () => {
     if (swipeDirection === 'left') {
@@ -202,11 +226,17 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
 
         {/* Bottom Info Section - Minimal Tinder style with space for overlayed buttons */}
         <div className="absolute inset-x-0 bottom-0 p-5 pb-24 z-10">
-          {/* Active Badge */}
-          {item.is_active && (
+          {/* Activity Badge */}
+          {activityStatus === 'active' && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-tinder-green/20 rounded-full mb-2">
               <div className="w-2 h-2 rounded-full bg-tinder-green animate-pulse" />
               <span className="text-xs font-semibold text-tinder-green">Active</span>
+            </div>
+          )}
+          {activityStatus === 'recent' && (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-tinder-gold/20 rounded-full mb-2">
+              <div className="w-2 h-2 rounded-full bg-tinder-gold" />
+              <span className="text-xs font-semibold text-tinder-gold">Recently Active</span>
             </div>
           )}
 

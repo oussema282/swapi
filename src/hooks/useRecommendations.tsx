@@ -9,6 +9,7 @@ export interface SwipeableItem extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
   owner_is_pro?: boolean;
+  owner_last_seen?: string | null;
   recommendation_score?: number;
   community_rating?: number;
   total_interactions?: number;
@@ -161,7 +162,7 @@ async function fetchNearbyItems(
   const userIds = [...new Set(filteredItems.map(item => item.user_id))];
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('user_id, display_name, avatar_url')
+    .select('user_id, display_name, avatar_url, last_seen')
     .in('user_id', userIds);
 
   // Get subscriptions
@@ -192,6 +193,7 @@ async function fetchNearbyItems(
       owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
       owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
       owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+      owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,
       community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
       total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
       distance_km,
@@ -227,7 +229,7 @@ async function fetchItemDetails(
   const userIds = [...new Set((items || []).map(item => item.user_id))];
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('user_id, display_name, avatar_url')
+    .select('user_id, display_name, avatar_url, last_seen')
     .in('user_id', userIds);
 
   // Get subscriptions to check Pro status
@@ -266,6 +268,7 @@ async function fetchItemDetails(
         owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
         owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
         owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+        owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,
         recommendation_score: scoreMap.get(item.id),
         community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
         total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
@@ -325,7 +328,7 @@ async function fallbackFetch(
   const userIds = [...new Set(filteredItems.map(item => item.user_id))];
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('user_id, display_name, avatar_url')
+    .select('user_id, display_name, avatar_url, last_seen')
     .in('user_id', userIds);
 
   // Get community ratings
@@ -363,6 +366,7 @@ async function fallbackFetch(
       owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
       owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
       owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
+      owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,
       community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
       total_interactions: ratingsMap.get(item.id)?.total_interactions ?? 0,
       distance_km,
