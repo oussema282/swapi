@@ -204,19 +204,24 @@ export default function Index() {
         
         // Check for missed match on left swipe (dislike)
         if (direction === 'left') {
-          // Invalidate and refetch missed matches
-          await queryClient.invalidateQueries({ queryKey: ['missed-matches'] });
-          const { data: updatedMissedMatches } = await refetchMissedMatches();
+          // Invalidate missed matches cache to trigger refetch
+          queryClient.invalidateQueries({ queryKey: ['missed-matches'] });
           
-          // Check if this swipe created a missed match
-          const newMissedMatch = updatedMissedMatches?.find(
-            m => m.their_item_id === swipedItemId && m.my_item_id === selectedItemId
-          );
-          
-          if (newMissedMatch) {
-            setCurrentMissedMatch(newMissedMatch);
-            setShowMissedMatchModal(true);
-          }
+          // Use a slight delay to let the cache invalidate, then check
+          setTimeout(async () => {
+            const result = await refetchMissedMatches();
+            const updatedMissedMatches = result.data;
+            
+            // Check if this swipe created a missed match
+            const newMissedMatch = updatedMissedMatches?.find(
+              m => m.their_item_id === swipedItemId && m.my_item_id === selectedItemId
+            );
+            
+            if (newMissedMatch) {
+              setCurrentMissedMatch(newMissedMatch);
+              setShowMissedMatchModal(true);
+            }
+          }, 100);
         }
 
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
