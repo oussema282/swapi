@@ -9,7 +9,7 @@ import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { useSystemState } from '@/hooks/useSystemState';
-import { useMissedMatches } from '@/hooks/useMissedMatches';
+import { useMissedMatches, MissedMatch } from '@/hooks/useMissedMatches';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { SwipeTopBar } from '@/components/discover/SwipeTopBar';
@@ -18,9 +18,8 @@ import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { EmptyState } from '@/components/discover/EmptyState';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
+import { MissedMatchModal } from '@/components/matches/MissedMatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
-import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -35,13 +34,15 @@ export default function Index() {
   const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const [showDealInvite, setShowDealInvite] = useState(false);
+  const [showMissedMatchModal, setShowMissedMatchModal] = useState(false);
+  const [currentMissedMatch, setCurrentMissedMatch] = useState<MissedMatch | null>(null);
   const { latitude, longitude } = useDeviceLocation();
   const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
   const { state: systemState } = useSystemState();
   const queryClient = useQueryClient();
   
-  // Fetch missed matches count for notification indicator only
-  const { data: missedMatches } = useMissedMatches();
+  // Fetch missed matches count for notification indicator and popup detection
+  const { data: missedMatches, refetch: refetchMissedMatches } = useMissedMatches();
   const hasMissedMatches = (missedMatches?.length ?? 0) > 0;
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
@@ -200,6 +201,23 @@ export default function Index() {
         if (result.match) {
           actions.setMatch(currentItem);
         }
+        
+        // Check for missed match on left swipe (dislike)
+        if (direction === 'left') {
+          // Invalidate and refetch missed matches
+          await queryClient.invalidateQueries({ queryKey: ['missed-matches'] });
+          const { data: updatedMissedMatches } = await refetchMissedMatches();
+          
+          // Check if this swipe created a missed match
+          const newMissedMatch = updatedMissedMatches?.find(
+            m => m.their_item_id === swipedItemId && m.my_item_id === selectedItemId
+          );
+          
+          if (newMissedMatch) {
+            setCurrentMissedMatch(newMissedMatch);
+            setShowMissedMatchModal(true);
+          }
+        }
 
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
         actions.completeSwipe(swipedItemId);
@@ -217,7 +235,7 @@ export default function Index() {
         actions.releaseCommitLock();
       }
     }, 400);
-  }, [selectedItemId, currentItem, swipeMutation, actions, canUse.swipes, isPro, incrementUsage, isSystemBlocked]);
+  }, [selectedItemId, currentItem, swipeMutation, actions, canUse.swipes, isPro, incrementUsage, isSystemBlocked, queryClient, refetchMissedMatches]);
 
   // Swipe is triggered by button click, not gesture
   const handleSwipeComplete = useCallback((direction: 'left' | 'right') => {
@@ -365,6 +383,17 @@ export default function Index() {
         onClose={actions.clearMatch}
         myItem={myItems?.find(i => i.id === selectedItemId) || null}
         theirItem={matchedItem}
+      />
+
+      {/* Missed Match Modal */}
+      <MissedMatchModal
+        open={showMissedMatchModal}
+        onClose={() => {
+          setShowMissedMatchModal(false);
+          setCurrentMissedMatch(null);
+        }}
+        missedMatch={currentMissedMatch}
+        isPro={isPro}
       />
 
       {/* Deal Invite Button (renders modal) */}
