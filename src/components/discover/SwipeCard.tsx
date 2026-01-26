@@ -154,8 +154,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             </div>
           )}
 
-          {/* Bottom gradient for text */}
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none" />
+          {/* Bottom gradient for text - taller to cover button area */}
+          <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/90 via-black/60 to-transparent pointer-events-none" />
 
           {/* LIKE Overlay - Tinder style bordered stamp */}
           <AnimatePresence>
@@ -192,8 +192,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           </AnimatePresence>
         </div>
 
-        {/* Bottom Info Section - Minimal Tinder style */}
-        <div className="absolute inset-x-0 bottom-0 p-5 z-10">
+        {/* Bottom Info Section - Minimal Tinder style with space for overlayed buttons */}
+        <div className="absolute inset-x-0 bottom-0 p-5 pb-24 z-10">
           {/* Active Badge */}
           {item.is_active && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-tinder-green/20 rounded-full mb-2">
@@ -228,7 +228,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 e.stopPropagation();
                 onInfoTap();
               }}
-              className="absolute bottom-5 right-5 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
+              className="absolute bottom-20 right-5 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
               aria-label="View details"
             >
               <ChevronUp className="w-5 h-5 text-white" />
