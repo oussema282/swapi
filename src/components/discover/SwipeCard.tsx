@@ -258,7 +258,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
               </div>
             )}
             {(item.value_min !== undefined && item.value_min !== null) && (
-              <div className="px-2 py-0.5 bg-white/20 rounded-full text-xs font-medium">
+              <div className="px-2 py-0.5 bg-tinder-green rounded-full text-xs font-medium text-white">
                 ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
               </div>
             )}
