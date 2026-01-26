@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
-import { useRecommendedItems, FeedMode } from '@/hooks/useRecommendations';
+import { useRecommendedItems, FeedMode, PriceFilter } from '@/hooks/useRecommendations';
 import { useSwipe } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -18,6 +18,7 @@ import { EmptyState } from '@/components/discover/EmptyState';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
+import { NearbyFilterBar } from '@/components/discover/NearbyFilterBar';
 import { X, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navigate, Link } from 'react-router-dom';
@@ -30,6 +31,7 @@ export default function Index() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>({ min: 0, max: 1000 });
   const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const [showDealInvite, setShowDealInvite] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
@@ -69,7 +71,11 @@ export default function Index() {
     }
   }, [myItems, selectedItemId]);
 
-  const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(selectedItemId, activeTab as FeedMode);
+  const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(
+    selectedItemId, 
+    activeTab as FeedMode,
+    activeTab === 'nearby' ? priceFilter : undefined
+  );
   const swipeMutation = useSwipe();
 
   const currentItem = swipeableItems?.[currentIndex];
@@ -283,6 +289,14 @@ export default function Index() {
             onSelect={handleSelectItem}
           />
         </div>
+
+        {/* Nearby Price Filter - only shown on nearby tab */}
+        {activeTab === 'nearby' && (
+          <NearbyFilterBar
+            priceFilter={priceFilter}
+            onPriceFilterChange={setPriceFilter}
+          />
+        )}
 
         {/* Missed Match Notification Banner - shows only for the currently selected item */}
         {hasMissedForSelectedItem && dismissedMissedBanner !== selectedItemId && (
