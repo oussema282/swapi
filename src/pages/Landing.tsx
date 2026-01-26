@@ -12,27 +12,42 @@ import { Footer } from '@/components/landing/Footer';
 
 export default function Landing() {
   return (
-    <div className="relative min-h-screen">
-      {/* Smoothie gradient background */}
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Animated mesh gradient background */}
       <div 
-        className="fixed inset-0 -z-10"
+        className="fixed inset-0 -z-10 animate-auth-gradient"
         style={{
-          background: `linear-gradient(
-            180deg,
-            hsl(262, 83%, 95%) 0%,
-            hsl(280, 70%, 92%) 10%,
-            hsl(300, 60%, 90%) 20%,
-            hsl(330, 70%, 92%) 30%,
-            hsl(340, 82%, 92%) 40%,
-            hsl(20, 80%, 93%) 50%,
-            hsl(45, 90%, 92%) 60%,
-            hsl(172, 66%, 90%) 70%,
-            hsl(200, 70%, 92%) 80%,
-            hsl(240, 60%, 94%) 90%,
-            hsl(262, 83%, 95%) 100%
-          )`
+          background: `
+            linear-gradient(
+              135deg,
+              hsl(252 100% 68% / 0.15) 0%,
+              hsl(296 75% 66% / 0.12) 25%,
+              hsl(338 83% 68% / 0.10) 50%,
+              hsl(222 100% 68% / 0.12) 75%,
+              hsl(252 100% 68% / 0.15) 100%
+            )
+          `,
+          backgroundSize: '400% 400%',
         }}
       />
+      
+      {/* Subtle overlay for readability */}
+      <div className="fixed inset-0 -z-10 bg-background/80 backdrop-blur-[1px]" />
+      
+      {/* Soft ambient blobs */}
+      <div 
+        className="fixed top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-30 animate-blob-slow -z-10" 
+        style={{ background: 'hsl(252 100% 68% / 0.4)' }} 
+      />
+      <div 
+        className="fixed bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[120px] opacity-25 animate-blob-slow-reverse -z-10" 
+        style={{ background: 'hsl(296 75% 66% / 0.35)' }} 
+      />
+      <div 
+        className="fixed top-[40%] left-[60%] w-[400px] h-[400px] rounded-full blur-[100px] opacity-20 animate-blob-slow-delay -z-10" 
+        style={{ background: 'hsl(338 83% 68% / 0.3)' }} 
+      />
+
       <Hero />
       <TrustBadges />
       <FeatureShowcase />
