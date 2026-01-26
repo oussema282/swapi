@@ -16,7 +16,7 @@ export default function WhitePaper() {
   // Basic access control - redirect if not authenticated
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/');
     }
   }, [user, loading, navigate]);
 

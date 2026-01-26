@@ -105,7 +105,7 @@ export function Pricing() {
                 </CardContent>
                 <CardFooter>
                   <Button asChild variant={plan.variant} className={`w-full ${plan.popular ? 'bg-primary text-primary-foreground' : ''}`}>
-                    <Link to="/auth">{t(plan.ctaKey)}</Link>
+                    <a href="#auth-section">{t(plan.ctaKey)}</a>
                   </Button>
                 </CardFooter>
               </Card>
