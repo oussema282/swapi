@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion';
 import { Star, StarHalf } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import trustpilotLogo from '@/assets/landing/trustpilot.svg';
+import g2Logo from '@/assets/landing/g2.svg';
+import capterraLogo from '@/assets/landing/capterra.svg';
 
 export function TrustBadges() {
   const { t } = useTranslation();
   
   const badges = [
-    { rating: '4.8', reviews: '10K+', platform: t('landing.trust.platform1') },
-    { rating: '4.9', reviews: '15K+', platform: t('landing.trust.platform2') },
-    { rating: '4.7', reviews: '8K+', platform: t('landing.trust.platform3') },
+    { rating: '4.8', reviews: '10K+', logo: trustpilotLogo, name: 'Trustpilot' },
+    { rating: '4.9', reviews: '15K+', logo: g2Logo, name: 'G2' },
+    { rating: '4.7', reviews: '8K+', logo: capterraLogo, name: 'Capterra' },
   ];
 
   return (
@@ -33,7 +36,11 @@ export function TrustBadges() {
               <b>{badge.rating}/5</b>
               <span className="text-muted-foreground"> {t('landing.trust.from')} {badge.reviews} {t('landing.trust.reviews')}</span>
             </span>
-            <span className="text-xl font-semibold text-foreground">{badge.platform}</span>
+            <img 
+              src={badge.logo} 
+              alt={badge.name} 
+              className="h-8 w-auto object-contain"
+            />
           </div>
         ))}
       </motion.div>
