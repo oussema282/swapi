@@ -2,19 +2,11 @@ import { useReducer, useCallback, useRef, useEffect } from 'react';
 import { Item } from '@/types/database';
 import { useSystemState, SwipePhase } from './useSystemState';
 
-interface SwipeHistoryEntry {
-  itemId: string;
-  direction: 'left' | 'right';
-  index: number;
-}
-
 interface LocalSwipeState {
   currentIndex: number;
   swipeDirection: 'left' | 'right' | null;
-  historyStack: SwipeHistoryEntry[];
   matchedItem: Item | null;
   showMatch: boolean;
-  lastUndoneItemId: string | null;
   cardKey: number;
   isRefreshing: boolean;
 }
@@ -24,20 +16,15 @@ type SwipeAction =
   | { type: 'COMPLETE_SWIPE'; itemId: string }
   | { type: 'SET_MATCH'; item: Item }
   | { type: 'CLEAR_MATCH' }
-  | { type: 'START_UNDO' }
-  | { type: 'COMPLETE_UNDO' }
   | { type: 'START_REFRESH' }
   | { type: 'COMPLETE_REFRESH'; newStartIndex?: number }
-  | { type: 'RESET' }
-  | { type: 'CLEAR_UNDO' };
+  | { type: 'RESET' };
 
 const initialState: LocalSwipeState = {
   currentIndex: 0,
   swipeDirection: null,
-  historyStack: [],
   matchedItem: null,
   showMatch: false,
-  lastUndoneItemId: null,
   cardKey: 0,
   isRefreshing: false,
 };
@@ -55,14 +42,6 @@ function swipeReducer(state: LocalSwipeState, action: SwipeAction): LocalSwipeSt
         ...state,
         currentIndex: state.currentIndex + 1,
         swipeDirection: null,
-        historyStack: [
-          ...state.historyStack,
-          {
-            itemId: action.itemId,
-            direction: state.swipeDirection!,
-            index: state.currentIndex,
-          },
-        ],
       };
 
     case 'SET_MATCH':
@@ -79,22 +58,6 @@ function swipeReducer(state: LocalSwipeState, action: SwipeAction): LocalSwipeSt
         showMatch: false,
       };
 
-    case 'START_UNDO':
-      return state;
-
-    case 'COMPLETE_UNDO':
-      if (state.historyStack.length === 0) return state;
-      const newHistory = state.historyStack.slice(0, -1);
-      const previousEntry = state.historyStack[state.historyStack.length - 1];
-      return {
-        ...state,
-        currentIndex: previousEntry.index,
-        historyStack: newHistory,
-        swipeDirection: null,
-        lastUndoneItemId: previousEntry.itemId,
-        cardKey: state.cardKey + 1,
-      };
-
     case 'START_REFRESH':
       return {
         ...state,
@@ -108,12 +71,6 @@ function swipeReducer(state: LocalSwipeState, action: SwipeAction): LocalSwipeSt
         currentIndex: action.newStartIndex ?? 0,
       };
 
-    case 'CLEAR_UNDO':
-      return {
-        ...state,
-        lastUndoneItemId: null,
-      };
-
     case 'RESET':
       return initialState;
 
@@ -124,34 +81,25 @@ function swipeReducer(state: LocalSwipeState, action: SwipeAction): LocalSwipeSt
 
 export function useSwipeState() {
   const [localState, dispatch] = useReducer(swipeReducer, initialState);
-  const debounceRef = useRef<number | null>(null);
-  const isCommittingRef = useRef(false); // Lock to prevent double commits
+  const isCommittingRef = useRef(false);
   const { state: systemState, setSwipePhase } = useSystemState();
 
-  // Sync local state changes to global SWIPE_PHASE
   const globalPhase = systemState.swipe;
   const systemPhase = systemState.phase;
   const subscriptionPhase = systemState.subscription;
 
-  // IMPORTANT: async callbacks (setTimeout / mutations) must not rely on stale closures
   const globalPhaseRef = useRef<SwipePhase>(globalPhase);
   useEffect(() => {
     globalPhaseRef.current = globalPhase;
   }, [globalPhase]);
 
-  // Determine if swipe operations are allowed based on system state
   const isSystemBlocked =
     systemPhase === 'TRANSITION' ||
     systemPhase === 'BLOCKED' ||
     systemPhase === 'BOOTSTRAPPING' ||
     subscriptionPhase === 'UPGRADING';
 
-  // Initialize to IDLE when component mounts
   useEffect(() => {
-    if (globalPhase === 'IDLE' || globalPhase === 'LOADING') {
-      // Will be set to READY once cards load
-    }
-    // Cleanup on unmount
     return () => {
       setSwipePhase('IDLE');
       isCommittingRef.current = false;
@@ -163,13 +111,10 @@ export function useSwipeState() {
     (direction: 'left' | 'right') => {
       const phaseNow = globalPhaseRef.current;
 
-      // Only allow if in READY phase and system not blocked
       if (phaseNow !== 'READY' || isSystemBlocked) {
         console.log(`[SWIPE] blocked: phase=${phaseNow}, systemBlocked=${isSystemBlocked}`);
         return false;
       }
-      // Commit lock is managed by the caller (Index) via acquireCommitLock/releaseCommitLock
-      // so we must NOT block here based on isCommittingRef.
 
       console.log(`[SWIPE] READY → SWIPING (${direction})`);
       globalPhaseRef.current = 'SWIPING';
@@ -184,7 +129,6 @@ export function useSwipeState() {
     (itemId: string) => {
       const phaseNow = globalPhaseRef.current;
 
-      // Only allow commit from SWIPING phase (use ref to avoid stale closure)
       if (phaseNow !== 'SWIPING') {
         console.log(`[SWIPE] completeSwipe blocked: phase=${phaseNow}`);
         return;
@@ -200,19 +144,16 @@ export function useSwipeState() {
     [setSwipePhase]
   );
 
-  // Force reset to READY (for error recovery) - can be called from ANY phase
   const forceReady = useCallback(
     () => {
       console.log(`[SWIPE] forceReady from phase=${globalPhaseRef.current}`);
       isCommittingRef.current = false;
-      // Clear any pending swipe direction without adding to history
       dispatch({ type: 'RESET' });
       setSwipePhase('READY');
     },
     [setSwipePhase]
   );
 
-  // Acquire commit lock
   const acquireCommitLock = useCallback(() => {
     if (isCommittingRef.current) {
       console.log('[SWIPE] lock already held');
@@ -222,7 +163,6 @@ export function useSwipeState() {
     return true;
   }, []);
 
-  // Release commit lock
   const releaseCommitLock = useCallback(() => {
     isCommittingRef.current = false;
   }, []);
@@ -235,41 +175,7 @@ export function useSwipeState() {
     dispatch({ type: 'CLEAR_MATCH' });
   }, []);
 
-  const startUndo = useCallback(
-    () => {
-      const phaseNow = globalPhaseRef.current;
-
-      // Only allow undo from READY phase
-      if (phaseNow !== 'READY' || isSystemBlocked) {
-        console.warn(`Undo blocked: phase=${phaseNow}`);
-        return false;
-      }
-      if (localState.historyStack.length === 0) {
-        return false;
-      }
-      setSwipePhase('UNDOING');
-      dispatch({ type: 'START_UNDO' });
-      return true;
-    },
-    [isSystemBlocked, localState.historyStack.length, setSwipePhase]
-  );
-
-  const completeUndo = useCallback(
-    () => {
-      const phaseNow = globalPhaseRef.current;
-
-      if (phaseNow !== 'UNDOING') {
-        console.warn(`Complete undo blocked: phase=${phaseNow}`);
-        return;
-      }
-      dispatch({ type: 'COMPLETE_UNDO' });
-      setSwipePhase('READY');
-    },
-    [setSwipePhase]
-  );
-
   const startRefresh = useCallback(() => {
-    // Enter REFRESHING phase to silently fetch more items
     setSwipePhase('REFRESHING');
     dispatch({ type: 'START_REFRESH' });
   }, [setSwipePhase]);
@@ -283,14 +189,12 @@ export function useSwipeState() {
   );
 
   const setReady = useCallback(() => {
-    // Allow transitioning to READY from multiple phases for recovery
-    // SWIPING and COMMITTING can also transition to READY in case of stuck state
     const phaseNow = globalPhaseRef.current;
     const allowedPhases: SwipePhase[] = ['LOADING', 'IDLE', 'REFRESHING', 'EXHAUSTED', 'SWIPING', 'COMMITTING'];
 
     if (allowedPhases.includes(phaseNow)) {
       console.log(`[SWIPE] ${phaseNow} → READY`);
-      isCommittingRef.current = false; // Always clear lock when setting ready
+      isCommittingRef.current = false;
       globalPhaseRef.current = 'READY';
       setSwipePhase('READY');
     }
@@ -304,10 +208,9 @@ export function useSwipeState() {
     setSwipePhase('PAUSED');
   }, [setSwipePhase]);
 
-  // Transition to EXHAUSTED - stable empty state for current item
   const setExhausted = useCallback(() => {
     setSwipePhase('EXHAUSTED');
-    dispatch({ type: 'COMPLETE_REFRESH' }); // Clear isRefreshing flag
+    dispatch({ type: 'COMPLETE_REFRESH' });
   }, [setSwipePhase]);
 
   const reset = useCallback(() => {
@@ -315,31 +218,9 @@ export function useSwipeState() {
     setSwipePhase('IDLE');
   }, [setSwipePhase]);
 
-  const clearUndo = useCallback(() => {
-    dispatch({ type: 'CLEAR_UNDO' });
-  }, []);
-
-  // Debounced undo check
-  const goBack = useCallback(() => {
-    if (debounceRef.current) return;
-    debounceRef.current = window.setTimeout(() => {
-      debounceRef.current = null;
-    }, 300);
-    return startUndo();
-  }, [startUndo]);
-
-  // Check if gestures are allowed (ONLY in READY phase)
   const canGesture = globalPhase === 'READY' && !isSystemBlocked;
-  
-  // Check if any swipe action is allowed
   const canSwipe = canGesture;
-  
-  // Check if undo is allowed
-  const canGoBack = canGesture && localState.historyStack.length > 0;
-
-  // Is currently in a transitional swipe phase
   const isAnimating = globalPhase === 'SWIPING' || globalPhase === 'COMMITTING';
-  const isUndoing = globalPhase === 'UNDOING';
   const isRefreshing = globalPhase === 'REFRESHING';
   const isLoading = globalPhase === 'LOADING';
   const isExhausted = globalPhase === 'EXHAUSTED';
@@ -359,9 +240,6 @@ export function useSwipeState() {
       releaseCommitLock,
       setMatch,
       clearMatch,
-      startUndo,
-      completeUndo,
-      goBack,
       startRefresh,
       completeRefresh,
       setReady,
@@ -369,13 +247,10 @@ export function useSwipeState() {
       setPaused,
       setExhausted,
       reset,
-      clearUndo,
     },
     canSwipe,
-    canGoBack,
     canGesture,
     isAnimating,
-    isUndoing,
     isRefreshing,
     isLoading,
     isExhausted,
