@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Item, CATEGORY_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Package, MapPin, Home, ChevronUp } from 'lucide-react';
+import { Package, MapPin, Home, ChevronUp, Star } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 
@@ -129,6 +129,14 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 </div>
               )}
 
+              {/* Rating Stars - Top Left */}
+              {isTop && item.community_rating !== undefined && item.community_rating > 0 && (
+                <div className="absolute top-8 left-3 z-20 flex items-center gap-1 px-2 py-1 bg-black/40 backdrop-blur-sm rounded-full">
+                  <Star className="w-3.5 h-3.5 text-tinder-gold fill-tinder-gold" />
+                  <span className="text-xs font-semibold text-white">{item.community_rating.toFixed(1)}</span>
+                </div>
+              )}
+
               {/* Photo tap zones */}
               {hasMultiplePhotos && isTop && (
                 <div className="absolute inset-0 flex z-10" style={{ touchAction: 'manipulation' }}>
@@ -207,8 +215,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             {item.title}
           </h3>
 
-          {/* Category & Distance */}
-          <div className="flex items-center gap-4 text-white/80 text-sm">
+          {/* Category, Distance & Price */}
+          <div className="flex flex-wrap items-center gap-3 text-white/80 text-sm">
             <div className="flex items-center gap-1.5">
               <Home className="w-4 h-4" />
               <span>{CATEGORY_LABELS[item.category]}</span>
@@ -217,6 +225,11 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
               <div className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" />
                 <span>{formatDistance(distanceKm)}</span>
+              </div>
+            )}
+            {(item.value_min !== undefined && item.value_min !== null) && (
+              <div className="px-2 py-0.5 bg-white/20 rounded-full text-xs font-medium">
+                ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
               </div>
             )}
           </div>
