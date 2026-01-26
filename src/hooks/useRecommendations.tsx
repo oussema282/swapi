@@ -30,15 +30,16 @@ interface RecommendationResponse {
 
 export type FeedMode = 'foryou' | 'nearby';
 
-export interface PriceFilter {
-  min: number;
-  max: number;
+export interface NearbyFilters {
+  priceMin: number;
+  priceMax: number;
+  maxDistance: number; // km, 0 = no limit
 }
 
 export function useRecommendedItems(
   myItemId: string | null, 
   feedMode: FeedMode = 'foryou',
-  priceFilter?: PriceFilter
+  nearbyFilters?: NearbyFilters
 ) {
   const { user } = useAuth();
   const { state: systemState, setSwipePhase } = useSystemState();
@@ -53,7 +54,7 @@ export function useRecommendedItems(
     systemState.subscription === 'UPGRADING';
 
   return useQuery({
-    queryKey: ['recommended-items', myItemId, user?.id, feedMode, priceFilter?.min, priceFilter?.max],
+    queryKey: ['recommended-items', myItemId, user?.id, feedMode, nearbyFilters?.priceMin, nearbyFilters?.priceMax, nearbyFilters?.maxDistance],
     queryFn: async (): Promise<SwipeableItem[]> => {
       if (!user || !myItemId) return [];
       
@@ -63,10 +64,10 @@ export function useRecommendedItems(
         return [];
       }
 
-      // For "nearby" mode, sort purely by distance with optional price filter
+      // For "nearby" mode, sort purely by distance with optional filters
       if (feedMode === 'nearby') {
-        console.log('[RECO] fetching nearby mode for item:', myItemId, 'priceFilter:', priceFilter);
-        return fetchNearbyItems(user.id, myItemId, latitude, longitude, priceFilter);
+        console.log('[RECO] fetching nearby mode for item:', myItemId, 'filters:', nearbyFilters);
+        return fetchNearbyItems(user.id, myItemId, latitude, longitude, nearbyFilters);
       }
 
       console.log('[RECO] fetching foryou mode for item:', myItemId);
@@ -131,13 +132,13 @@ export function useRecommendedItems(
   });
 }
 
-// Nearby mode: purely distance-based sorting with optional price filter
+// Nearby mode: purely distance-based sorting with optional filters
 async function fetchNearbyItems(
   userId: string, 
   myItemId: string, 
   userLat: number | null, 
   userLon: number | null,
-  priceFilter?: PriceFilter
+  filters?: NearbyFilters
 ): Promise<SwipeableItem[]> {
   // Get my item
   const { data: myItem, error: myItemError } = await supabase
@@ -166,16 +167,25 @@ async function fetchNearbyItems(
 
   if (error) throw error;
 
-  // Filter out already swiped items and apply price filter
+  // Filter out already swiped items
   let filteredItems = (items || []).filter(item => !swipedItemIds.includes(item.id));
   
   // Apply price filter if provided
-  if (priceFilter) {
+  if (filters) {
     filteredItems = filteredItems.filter(item => {
       const itemMin = item.value_min ?? 0;
       const itemMax = item.value_max ?? itemMin;
       // Item is within range if there's any overlap with the filter range
-      return itemMin <= priceFilter.max && itemMax >= priceFilter.min;
+      return itemMin <= filters.priceMax && itemMax >= filters.priceMin;
+    });
+  }
+  
+  // Apply distance filter if provided and user has location
+  if (filters?.maxDistance && filters.maxDistance > 0 && userLat && userLon) {
+    filteredItems = filteredItems.filter(item => {
+      if (!item.latitude || !item.longitude) return false;
+      const distance = calculateDistance(userLat, userLon, item.latitude, item.longitude);
+      return distance <= filters.maxDistance;
     });
   }
 
