@@ -69,6 +69,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        tinder: {
+          red: "hsl(var(--tinder-red))",
+          green: "hsl(var(--tinder-green))",
+          blue: "hsl(var(--tinder-blue))",
+          gold: "hsl(var(--tinder-gold))",
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(circle at center, var(--tw-gradient-stops))',

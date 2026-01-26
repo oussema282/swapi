@@ -1,6 +1,6 @@
-import { ThumbsUp, ThumbsDown, Undo2, Crown } from 'lucide-react';
+import { X, Undo2, Star, Heart, Send, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEntitlements } from '@/hooks/useEntitlements';
 import {
   Tooltip,
@@ -14,6 +14,8 @@ interface SwipeActionsProps {
   onDislike: () => void;
   onLike: () => void;
   onUndo: () => void;
+  onSuperLike?: () => void;
+  onInfo?: () => void;
   onUpgradeClick?: () => void;
   canSwipe: boolean;
   canUndo: boolean;
@@ -25,6 +27,8 @@ export function SwipeActions({
   onDislike,
   onLike,
   onUndo,
+  onSuperLike,
+  onInfo,
   onUpgradeClick,
   canSwipe,
   canUndo,
@@ -32,9 +36,8 @@ export function SwipeActions({
   className,
 }: SwipeActionsProps) {
   const { isPro } = useEntitlements();
-  const [activeThumb, setActiveThumb] = useState<'up' | 'down' | null>(null);
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
-  // Handler for undo - only allow for Pro users
   const handleUndoClick = () => {
     if (!isPro) {
       onUpgradeClick?.();
@@ -43,147 +46,152 @@ export function SwipeActions({
     onUndo();
   };
 
-  const handleDislike = () => {
-    if (!canSwipe || isLoading) return;
-    setActiveThumb('down');
-    onDislike();
-    setTimeout(() => setActiveThumb(null), 600);
+  const handleSuperLikeClick = () => {
+    if (!isPro) {
+      onUpgradeClick?.();
+      return;
+    }
+    onSuperLike?.();
   };
 
-  const handleLike = () => {
+  const handleAction = (action: string, callback: () => void) => {
     if (!canSwipe || isLoading) return;
-    setActiveThumb('up');
-    onLike();
-    setTimeout(() => setActiveThumb(null), 600);
+    setActiveButton(action);
+    callback();
+    setTimeout(() => setActiveButton(null), 300);
   };
 
   return (
-    <div className={cn("flex flex-col items-center gap-4", className)}>
-      {/* Main Action Bar */}
-      <div className="relative flex items-center justify-center w-full max-w-[280px] mx-auto">
-        {/* Glass morphism container */}
-        <div className="flex items-center justify-between w-full bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl px-3 py-2 shadow-2xl">
-          {/* Dislike Button */}
-          <motion.button
-            onClick={handleDislike}
-            disabled={!canSwipe || isLoading}
-            className={cn(
-              "relative flex items-center justify-center w-16 h-16 rounded-xl transition-all duration-300",
-              "bg-gradient-to-br from-destructive/20 to-destructive/5 border-2 border-destructive/30",
-              "hover:from-destructive hover:to-destructive/80 hover:border-destructive hover:shadow-lg hover:shadow-destructive/25",
-              "disabled:opacity-40 disabled:hover:from-destructive/20 disabled:hover:to-destructive/5 disabled:cursor-not-allowed",
-              "group"
-            )}
-            whileTap={{ scale: 0.9 }}
-          >
-            <AnimatePresence mode="wait">
-              {activeThumb === 'down' ? (
-                <motion.div
-                  key="active-down"
-                  initial={{ scale: 0.5, rotate: 0 }}
-                  animate={{ 
-                    scale: [0.5, 1.3, 1.1], 
-                    rotate: [0, -15, 0],
-                    y: [0, 8, 0]
-                  }}
-                  exit={{ scale: 0.5, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <ThumbsDown className="w-8 h-8 text-destructive fill-destructive" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="idle-down"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center gap-0.5"
-                >
-                  <ThumbsDown className="w-6 h-6 text-destructive/70 group-hover:text-white transition-colors" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-destructive/60 group-hover:text-white/80 transition-colors">
-                    Nope
-                  </span>
-                </motion.div>
+    <div className={cn("flex items-center justify-center gap-4", className)}>
+      {/* Undo Button - Small Gold */}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.button
+              onClick={handleUndoClick}
+              disabled={isPro ? !canUndo : false}
+              className={cn(
+                "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
+                "bg-white shadow-lg border border-gray-100",
+                "hover:scale-110 active:scale-95",
+                "disabled:opacity-40 disabled:hover:scale-100"
               )}
-            </AnimatePresence>
-          </motion.button>
-
-          {/* Center Undo Button */}
-          <div className="flex flex-col items-center gap-0.5">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <motion.button
-                    onClick={handleUndoClick}
-                    disabled={isPro ? !canUndo : false}
-                    className={cn(
-                      "relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300",
-                      isPro 
-                        ? "bg-muted/50 border border-border hover:bg-muted disabled:opacity-30"
-                        : "bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20"
-                    )}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Undo2 className="w-4 h-4 text-muted-foreground" />
-                    {!isPro && (
-                      <Crown className="w-3 h-3 absolute -top-1 -right-1 text-amber-500" />
-                    )}
-                  </motion.button>
-                </TooltipTrigger>
-                {!isPro && (
-                  <TooltipContent side="top">
-                    <p className="text-xs">Pro feature - Upgrade to undo</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
-            <span className="text-[9px] text-muted-foreground/60 uppercase tracking-wider">Undo</span>
-          </div>
-
-          {/* Like Button */}
-          <motion.button
-            onClick={handleLike}
-            disabled={!canSwipe || isLoading}
-            className={cn(
-              "relative flex items-center justify-center w-16 h-16 rounded-xl transition-all duration-300",
-              "bg-gradient-to-br from-success/20 to-success/5 border-2 border-success/30",
-              "hover:from-success hover:to-success/80 hover:border-success hover:shadow-lg hover:shadow-success/25",
-              "disabled:opacity-40 disabled:hover:from-success/20 disabled:hover:to-success/5 disabled:cursor-not-allowed",
-              "group"
-            )}
-            whileTap={{ scale: 0.9 }}
-          >
-            <AnimatePresence mode="wait">
-              {activeThumb === 'up' ? (
-                <motion.div
-                  key="active-up"
-                  initial={{ scale: 0.5, rotate: 0 }}
-                  animate={{ 
-                    scale: [0.5, 1.3, 1.1], 
-                    rotate: [0, 15, 0],
-                    y: [0, -8, 0]
-                  }}
-                  exit={{ scale: 0.5, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <ThumbsUp className="w-8 h-8 text-success fill-success" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="idle-up"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center gap-0.5"
-                >
-                  <ThumbsUp className="w-6 h-6 text-success/70 group-hover:text-white transition-colors" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-success/60 group-hover:text-white/80 transition-colors">
-                    Like
-                  </span>
-                </motion.div>
+              whileTap={{ scale: 0.9 }}
+              style={{
+                boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)',
+              }}
+            >
+              <Undo2 className="w-5 h-5 text-tinder-gold" />
+              {!isPro && (
+                <Crown className="w-3 h-3 absolute -top-0.5 -right-0.5 text-tinder-gold" />
               )}
-            </AnimatePresence>
-          </motion.button>
-        </div>
-      </div>
+            </motion.button>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p className="text-xs">{isPro ? 'Undo last swipe' : 'Pro feature'}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      {/* Dislike Button - Medium Red */}
+      <motion.button
+        onClick={() => handleAction('dislike', onDislike)}
+        disabled={!canSwipe || isLoading}
+        className={cn(
+          "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
+          "bg-white shadow-xl border border-gray-100",
+          "hover:scale-110 active:scale-95",
+          "disabled:opacity-40 disabled:hover:scale-100",
+          activeButton === 'dislike' && "ring-4 ring-tinder-red/30"
+        )}
+        whileTap={{ scale: 0.85 }}
+        style={{
+          boxShadow: '0 6px 20px rgba(255, 68, 88, 0.25)',
+        }}
+      >
+        <X 
+          className={cn(
+            "w-8 h-8 text-tinder-red transition-all",
+            activeButton === 'dislike' && "scale-110"
+          )} 
+          strokeWidth={3}
+        />
+      </motion.button>
+
+      {/* Super Like Button - Small Blue */}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.button
+              onClick={handleSuperLikeClick}
+              disabled={!canSwipe || isLoading}
+              className={cn(
+                "relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
+                "bg-white shadow-lg border border-gray-100",
+                "hover:scale-110 active:scale-95",
+                "disabled:opacity-40 disabled:hover:scale-100"
+              )}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                boxShadow: '0 4px 15px rgba(0, 122, 255, 0.3)',
+              }}
+            >
+              <Star className="w-5 h-5 text-tinder-blue fill-tinder-blue" />
+              {!isPro && (
+                <Crown className="w-3 h-3 absolute -top-0.5 -right-0.5 text-tinder-gold" />
+              )}
+            </motion.button>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p className="text-xs">{isPro ? 'Super Like' : 'Pro feature'}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      {/* Like Button - Medium Green */}
+      <motion.button
+        onClick={() => handleAction('like', onLike)}
+        disabled={!canSwipe || isLoading}
+        className={cn(
+          "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
+          "bg-white shadow-xl border border-gray-100",
+          "hover:scale-110 active:scale-95",
+          "disabled:opacity-40 disabled:hover:scale-100",
+          activeButton === 'like' && "ring-4 ring-tinder-green/30"
+        )}
+        whileTap={{ scale: 0.85 }}
+        style={{
+          boxShadow: '0 6px 20px rgba(0, 212, 106, 0.25)',
+        }}
+      >
+        <Heart 
+          className={cn(
+            "w-8 h-8 text-tinder-green transition-all",
+            activeButton === 'like' && "fill-tinder-green scale-110"
+          )} 
+          strokeWidth={2.5}
+        />
+      </motion.button>
+
+      {/* Info/Send Button - Small Blue */}
+      {onInfo && (
+        <motion.button
+          onClick={onInfo}
+          disabled={!canSwipe || isLoading}
+          className={cn(
+            "flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200",
+            "bg-white shadow-lg border border-gray-100",
+            "hover:scale-110 active:scale-95",
+            "disabled:opacity-40 disabled:hover:scale-100"
+          )}
+          whileTap={{ scale: 0.9 }}
+          style={{
+            boxShadow: '0 4px 15px rgba(0, 122, 255, 0.2)',
+          }}
+        >
+          <Send className="w-5 h-5 text-tinder-blue" />
+        </motion.button>
+      )}
     </div>
   );
 }
