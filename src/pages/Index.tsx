@@ -393,8 +393,8 @@ export default function Index() {
               isRefreshing={isRefreshing}
             />
           ) : hasCards ? (
-            <div className="absolute inset-0 p-4 flex items-center justify-center">
-              <div className="relative w-full max-w-[320px] h-full max-h-[520px]">
+            <div className="absolute inset-4 flex items-center justify-center">
+              <div className="relative w-full h-full max-w-md mx-auto">
                 {swipeableItems?.slice(currentIndex, currentIndex + 3).reverse().map((item, idx, arr) => (
                   <SwipeCard
                     key={`${item.id}-${cardKey}`}
@@ -412,13 +412,15 @@ export default function Index() {
           ) : null}
         </div>
 
-        {/* Thumb Action Buttons */}
+        {/* Tinder-style Action Buttons */}
         {selectedItemId && !noItems && hasCards && (
-          <div className="py-4 pb-6 shrink-0 bg-background/95 backdrop-blur-sm border-t border-border/30">
+          <div className="py-4 pb-6 shrink-0 bg-background">
             <SwipeActions
               onDislike={() => handleSwipe('left')}
               onLike={() => handleSwipe('right')}
               onUndo={handleGoBack}
+              onSuperLike={() => setShowUpgradePrompt(true)}
+              onInfo={() => setShowDetailsSheet(true)}
               onUpgradeClick={() => setShowUpgradePrompt(true)}
               canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
               canUndo={canGoBack}

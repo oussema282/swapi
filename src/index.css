@@ -42,6 +42,12 @@
 
     --radius: 1rem;
 
+    /* Tinder-specific colors */
+    --tinder-red: 351 100% 63%;
+    --tinder-green: 156 100% 42%;
+    --tinder-blue: 211 100% 50%;
+    --tinder-gold: 45 100% 50%;
+
     --gradient-primary: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(340, 82%, 52%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(172, 66%, 50%) 0%, hsl(262, 83%, 58%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(240, 20%, 98%) 100%);
