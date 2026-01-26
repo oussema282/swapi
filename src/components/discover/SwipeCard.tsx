@@ -36,8 +36,8 @@ function getUserActivityStatus(lastSeen: string | null | undefined): 'active' | 
   const diffMinutes = diffMs / (1000 * 60);
   const diffHours = diffMs / (1000 * 60 * 60);
   
-  // Active: within last 5 minutes
-  if (diffMinutes <= 5) return 'active';
+  // Active: within last 15 minutes
+  if (diffMinutes <= 15) return 'active';
   
   // Recently active: within last 24 hours
   if (diffHours <= 24) return 'recent';
@@ -237,13 +237,13 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           {activityStatus === 'active' && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-tinder-green/20 rounded-full mb-2">
               <div className="w-2 h-2 rounded-full bg-tinder-green animate-pulse" />
-              <span className="text-xs font-semibold text-tinder-green">Active</span>
+              <span className="text-xs font-semibold text-tinder-green">Owner Active</span>
             </div>
           )}
           {activityStatus === 'recent' && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-tinder-gold/20 rounded-full mb-2">
               <div className="w-2 h-2 rounded-full bg-tinder-gold" />
-              <span className="text-xs font-semibold text-tinder-gold">Recently Active</span>
+              <span className="text-xs font-semibold text-tinder-gold">Owner Recently Active</span>
             </div>
           )}
 
