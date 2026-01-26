@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { ArrowLeftRight, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/config/branding';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import heroPhoneImage from '@/assets/landing/hero-phone.png';
 
 export function Hero() {
   const { t } = useTranslation();
@@ -56,25 +57,15 @@ export function Hero() {
 
         {/* Right Content - Phone Mockup */}
         <div className="flex w-full max-w-[50%] items-center justify-center overflow-hidden max-lg:max-w-full">
-          <div className="relative flex max-h-[580px] min-h-[450px] min-w-[350px] max-w-[650px] overflow-hidden max-lg:h-fit max-lg:max-h-[320px] max-lg:min-h-[180px] max-lg:w-[320px] max-lg:min-w-[320px]">
-            <motion.div
+          <div className="relative flex max-h-[580px] min-h-[450px] min-w-[350px] max-w-[650px] overflow-hidden max-lg:h-fit max-lg:max-h-[400px] max-lg:min-h-[280px] max-lg:w-[350px] max-lg:min-w-[280px]">
+            <motion.img
+              src={heroPhoneImage}
+              alt={APP_NAME}
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="z-10 flex h-full w-full items-center justify-center"
-            >
-              <div className="relative h-[400px] w-[200px] rounded-[40px] border-4 border-foreground/20 bg-background shadow-2xl max-lg:h-[280px] max-lg:w-[140px]">
-                {/* Phone Screen */}
-                <div className="absolute inset-2 overflow-hidden rounded-[32px] bg-gradient-to-br from-primary/20 to-secondary/20">
-                  <div className="flex h-full flex-col items-center justify-center gap-4 p-4">
-                    <ArrowLeftRight className="h-16 w-16 text-primary" />
-                    <span className="text-center text-lg font-bold text-foreground">{APP_NAME}</span>
-                  </div>
-                </div>
-                {/* Notch */}
-                <div className="absolute left-1/2 top-2 h-6 w-20 -translate-x-1/2 rounded-full bg-foreground/20" />
-              </div>
-            </motion.div>
+              className="z-10 h-full w-full object-contain"
+            />
 
             <motion.div
               initial={{ scale: 0 }}
