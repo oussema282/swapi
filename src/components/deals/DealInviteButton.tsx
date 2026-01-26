@@ -27,16 +27,32 @@ interface DealInviteButtonProps {
   targetItemTitle: string;
   className?: string;
   iconOnly?: boolean;
+  // External modal control (optional)
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideButton?: boolean;
 }
 
 type InviteStatus = 'available' | 'pending' | 'can_resend' | 'blocked' | 'matched';
 
-export function DealInviteButton({ targetItemId, targetItemTitle, className, iconOnly }: DealInviteButtonProps) {
+export function DealInviteButton({ 
+  targetItemId, 
+  targetItemTitle, 
+  className, 
+  iconOnly, 
+  open, 
+  onOpenChange, 
+  hideButton 
+}: DealInviteButtonProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState(false);
+  const [internalShowModal, setInternalShowModal] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const { canUse, usage, incrementUsage, isPro } = useEntitlements();
+
+  // Support both internal and external modal control
+  const showModal = open !== undefined ? open : internalShowModal;
+  const setShowModal = onOpenChange || setInternalShowModal;
 
   // Fetch user's own active, non-archived items
   const { data: myItems = [], isLoading: itemsLoading } = useQuery({
@@ -139,32 +155,32 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
     return 'available';
   };
 
-  const getStatusBadge = (status: InviteStatus, attempt?: number) => {
+  const getStatusBadge = (status: InviteStatus) => {
     switch (status) {
       case 'pending':
         return (
-          <span className="flex items-center gap-1 text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+          <span className="flex items-center gap-1 text-xs text-warning bg-warning/10 px-2 py-1 rounded">
             <Lock className="w-3 h-3" />
             Pending
           </span>
         );
       case 'can_resend':
         return (
-          <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+          <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-600/10 px-2 py-1 rounded">
             <RotateCcw className="w-3 h-3" />
             Resend (1 left)
           </span>
         );
       case 'blocked':
         return (
-          <span className="flex items-center gap-1 text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+          <span className="flex items-center gap-1 text-xs text-destructive bg-destructive/10 px-2 py-1 rounded">
             <Lock className="w-3 h-3" />
             Blocked
           </span>
         );
       case 'matched':
         return (
-          <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Matched!</span>
+          <span className="text-xs text-tinder-green bg-tinder-green/10 px-2 py-1 rounded">Matched!</span>
         );
       default:
         return null;
@@ -177,18 +193,20 @@ export function DealInviteButton({ targetItemId, targetItemTitle, className, ico
 
   return (
     <>
-      <Button
-        variant="outline"
-        size={iconOnly ? 'icon' : 'sm'}
-        className={className}
-        onClick={(e) => {
-          e.stopPropagation();
-          setShowModal(true);
-        }}
-      >
-        <Send className="w-4 h-4" />
-        {!iconOnly && <span className="ml-1.5">Invite Deal</span>}
-      </Button>
+      {!hideButton && (
+        <Button
+          variant="outline"
+          size={iconOnly ? 'icon' : 'sm'}
+          className={className}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowModal(true);
+          }}
+        >
+          <Send className="w-4 h-4" />
+          {!iconOnly && <span className="ml-1.5">Invite Deal</span>}
+        </Button>
+      )}
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent className="max-w-sm">

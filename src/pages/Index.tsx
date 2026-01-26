@@ -15,6 +15,7 @@ import { SwipeTopBar } from '@/components/discover/SwipeTopBar';
 import { SwipeActions } from '@/components/discover/SwipeActions';
 import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { EmptyState } from '@/components/discover/EmptyState';
+import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { X, HeartOff } from 'lucide-react';
@@ -30,6 +31,7 @@ export default function Index() {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
   const [showDetailsSheet, setShowDetailsSheet] = useState(false);
+  const [showDealInvite, setShowDealInvite] = useState(false);
   const { latitude, longitude } = useDeviceLocation();
   const { canUse, remaining, usage, incrementUsage, isPro } = useEntitlements();
   const { state: systemState } = useSystemState();
@@ -414,7 +416,7 @@ export default function Index() {
                   onLike={() => handleSwipe('right')}
                   onUndo={handleGoBack}
                   onSuperLike={() => setShowUpgradePrompt(true)}
-                  onDealInvite={() => toast.info('Deal invite coming soon!')}
+                  onDealInvite={() => setShowDealInvite(true)}
                   onUpgradeClick={() => setShowUpgradePrompt(true)}
                   canSwipe={canSwipe && !swipeMutation.isPending && !feedbackOverlay}
                   canUndo={canGoBack}
@@ -442,6 +444,17 @@ export default function Index() {
         myItem={myItems?.find(i => i.id === selectedItemId) || null}
         theirItem={matchedItem}
       />
+
+      {/* Deal Invite Button (renders modal) */}
+      {currentItem && (
+        <DealInviteButton
+          targetItemId={currentItem.id}
+          targetItemTitle={currentItem.title}
+          open={showDealInvite}
+          onOpenChange={setShowDealInvite}
+          hideButton
+        />
+      )}
 
       {/* Upgrade Prompt */}
       <UpgradePrompt
