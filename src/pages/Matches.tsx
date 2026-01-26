@@ -225,9 +225,10 @@ export default function Matches() {
 
   return (
     <AppLayout showNav={false}>
-      <div className="max-w-lg mx-auto px-4 py-4 pb-24 min-h-[calc(100vh-2rem)] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
+      {/* Main container with fixed height calculation: 100vh - safe areas */}
+      <div className="max-w-lg mx-auto px-4 py-4 h-[calc(100vh-env(safe-area-inset-top)-env(safe-area-inset-bottom))] flex flex-col">
+        {/* Header - fixed height section */}
+        <div className="flex items-center gap-4 mb-6 shrink-0">
           <Button variant="ghost" size="icon" onClick={handleBack}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
@@ -240,8 +241,8 @@ export default function Matches() {
           </span>
         </div>
 
-        {/* Progress Bar */}
-        <div className="flex gap-2 mb-6">
+        {/* Progress Bar - fixed height section */}
+        <div className="flex gap-2 mb-6 shrink-0">
           {SECTIONS.map((section, idx) => (
             <button
               key={section.id}
@@ -254,9 +255,10 @@ export default function Matches() {
           ))}
         </div>
 
-        {/* Section Content */}
+        {/* Section Content - flex-1 fills remaining space, min-h-0 allows shrinking */}
         <div className="flex-1 min-h-0 flex flex-col">
-          <Card className="flex-1 flex flex-col overflow-hidden min-h-0">
+          {/* Card wrapper - takes full height of parent */}
+          <Card className="h-full flex flex-col overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -264,16 +266,19 @@ export default function Matches() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="flex-1 overflow-y-auto p-4 min-h-0"
+                /* Content area: h-full ensures it fills card, overflow-y-auto for scrolling */
+                className="h-full overflow-y-auto p-4"
               >
                 {/* Active Matches */}
                 {currentStep === 0 && (
-                  <>
+                  <div className="h-full flex flex-col">
                     {isLoading ? (
-                      <div className="flex items-center justify-center h-full">
+                      /* Loading state - centered in full height */
+                      <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
                     ) : activeMatches.length > 0 ? (
+                      /* List state - scrollable content */
                       <div className="space-y-3">
                         {activeMatches.map((match, index) => (
                           <MatchCard
@@ -286,7 +291,8 @@ export default function Matches() {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      /* Empty state - centered in full height */
+                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
                         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                           <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
                         </div>
@@ -294,17 +300,19 @@ export default function Matches() {
                         <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
 
                 {/* Completed Matches */}
                 {currentStep === 1 && (
-                  <>
+                  <div className="h-full flex flex-col">
                     {isLoading ? (
-                      <div className="flex items-center justify-center h-full">
+                      /* Loading state - centered in full height */
+                      <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
                     ) : completedMatches.length > 0 ? (
+                      /* List state - scrollable content */
                       <div className="space-y-3">
                         {completedMatches.map((match, index) => (
                           <CompletedMatchCard
@@ -316,24 +324,27 @@ export default function Matches() {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      /* Empty state - centered in full height */
+                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
                         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                           <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
                         </div>
                         <p className="text-muted-foreground">No completed swaps yet</p>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
 
                 {/* Deal Invites */}
                 {currentStep === 2 && (
-                  <>
+                  <div className="h-full flex flex-col">
                     {invitesLoading ? (
-                      <div className="flex items-center justify-center h-full">
+                      /* Loading state - centered in full height */
+                      <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
                     ) : pendingInvites.length > 0 ? (
+                      /* List state - scrollable content */
                       <div className="space-y-3">
                         {pendingInvites.map((invite) => (
                           <Card key={invite.id} className="p-4 space-y-3">
@@ -413,24 +424,27 @@ export default function Matches() {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      /* Empty state - centered in full height */
+                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
                         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                           <Send className="w-8 h-8 text-muted-foreground" />
                         </div>
                         <p className="text-muted-foreground">No pending deal invites</p>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
 
                 {/* Missed Matches */}
                 {currentStep === 3 && (
-                  <>
+                  <div className="h-full flex flex-col">
                     {missedLoading ? (
-                      <div className="flex items-center justify-center h-full">
+                      /* Loading state - centered in full height */
+                      <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
                     ) : missedMatches.length > 0 ? (
+                      /* List state - scrollable content */
                       <div className="space-y-3">
                         <div className="text-center py-2">
                           <p className="text-sm text-muted-foreground">
@@ -447,7 +461,8 @@ export default function Matches() {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      /* Empty state - centered in full height */
+                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
                         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                           <HeartOff className="w-8 h-8 text-muted-foreground" />
                         </div>
@@ -455,15 +470,15 @@ export default function Matches() {
                         <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
               </motion.div>
             </AnimatePresence>
           </Card>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex gap-3 pt-4 mt-auto">
+        {/* Navigation Buttons - fixed height, never shrinks */}
+        <div className="flex gap-3 pt-4 shrink-0">
           <Button
             variant="outline"
             onClick={handlePrevious}
