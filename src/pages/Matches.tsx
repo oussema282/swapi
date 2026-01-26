@@ -225,50 +225,54 @@ export default function Matches() {
 
   return (
     <AppLayout showNav={false}>
-      {/* Main container with fixed height calculation: 100vh - safe areas */}
-      <div className="max-w-lg mx-auto px-4 py-4 h-[calc(100vh-env(safe-area-inset-top)-env(safe-area-inset-bottom))] flex flex-col">
-        {/* Header - fixed height section */}
-        <div className="flex items-center gap-4 mb-6 shrink-0">
-          <Button variant="ghost" size="icon" onClick={handleBack}>
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-lg font-display font-bold">{currentSection.title}</h1>
-            <p className="text-sm text-muted-foreground">{currentSection.description}</p>
+      {/* Main container: min-h-screen ensures full viewport, flex-col for vertical layout */}
+      <div className="min-h-screen flex flex-col bg-background">
+        {/* Inner container with max width */}
+        <div className="max-w-lg mx-auto w-full flex-1 flex flex-col">
+          
+          {/* Header - FIXED HEIGHT: 72px */}
+          <header className="h-[72px] flex items-center px-4 border-b shrink-0">
+            <Button variant="ghost" size="icon" onClick={handleBack}>
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div className="ml-2 flex-1 min-w-0">
+              <h1 className="text-lg font-display font-bold truncate">{currentSection.title}</h1>
+              <p className="text-sm text-muted-foreground truncate">{currentSection.description}</p>
+            </div>
+            <span className="text-sm font-medium text-muted-foreground shrink-0">
+              {currentStep + 1}/{SECTIONS.length}
+            </span>
+          </header>
+
+          {/* Progress Bar - FIXED HEIGHT: 40px (includes padding) */}
+          <div className="h-[40px] flex items-center gap-2 px-4 shrink-0">
+            {SECTIONS.map((section, idx) => (
+              <button
+                key={section.id}
+                onClick={() => setCurrentStep(idx)}
+                className={cn(
+                  'h-1.5 flex-1 rounded-full transition-all duration-300',
+                  idx <= currentStep ? 'bg-primary' : 'bg-muted'
+                )}
+              />
+            ))}
           </div>
-          <span className="text-sm font-medium text-muted-foreground">
-            {currentStep + 1}/{SECTIONS.length}
-          </span>
-        </div>
 
-        {/* Progress Bar - fixed height section */}
-        <div className="flex gap-2 mb-6 shrink-0">
-          {SECTIONS.map((section, idx) => (
-            <button
-              key={section.id}
-              onClick={() => setCurrentStep(idx)}
-              className={cn(
-                'h-1.5 flex-1 rounded-full transition-all duration-300',
-                idx <= currentStep ? 'bg-primary' : 'bg-muted'
-              )}
-            />
-          ))}
-        </div>
-
-        {/* Section Content - flex-1 fills remaining space, min-h-0 allows shrinking */}
-        <div className="flex-1 min-h-0 flex flex-col">
-          {/* Card wrapper - takes full height of parent */}
-          <Card className="h-full flex flex-col overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                /* Content area: h-full ensures it fills card, overflow-y-auto for scrolling */
-                className="h-full overflow-y-auto p-4"
-              >
+          {/* Center Container - FIXED: flex-1 fills remaining space, overflow hidden */}
+          <main className="flex-1 flex justify-center overflow-hidden min-h-0">
+            <div className="w-full h-full px-4 py-2 flex flex-col">
+              {/* Card wrapper - takes full height */}
+              <Card className="flex-1 flex flex-col overflow-hidden min-h-0">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentStep}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.2 }}
+                    /* Content area: flex-1 fills card, overflow-y-auto for scrolling */
+                    className="flex-1 overflow-y-auto p-4 min-h-0"
+                  >
                 {/* Active Matches */}
                 {currentStep === 0 && (
                   <div className="h-full flex flex-col">
@@ -475,27 +479,29 @@ export default function Matches() {
               </motion.div>
             </AnimatePresence>
           </Card>
-        </div>
+            </div>
+          </main>
 
-        {/* Navigation Buttons - fixed height, never shrinks */}
-        <div className="flex gap-3 pt-4 shrink-0">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={currentStep === 0}
-            className="flex-1"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={currentStep === SECTIONS.length - 1}
-            className="flex-1"
-          >
-            Next
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+          {/* Footer - FIXED HEIGHT: 88px */}
+          <footer className="h-[88px] px-4 flex items-center gap-4 border-t bg-background shrink-0">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentStep === 0}
+              className="flex-1"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={currentStep === SECTIONS.length - 1}
+              className="flex-1"
+            >
+              Next
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </footer>
         </div>
       </div>
     </AppLayout>
