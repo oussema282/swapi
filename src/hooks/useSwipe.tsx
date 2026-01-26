@@ -115,7 +115,38 @@ export function useSwipe() {
         .select()
         .single();
 
-      if (error) throw error;
+      // If we've already swiped this exact pair, Postgres rejects the insert due to the
+      // unique constraint (swiper_item_id, swiped_item_id). In that case, treat it as a
+      // no-op success so the UI can advance to the next card instead of showing an error.
+      if (error) {
+        const isDuplicate = error.code === '23505' || (error.message || '').includes('swipes_swiper_item_id_swiped_item_id_key');
+        if (isDuplicate) {
+          const { data: existing, error: existingError } = await supabase
+            .from('swipes')
+            .select('*')
+            .eq('swiper_item_id', swiperItemId)
+            .eq('swiped_item_id', swipedItemId)
+            .maybeSingle();
+
+          if (existingError) throw existingError;
+          if (!existing) throw error;
+
+          // If the existing swipe was a like, still check if a match exists.
+          if (existing.liked) {
+            const { data: match } = await supabase
+              .from('matches')
+              .select('*')
+              .or(`and(item_a_id.eq.${swiperItemId},item_b_id.eq.${swipedItemId}),and(item_a_id.eq.${swipedItemId},item_b_id.eq.${swiperItemId})`)
+              .maybeSingle();
+
+            return { swipe: existing, match };
+          }
+
+          return { swipe: existing, match: null };
+        }
+
+        throw error;
+      }
 
       // Check if a match was created
       if (liked) {
@@ -132,6 +163,8 @@ export function useSwipe() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['swipeable-items', variables.swiperItemId] });
+      // The Discover screen uses recommended-items; ensure it stays consistent after swiping.
+      queryClient.invalidateQueries({ queryKey: ['recommended-items'] });
       queryClient.invalidateQueries({ queryKey: ['matches'] });
     },
   });
