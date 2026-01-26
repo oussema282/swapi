@@ -267,7 +267,7 @@ export default function Matches() {
                   </button>
                   {/* Red notification card with count */}
                   {notificationCount > 0 && idx !== currentStep && (
-                    <span className="min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-destructive-foreground bg-destructive rounded-md animate-pulse">
+                    <span className="min-w-[18px] h-[16px] px-1.5 flex items-center justify-center text-[10px] font-bold text-destructive-foreground bg-destructive rounded-sm animate-pulse">
                       {notificationCount}
                     </span>
                   )}
