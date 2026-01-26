@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
 import { useRecommendedItems, FeedMode, NearbyFilters } from '@/hooks/useRecommendations';
+import { DiscoverFilterSheet } from '@/components/discover/NearbyFilterSheet';
 import { useSwipe } from '@/hooks/useSwipe';
 import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -18,7 +19,6 @@ import { EmptyState } from '@/components/discover/EmptyState';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { MatchModal } from '@/components/discover/MatchModal';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
-import { NearbyFilterSheet } from '@/components/discover/NearbyFilterSheet';
 import { X, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navigate, Link } from 'react-router-dom';
@@ -31,7 +31,7 @@ export default function Index() {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
-  const [nearbyFilters, setNearbyFilters] = useState<NearbyFilters>({ priceMin: 0, priceMax: 1000, maxDistance: 0 });
+  const [discoverFilters, setDiscoverFilters] = useState<NearbyFilters>({ priceMin: 0, priceMax: 1000, maxDistance: 0, selectedCategories: [] });
   const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const [showDealInvite, setShowDealInvite] = useState(false);
@@ -75,7 +75,7 @@ export default function Index() {
   const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(
     selectedItemId, 
     activeTab as FeedMode,
-    activeTab === 'nearby' ? nearbyFilters : undefined
+    discoverFilters
   );
   const swipeMutation = useSwipe();
 
@@ -277,13 +277,7 @@ export default function Index() {
         <SwipeTopBar
           activeTab={activeTab}
           onTabChange={setActiveTab}
-          onFilterClick={() => {
-            if (activeTab === 'nearby') {
-              setShowFilterSheet(true);
-            } else {
-              toast.info('Filters are available in Nearby tab');
-            }
-          }}
+          onFilterClick={() => setShowFilterSheet(true)}
           onBoostClick={() => setShowUpgradePrompt(true)}
           hasNotifications={hasMissedForSelectedItem}
         />
@@ -428,12 +422,12 @@ export default function Index() {
         limit={FREE_LIMITS.swipes}
       />
 
-      {/* Nearby Filter Sheet */}
-      <NearbyFilterSheet
+      {/* Discover Filter Sheet */}
+      <DiscoverFilterSheet
         open={showFilterSheet}
         onOpenChange={setShowFilterSheet}
-        filters={nearbyFilters}
-        onFiltersChange={setNearbyFilters}
+        filters={discoverFilters}
+        onFiltersChange={setDiscoverFilters}
       />
     </AppLayout>
   );
