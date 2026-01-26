@@ -6,6 +6,14 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en/translation.json";
 import fr from "./locales/fr/translation.json";
 import ar from "./locales/ar/translation.json";
+import es from "./locales/es/translation.json";
+import de from "./locales/de/translation.json";
+import pt from "./locales/pt/translation.json";
+import zh from "./locales/zh/translation.json";
+import ja from "./locales/ja/translation.json";
+import hi from "./locales/hi/translation.json";
+import ru from "./locales/ru/translation.json";
+import ko from "./locales/ko/translation.json";
 
 // Get saved language from localStorage or default to 'en'
 const savedLanguage = typeof window !== 'undefined' 
@@ -18,7 +26,15 @@ i18n
     resources: {
       en: { translation: en },
       fr: { translation: fr },
-      ar: { translation: ar }
+      ar: { translation: ar },
+      es: { translation: es },
+      de: { translation: de },
+      pt: { translation: pt },
+      zh: { translation: zh },
+      ja: { translation: ja },
+      hi: { translation: hi },
+      ru: { translation: ru },
+      ko: { translation: ko }
     },
     lng: savedLanguage,
     fallbackLng: "en",

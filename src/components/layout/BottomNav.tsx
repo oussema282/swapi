@@ -3,19 +3,21 @@ import { cn } from '@/lib/utils';
 import { Search, Map, Compass, Plus, ArrowLeftRight, User } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { motion } from 'framer-motion';
-
-const navItems = [
-  { icon: Search, label: 'Search', path: '/search' },
-  { icon: Map, label: 'Map', path: '/map' },
-  { icon: Compass, label: 'Discover', path: '/discover' },
-  { icon: Plus, label: 'Add', path: '/items/new' },
-  { icon: ArrowLeftRight, label: 'Matches', path: '/matches' },
-  { icon: User, label: 'Profile', path: '/profile' },
-];
+import { useTranslation } from 'react-i18next';
 
 export function BottomNav() {
   const location = useLocation();
   const { hasNewMatches } = useNotifications();
+  const { t } = useTranslation();
+
+  const navItems = [
+    { icon: Search, label: t('nav.search'), path: '/search' },
+    { icon: Map, label: t('nav.map'), path: '/map' },
+    { icon: Compass, label: t('nav.discover'), path: '/discover' },
+    { icon: Plus, label: t('items.addNew').split(' ')[0], path: '/items/new' },
+    { icon: ArrowLeftRight, label: t('nav.matches'), path: '/matches' },
+    { icon: User, label: t('nav.profile'), path: '/profile' },
+  ];
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';

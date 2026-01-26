@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Item } from '@/types/database';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface DealInviteRaw {
   id: string;
@@ -39,13 +40,6 @@ interface DealInviteWithItems {
   receiver_item?: Item;
 }
 
-const SECTIONS = [
-  { id: 'active', title: 'Active Matches', description: 'Current ongoing swaps', icon: ArrowLeftRight },
-  { id: 'completed', title: 'Completed', description: 'Finished exchanges', icon: CheckCircle2 },
-  { id: 'invites', title: 'Deal Invites', description: 'Pending invitations', icon: Send },
-  { id: 'missed', title: 'Missed Matches', description: 'Opportunities you missed', icon: HeartOff },
-];
-
 export default function Matches() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -54,6 +48,14 @@ export default function Matches() {
   const { data: matches, isLoading, isError: matchesError, refetch } = useMatches();
   const { data: missedMatches = [], isLoading: missedLoading } = useMissedMatches();
   const { isPro } = useEntitlements();
+  const { t } = useTranslation();
+  
+  const SECTIONS = [
+    { id: 'active', title: t('matches.active'), description: t('matches.noActiveMatchesDescription'), icon: ArrowLeftRight },
+    { id: 'completed', title: t('matches.completed'), description: t('matches.noCompletedMatchesDescription'), icon: CheckCircle2 },
+    { id: 'invites', title: t('matches.dealInvites'), description: t('matches.noDealInvitesDescription'), icon: Send },
+    { id: 'missed', title: t('matches.missed'), description: t('matches.noMissedMatchesDescription'), icon: HeartOff },
+  ];
   
   // Step navigation
   const initialTab = searchParams.get('tab');
