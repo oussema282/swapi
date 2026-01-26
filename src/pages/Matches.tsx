@@ -245,30 +245,33 @@ export default function Matches() {
           </header>
 
           {/* Progress Bar - FIXED HEIGHT: 40px (includes padding) */}
-          <div className="h-[40px] flex items-center gap-2 px-4 shrink-0">
+          <div className="h-[40px] flex items-center gap-1 px-4 shrink-0">
             {SECTIONS.map((section, idx) => {
-              // Determine if section has notifications
-              const hasNotification = 
-                (idx === 0 && activeMatches.some(m => hasUnreadMessages(m))) || // Active with unread
-                (idx === 2 && pendingInvites.length > 0) || // Deal invites
-                (idx === 3 && missedMatches.length > 0); // Missed matches
+              // Calculate notification count for each section
+              const notificationCount = 
+                idx === 0 ? activeMatches.filter(m => hasUnreadMessages(m)).length :
+                idx === 2 ? pendingInvites.length :
+                idx === 3 ? missedMatches.length : 0;
               
               return (
-                <button
-                  key={section.id}
-                  onClick={() => setCurrentStep(idx)}
-                  className="relative h-1.5 flex-1"
-                >
+                <div key={section.id} className="flex items-center flex-1 gap-1">
                   {/* Progress bar segment */}
-                  <div className={cn(
-                    'h-full w-full rounded-full transition-all duration-300',
-                    idx <= currentStep ? 'bg-primary' : 'bg-muted'
-                  )} />
-                  {/* Red notification dot */}
-                  {hasNotification && idx !== currentStep && (
-                    <span className="absolute -top-1 right-1/2 translate-x-1/2 w-2 h-2 bg-destructive rounded-full animate-pulse" />
+                  <button
+                    onClick={() => setCurrentStep(idx)}
+                    className="h-1.5 flex-1"
+                  >
+                    <div className={cn(
+                      'h-full w-full rounded-full transition-all duration-300',
+                      idx <= currentStep ? 'bg-primary' : 'bg-muted'
+                    )} />
+                  </button>
+                  {/* Red notification card with count */}
+                  {notificationCount > 0 && idx !== currentStep && (
+                    <span className="min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-destructive-foreground bg-destructive rounded-md animate-pulse">
+                      {notificationCount}
+                    </span>
                   )}
-                </button>
+                </div>
               );
             })}
           </div>
