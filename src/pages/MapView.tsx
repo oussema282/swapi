@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -49,7 +49,7 @@ export default function MapView() {
   // Support both focusItemId (new) and itemId (legacy) for backward compatibility
   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
   const { user } = useAuth();
-  const { latitude, longitude, permissionStatus, hasLocation } = useDeviceLocation();
+  const { latitude, longitude, permissionStatus, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
   const goBack = useSmartBack('/');
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -67,6 +67,13 @@ export default function MapView() {
   const hasNavigatedToFocusItem = useRef(false);
   const [missingCoordsShown, setMissingCoordsShown] = useState(false);
   const { canUse, usage, incrementUsage, isPro } = useEntitlements();
+
+  // Auto-request location on mount (like Search page)
+  useEffect(() => {
+    if (!hasLocation && !locationLoading && permissionStatus !== 'denied') {
+      requestLocation();
+    }
+  }, [hasLocation, locationLoading, permissionStatus, requestLocation]);
 
   // Block map access entirely when location is not available
   const locationBlocked = !hasLocation || permissionStatus === 'denied';
@@ -142,6 +149,7 @@ export default function MapView() {
   });
 
   const toggleCategory = (category: ItemCategory) => {
+    trackMapUsage(); // Track usage on filter interaction
     setSelectedCategories(prev =>
       prev.includes(category)
         ? prev.filter(c => c !== category)
@@ -159,8 +167,8 @@ export default function MapView() {
     },
   });
 
-  // Track map usage on mount (for free users)
-  useEffect(() => {
+  // Helper function to track map usage on actual interaction (not on page load)
+  const trackMapUsage = useCallback(() => {
     if (hasTrackedUsage || isPro) return;
     
     // Check limit before tracking
@@ -222,6 +230,7 @@ export default function MapView() {
 
   // Handle theme toggle
   const toggleMapTheme = () => {
+    trackMapUsage(); // Track usage on theme toggle interaction
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem('map-theme', newMode ? 'dark' : 'light');
@@ -266,6 +275,7 @@ export default function MapView() {
       }
 
       el.addEventListener('click', () => {
+        trackMapUsage(); // Track usage on marker interaction
         setSelectedItem(item);
       });
 
