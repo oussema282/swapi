@@ -255,207 +255,211 @@ export default function Matches() {
         </div>
 
         {/* Section Content */}
-        <div className="flex-1 min-h-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              className="h-full"
-            >
-              <Card className="h-full flex flex-col overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {/* Active Matches */}
-              {currentStep === 0 && (
-                <>
-                  {isLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                    </div>
-                  ) : activeMatches.length > 0 ? (
-                    activeMatches.map((match, index) => (
-                      <MatchCard
-                        key={match.id}
-                        match={match}
-                        index={index}
-                        onClick={() => navigate(`/chat/${match.id}`)}
-                        hasUnread={hasUnreadMessages(match)}
-                      />
-                    ))
-                  ) : (
-                    <Card className="p-8 text-center">
-                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                        <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
+        <div className="flex-1 min-h-0 flex flex-col">
+          <Card className="flex-1 flex flex-col overflow-hidden min-h-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="flex-1 overflow-y-auto p-4 min-h-0"
+              >
+                {/* Active Matches */}
+                {currentStep === 0 && (
+                  <>
+                    {isLoading ? (
+                      <div className="flex items-center justify-center h-full">
+                        <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
-                      <p className="text-muted-foreground">No active matches yet</p>
-                      <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
-                    </Card>
-                  )}
-                </>
-              )}
-
-              {/* Completed Matches */}
-              {currentStep === 1 && (
-                <>
-                  {isLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                    </div>
-                  ) : completedMatches.length > 0 ? (
-                    completedMatches.map((match, index) => (
-                      <CompletedMatchCard
-                        key={match.id}
-                        match={match}
-                        index={index}
-                        onClick={() => navigate(`/chat/${match.id}`)}
-                      />
-                    ))
-                  ) : (
-                    <Card className="p-8 text-center">
-                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
+                    ) : activeMatches.length > 0 ? (
+                      <div className="space-y-3">
+                        {activeMatches.map((match, index) => (
+                          <MatchCard
+                            key={match.id}
+                            match={match}
+                            index={index}
+                            onClick={() => navigate(`/chat/${match.id}`)}
+                            hasUnread={hasUnreadMessages(match)}
+                          />
+                        ))}
                       </div>
-                      <p className="text-muted-foreground">No completed swaps yet</p>
-                    </Card>
-                  )}
-                </>
-              )}
-
-              {/* Deal Invites */}
-              {currentStep === 2 && (
-                <>
-                  {invitesLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                    </div>
-                  ) : pendingInvites.length > 0 ? (
-                    pendingInvites.map((invite) => (
-                      <Card key={invite.id} className="p-4 space-y-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
-                            {invite.sender_item?.photos?.[0] ? (
-                              <img 
-                                src={invite.sender_item.photos[0]} 
-                                alt="" 
-                                className="w-full h-full object-cover" 
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center">📦</div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
-                            <p className="text-xs text-muted-foreground">
-                              from <VerifiedName name={invite.sender_item?.owner_display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" />
-                            </p>
-                          </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                          <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
                         </div>
+                        <p className="text-muted-foreground">No active matches yet</p>
+                        <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
+                      </div>
+                    )}
+                  </>
+                )}
 
-                        <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
-
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
-                            {invite.receiver_item?.photos?.[0] ? (
-                              <img 
-                                src={invite.receiver_item.photos[0]} 
-                                alt="" 
-                                className="w-full h-full object-cover" 
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center">📦</div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
-                            <p className="text-xs text-muted-foreground">Your item</p>
-                          </div>
+                {/* Completed Matches */}
+                {currentStep === 1 && (
+                  <>
+                    {isLoading ? (
+                      <div className="flex items-center justify-center h-full">
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                      </div>
+                    ) : completedMatches.length > 0 ? (
+                      <div className="space-y-3">
+                        {completedMatches.map((match, index) => (
+                          <CompletedMatchCard
+                            key={match.id}
+                            match={match}
+                            index={index}
+                            onClick={() => navigate(`/chat/${match.id}`)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                          <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
                         </div>
+                        <p className="text-muted-foreground">No completed swaps yet</p>
+                      </div>
+                    )}
+                  </>
+                )}
 
-                        <div className="flex gap-2 pt-2">
-                          <Button
-                            variant="default"
-                            size="sm"
-                            className="flex-1"
-                            disabled={respondMutation.isPending}
-                            onClick={() => respondMutation.mutate({ 
-                              inviteId: invite.id, 
-                              accept: true,
-                              senderItemId: invite.sender_item_id,
-                              receiverItemId: invite.receiver_item_id,
-                            })}
-                          >
-                            <Check className="w-4 h-4 mr-1" />
-                            Accept
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="flex-1"
-                            disabled={respondMutation.isPending}
-                            onClick={() => respondMutation.mutate({ 
-                              inviteId: invite.id, 
-                              accept: false,
-                              senderItemId: invite.sender_item_id,
-                              receiverItemId: invite.receiver_item_id,
-                            })}
-                          >
-                            <X className="w-4 h-4 mr-1" />
-                            Decline
-                          </Button>
+                {/* Deal Invites */}
+                {currentStep === 2 && (
+                  <>
+                    {invitesLoading ? (
+                      <div className="flex items-center justify-center h-full">
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                      </div>
+                    ) : pendingInvites.length > 0 ? (
+                      <div className="space-y-3">
+                        {pendingInvites.map((invite) => (
+                          <Card key={invite.id} className="p-4 space-y-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                                {invite.sender_item?.photos?.[0] ? (
+                                  <img 
+                                    src={invite.sender_item.photos[0]} 
+                                    alt="" 
+                                    className="w-full h-full object-cover" 
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">📦</div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  from <VerifiedName name={invite.sender_item?.owner_display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" />
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
+
+                            <div className="flex items-center gap-2">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                                {invite.receiver_item?.photos?.[0] ? (
+                                  <img 
+                                    src={invite.receiver_item.photos[0]} 
+                                    alt="" 
+                                    className="w-full h-full object-cover" 
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">📦</div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
+                                <p className="text-xs text-muted-foreground">Your item</p>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2 pt-2">
+                              <Button
+                                variant="default"
+                                size="sm"
+                                className="flex-1"
+                                disabled={respondMutation.isPending}
+                                onClick={() => respondMutation.mutate({ 
+                                  inviteId: invite.id, 
+                                  accept: true,
+                                  senderItemId: invite.sender_item_id,
+                                  receiverItemId: invite.receiver_item_id,
+                                })}
+                              >
+                                <Check className="w-4 h-4 mr-1" />
+                                Accept
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                                disabled={respondMutation.isPending}
+                                onClick={() => respondMutation.mutate({ 
+                                  inviteId: invite.id, 
+                                  accept: false,
+                                  senderItemId: invite.sender_item_id,
+                                  receiverItemId: invite.receiver_item_id,
+                                })}
+                              >
+                                <X className="w-4 h-4 mr-1" />
+                                Decline
+                              </Button>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                          <Send className="w-8 h-8 text-muted-foreground" />
                         </div>
-                      </Card>
-                    ))
-                  ) : (
-                    <Card className="p-8 text-center">
-                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                        <Send className="w-8 h-8 text-muted-foreground" />
+                        <p className="text-muted-foreground">No pending deal invites</p>
                       </div>
-                      <p className="text-muted-foreground">No pending deal invites</p>
-                    </Card>
-                  )}
-                </>
-              )}
+                    )}
+                  </>
+                )}
 
-              {/* Missed Matches */}
-              {currentStep === 3 && (
-                <>
-                  {missedLoading ? (
-                    <div className="flex justify-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                    </div>
-                  ) : missedMatches.length > 0 ? (
-                    <>
-                      <div className="text-center py-2">
-                        <p className="text-sm text-muted-foreground">
-                          <HeartOff className="w-4 h-4 inline mr-1" />
-                          You missed a match! They wanted to swap with you.
-                        </p>
+                {/* Missed Matches */}
+                {currentStep === 3 && (
+                  <>
+                    {missedLoading ? (
+                      <div className="flex items-center justify-center h-full">
+                        <Loader2 className="w-6 h-6 animate-spin" />
                       </div>
-                      {missedMatches.map((missed, index) => (
-                        <MissedMatchCard
-                          key={missed.id}
-                          missedMatch={missed}
-                          index={index}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <Card className="p-8 text-center">
-                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-                        <HeartOff className="w-8 h-8 text-muted-foreground" />
+                    ) : missedMatches.length > 0 ? (
+                      <div className="space-y-3">
+                        <div className="text-center py-2">
+                          <p className="text-sm text-muted-foreground">
+                            <HeartOff className="w-4 h-4 inline mr-1" />
+                            You missed a match! They wanted to swap with you.
+                          </p>
+                        </div>
+                        {missedMatches.map((missed, index) => (
+                          <MissedMatchCard
+                            key={missed.id}
+                            missedMatch={missed}
+                            index={index}
+                          />
+                        ))}
                       </div>
-                      <p className="text-muted-foreground">No missed matches</p>
-                      <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
-                    </Card>
-                  )}
-                </>
-              )}
-                </div>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                          <HeartOff className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                        <p className="text-muted-foreground">No missed matches</p>
+                        <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </Card>
         </div>
 
         {/* Navigation Buttons */}
