@@ -1,6 +1,7 @@
 import { SlidersHorizontal, Zap, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface SwipeTopBarProps {
   activeTab: 'foryou' | 'nearby';
@@ -19,6 +20,8 @@ export function SwipeTopBar({
   hasNotifications = false,
   className,
 }: SwipeTopBarProps) {
+  const { t } = useTranslation();
+
   return (
     <div 
       className={cn(
@@ -49,7 +52,7 @@ export function SwipeTopBar({
               : "text-muted-foreground hover:text-foreground"
           )}
         >
-          For You
+          {t('discover.forYou')}
         </button>
         <button
           onClick={() => onTabChange('nearby')}
@@ -60,7 +63,7 @@ export function SwipeTopBar({
               : "text-muted-foreground hover:text-foreground"
           )}
         >
-          Nearby
+          {t('discover.nearby')}
         </button>
       </div>
 
