@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { Item } from '@/types/database';
 import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { HeartOff, Package, Lock, Crown } from 'lucide-react';
+import { HeartOff, Package, Lock, Crown, Loader2, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -16,9 +15,18 @@ interface MissedMatchModalProps {
   onClose: () => void;
   missedMatch: MissedMatch | null;
   isPro: boolean;
+  onAccept?: () => void;
+  isAccepting?: boolean;
 }
 
-export function MissedMatchModal({ open, onClose, missedMatch, isPro }: MissedMatchModalProps) {
+export function MissedMatchModal({ 
+  open, 
+  onClose, 
+  missedMatch, 
+  isPro, 
+  onAccept,
+  isAccepting = false 
+}: MissedMatchModalProps) {
   const navigate = useNavigate();
 
   if (!missedMatch) return null;
@@ -54,7 +62,7 @@ export function MissedMatchModal({ open, onClose, missedMatch, isPro }: MissedMa
               </motion.div>
 
               {isPro ? (
-                // PRO USER: Show full details
+                // PRO USER: Show full details with Accept option
                 <>
                   {/* User Info */}
                   <motion.div
@@ -142,17 +150,40 @@ export function MissedMatchModal({ open, onClose, missedMatch, isPro }: MissedMa
                     transition={{ delay: 0.5 }}
                     className="text-center text-muted-foreground mt-2 mb-6 text-sm"
                   >
-                    They liked your item but you swiped left on theirs.
+                    They liked your item but you swiped left on theirs. You can still accept this match!
                   </motion.p>
 
-                  {/* Button */}
+                  {/* Buttons */}
                   <motion.div
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.6 }}
+                    className="flex flex-col gap-2"
                   >
-                    <Button onClick={onClose} className="w-full" variant="outline">
-                      Got it
+                    <Button 
+                      onClick={onAccept} 
+                      className="w-full gradient-primary"
+                      disabled={isAccepting}
+                    >
+                      {isAccepting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Creating match...
+                        </>
+                      ) : (
+                        <>
+                          <Heart className="w-4 h-4 mr-2" />
+                          Accept Match
+                        </>
+                      )}
+                    </Button>
+                    <Button 
+                      onClick={onClose} 
+                      variant="ghost" 
+                      className="w-full"
+                      disabled={isAccepting}
+                    >
+                      Maybe Later
                     </Button>
                   </motion.div>
                 </>
@@ -190,7 +221,7 @@ export function MissedMatchModal({ open, onClose, missedMatch, isPro }: MissedMa
                     className="text-center mb-6"
                   >
                     <p className="text-muted-foreground text-sm mb-4">
-                      Upgrade to Valexo Pro to see who wanted to match with you and what items they have.
+                      Upgrade to Valexo Pro to see who wanted to match with you and accept the match.
                     </p>
                   </motion.div>
 
