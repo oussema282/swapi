@@ -217,7 +217,7 @@ async function fetchNearbyItems(
     }
     return {
       ...item,
-      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
       owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
       owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
       owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,
@@ -301,7 +301,7 @@ async function fetchItemDetailsWithFilter(
       }
       return {
         ...item,
-        owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+        owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
         owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
         owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
         owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,
@@ -401,7 +401,7 @@ async function fallbackFetch(
     }
     return {
       ...item,
-      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
       owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
       owner_is_pro: subscriptionMap.get(item.user_id) ?? false,
       owner_last_seen: profileMap.get(item.user_id)?.last_seen || null,

@@ -57,10 +57,14 @@ export function useMatches() {
         if (match.user_b_id) userIds.add(match.user_b_id);
       });
 
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, display_name, avatar_url, last_seen')
-        .in('user_id', Array.from(userIds));
+      // Skip profile query if no user IDs found
+      const userIdsArray = Array.from(userIds);
+      const { data: profiles } = userIdsArray.length > 0 
+        ? await supabase
+            .from('profiles')
+            .select('user_id, display_name, avatar_url, last_seen')
+            .in('user_id', userIdsArray)
+        : { data: [] };
 
       // Fetch subscription status for Pro badges
       const { data: subscriptions } = await supabase
@@ -119,19 +123,19 @@ export function useMatches() {
           confirmed_by_user_b: match.confirmed_by_user_b,
           item_a: { 
             ...itemA, 
-            owner_display_name: profileMap.get(userAId)?.display_name || 'Unknown'
+            owner_display_name: profileMap.get(userAId)?.display_name || 'User'
           },
           item_b: { 
             ...itemB, 
-            owner_display_name: profileMap.get(userBId)?.display_name || 'Unknown'
+            owner_display_name: profileMap.get(userBId)?.display_name || 'User'
           },
           my_item: isMyItemA ? itemA : itemB,
           their_item: isMyItemA 
-            ? { ...itemB, owner_display_name: profileMap.get(userBId)?.display_name || 'Unknown' }
-            : { ...itemA, owner_display_name: profileMap.get(userAId)?.display_name || 'Unknown' },
+            ? { ...itemB, owner_display_name: profileMap.get(userBId)?.display_name || 'User' }
+            : { ...itemA, owner_display_name: profileMap.get(userAId)?.display_name || 'User' },
           other_user_id: otherUserId,
           other_user_profile: {
-            display_name: otherUserProfile?.display_name || 'Unknown',
+            display_name: otherUserProfile?.display_name || 'User',
             avatar_url: otherUserProfile?.avatar_url || null,
             last_seen: otherUserProfile?.last_seen || null,
             is_pro: otherUserProfile?.is_pro || false,
