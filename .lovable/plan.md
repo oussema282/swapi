@@ -1,96 +1,146 @@
 
-# Accept Missed Matches Feature
+# Tappable Item Photos in Matches Sections
 
 ## Overview
-Enable Pro users to reconsider missed matches by accepting them manually, which creates a match and opens the chat conversation.
+Add the ability for users to tap on any product picture in the matches sections to view detailed item information using the existing `ItemDetailsSheet` component. This applies to:
+- Active Matches (MatchCard)
+- Completed Matches (CompletedMatchCard)
+- Deal Invites section
+- Missed Matches (MissedMatchCard)
 
-## How It Works
+## Current State
+- `ItemDetailsSheet` already exists and displays: category, condition, value range, distance, description, swap preferences, and owner info
+- All match card components show item thumbnails but they are not individually tappable
+- Currently, tapping anywhere on a match card navigates to chat or opens a modal
 
-When a user reviews their missed matches and clicks "Accept", the system will:
-1. Remove their previous "dislike" swipe
-2. Record a new "like" swipe for that item pair
-3. The database automatically detects the mutual like and creates a match
-4. The user is redirected to the new chat conversation
+## Implementation Approach
 
-## Implementation Steps
-
-### 1. Create Recovery Mutation Hook
-**File:** `src/hooks/useMissedMatches.tsx`
-
-Add a new `useRecoverMissedMatch` mutation that:
-- Deletes the existing dislike swipe (my_item → their_item)
-- Inserts a new like swipe for the same pair
-- Waits briefly for the match trigger to fire
-- Fetches and returns the newly created match ID
-- Invalidates relevant caches (matches, missed-matches, recommendations)
-
-### 2. Update Missed Match Modal (Pro Users)
-**File:** `src/components/matches/MissedMatchModal.tsx`
-
-- Add an "Accept Match" button alongside the existing "Got it" button
-- Wire up the button to call the recovery mutation
-- Show loading state during the operation
-- On success: show a toast message and navigate to the new chat
-- On error: show an error toast
-
-### 3. Update Missed Match Card
-**File:** `src/components/matches/MissedMatchCard.tsx`
-
-- The card already has an `onReconsider` prop - wire it up properly
-- The "Reconsider" (refresh) icon button should trigger the same flow
-- Update the card to show a loading state when recovering
-
-### 4. Wire Up Matches Page
+### 1. Create a Reusable ItemDetailsSheet State
 **File:** `src/pages/Matches.tsx`
 
-- Pass the recovery handler to MissedMatchCard and MissedMatchModal
-- Handle the navigation to chat after successful recovery
-- Remove the missed match from the list after it's accepted
+Add state management for the ItemDetailsSheet:
+- `selectedItem` state to hold the item to display
+- `selectedItemOwner` state for owner info
+- Open the sheet when any item photo is tapped
+- Close sheet when user dismisses it
+
+### 2. Update MatchCard Component
+**File:** `src/components/matches/MatchCard.tsx`
+
+Changes:
+- Add `onMyItemTap` and `onTheirItemTap` callback props
+- Wrap each item photo in a button element
+- Use `e.stopPropagation()` to prevent triggering the card's onClick
+- Maintain the current card tap behavior for navigating to chat
+
+### 3. Update CompletedMatchCard Component
+**File:** `src/components/matches/CompletedMatchCard.tsx`
+
+Changes:
+- Add `onMyItemTap` and `onTheirItemTap` callback props
+- Make each item photo independently tappable
+- Use `e.stopPropagation()` to prevent triggering the card's onClick
+
+### 4. Update MissedMatchCard Component
+**File:** `src/components/matches/MissedMatchCard.tsx`
+
+Changes:
+- Add `onTheirItemTap` and `onMyItemTap` callback props
+- Make item photos tappable (only for Pro users since free users see blurred content)
+- Use `e.stopPropagation()` to prevent triggering the card's onClick or modal
+
+### 5. Update Matches Page
+**File:** `src/pages/Matches.tsx`
+
+Changes:
+- Import `ItemDetailsSheet` component
+- Add state: `selectedViewItem` for the item details sheet
+- Create handler functions to prepare item data for the sheet
+- Pass the new tap handlers to all card components
+- Add the `ItemDetailsSheet` at the bottom of the page
+- Render the sheet with the selected item
+
+### 6. Update Deal Invites Section
+**File:** `src/pages/Matches.tsx`
+
+Changes:
+- Make the sender item and receiver item photos in Deal Invites tappable
+- Use same pattern with `e.stopPropagation()` to prevent button clicks
 
 ## User Flow
 
 ```text
-User views Missed Matches tab
-         ↓
-Clicks on a missed match card (Pro only)
-         ↓
-Modal opens showing both items
-         ↓
-User clicks "Accept Match" button
-         ↓
-System removes old dislike swipe
-         ↓
-System creates new like swipe
-         ↓
-Database trigger creates mutual match
-         ↓
-User redirected to chat with success toast
+User views any matches section
+         |
+Sees match/invite cards with item photos
+         |
+Taps on a specific item photo
+         |
+ItemDetailsSheet slides up from bottom
+         |
+User sees: title, photo, category, condition,
+value range, description, swap preferences, owner
+         |
+User can tap owner to view their profile
+         |
+User closes sheet and continues browsing
 ```
 
 ## Technical Details
 
-**Database Operations:**
-1. `DELETE FROM swipes WHERE swiper_item_id = my_item AND swiped_item_id = their_item`
-2. `INSERT INTO swipes (swiper_item_id, swiped_item_id, liked) VALUES (my_item, their_item, true)`
-3. Trigger `check_for_match()` fires → creates match
-4. Query for the new match and return its ID
+**Props Changes:**
 
-**Access Control:**
-- DELETE swipes: Allowed by existing RLS policy "Users can delete own swipes"
-- INSERT swipes: Allowed by existing RLS policy "Users can create swipes from own items"
-- This feature is Pro-only (gated in the UI)
+MatchCard:
+```
++ onMyItemTap?: () => void
++ onTheirItemTap?: () => void
+```
 
-**Cache Invalidation:**
-- `['matches']` - to show the new active match
-- `['missed-matches']` - to remove the recovered item from the list
-- `['recommendations']` - in case the item was in the discovery queue
+CompletedMatchCard:
+```
++ onMyItemTap?: () => void
++ onTheirItemTap?: () => void
+```
 
-## UI Changes
+MissedMatchCard:
+```
++ onMyItemTap?: () => void
++ onTheirItemTap?: () => void
+```
 
-**MissedMatchModal (Pro Users):**
-- Current: "Got it" button only
-- New: "Accept Match" primary button + "Maybe Later" secondary button
+**Item Data Transformation:**
 
-**MissedMatchCard (Pro Users):**
-- The existing RefreshCw icon button becomes functional
-- Clicking it triggers the same recovery flow as the modal
+The `ItemDetailsSheet` expects an `ItemWithOwner` type:
+- Standard Item fields
+- `owner_display_name: string`
+- `owner_avatar_url: string | null`
+- `owner_is_pro?: boolean`
+- `user_id: string`
+
+For match items:
+- `my_item` already has owner info from the match query
+- `their_item` has `owner_display_name` from the match data
+- Owner data comes from `other_user_profile` for their item
+- Current user's profile needed for my item (can be fetched or passed)
+
+## Files to Modify
+
+1. `src/components/matches/MatchCard.tsx` - Add item photo tap handlers
+2. `src/components/matches/CompletedMatchCard.tsx` - Add item photo tap handlers
+3. `src/components/matches/MissedMatchCard.tsx` - Add item photo tap handlers
+4. `src/pages/Matches.tsx` - Add ItemDetailsSheet integration and pass handlers
+
+## Edge Cases Handled
+
+- **My item vs Their item**: Both items have different owner info sources
+- **Free users in Missed Matches**: Photos are blurred, tapping shows upgrade prompt
+- **Missing photos**: Fallback to Package icon (existing behavior)
+- **Archived items**: Still viewable in completed/active matches
+- **Click propagation**: Prevented so card navigation still works
+
+## No Database Changes Required
+
+All data needed is already fetched by existing queries:
+- `useMatches` returns full item data with owner info
+- `useMissedMatches` returns items with owner profiles
+- Deal invites query fetches items and profiles
