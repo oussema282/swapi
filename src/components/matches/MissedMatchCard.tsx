@@ -15,6 +15,8 @@ interface MissedMatchCardProps {
   onReconsider?: () => void;
   onClick?: () => void;
   isRecovering?: boolean;
+  onMyItemTap?: () => void;
+  onTheirItemTap?: () => void;
 }
 
 export function MissedMatchCard({ 
@@ -23,7 +25,9 @@ export function MissedMatchCard({
   isPro = false, 
   onReconsider, 
   onClick,
-  isRecovering = false 
+  isRecovering = false,
+  onMyItemTap,
+  onTheirItemTap
 }: MissedMatchCardProps) {
   const navigate = useNavigate();
 
@@ -112,7 +116,14 @@ export function MissedMatchCard({
         <div className="flex gap-3">
           {/* Item Visual */}
           <div className="relative flex-shrink-0">
-            <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted ring-2 ring-destructive/30">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onTheirItemTap?.();
+              }}
+              className="w-14 h-14 rounded-lg overflow-hidden bg-muted ring-2 ring-destructive/30 focus:outline-none focus:ring-2 focus:ring-primary"
+            >
               {missedMatch.their_item?.photos?.[0] ? (
                 <img 
                   src={missedMatch.their_item.photos[0]} 
@@ -124,7 +135,7 @@ export function MissedMatchCard({
                   <Package className="w-6 h-6 text-muted-foreground" />
                 </div>
               )}
-            </div>
+            </button>
             <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-destructive flex items-center justify-center">
               <HeartOff className="w-3 h-3 text-destructive-foreground" />
             </div>
