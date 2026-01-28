@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useMatches } from '@/hooks/useMatches';
+import { useMatches, MatchWithItems } from '@/hooks/useMatches';
 import { useMissedMatches, useRecoverMissedMatch, MissedMatch } from '@/hooks/useMissedMatches';
 import { useEntitlements } from '@/hooks/useEntitlements';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,12 +14,14 @@ import { MatchCard } from '@/components/matches/MatchCard';
 import { CompletedMatchCard } from '@/components/matches/CompletedMatchCard';
 import { MissedMatchCard } from '@/components/matches/MissedMatchCard';
 import { MissedMatchModal } from '@/components/matches/MissedMatchModal';
+import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Item } from '@/types/database';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { useDeviceLocation } from '@/hooks/useLocation';
 
 interface DealInviteRaw {
   id: string;
@@ -40,6 +42,14 @@ interface DealInviteWithItems {
   receiver_item?: Item;
 }
 
+// Type for ItemDetailsSheet
+interface ItemWithOwner extends Item {
+  owner_display_name: string;
+  owner_avatar_url: string | null;
+  owner_is_pro?: boolean;
+  user_id: string;
+}
+
 export default function Matches() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -50,6 +60,8 @@ export default function Matches() {
   const recoverMutation = useRecoverMissedMatch();
   const { isPro } = useEntitlements();
   const { t } = useTranslation();
+  const deviceLocation = useDeviceLocation();
+  const userLocation = { latitude: deviceLocation.latitude, longitude: deviceLocation.longitude };
   
   const SECTIONS = [
     { id: 'active', title: t('matches.active'), description: t('matches.noActiveMatchesDescription'), icon: ArrowLeftRight },
@@ -67,6 +79,89 @@ export default function Matches() {
   const [selectedMissedMatch, setSelectedMissedMatch] = useState<MissedMatch | null>(null);
   // Track which missed match is being recovered (for card loading state)
   const [recoveringId, setRecoveringId] = useState<string | null>(null);
+  
+  // Item details sheet state
+  const [selectedViewItem, setSelectedViewItem] = useState<ItemWithOwner | null>(null);
+  
+  // Fetch current user's profile for "my item" owner info
+  const { data: currentUserProfile } = useQuery({
+    queryKey: ['my-profile', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data } = await supabase
+        .from('profiles')
+        .select('display_name, avatar_url')
+        .eq('user_id', user.id)
+        .single();
+      return data;
+    },
+    enabled: !!user,
+  });
+  
+  // Handler to view item details (my item)
+  const handleViewMyItemDetails = (match: MatchWithItems) => {
+    if (!match.my_item || !user) return;
+    setSelectedViewItem({
+      ...match.my_item,
+      owner_display_name: currentUserProfile?.display_name || 'You',
+      owner_avatar_url: currentUserProfile?.avatar_url || null,
+      owner_is_pro: isPro,
+      user_id: user.id,
+    });
+  };
+  
+  // Handler to view item details (their item)
+  const handleViewTheirItemDetails = (match: MatchWithItems) => {
+    if (!match.their_item) return;
+    setSelectedViewItem({
+      ...match.their_item,
+      owner_display_name: match.other_user_profile?.display_name || 'Unknown',
+      owner_avatar_url: match.other_user_profile?.avatar_url || null,
+      owner_is_pro: match.other_user_profile?.is_pro,
+      user_id: match.other_user_id,
+    });
+  };
+  
+  // Handler for missed match items
+  const handleViewMissedItemDetails = (missedMatch: MissedMatch, isMyItem: boolean) => {
+    if (isMyItem && missedMatch.my_item) {
+      setSelectedViewItem({
+        ...missedMatch.my_item,
+        owner_display_name: currentUserProfile?.display_name || 'You',
+        owner_avatar_url: currentUserProfile?.avatar_url || null,
+        owner_is_pro: isPro,
+        user_id: user?.id || '',
+      });
+    } else if (!isMyItem && missedMatch.their_item) {
+      setSelectedViewItem({
+        ...missedMatch.their_item,
+        owner_display_name: missedMatch.their_item.owner_display_name || 'Unknown',
+        owner_avatar_url: missedMatch.their_item.owner_avatar_url || null,
+        owner_is_pro: missedMatch.their_item.owner_is_pro,
+        user_id: missedMatch.their_item.user_id,
+      });
+    }
+  };
+  
+  // Handler for deal invite items
+  const handleViewDealInviteItem = (invite: DealInviteWithItems, isSenderItem: boolean) => {
+    if (isSenderItem && invite.sender_item) {
+      setSelectedViewItem({
+        ...invite.sender_item,
+        owner_display_name: invite.sender_item.owner_display_name || 'Unknown',
+        owner_avatar_url: null,
+        user_id: invite.sender_item.user_id,
+      });
+    } else if (!isSenderItem && invite.receiver_item && user) {
+      setSelectedViewItem({
+        ...invite.receiver_item,
+        owner_display_name: currentUserProfile?.display_name || 'You',
+        owner_avatar_url: currentUserProfile?.avatar_url || null,
+        owner_is_pro: isPro,
+        user_id: user.id,
+      });
+    }
+  };
 
   // Handle accept missed match
   const handleAcceptMissedMatch = (missedMatch: MissedMatch) => {
@@ -342,6 +437,8 @@ export default function Matches() {
                             index={index}
                             onClick={() => navigate(`/chat/${match.id}`)}
                             hasUnread={hasUnreadMessages(match)}
+                            onMyItemTap={() => handleViewMyItemDetails(match)}
+                            onTheirItemTap={() => handleViewTheirItemDetails(match)}
                           />
                         ))}
                       </div>
@@ -375,6 +472,8 @@ export default function Matches() {
                             match={match}
                             index={index}
                             onClick={() => navigate(`/chat/${match.id}`)}
+                            onMyItemTap={() => handleViewMyItemDetails(match)}
+                            onTheirItemTap={() => handleViewTheirItemDetails(match)}
                           />
                         ))}
                       </div>
@@ -404,7 +503,14 @@ export default function Matches() {
                         {pendingInvites.map((invite) => (
                           <Card key={invite.id} className="p-4 space-y-3">
                             <div className="flex items-center gap-2">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleViewDealInviteItem(invite, true);
+                                }}
+                                className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                              >
                                 {invite.sender_item?.photos?.[0] ? (
                                   <img 
                                     src={invite.sender_item.photos[0]} 
@@ -414,7 +520,7 @@ export default function Matches() {
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center">📦</div>
                                 )}
-                              </div>
+                              </button>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
                                 <p className="text-xs text-muted-foreground">
@@ -426,7 +532,14 @@ export default function Matches() {
                             <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
 
                             <div className="flex items-center gap-2">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleViewDealInviteItem(invite, false);
+                                }}
+                                className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                              >
                                 {invite.receiver_item?.photos?.[0] ? (
                                   <img 
                                     src={invite.receiver_item.photos[0]} 
@@ -436,7 +549,7 @@ export default function Matches() {
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center">📦</div>
                                 )}
-                              </div>
+                              </button>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
                                 <p className="text-xs text-muted-foreground">Your item</p>
@@ -516,6 +629,8 @@ export default function Matches() {
                             onClick={() => setSelectedMissedMatch(missed)}
                             onReconsider={isPro ? () => handleAcceptMissedMatch(missed) : undefined}
                             isRecovering={recoveringId === missed.id}
+                            onMyItemTap={isPro ? () => handleViewMissedItemDetails(missed, true) : undefined}
+                            onTheirItemTap={isPro ? () => handleViewMissedItemDetails(missed, false) : undefined}
                           />
                         ))}
                       </div>
@@ -568,6 +683,14 @@ export default function Matches() {
         isPro={isPro}
         onAccept={selectedMissedMatch ? () => handleAcceptMissedMatch(selectedMissedMatch) : undefined}
         isAccepting={recoverMutation.isPending}
+      />
+      
+      {/* Item Details Sheet */}
+      <ItemDetailsSheet
+        open={!!selectedViewItem}
+        onOpenChange={(open) => !open && setSelectedViewItem(null)}
+        item={selectedViewItem}
+        userLocation={userLocation}
       />
     </AppLayout>
   );

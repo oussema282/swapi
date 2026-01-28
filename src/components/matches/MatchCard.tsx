@@ -12,9 +12,11 @@ interface MatchCardProps {
   index: number;
   onClick: () => void;
   hasUnread?: boolean;
+  onMyItemTap?: () => void;
+  onTheirItemTap?: () => void;
 }
 
-export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) {
+export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onTheirItemTap }: MatchCardProps) {
   const lastMessagePreview = match.last_message?.content || 'Start a conversation...';
   const lastActivityTime = match.last_message?.created_at || match.created_at;
   
@@ -43,7 +45,14 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
           {/* Swap Visual */}
           <div className="relative flex-shrink-0">
             <div className="flex items-center">
-              <div className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMyItemTap?.();
+                }}
+                className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
                 {match.my_item?.photos?.[0] ? (
                   <img src={match.my_item.photos[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
@@ -51,11 +60,18 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                     <Package className="w-4 h-4 text-muted-foreground" />
                   </div>
                 )}
-              </div>
+              </button>
               <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center -mx-1.5 z-10">
                 <ArrowLeftRight className="w-2.5 h-2.5 text-primary" />
               </div>
-              <div className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTheirItemTap?.();
+                }}
+                className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
                 {match.their_item?.photos?.[0] ? (
                   <img src={match.their_item.photos[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
@@ -63,7 +79,7 @@ export function MatchCard({ match, index, onClick, hasUnread }: MatchCardProps) 
                     <Package className="w-4 h-4 text-muted-foreground" />
                   </div>
                 )}
-              </div>
+              </button>
             </div>
             
             {/* Pending confirmation indicator */}

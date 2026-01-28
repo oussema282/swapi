@@ -10,9 +10,11 @@ interface CompletedMatchCardProps {
   match: MatchWithItems;
   index: number;
   onClick?: () => void;
+  onMyItemTap?: () => void;
+  onTheirItemTap?: () => void;
 }
 
-export function CompletedMatchCard({ match, index, onClick }: CompletedMatchCardProps) {
+export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheirItemTap }: CompletedMatchCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -26,7 +28,14 @@ export function CompletedMatchCard({ match, index, onClick }: CompletedMatchCard
         <div className="flex items-center gap-3">
           {/* Compact Swap Visual */}
           <div className="flex items-center gap-1 flex-shrink-0">
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onMyItemTap?.();
+              }}
+              className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            >
               {match.my_item?.photos?.[0] ? (
                 <img src={match.my_item.photos[0]} alt="" className="w-full h-full object-cover opacity-80" />
               ) : (
@@ -34,9 +43,16 @@ export function CompletedMatchCard({ match, index, onClick }: CompletedMatchCard
                   <Package className="w-4 h-4 text-muted-foreground" />
                 </div>
               )}
-            </div>
+            </button>
             <ArrowLeftRight className="w-3 h-3 text-success -mx-1.5 z-10" />
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onTheirItemTap?.();
+              }}
+              className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            >
               {match.their_item?.photos?.[0] ? (
                 <img src={match.their_item.photos[0]} alt="" className="w-full h-full object-cover opacity-80" />
               ) : (
@@ -44,7 +60,7 @@ export function CompletedMatchCard({ match, index, onClick }: CompletedMatchCard
                   <Package className="w-4 h-4 text-muted-foreground" />
                 </div>
               )}
-            </div>
+            </button>
           </div>
 
           {/* Content */}
