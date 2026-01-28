@@ -115,7 +115,7 @@ export default function Matches() {
     if (!match.their_item) return;
     setSelectedViewItem({
       ...match.their_item,
-      owner_display_name: match.other_user_profile?.display_name || 'Unknown',
+      owner_display_name: match.other_user_profile?.display_name || 'User',
       owner_avatar_url: match.other_user_profile?.avatar_url || null,
       owner_is_pro: match.other_user_profile?.is_pro,
       user_id: match.other_user_id,
@@ -135,7 +135,7 @@ export default function Matches() {
     } else if (!isMyItem && missedMatch.their_item) {
       setSelectedViewItem({
         ...missedMatch.their_item,
-        owner_display_name: missedMatch.their_item.owner_display_name || 'Unknown',
+        owner_display_name: missedMatch.their_item.owner_display_name || 'User',
         owner_avatar_url: missedMatch.their_item.owner_avatar_url || null,
         owner_is_pro: missedMatch.their_item.owner_is_pro,
         user_id: missedMatch.their_item.user_id,
@@ -148,7 +148,7 @@ export default function Matches() {
     if (isSenderItem && invite.sender_item) {
       setSelectedViewItem({
         ...invite.sender_item,
-        owner_display_name: invite.sender_item.owner_display_name || 'Unknown',
+        owner_display_name: invite.sender_item.owner_display_name || 'User',
         owner_avatar_url: null,
         user_id: invite.sender_item.user_id,
       });
@@ -244,7 +244,7 @@ export default function Matches() {
 
         return {
           ...invite,
-          sender_item: senderItem ? { ...senderItem, owner_display_name: ownerProfile?.display_name || 'Unknown' } : undefined,
+          sender_item: senderItem ? { ...senderItem, owner_display_name: ownerProfile?.display_name || 'User' } : undefined,
           receiver_item: receiverItem,
         };
       }) as DealInviteWithItems[];

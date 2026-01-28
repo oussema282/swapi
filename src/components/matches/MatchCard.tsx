@@ -103,7 +103,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
                 </Avatar>
                 <span className="font-medium text-sm">
                   <VerifiedName 
-                    name={match.other_user_profile?.display_name || 'Unknown'} 
+                    name={match.other_user_profile?.display_name || 'User'} 
                     isPro={match.other_user_profile?.is_pro}
                     badgeClassName="w-3.5 h-3.5"
                     userId={match.other_user_id}

@@ -86,25 +86,32 @@ export function useMissedMatches() {
 
       if (!items?.length) return [];
 
-      // Fetch profiles for their items
+      // Fetch profiles for their items (skip if no user IDs)
       const theirUserIds = [...new Set(items.filter(i => !myItemIds.includes(i.id)).map(i => i.user_id))];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, display_name, avatar_url')
-        .in('user_id', theirUserIds);
+      
+      const { data: profiles } = theirUserIds.length > 0
+        ? await supabase
+            .from('profiles')
+            .select('user_id, display_name, avatar_url')
+            .in('user_id', theirUserIds)
+        : { data: [] };
 
-      // Fetch subscription status for Pro badges
-      const { data: subscriptions } = await supabase
-        .from('user_subscriptions')
-        .select('user_id, is_pro')
-        .in('user_id', theirUserIds);
+      // Fetch subscription status for Pro badges (skip if no user IDs)
+      const { data: subscriptions } = theirUserIds.length > 0
+        ? await supabase
+            .from('user_subscriptions')
+            .select('user_id, is_pro')
+            .in('user_id', theirUserIds)
+        : { data: [] };
 
-      const subscriptionMap = new Map(
+      const subscriptionMap = new Map<string, boolean>(
         (subscriptions || []).map(s => [s.user_id, s.is_pro])
       );
 
       const itemMap = new Map(items.map(i => [i.id, i]));
-      const profileMap = new Map(profiles?.map(p => [p.user_id, { ...p, is_pro: subscriptionMap.get(p.user_id) || false }]) || []);
+      const profileMap = new Map<string, { user_id: string; display_name: string; avatar_url: string | null; is_pro: boolean }>(
+        (profiles || []).map(p => [p.user_id, { ...p, is_pro: subscriptionMap.get(p.user_id) || false }])
+      );
 
       return missedMatchPairs.slice(0, 10).map((pair, idx) => {
         const theirItem = itemMap.get(pair.theirItemId)!;
@@ -117,7 +124,7 @@ export function useMissedMatches() {
           their_item_id: pair.theirItemId,
           their_item: {
             ...theirItem,
-            owner_display_name: profile?.display_name || 'Unknown',
+            owner_display_name: profile?.display_name || 'User',
             owner_avatar_url: profile?.avatar_url || null,
             owner_is_pro: profile?.is_pro || false,
           },

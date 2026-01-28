@@ -124,7 +124,7 @@ export const itemsService: ItemsService = {
     
     return (data || []).map(item => ({
       ...item,
-      owner_display_name: profile?.display_name || 'Unknown',
+      owner_display_name: profile?.display_name || 'User',
       owner_avatar_url: profile?.avatar_url || null,
     })) as SwipeableItem[];
   },
@@ -146,7 +146,7 @@ export const itemsService: ItemsService = {
     
     return {
       ...data,
-      owner_display_name: profile?.display_name || 'Unknown',
+      owner_display_name: profile?.display_name || 'User',
       owner_avatar_url: profile?.avatar_url || null,
     } as SwipeableItem;
   },
@@ -174,7 +174,7 @@ export const itemsService: ItemsService = {
     
     return {
       ...data,
-      owner_display_name: profile?.display_name || 'Unknown',
+      owner_display_name: profile?.display_name || 'User',
       owner_avatar_url: profile?.avatar_url || null,
     } as SwipeableItem;
   },
@@ -197,7 +197,7 @@ export const itemsService: ItemsService = {
     
     return {
       ...data,
-      owner_display_name: profile?.display_name || 'Unknown',
+      owner_display_name: profile?.display_name || 'User',
       owner_avatar_url: profile?.avatar_url || null,
     } as SwipeableItem;
   },
@@ -253,7 +253,7 @@ export const itemsService: ItemsService = {
     
     return filtered.map(item => ({
       ...item,
-      owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+      owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
       owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
     })) as SwipeableItem[];
   },
@@ -298,7 +298,7 @@ export const itemsService: ItemsService = {
       return (items || [])
         .map(item => ({
           ...item,
-          owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+          owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
           owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
           recommendation_score: scoreMap.get(item.id),
           community_rating: ratingsMap.get(item.id)?.rating ?? 3.0,
