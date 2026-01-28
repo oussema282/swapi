@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Package, HeartOff, RefreshCw, Lock, Crown } from 'lucide-react';
+import { Package, HeartOff, RefreshCw, Lock, Crown, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,9 +14,17 @@ interface MissedMatchCardProps {
   isPro?: boolean;
   onReconsider?: () => void;
   onClick?: () => void;
+  isRecovering?: boolean;
 }
 
-export function MissedMatchCard({ missedMatch, index, isPro = false, onReconsider, onClick }: MissedMatchCardProps) {
+export function MissedMatchCard({ 
+  missedMatch, 
+  index, 
+  isPro = false, 
+  onReconsider, 
+  onClick,
+  isRecovering = false 
+}: MissedMatchCardProps) {
   const navigate = useNavigate();
 
   // Non-Pro: Show blurred/locked card
@@ -161,12 +169,17 @@ export function MissedMatchCard({ missedMatch, index, isPro = false, onReconside
               variant="ghost"
               size="sm"
               className="self-center"
+              disabled={isRecovering}
               onClick={(e) => {
                 e.stopPropagation();
                 onReconsider();
               }}
             >
-              <RefreshCw className="w-4 h-4" />
+              {isRecovering ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4" />
+              )}
             </Button>
           )}
         </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMatches } from '@/hooks/useMatches';
-import { useMissedMatches, MissedMatch } from '@/hooks/useMissedMatches';
+import { useMissedMatches, useRecoverMissedMatch, MissedMatch } from '@/hooks/useMissedMatches';
 import { useEntitlements } from '@/hooks/useEntitlements';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -47,6 +47,7 @@ export default function Matches() {
   const queryClient = useQueryClient();
   const { data: matches, isLoading, isError: matchesError, refetch } = useMatches();
   const { data: missedMatches = [], isLoading: missedLoading } = useMissedMatches();
+  const recoverMutation = useRecoverMissedMatch();
   const { isPro } = useEntitlements();
   const { t } = useTranslation();
   
@@ -64,6 +65,30 @@ export default function Matches() {
   
   // Missed match modal state
   const [selectedMissedMatch, setSelectedMissedMatch] = useState<MissedMatch | null>(null);
+  // Track which missed match is being recovered (for card loading state)
+  const [recoveringId, setRecoveringId] = useState<string | null>(null);
+
+  // Handle accept missed match
+  const handleAcceptMissedMatch = (missedMatch: MissedMatch) => {
+    setRecoveringId(missedMatch.id);
+    recoverMutation.mutate(
+      { myItemId: missedMatch.my_item_id, theirItemId: missedMatch.their_item_id },
+      {
+        onSuccess: (result) => {
+          setSelectedMissedMatch(null);
+          setRecoveringId(null);
+          toast.success('Match created! Opening chat...');
+          if (result.matchId) {
+            navigate(`/chat/${result.matchId}`);
+          }
+        },
+        onError: () => {
+          setRecoveringId(null);
+          toast.error('Failed to recover match. Please try again.');
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -489,6 +514,8 @@ export default function Matches() {
                             index={index}
                             isPro={isPro}
                             onClick={() => setSelectedMissedMatch(missed)}
+                            onReconsider={isPro ? () => handleAcceptMissedMatch(missed) : undefined}
+                            isRecovering={recoveringId === missed.id}
                           />
                         ))}
                       </div>
@@ -539,6 +566,8 @@ export default function Matches() {
         onClose={() => setSelectedMissedMatch(null)}
         missedMatch={selectedMissedMatch}
         isPro={isPro}
+        onAccept={selectedMissedMatch ? () => handleAcceptMissedMatch(selectedMissedMatch) : undefined}
+        isAccepting={recoverMutation.isPending}
       />
     </AppLayout>
   );

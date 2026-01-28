@@ -131,6 +131,60 @@ export function useMissedMatches() {
   });
 }
 
+// Recover a missed match by deleting the dislike and creating a like
+export function useRecoverMissedMatch() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ myItemId, theirItemId }: { myItemId: string; theirItemId: string }) => {
+      // Step 1: Delete the existing dislike swipe
+      const { error: deleteError } = await supabase
+        .from('swipes')
+        .delete()
+        .eq('swiper_item_id', myItemId)
+        .eq('swiped_item_id', theirItemId);
+
+      if (deleteError) throw deleteError;
+
+      // Step 2: Insert a new like swipe (this triggers check_for_match)
+      const { error: insertError } = await supabase
+        .from('swipes')
+        .insert({
+          swiper_item_id: myItemId,
+          swiped_item_id: theirItemId,
+          liked: true,
+        });
+
+      if (insertError) throw insertError;
+
+      // Step 3: Wait for the trigger to create the match
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Step 4: Find the newly created match
+      const itemA = myItemId < theirItemId ? myItemId : theirItemId;
+      const itemB = myItemId < theirItemId ? theirItemId : myItemId;
+
+      const { data: match, error: matchError } = await supabase
+        .from('matches')
+        .select('id')
+        .eq('item_a_id', itemA)
+        .eq('item_b_id', itemB)
+        .maybeSingle();
+
+      if (matchError) throw matchError;
+      if (!match) throw new Error('Match was not created');
+
+      return { matchId: match.id };
+    },
+    onSuccess: () => {
+      // Invalidate all related caches
+      queryClient.invalidateQueries({ queryKey: ['matches'] });
+      queryClient.invalidateQueries({ queryKey: ['missed-matches'] });
+      queryClient.invalidateQueries({ queryKey: ['recommendations'] });
+    },
+  });
+}
+
 export function useUnmatchMutation() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
