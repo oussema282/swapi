@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, Lock, User, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
@@ -231,139 +231,129 @@ export function AuthSection() {
                   </div>
                 </div>
 
-                <AnimatePresence mode="wait">
-                  <TabsContent value="signin" className="mt-0" key="signin">
-                    <motion.form
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      transition={{ duration: 0.3 }}
-                      onSubmit={handleSignIn}
-                      className="space-y-5"
+                <TabsContent value="signin" className="mt-0">
+                  <form
+                    onSubmit={handleSignIn}
+                    className="space-y-5"
+                  >
+                    <div className="space-y-2">
+                      <Label htmlFor="signin-email" className="text-sm font-medium">{t('auth.email')}</Label>
+                      <div className="relative group">
+                        <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="signin-email"
+                          type="email"
+                          placeholder={t('auth.emailPlaceholder')}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="signin-password" className="text-sm font-medium">{t('auth.password')}</Label>
+                      <div className="relative group">
+                        <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="signin-password"
+                          type="password"
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full h-12 text-base font-semibold"
+                      disabled={isLoading || isGoogleLoading}
                     >
-                      <div className="space-y-2">
-                        <Label htmlFor="signin-email" className="text-sm font-medium">{t('auth.email')}</Label>
-                        <div className="relative group">
-                          <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                          <Input
-                            id="signin-email"
-                            type="email"
-                            placeholder={t('auth.emailPlaceholder')}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                            required
-                          />
-                        </div>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          {t('auth.signingIn')}
+                        </>
+                      ) : (
+                        t('auth.signIn')
+                      )}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="signup" className="mt-0">
+                  <form
+                    onSubmit={handleSignUp}
+                    className="space-y-5"
+                  >
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name" className="text-sm font-medium">{t('auth.displayName')}</Label>
+                      <div className="relative group">
+                        <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="signup-name"
+                          type="text"
+                          placeholder={t('auth.displayNamePlaceholder')}
+                          value={displayName}
+                          onChange={(e) => setDisplayName(e.target.value)}
+                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                          required
+                        />
                       </div>
+                    </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="signin-password" className="text-sm font-medium">{t('auth.password')}</Label>
-                        <div className="relative group">
-                          <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                          <Input
-                            id="signin-password"
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                            required
-                          />
-                        </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email" className="text-sm font-medium">{t('auth.email')}</Label>
+                      <div className="relative group">
+                        <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="signup-email"
+                          type="email"
+                          placeholder={t('auth.emailPlaceholder')}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                          required
+                        />
                       </div>
+                    </div>
 
-                      <Button
-                        type="submit"
-                        className="w-full h-12 text-base font-semibold"
-                        disabled={isLoading || isGoogleLoading}
-                      >
-                        {isLoading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            {t('auth.signingIn')}
-                          </>
-                        ) : (
-                          t('auth.signIn')
-                        )}
-                      </Button>
-                    </motion.form>
-                  </TabsContent>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password" className="text-sm font-medium">{t('auth.password')}</Label>
+                      <div className="relative group">
+                        <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Input
+                          id="signup-password"
+                          type="password"
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                          required
+                        />
+                      </div>
+                    </div>
 
-                  <TabsContent value="signup" className="mt-0" key="signup">
-                    <motion.form
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3 }}
-                      onSubmit={handleSignUp}
-                      className="space-y-5"
+                    <Button
+                      type="submit"
+                      className="w-full h-12 text-base font-semibold"
+                      disabled={isLoading || isGoogleLoading}
                     >
-                      <div className="space-y-2">
-                        <Label htmlFor="signup-name" className="text-sm font-medium">{t('auth.displayName')}</Label>
-                        <div className="relative group">
-                          <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                          <Input
-                            id="signup-name"
-                            type="text"
-                            placeholder={t('auth.displayNamePlaceholder')}
-                            value={displayName}
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="signup-email" className="text-sm font-medium">{t('auth.email')}</Label>
-                        <div className="relative group">
-                          <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                          <Input
-                            id="signup-email"
-                            type="email"
-                            placeholder={t('auth.emailPlaceholder')}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="signup-password" className="text-sm font-medium">{t('auth.password')}</Label>
-                        <div className="relative group">
-                          <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                          <Input
-                            id="signup-password"
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full h-12 text-base font-semibold"
-                        disabled={isLoading || isGoogleLoading}
-                      >
-                        {isLoading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            {t('auth.creatingAccount')}
-                          </>
-                        ) : (
-                          t('auth.signUp')
-                        )}
-                      </Button>
-                    </motion.form>
-                  </TabsContent>
-                </AnimatePresence>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          {t('auth.creatingAccount')}
+                        </>
+                      ) : (
+                        t('auth.signUp')
+                      )}
+                    </Button>
+                  </form>
+                </TabsContent>
               </CardContent>
             </Tabs>
           </Card>
