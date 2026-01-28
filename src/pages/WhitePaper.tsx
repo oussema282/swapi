@@ -1,640 +1,512 @@
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { APP_NAME, BRAND } from '@/config/branding';
 
 export default function WhitePaper() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
-            <ArrowLeft className="h-5 w-5" />
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="w-5 h-5" />
           </Button>
-          <div>
-            <h1 className="text-xl font-bold">{APP_NAME} White Paper</h1>
-            <p className="text-sm text-muted-foreground">AI-Powered Barter Exchange Platform • Version 2.0 • January 2026</p>
-          </div>
+          <h1 className="text-lg font-semibold">Valexo Technical Audit</h1>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
-        
-        {/* Table of Contents */}
-        <nav className="mb-12 p-6 bg-muted/30 rounded-lg border border-border">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">Table of Contents</h2>
-          <ol className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
-            <li><a href="#abstract" className="hover:text-primary transition-colors">1. Abstract</a></li>
-            <li><a href="#problem" className="hover:text-primary transition-colors">2. Problem Statement</a></li>
-            <li><a href="#solution" className="hover:text-primary transition-colors">3. Solution Overview</a></li>
-            <li><a href="#architecture" className="hover:text-primary transition-colors">4. Platform Architecture</a></li>
-            <li><a href="#roles" className="hover:text-primary transition-colors">5. User Roles and Permissions</a></li>
-            <li><a href="#exchange-flow" className="hover:text-primary transition-colors">6. Barter Exchange Flow</a></li>
-            <li><a href="#ai-systems" className="hover:text-primary transition-colors">7. AI Systems</a></li>
-            <li><a href="#trust-safety" className="hover:text-primary transition-colors">8. Trust, Safety, and Moderation</a></li>
-            <li><a href="#privacy" className="hover:text-primary transition-colors">9. Data Privacy and Ethics</a></li>
-            <li><a href="#scalability" className="hover:text-primary transition-colors">10. Scalability and Future Vision</a></li>
-            <li><a href="#technical-specs" className="hover:text-primary transition-colors">11. Technical Specifications</a></li>
-            <li><a href="#changelog" className="hover:text-primary transition-colors">12. Change Log</a></li>
-          </ol>
-        </nav>
-
-        <article className="prose prose-sm dark:prose-invert max-w-none space-y-10">
+        <article className="prose prose-slate dark:prose-invert max-w-none">
           
-          {/* 1. Abstract */}
-          <section id="abstract">
-            <h2 className="text-xl font-bold border-b border-border pb-2">1. Abstract</h2>
-            <p>
-              <strong>{APP_NAME}</strong> is an AI-powered barter exchange platform that enables users to trade physical items 
-              directly with one another without monetary transactions. The platform addresses the friction and inefficiency 
-              inherent in traditional barter systems by implementing intelligent matching algorithms that connect users based 
-              on item compatibility, geographic proximity, and behavioral preferences.
-            </p>
-            <p>
-              Unlike conventional second-hand marketplaces that require pricing, negotiation, and payment processing, 
-              {APP_NAME} streamlines the exchange process through a swipe-based discovery interface, mutual matching 
-              mechanics, and built-in chat functionality. The platform serves users across Europe who wish to exchange 
-              goods ranging from electronics and clothing to books and sporting equipment.
-            </p>
-            <p>
-              <strong>Core Value Proposition:</strong> "{BRAND.tagline}" — enabling circular economy participation 
-              through frictionless item-to-item exchange.
-            </p>
-          </section>
+          <h1>Valexo – AI-Powered Barter Exchange Platform</h1>
+          <p className="text-muted-foreground">Technical Audit Document • Last Updated: January 2026</p>
+          
+          <hr />
 
-          {/* 2. Problem Statement */}
-          <section id="problem">
-            <h2 className="text-xl font-bold border-b border-border pb-2">2. Problem Statement</h2>
-            
-            <h3 className="font-semibold mt-4">2.1 Traditional Barter Limitations</h3>
-            <p>
-              Traditional barter systems suffer from the "double coincidence of wants" problem — both parties must 
-              simultaneously want what the other offers. This limitation has historically made barter impractical 
-              at scale, requiring either extensive networks or intermediary goods to facilitate exchanges.
-            </p>
+          {/* SECTION 1: SYSTEM OVERVIEW */}
+          <h2>1. System Overview</h2>
+          
+          <h3>What the System Does</h3>
+          <p>
+            Valexo is a location-first barter exchange platform where users list physical items for swap and discover compatible trade partners through a Tinder-style swipe interface. The system matches items (not users) based on mutual "like" swipes AND compatible swap preferences. It supports real-time chat between matched parties, geolocation-based discovery, and a freemium subscription model.
+          </p>
+          
+          <h3>What the System Does NOT Do</h3>
+          <ul>
+            <li><strong>No monetary transactions between users</strong> – Valexo is a pure barter platform. The only payment flow is for Pro subscriptions (Dodo Payments).</li>
+            <li><strong>No AI-generated content moderation</strong> – There is no automated image analysis, content filtering, or fraud detection. Moderation is NOT IMPLEMENTED.</li>
+            <li><strong>No multi-way swap execution</strong> – The reciprocal-optimizer identifies 2-way and 3-way opportunities but does NOT execute them. These are surfaced as "reciprocal_boost" scores only.</li>
+            <li><strong>No push notifications</strong> – Real-time updates use Supabase Realtime. Native push is NOT IMPLEMENTED.</li>
+            <li><strong>No identity verification</strong> – Users register with email/password or Google OAuth. KYC/ID verification is NOT IMPLEMENTED.</li>
+            <li><strong>No shipping or logistics</strong> – The platform facilitates matching; physical exchange logistics are left to users.</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">2.2 Existing Marketplace Friction</h3>
-            <ul>
-              <li><strong>Pricing Complexity:</strong> Users must research market values and set competitive prices</li>
-              <li><strong>Negotiation Overhead:</strong> Multiple back-and-forth messages to agree on terms</li>
-              <li><strong>Payment Processing:</strong> Fees, fraud risk, and transaction delays</li>
-              <li><strong>Trust Deficits:</strong> Lack of verified profiles and exchange history</li>
-              <li><strong>Discovery Inefficiency:</strong> Browsing through irrelevant listings</li>
-            </ul>
+          <hr />
 
-            <h3 className="font-semibold mt-4">2.3 Sustainability Gap</h3>
-            <p>
-              As consumers become more environmentally conscious, demand for circular economy solutions grows. 
-              However, existing platforms still optimize for monetary transactions rather than direct exchange, 
-              leaving a significant portion of reusable goods underutilized.
-            </p>
-          </section>
+          {/* SECTION 2: FRONTEND ARCHITECTURE */}
+          <h2>2. Frontend Architecture</h2>
+          
+          <h3>Technology Stack</h3>
+          <ul>
+            <li><strong>Framework:</strong> React 18 + TypeScript + Vite</li>
+            <li><strong>Styling:</strong> Tailwind CSS + shadcn/ui components</li>
+            <li><strong>State:</strong> TanStack React Query (server state), React Context (auth, system state)</li>
+            <li><strong>Routing:</strong> React Router DOM v6</li>
+            <li><strong>Animation:</strong> Framer Motion</li>
+            <li><strong>i18n:</strong> i18next (11 languages)</li>
+            <li><strong>Maps:</strong> Mapbox GL</li>
+          </ul>
 
-          {/* 3. Solution Overview */}
-          <section id="solution">
-            <h2 className="text-xl font-bold border-b border-border pb-2">3. Solution Overview</h2>
-            
-            <h3 className="font-semibold mt-4">3.1 Item-Centric Matching Model</h3>
-            <p>
-              {APP_NAME} implements an <strong>item-to-item matching system</strong> rather than user-to-user. 
-              Each item listing has its own swap preferences defining which categories the owner would accept 
-              in exchange. A match occurs when two items mutually "like" each other AND both items' swap 
-              preferences are compatible. This model enables users to maintain multiple simultaneous swap 
-              opportunities per item.
-            </p>
+          <h3>Route Map</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Route</th>
+                <th>File</th>
+                <th>Access</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>/</td><td>Landing.tsx</td><td>Public</td><td>Landing page with integrated auth forms</td></tr>
+              <tr><td>/whitepaper</td><td>WhitePaper.tsx</td><td>Public</td><td>This technical documentation</td></tr>
+              <tr><td>/admin</td><td>Admin.tsx</td><td>Public (role-gated internally)</td><td>Admin dashboard (requires admin role)</td></tr>
+              <tr><td>/setup</td><td>Setup.tsx</td><td>Public</td><td>First-run configuration</td></tr>
+              <tr><td>/discover</td><td>Index.tsx</td><td>Auth + Location Required</td><td>Swipe interface for item discovery</td></tr>
+              <tr><td>/map</td><td>MapView.tsx</td><td>Auth + Location Required</td><td>Map-based item discovery</td></tr>
+              <tr><td>/search</td><td>Search.tsx</td><td>Auth + Location Required</td><td>Text/filter-based search</td></tr>
+              <tr><td>/items</td><td>Items.tsx</td><td>Auth Required</td><td>User's item inventory</td></tr>
+              <tr><td>/items/new</td><td>NewItem.tsx</td><td>Auth Required</td><td>Create new item listing</td></tr>
+              <tr><td>/items/:id/edit</td><td>EditItem.tsx</td><td>Auth Required</td><td>Edit existing item</td></tr>
+              <tr><td>/matches</td><td>Matches.tsx</td><td>Auth Required (Safe Route)</td><td>View all matches</td></tr>
+              <tr><td>/chat/:matchId</td><td>Chat.tsx</td><td>Auth Required (Safe Route)</td><td>Real-time chat with match partner</td></tr>
+              <tr><td>/profile</td><td>Profile.tsx</td><td>Auth Required (Safe Route)</td><td>View own profile</td></tr>
+              <tr><td>/profile/edit</td><td>EditProfile.tsx</td><td>Auth Required</td><td>Edit profile</td></tr>
+              <tr><td>/user/:userId</td><td>UserProfile.tsx</td><td>Auth Required</td><td>View other user's profile</td></tr>
+              <tr><td>/settings</td><td>Settings.tsx</td><td>Auth Required (Safe Route)</td><td>Account settings</td></tr>
+              <tr><td>/checkout</td><td>Checkout.tsx</td><td>Auth Required</td><td>Initiate Pro subscription</td></tr>
+              <tr><td>/checkout/success</td><td>CheckoutSuccess.tsx</td><td>Auth Required</td><td>Post-payment confirmation</td></tr>
+              <tr><td>/valhalla</td><td>Valhalla.tsx</td><td>Auth Required (Admin only)</td><td>Algorithm insights dashboard</td></tr>
+            </tbody>
+          </table>
 
-            <h3 className="font-semibold mt-4">3.2 AI-Powered Discovery</h3>
-            <p>The platform employs a multi-factor weighted scoring algorithm that ranks potential swap candidates based on:</p>
-            <ul>
-              <li><strong>Category Similarity (18%):</strong> Cosine similarity between item category embeddings</li>
-              <li><strong>Geographic Proximity (28%):</strong> Exponential distance decay using Haversine formula</li>
-              <li><strong>Exchange Compatibility (18%):</strong> Mutual swap preference alignment</li>
-              <li><strong>Behavioral Affinity (10%):</strong> Patterns derived from swipe history</li>
-              <li><strong>Item Freshness (6%):</strong> Recency-weighted scoring</li>
-              <li><strong>Condition Score (8%):</strong> Item condition quality weighting</li>
-              <li><strong>Reciprocal Boost (12%):</strong> Priority for items with high match potential</li>
-            </ul>
+          <h3>Navigation Flow</h3>
+          <ol>
+            <li>User lands on <code>/</code> → Scrolls to AuthSection → Signs up/in</li>
+            <li>Post-auth redirect → <code>/discover</code> (triggers location permission check)</li>
+            <li>If no location permission → LocationGate blocks with prompt</li>
+            <li>Bottom navigation: Discover | Search | Items | Matches | Profile</li>
+          </ol>
 
-            <h3 className="font-semibold mt-4">3.3 Swipe-Based Interface</h3>
-            <p>
-              Users discover potential swaps through a familiar swipe interface. The "For You" feed presents 
-              AI-ranked recommendations, while the "Nearby" feed prioritizes geographic proximity with optional 
-              category and price filters. The interface supports both button-based and gesture-based interactions.
-            </p>
+          <h3>Safe Routes (Bypass Location Gate)</h3>
+          <p>
+            Routes defined in <code>GEO_REQUIRED_ROUTES</code> (<code>/discover</code>, <code>/map</code>, <code>/search</code>) require location permission.
+            All other authenticated routes (matches, chat, profile, items, settings) are "safe" and render immediately without location checks.
+            Reference: <code>src/components/layout/SystemPhaseRenderer.tsx</code> lines 17-34
+          </p>
 
-            <h3 className="font-semibold mt-4">3.4 Two-Sided Exchange Confirmation</h3>
-            <p>
-              Matches proceed through a structured confirmation flow where both parties must explicitly confirm 
-              the exchange within a chat interface. Upon mutual confirmation, items are automatically archived 
-              (removed from discovery) but remain visible in exchange history.
-            </p>
-          </section>
+          <hr />
 
-          {/* 4. Platform Architecture */}
-          <section id="architecture">
-            <h2 className="text-xl font-bold border-b border-border pb-2">4. Platform Architecture</h2>
-            
-            <h3 className="font-semibold mt-4">4.1 Technology Stack</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 font-semibold">Layer</th>
-                    <th className="text-left py-2 font-semibold">Technology</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50"><td className="py-2">Frontend</td><td>React 18, TypeScript, Vite</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Styling</td><td>Tailwind CSS, shadcn/ui components</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">State Management</td><td>TanStack Query, Context API</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Backend</td><td>Lovable Cloud (Supabase)</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Database</td><td>PostgreSQL with Row-Level Security</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Edge Functions</td><td>Deno runtime for serverless logic</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Maps</td><td>Mapbox GL JS</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Internationalization</td><td>i18next (11 languages)</td></tr>
-                  <tr><td className="py-2">Animations</td><td>Framer Motion</td></tr>
-                </tbody>
-              </table>
-            </div>
+          {/* SECTION 3: BACKEND ARCHITECTURE */}
+          <h2>3. Backend Architecture</h2>
+          
+          <h3>Infrastructure</h3>
+          <ul>
+            <li><strong>Database:</strong> Supabase PostgreSQL (Lovable Cloud)</li>
+            <li><strong>Auth:</strong> Supabase Auth (email/password + Google OAuth)</li>
+            <li><strong>Storage:</strong> Supabase Storage (bucket: <code>item-photos</code>, public)</li>
+            <li><strong>Edge Functions:</strong> Deno runtime via Supabase</li>
+            <li><strong>Realtime:</strong> Supabase Realtime for messages</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">4.2 Database Schema</h3>
-            <p>Core entities include:</p>
-            <ul>
-              <li><strong>profiles:</strong> User identity, display name, avatar, location coordinates</li>
-              <li><strong>items:</strong> Listings with category, condition, photos, swap preferences, geo-location</li>
-              <li><strong>swipes:</strong> Swipe history (swiper_item_id, swiped_item_id, liked boolean)</li>
-              <li><strong>matches:</strong> Mutual likes with confirmation flags and completion status</li>
-              <li><strong>messages:</strong> Chat messages with delivery/read status tracking</li>
-              <li><strong>item_ratings:</strong> Bayesian rating system (alpha/beta, likes/dislikes)</li>
-              <li><strong>user_subscriptions:</strong> Pro subscription status and expiry</li>
-              <li><strong>daily_usage:</strong> Free-tier usage tracking (swipes, searches, etc.)</li>
-              <li><strong>deal_invites:</strong> Direct swap proposals outside standard matching</li>
-              <li><strong>user_roles:</strong> Admin/moderator role assignments</li>
-            </ul>
+          <h3>Edge Functions</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>File</th>
+                <th>Trigger</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>recommend-items</code></td>
+                <td>supabase/functions/recommend-items/index.ts</td>
+                <td>POST from useRecommendations hook</td>
+                <td>Returns ranked item IDs based on multi-factor scoring algorithm</td>
+              </tr>
+              <tr>
+                <td><code>reciprocal-optimizer</code></td>
+                <td>supabase/functions/reciprocal-optimizer/index.ts</td>
+                <td>Manual/Scheduled (not auto-triggered)</td>
+                <td>Batch job that computes 2-way and 3-way swap opportunities, updates reciprocal_boost on items</td>
+              </tr>
+              <tr>
+                <td><code>dodo-checkout</code></td>
+                <td>supabase/functions/dodo-checkout/index.ts</td>
+                <td>POST from Checkout.tsx</td>
+                <td>Creates Dodo Payments checkout session for Pro subscription</td>
+              </tr>
+              <tr>
+                <td><code>get-mapbox-token</code></td>
+                <td>supabase/functions/get-mapbox-token/index.ts</td>
+                <td>GET from MapView</td>
+                <td>Returns Mapbox access token from secrets</td>
+              </tr>
+              <tr>
+                <td><code>setup-test-data</code></td>
+                <td>supabase/functions/setup-test-data/index.ts</td>
+                <td>Manual invocation</td>
+                <td>Seeds database with test items (dev only)</td>
+              </tr>
+              <tr>
+                <td><code>add-sample-photos</code></td>
+                <td>supabase/functions/add-sample-photos/index.ts</td>
+                <td>Manual invocation</td>
+                <td>Adds placeholder photos to items (dev only)</td>
+              </tr>
+            </tbody>
+          </table>
 
-            <h3 className="font-semibold mt-4">4.3 State Machine Architecture</h3>
-            <p>The application operates through three interconnected state machines:</p>
-            
-            <h4 className="font-medium mt-3">SYSTEM_PHASE</h4>
-            <ul className="text-sm">
-              <li><code className="bg-muted px-1 rounded text-xs">BOOTSTRAPPING</code> → App initialization (max 5s timeout)</li>
-              <li><code className="bg-muted px-1 rounded text-xs">ACTIVE</code> → Normal operation</li>
-              <li><code className="bg-muted px-1 rounded text-xs">TRANSITION</code> → State change in progress</li>
-              <li><code className="bg-muted px-1 rounded text-xs">BLOCKED</code> → Location permission denied</li>
-            </ul>
+          <h3>Database Functions (RPCs)</h3>
+          <table>
+            <thead>
+              <tr><th>Function</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>confirm_exchange(p_match_id)</code></td><td>Two-sided confirmation. When both users confirm, sets is_completed=true and triggers item archival.</td></tr>
+              <tr><td><code>get_my_matches_with_items()</code></td><td>Security definer that returns matches with full item data (bypasses RLS for archived items).</td></tr>
+              <tr><td><code>get_match_with_items(p_match_id)</code></td><td>Returns single match with item data.</td></tr>
+              <tr><td><code>is_admin(_user_id)</code></td><td>Security definer to check admin role without RLS recursion.</td></tr>
+              <tr><td><code>has_role(_user_id, _role)</code></td><td>Generic role check used in RLS policies.</td></tr>
+              <tr><td><code>increment_usage(p_user_id, p_field)</code></td><td>Increments daily usage counter for free tier limits.</td></tr>
+              <tr><td><code>get_or_create_daily_usage(p_user_id)</code></td><td>Ensures daily_usage row exists for user.</td></tr>
+            </tbody>
+          </table>
 
-            <h4 className="font-medium mt-3">SUBSCRIPTION_PHASE</h4>
-            <ul className="text-sm">
-              <li><code className="bg-muted px-1 rounded text-xs">FREE_ACTIVE</code> → Free user within limits</li>
-              <li><code className="bg-muted px-1 rounded text-xs">FREE_LIMITED</code> → Free user at limit</li>
-              <li><code className="bg-muted px-1 rounded text-xs">UPGRADING</code> → Payment in progress</li>
-              <li><code className="bg-muted px-1 rounded text-xs">PRO_ACTIVE</code> → Pro subscription active</li>
-              <li><code className="bg-muted px-1 rounded text-xs">PRO_EXPIRED</code> → Pro subscription expired</li>
-            </ul>
+          <h3>Database Triggers</h3>
+          <table>
+            <thead><tr><th>Trigger</th><th>Table</th><th>Function</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>On INSERT swipes</td><td>swipes</td><td>check_for_match()</td><td>Creates match if mutual like exists</td></tr>
+              <tr><td>On INSERT swipes</td><td>swipes</td><td>update_item_rating_on_swipe()</td><td>Updates Bayesian rating on swiped item</td></tr>
+              <tr><td>On UPDATE matches</td><td>matches</td><td>archive_items_on_match_complete()</td><td>Archives both items when is_completed becomes true</td></tr>
+              <tr><td>On UPDATE matches</td><td>matches</td><td>update_item_rating_on_match_complete()</td><td>Boosts rating for successful exchanges</td></tr>
+              <tr><td>On INSERT deal_invites</td><td>deal_invites</td><td>validate_deal_invite_attempt()</td><td>Enforces max 2 attempts per item pair</td></tr>
+              <tr><td>On UPDATE deal_invites</td><td>deal_invites</td><td>handle_deal_invite_accepted()</td><td>Creates match when invite is accepted</td></tr>
+              <tr><td>On INSERT auth.users</td><td>auth.users</td><td>handle_new_user()</td><td>Creates profile row for new user</td></tr>
+              <tr><td>On INSERT items</td><td>items</td><td>set_item_location_from_profile()</td><td>Inherits location from profile if not provided</td></tr>
+            </tbody>
+          </table>
 
-            <h4 className="font-medium mt-3">SWIPE_PHASE</h4>
-            <ul className="text-sm">
-              <li><code className="bg-muted px-1 rounded text-xs">IDLE</code> → No active swipe session</li>
-              <li><code className="bg-muted px-1 rounded text-xs">LOADING</code> → Fetching recommendations</li>
-              <li><code className="bg-muted px-1 rounded text-xs">READY</code> → Cards available for swiping</li>
-              <li><code className="bg-muted px-1 rounded text-xs">SWIPING</code> → Animation in progress</li>
-              <li><code className="bg-muted px-1 rounded text-xs">COMMITTING</code> → Persisting to database</li>
-              <li><code className="bg-muted px-1 rounded text-xs">EXHAUSTED</code> → No more candidates for item</li>
-            </ul>
+          <hr />
 
-            <h3 className="font-semibold mt-4">4.4 Route Classification</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 font-semibold">Type</th>
-                    <th className="text-left py-2 font-semibold">Routes</th>
-                    <th className="text-left py-2 font-semibold">Access</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50"><td className="py-2">Public</td><td>/, /whitepaper</td><td>No authentication required</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Protected</td><td>/discover, /matches, /profile, /settings, /items/*</td><td>Authentication required</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Geo-Required</td><td>/map, /items/new, /items/:id/edit</td><td>Location permission required</td></tr>
-                  <tr><td className="py-2">Safe Routes</td><td>/settings, /profile</td><td>Never blocked by location gate</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+          {/* SECTION 4: CORE ALGORITHMS */}
+          <h2>4. Core Algorithms</h2>
 
-          {/* 5. User Roles and Permissions */}
-          <section id="roles">
-            <h2 className="text-xl font-bold border-b border-border pb-2">5. User Roles and Permissions</h2>
-            
-            <h3 className="font-semibold mt-4">5.1 Standard Users</h3>
-            <ul>
-              <li>Create and manage personal item listings</li>
-              <li>Swipe on items within their selected item's context</li>
-              <li>Chat with matched users</li>
-              <li>Confirm exchanges</li>
-              <li>Subject to daily usage limits (free tier) or unlimited access (Pro tier)</li>
-            </ul>
+          <h3>4.1 Recommendation Algorithm</h3>
+          <p><strong>File:</strong> <code>supabase/functions/recommend-items/index.ts</code></p>
+          <p><strong>Input:</strong> <code>myItemId</code> (the item user is swiping with)</p>
+          <p><strong>Output:</strong> Array of <code>{'{id: string, score: number}'}</code> sorted by score descending</p>
 
-            <h3 className="font-semibold mt-4">5.2 Free Tier Limits</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 font-semibold">Feature</th>
-                    <th className="text-left py-2 font-semibold">Daily Limit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50"><td className="py-2">Swipes</td><td>50 per day</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Searches</td><td>3 per day</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Deal Invites</td><td>3 per day</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Map Views</td><td>3 per day</td></tr>
-                  <tr><td className="py-2">Active Items</td><td>4 maximum</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <h4>Scoring Weights (Lines 30-39)</h4>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`const WEIGHTS = {
+  categorySimilarity: 0.18,   // 18% - cosine similarity of category embeddings
+  geoScore: 0.28,             // 28% - exponential decay by distance (σ=50km)
+  exchangeCompatibility: 0.18, // 18% - mutual swap preference match
+  behaviorAffinity: 0.10,     // 10% - similarity to previously liked items
+  freshness: 0.06,            // 6%  - 1/(1+ageInDays)
+  conditionScore: 0.08,       // 8%  - new:1.0, like_new:0.9, good:0.7, fair:0.5
+  reciprocalBoost: 0.12,      // 12% - from reciprocal-optimizer batch job
+};`}</pre>
 
-            <h3 className="font-semibold mt-4">5.3 Pro Users ({BRAND.proPlan})</h3>
-            <ul>
-              <li>Unlimited swipes, searches, map views, and deal invites</li>
-              <li>Unlimited active item listings</li>
-              <li>Pro badge displayed on profile</li>
-              <li>Priority in search results (planned)</li>
-            </ul>
+          <h4>Category Embeddings (5-dimensional semantic vectors)</h4>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`// Dimensions: [tech, fashion, media, sports, home]
+electronics: [0.9, 0.1, 0.3, 0.2, 0.2]
+clothes:     [0.1, 0.9, 0.2, 0.3, 0.1]
+books:       [0.2, 0.1, 0.9, 0.1, 0.3]
+games:       [0.7, 0.1, 0.8, 0.4, 0.2]
+sports:      [0.2, 0.3, 0.1, 0.9, 0.2]
+home_garden: [0.2, 0.1, 0.2, 0.1, 0.9]
+other:       [0.3, 0.3, 0.3, 0.3, 0.3]`}</pre>
 
-            <h3 className="font-semibold mt-4">5.4 Administrators</h3>
-            <ul>
-              <li>Access to admin dashboard (/admin)</li>
-              <li>View platform-wide statistics and analytics</li>
-              <li>Manage user roles</li>
-              <li>Review reported content</li>
-              <li>Role verified via <code className="bg-muted px-1 rounded text-xs">is_admin()</code> RPC function</li>
-            </ul>
+          <h4>Geo Score Calculation</h4>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`const GEO_SIGMA = 50; // km
+geoScore = Math.exp(-distance / GEO_SIGMA);
+// At 0km: 1.0, At 50km: 0.37, At 100km: 0.14, At 200km: 0.02`}</pre>
 
-            <h3 className="font-semibold mt-4">5.5 Moderators</h3>
-            <ul>
-              <li>Limited admin privileges for content review</li>
-              <li>Role verified via <code className="bg-muted px-1 rounded text-xs">has_role()</code> RPC function</li>
-            </ul>
-          </section>
+          <h4>Missing Data Handling</h4>
+          <ul>
+            <li>No location data → geoScore = 0.5 (neutral)</li>
+            <li>No swap preferences → categorySimilarity = 0.5 (neutral)</li>
+            <li>No swipe history → behaviorAffinity = 0.5 (neutral)</li>
+            <li>Exploration factor: random 0-0.1 added to all scores</li>
+          </ul>
 
-          {/* 6. Barter Exchange Flow */}
-          <section id="exchange-flow">
-            <h2 className="text-xl font-bold border-b border-border pb-2">6. Barter Exchange Flow</h2>
-            
-            <h3 className="font-semibold mt-4">6.1 Item Listing</h3>
-            <ol className="list-decimal list-inside">
-              <li>User authenticates and grants location permission</li>
-              <li>User creates item listing with: title, description, photos (up to 5), category, condition</li>
-              <li>User sets swap preferences (categories they would accept in exchange)</li>
-              <li>User sets estimated value range</li>
-              <li>Item location defaults to user's current coordinates</li>
-              <li>Item enters active state and becomes discoverable</li>
-            </ol>
+          <h4>Pool Exhaustion Logic</h4>
+          <ol>
+            <li>If strict pool {"<"} 5 items, automatically enables expandedSearch</li>
+            <li>Expanded search recycles items swiped {">"} 7 days ago</li>
+            <li>Adjusted weights in expanded mode: reciprocalBoost=0.20, behaviorAffinity=0.15</li>
+          </ol>
 
-            <h3 className="font-semibold mt-4">6.2 Discovery and Swiping</h3>
-            <ol className="list-decimal list-inside">
-              <li>User selects one of their items as "swipe context"</li>
-              <li>Recommendation engine generates ranked candidates</li>
-              <li>Candidates are filtered by: swap preference compatibility, not previously swiped, not already matched</li>
-              <li>User swipes right (like) or left (pass) on each candidate</li>
-              <li>Each swipe is recorded in the swipes table</li>
-              <li>Daily swipe count incremented for free users</li>
-            </ol>
+          <h3>4.2 Bayesian Item Rating</h3>
+          <p><strong>Function:</strong> <code>update_item_rating_on_swipe()</code></p>
+          <p><strong>Formula:</strong> <code>rating = 1 + 4 * (alpha / (alpha + beta))</code></p>
+          <p><strong>Initial values:</strong> alpha=3, beta=3 (neutral 3-star)</p>
 
-            <h3 className="font-semibold mt-4">6.3 Matching</h3>
-            <ol className="list-decimal list-inside">
-              <li>When User A's Item X likes User B's Item Y</li>
-              <li>System checks if Item Y has previously liked Item X</li>
-              <li>If mutual like exists → Match created</li>
-              <li>Both users receive match notification</li>
-              <li>Chat channel is unlocked between users</li>
-            </ol>
+          <table>
+            <thead><tr><th>Event</th><th>Weight</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td>Like</td><td>+1.0</td><td>Increases alpha</td></tr>
+              <tr><td>Dislike</td><td>-0.5</td><td>Increases beta</td></tr>
+              <tr><td>Successful exchange</td><td>+2.0</td><td>Increases alpha</td></tr>
+            </tbody>
+          </table>
 
-            <h3 className="font-semibold mt-4">6.4 Negotiation (Chat)</h3>
-            <ul>
-              <li>Real-time messaging via Supabase Realtime</li>
-              <li>Message status tracking: sending → sent → delivered → read</li>
-              <li>Online presence indicators</li>
-              <li>Users discuss logistics: meeting location, timing, item conditions</li>
-            </ul>
+          <h3>4.3 Reciprocal Optimizer</h3>
+          <p><strong>File:</strong> <code>supabase/functions/reciprocal-optimizer/index.ts</code></p>
+          <p><strong>Execution:</strong> Manual/scheduled batch job (NOT auto-triggered)</p>
 
-            <h3 className="font-semibold mt-4">6.5 Exchange Confirmation</h3>
-            <ol className="list-decimal list-inside">
-              <li>Either user can initiate "Confirm Exchange" within chat</li>
-              <li>First confirmation sets <code className="bg-muted px-1 rounded text-xs">confirmed_by_user_a</code> or <code className="bg-muted px-1 rounded text-xs">confirmed_by_user_b</code></li>
-              <li>System waits for second party to confirm</li>
-              <li>When both confirm → <code className="bg-muted px-1 rounded text-xs">confirm_exchange()</code> RPC executes</li>
-              <li>Match marked <code className="bg-muted px-1 rounded text-xs">is_completed = true</code>, <code className="bg-muted px-1 rounded text-xs">completed_at</code> set</li>
-              <li>Both items automatically archived via database trigger</li>
-              <li>Items removed from discovery but visible in "Swapped" history</li>
-            </ol>
+          <h4>Process</h4>
+          <ol>
+            <li>Load all active items and swipe history</li>
+            <li>Learn category affinities per user from swipe patterns</li>
+            <li>Calculate pairwise reciprocal scores: <code>score = bWantsA * aWantsB + distanceBonus</code></li>
+            <li>Find 3-way cycles (A→B→C→A) with minimum score threshold (0.3)</li>
+            <li>Store top 50 2-way and top 10 3-way opportunities in <code>swap_opportunities</code> table</li>
+            <li>Update <code>reciprocal_boost</code> column on items involved in opportunities</li>
+          </ol>
 
-            <h3 className="font-semibold mt-4">6.6 Missed Matches</h3>
-            <p>
-              If a user passes on an item that had already liked theirs, a "missed match" notification 
-              appears. Pro users can undo the swipe and reconsider; free users are prompted to upgrade.
-            </p>
+          <p><strong>Important:</strong> swap_opportunities table is for background analysis only. UI does NOT read from it. Items get boosted visibility via the reciprocal_boost column in the recommendation algorithm.</p>
 
-            <h3 className="font-semibold mt-4">6.7 Deal Invites (Alternative Flow)</h3>
-            <p>
-              Users can send direct "Deal Invites" to items they discover, bypassing the standard 
-              mutual-like requirement. The receiver can accept (creating a match), decline, or ignore.
-            </p>
-          </section>
+          <hr />
 
-          {/* 7. AI Systems */}
-          <section id="ai-systems">
-            <h2 className="text-xl font-bold border-b border-border pb-2">7. AI Systems</h2>
-            
-            <h3 className="font-semibold mt-4">7.1 Recommendation Engine</h3>
-            <p>
-              The <code className="bg-muted px-1 rounded text-xs">recommend-items</code> Edge Function implements the core matching algorithm:
-            </p>
+          {/* SECTION 5: AI & MACHINE INTELLIGENCE */}
+          <h2>5. AI & Machine Intelligence</h2>
 
-            <h4 className="font-medium mt-3">Category Embeddings</h4>
-            <p>
-              Pre-computed 5-dimensional vectors map each category to semantic dimensions: 
-              [technology, fashion, media, sports, home]. Cosine similarity measures category affinity.
-            </p>
+          <h3>Implemented Components</h3>
+          <table>
+            <thead><tr><th>Component</th><th>Type</th><th>Location</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Recommendation Engine</td>
+                <td>Rule-based weighted scoring</td>
+                <td>recommend-items edge function</td>
+              </tr>
+              <tr>
+                <td>Category Embeddings</td>
+                <td>Pre-computed static vectors (NOT ML-trained)</td>
+                <td>CATEGORY_EMBEDDINGS constant</td>
+              </tr>
+              <tr>
+                <td>Behavior Affinity</td>
+                <td>Cosine similarity of swipe history</td>
+                <td>calculateBehaviorAffinity()</td>
+              </tr>
+              <tr>
+                <td>Bayesian Rating</td>
+                <td>Statistical model (beta distribution)</td>
+                <td>update_item_rating_on_swipe trigger</td>
+              </tr>
+            </tbody>
+          </table>
 
-            <h4 className="font-medium mt-3">Geographic Scoring</h4>
-            <p>
-              Haversine distance calculates actual kilometers between coordinates. Exponential decay 
-              (σ = 50km) ensures closer items receive significantly higher scores.
-            </p>
+          <h3>NOT IMPLEMENTED</h3>
+          <ul>
+            <li>Image analysis / computer vision</li>
+            <li>Natural language processing for descriptions</li>
+            <li>Fraud detection ML models</li>
+            <li>External AI APIs (OpenAI, Gemini, etc.)</li>
+            <li>Human-in-the-loop moderation workflows</li>
+            <li>Confidence scoring with human override</li>
+          </ul>
 
-            <h4 className="font-medium mt-3">Exchange Compatibility</h4>
-            <p>
-              Bidirectional preference matching: checks if my item's category is in their swap preferences 
-              AND their category is in my preferences. Embedding similarity adds nuance.
-            </p>
+          <p><strong>The "AI" in Valexo is rule-based weighted scoring with pre-computed embeddings. There are no trained ML models or external AI services.</strong></p>
 
-            <h4 className="font-medium mt-3">Behavioral Learning</h4>
-            <p>
-              Swipe history is analyzed to identify implicit preferences. Average embedding of liked items 
-              is compared against candidates to boost similar items.
-            </p>
+          <hr />
 
-            <h4 className="font-medium mt-3">Pool Exhaustion Handling</h4>
-            <p>
-              When the strict pool drops below 5 candidates, the algorithm silently expands search 
-              criteria, including items swiped more than 7 days ago for recycling.
-            </p>
+          {/* SECTION 6: DATABASE DESIGN */}
+          <h2>6. Database Design</h2>
 
-            <h3 className="font-semibold mt-4">7.2 Item Rating System</h3>
-            <p>Bayesian rating model using Beta distribution (alpha, beta parameters). Ratings incorporate:</p>
-            <ul>
-              <li>Like/dislike counts from swipes</li>
-              <li>Successful exchange completions (strong positive signal)</li>
-              <li>Total interactions for confidence weighting</li>
-            </ul>
+          <h3>Core Tables</h3>
+          <table>
+            <thead><tr><th>Table</th><th>Purpose</th><th>Key Columns</th></tr></thead>
+            <tbody>
+              <tr><td>profiles</td><td>User profile data</td><td>user_id, display_name, avatar_url, latitude, longitude, last_seen</td></tr>
+              <tr><td>items</td><td>Item listings</td><td>user_id, title, category, condition, swap_preferences[], photos[], latitude, longitude, is_active, is_archived, reciprocal_boost</td></tr>
+              <tr><td>swipes</td><td>Swipe actions</td><td>swiper_item_id, swiped_item_id, liked</td></tr>
+              <tr><td>matches</td><td>Mutual matches</td><td>item_a_id, item_b_id, is_completed, confirmed_by_user_a, confirmed_by_user_b</td></tr>
+              <tr><td>messages</td><td>Chat messages</td><td>match_id, sender_id, content, status (sent/delivered/read)</td></tr>
+              <tr><td>deal_invites</td><td>Direct swap requests</td><td>sender_item_id, receiver_item_id, status, attempt</td></tr>
+              <tr><td>item_ratings</td><td>Bayesian ratings</td><td>item_id, alpha, beta, rating, likes_count, dislikes_count</td></tr>
+              <tr><td>user_subscriptions</td><td>Pro status</td><td>user_id, is_pro, expires_at, dodo_session_id</td></tr>
+              <tr><td>daily_usage</td><td>Free tier tracking</td><td>user_id, usage_date, swipes_count, searches_count, map_uses_count</td></tr>
+              <tr><td>user_roles</td><td>Admin/moderator roles</td><td>user_id, role (admin/moderator/user)</td></tr>
+              <tr><td>swap_opportunities</td><td>Batch-computed opportunities</td><td>cycle_type, user_a/b/c_id, item_a/b/c_id, confidence_score (NOT read by UI)</td></tr>
+            </tbody>
+          </table>
 
-            <h3 className="font-semibold mt-4">7.3 Reciprocal Optimizer</h3>
-            <p>
-              Background Edge Function (<code className="bg-muted px-1 rounded text-xs">reciprocal-optimizer</code>) periodically scans for 
-              items with high potential for mutual matches and boosts their visibility via the 
-              <code className="bg-muted px-1 rounded text-xs">reciprocal_boost</code> column.
-            </p>
+          <h3>Key Constraints</h3>
+          <ul>
+            <li><code>swipes</code>: UNIQUE(swiper_item_id, swiped_item_id) – prevents duplicate swipes</li>
+            <li><code>matches</code>: UNIQUE(item_a_id, item_b_id) with ordered insertion (LEAST/GREATEST) – prevents duplicate matches</li>
+            <li><code>deal_invites</code>: Max 2 attempts per item pair enforced by trigger</li>
+            <li><code>user_roles</code>: UNIQUE(user_id, role)</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">7.4 Future AI Capabilities (Planned)</h3>
-            <ul>
-              <li><strong>Image Risk Analysis:</strong> Automated detection of prohibited items and inappropriate content</li>
-              <li><strong>Value Estimation:</strong> AI-assisted fair trade value suggestions</li>
-              <li><strong>Fraud Detection:</strong> Pattern recognition for suspicious account behavior</li>
-              <li><strong>Multi-Way Swap Detection:</strong> Identifying three-way circular exchange opportunities</li>
-            </ul>
-          </section>
+          <hr />
 
-          {/* 8. Trust, Safety, and Moderation */}
-          <section id="trust-safety">
-            <h2 className="text-xl font-bold border-b border-border pb-2">8. Trust, Safety, and Moderation</h2>
-            
-            <h3 className="font-semibold mt-4">8.1 Account Security</h3>
-            <ul>
-              <li>Email-based authentication with password requirements</li>
-              <li>Session validation on each auth state change</li>
-              <li>Automatic token refresh and expiry handling</li>
-              <li>Row-Level Security (RLS) policies on all database tables</li>
-            </ul>
+          {/* SECTION 7: SECURITY & PERMISSIONS */}
+          <h2>7. Security & Permissions</h2>
 
-            <h3 className="font-semibold mt-4">8.2 Data Protection</h3>
-            <ul>
-              <li>User data isolated via RLS — users can only access their own records</li>
-              <li>Location data used for matching only, not exposed to other users until match</li>
-              <li>Photos stored in secure cloud storage with access controls</li>
-              <li>Security-definer RPC functions for sensitive operations</li>
-            </ul>
+          <h3>Authentication</h3>
+          <ul>
+            <li>Email/password with auto-confirm enabled (no email verification)</li>
+            <li>Google OAuth via Lovable Cloud managed provider</li>
+            <li>Session managed by Supabase Auth (JWT tokens)</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">8.3 Abuse Prevention</h3>
-            <ul>
-              <li>Daily usage limits prevent spam swiping</li>
-              <li>Deal invite attempt tracking (max 3 attempts per item pair)</li>
-              <li>Unique constraints prevent duplicate swipes</li>
-              <li>Unmatching capability for users who feel uncomfortable</li>
-            </ul>
+          <h3>Authorization (RLS Policies)</h3>
+          <p>Every table has Row Level Security enabled. Key patterns:</p>
+          <ul>
+            <li><strong>profiles:</strong> Anyone can SELECT; only owner can UPDATE</li>
+            <li><strong>items:</strong> Anyone sees active non-archived OR own items; only owner can INSERT/UPDATE/DELETE</li>
+            <li><strong>swipes:</strong> User can create/view swipes from own items; can delete own swipes</li>
+            <li><strong>matches:</strong> User sees matches involving own items; system can INSERT (trigger)</li>
+            <li><strong>messages:</strong> User sees messages in own matches; can INSERT if sender; can UPDATE status if recipient</li>
+            <li><strong>user_roles:</strong> Only admins (via is_admin() function) can CRUD</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">8.4 Moderation Framework (In Development)</h3>
-            <ul>
-              <li>User reporting system for inappropriate content</li>
-              <li>Admin review queue for flagged items</li>
-              <li>Human-in-the-loop verification for AI moderation decisions</li>
-              <li>Appeals process for contested removals</li>
-            </ul>
-          </section>
+          <h3>Admin Role Check</h3>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`// Security definer function prevents RLS recursion
+CREATE FUNCTION is_admin(_user_id uuid) RETURNS boolean
+SELECT EXISTS (
+  SELECT 1 FROM user_roles WHERE user_id = _user_id AND role = 'admin'
+);`}</pre>
 
-          {/* 9. Data Privacy and Ethics */}
-          <section id="privacy">
-            <h2 className="text-xl font-bold border-b border-border pb-2">9. Data Privacy and Ethics</h2>
-            
-            <h3 className="font-semibold mt-4">9.1 Data Collection Principles</h3>
-            <ul>
-              <li><strong>Minimization:</strong> Only data essential for platform functionality is collected</li>
-              <li><strong>Purpose Limitation:</strong> Data used only for matching and user experience</li>
-              <li><strong>Transparency:</strong> Clear explanation of data usage in UI prompts</li>
-            </ul>
+          <h3>Abuse Prevention</h3>
+          <ul>
+            <li><strong>Daily limits (Free tier):</strong> 50 swipes, 3 searches, 3 map uses, 3 deal invites, 4 active items</li>
+            <li><strong>Deal invite spam:</strong> Max 2 attempts per item pair (enforced by trigger)</li>
+            <li><strong>Duplicate swipes:</strong> Unique constraint + graceful handling in mutation</li>
+            <li><strong>Content moderation:</strong> NOT IMPLEMENTED</li>
+            <li><strong>Reporting system:</strong> NOT IMPLEMENTED</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">9.2 Location Data Handling</h3>
-            <ul>
-              <li>Location is required for item listings and geographic matching</li>
-              <li>Precise coordinates stored for distance calculations</li>
-              <li>Approximate distance displayed to other users, not exact location</li>
-              <li>Users can update location at any time</li>
-            </ul>
+          <hr />
 
-            <h3 className="font-semibold mt-4">9.3 AI Ethics</h3>
-            <ul>
-              <li>Recommendation algorithms avoid discriminatory patterns</li>
-              <li>No demographic profiling beyond functional requirements</li>
-              <li>Exploration factor (10%) prevents filter bubble formation</li>
-              <li>Users can view their recommendation factors (planned)</li>
-            </ul>
+          {/* SECTION 8: FAILURE MODES & EDGE CASES */}
+          <h2>8. Failure Modes & Edge Cases</h2>
 
-            <h3 className="font-semibold mt-4">9.4 Compliance Readiness</h3>
-            <p>
-              The platform architecture is designed with GDPR compliance in mind, including data 
-              deletion capabilities and right-to-access provisions. Formal compliance certification 
-              pending as the platform scales.
-            </p>
-          </section>
+          <h3>Edge Function Failures</h3>
+          <ul>
+            <li><strong>recommend-items fails:</strong> Falls back to fallbackFetch() which queries database directly with swap_preferences filtering (useRecommendations.tsx line 321)</li>
+            <li><strong>dodo-checkout fails:</strong> Returns 500 with error message, user sees "Payment configuration error"</li>
+            <li><strong>get-mapbox-token fails:</strong> Map fails to load, fallback UI NOT IMPLEMENTED</li>
+          </ul>
 
-          {/* 10. Scalability and Future Vision */}
-          <section id="scalability">
-            <h2 className="text-xl font-bold border-b border-border pb-2">10. Scalability and Future Vision</h2>
-            
-            <h3 className="font-semibold mt-4">10.1 Current Capacity</h3>
-            <ul>
-              <li>Edge Functions scale automatically with demand</li>
-              <li>PostgreSQL handles concurrent connections via pooling</li>
-              <li>CDN-delivered static assets for global performance</li>
-              <li>Real-time messaging via WebSocket connections</li>
-            </ul>
+          <h3>Partial Data Handling</h3>
+          <ul>
+            <li><strong>Item without photos:</strong> Renders placeholder</li>
+            <li><strong>Item without location:</strong> Excluded from Nearby mode; included in ForYou with neutral geoScore</li>
+            <li><strong>Profile without avatar:</strong> Renders default avatar</li>
+            <li><strong>Archived items in match:</strong> Security definer RPC returns item data</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">10.2 Planned Enhancements</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 font-semibold">Feature</th>
-                    <th className="text-left py-2 font-semibold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50"><td className="py-2">Push Notifications</td><td>Planned</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">User Reviews and Ratings</td><td>Planned</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Dark Mode</td><td>Partial (theme support exists)</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Social Sharing</td><td>Planned</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">Multi-Way Swaps</td><td>Architecture exists (swap_opportunities table)</td></tr>
-                  <tr><td className="py-2">Native Mobile Apps</td><td>Under consideration</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <h3>State Machine Timeouts</h3>
+          <ul>
+            <li><strong>BOOTSTRAPPING phase:</strong> 5-second timeout fallback (documented in useSystemState)</li>
+            <li><strong>Location permission pending:</strong> Blocks in TRANSITION phase until resolved</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">10.3 Geographic Expansion</h3>
-            <p>
-              Initial focus on European markets with support for 11 languages: English, French, German, 
-              Spanish, Portuguese, Russian, Arabic, Japanese, Korean, Chinese, Hindi.
-            </p>
-          </section>
+          <h3>User-Visible Error Handling</h3>
+          <ul>
+            <li>Form validation errors: Inline messages via react-hook-form + zod</li>
+            <li>Network errors: Toast notifications via sonner</li>
+            <li>Empty states: Dedicated EmptyState components with CTAs</li>
+          </ul>
 
-          {/* 11. Technical Specifications */}
-          <section id="technical-specs">
-            <h2 className="text-xl font-bold border-b border-border pb-2">11. Technical Specifications</h2>
-            
-            <h3 className="font-semibold mt-4">11.1 Item Categories</h3>
-            <ul className="text-sm">
-              <li>🎮 Games</li>
-              <li>📱 Electronics</li>
-              <li>👕 Clothes</li>
-              <li>📚 Books</li>
-              <li>🏡 Home & Garden</li>
-              <li>⚽ Sports</li>
-              <li>📦 Other</li>
-            </ul>
+          <hr />
 
-            <h3 className="font-semibold mt-4">11.2 Item Conditions</h3>
-            <ul className="text-sm">
-              <li>New (1.0 weight)</li>
-              <li>Like New (0.9 weight)</li>
-              <li>Good (0.7 weight)</li>
-              <li>Fair (0.5 weight)</li>
-            </ul>
+          {/* SECTION 9: KNOWN LIMITATIONS */}
+          <h2>9. Known Limitations</h2>
 
-            <h3 className="font-semibold mt-4">11.3 Algorithm Parameters</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-2 font-semibold">Parameter</th>
-                    <th className="text-left py-2 font-semibold">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50"><td className="py-2">GEO_SIGMA</td><td>50 km (distance decay)</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">EXPLORATION_FACTOR</td><td>0.1 (10% randomness)</td></tr>
-                  <tr className="border-b border-border/50"><td className="py-2">BOOTSTRAP_TIMEOUT</td><td>5000 ms</td></tr>
-                  <tr><td className="py-2">RECYCLE_THRESHOLD</td><td>7 days (old swipes)</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <h3>Technical Limitations</h3>
+          <ul>
+            <li><strong>Supabase query limit:</strong> 1000 rows per query (may affect users with many items)</li>
+            <li><strong>No offline support:</strong> App requires network connection</li>
+            <li><strong>No push notifications:</strong> Users must open app to see updates</li>
+            <li><strong>No image compression:</strong> Large photos uploaded as-is</li>
+            <li><strong>Single currency display:</strong> Euro (€) hardcoded</li>
+          </ul>
 
-            <h3 className="font-semibold mt-4">11.4 Project Structure</h3>
-            <pre className="bg-muted p-4 rounded-md overflow-x-auto text-xs">
-{`src/
-├── components/
-│   ├── layout/         # AppLayout, BottomNav, SystemPhaseRenderer
-│   ├── landing/        # Hero, AuthSection, Features, Pricing
-│   ├── discover/       # SwipeCard, SwipeActions, MatchModal
-│   ├── matches/        # MatchCard, CompleteSwapModal
-│   ├── chat/           # MessageBubble, ChatHeader
-│   ├── deals/          # DealInviteButton
-│   ├── admin/          # AdminSidebar, DataTable, sections/
-│   ├── subscription/   # UpgradePrompt, FeatureUpgradeModal
-│   └── ui/             # 40+ shadcn/ui components
-│
-├── hooks/
-│   ├── useAuth.tsx           # Authentication context
-│   ├── useSystemState.tsx    # Global state machine
-│   ├── useRecommendations.tsx  # AI recommendations
-│   ├── useEntitlements.tsx   # Feature limits
-│   ├── useSwipeState.tsx     # Swipe state machine
-│   ├── useMatches.tsx        # Match management
-│   └── useLocation.tsx       # Device location
-│
-├── pages/              # Route components
-├── locales/            # 11 language translation files
-├── config/branding.ts  # App name and branding
-└── integrations/supabase/  # Auto-generated client
+          <h3>Unimplemented Features (Planned or Documented but Not Built)</h3>
+          <ul>
+            <li>Content moderation / image analysis</li>
+            <li>User reporting and appeals system</li>
+            <li>Multi-way swap execution flow</li>
+            <li>Push notifications</li>
+            <li>Identity verification</li>
+            <li>Shipping/logistics integration</li>
+            <li>Time decay on Bayesian ratings (mentioned in docs, NOT in code)</li>
+          </ul>
 
-supabase/functions/
-├── recommend-items/    # AI recommendation engine
-├── reciprocal-optimizer/  # Boost calculation
-├── dodo-checkout/      # Payment processing
-├── get-mapbox-token/   # Secure token retrieval
-└── setup-test-data/    # Development utilities`}
-            </pre>
-          </section>
+          <h3>Out of Scope</h3>
+          <ul>
+            <li>Monetary transactions between users</li>
+            <li>Native mobile apps (iOS/Android)</li>
+            <li>Multi-tenancy / white-label</li>
+            <li>API access for third parties</li>
+          </ul>
 
-          {/* 12. Change Log */}
-          <section id="changelog">
-            <h2 className="text-xl font-bold border-b border-border pb-2">12. Change Log</h2>
-            
-            <h3 className="font-semibold mt-4">January 2026</h3>
-            <ul>
-              <li><strong>White Paper v2.0:</strong> Comprehensive technical documentation rewritten</li>
-              <li><strong>Landing Page Integration:</strong> Auth forms merged into landing page, /auth route deprecated</li>
-              <li><strong>Public Access:</strong> /whitepaper route made publicly accessible without authentication</li>
-              <li><strong>Route Cleanup:</strong> All references to deprecated /auth route removed</li>
-            </ul>
+          <hr />
 
-            <h3 className="font-semibold mt-4">Previous Updates</h3>
-            <ul>
-              <li>Item-to-item matching model implementation</li>
-              <li>Multi-factor recommendation algorithm with weighted scoring</li>
-              <li>Two-sided exchange confirmation system with auto-archiving</li>
-              <li>Swipe state machine with exhaustion handling and recovery</li>
-              <li>Deal invites feature for direct proposals</li>
-              <li>Missed matches detection with Pro upsell flow</li>
-              <li>Real-time chat with read receipts and presence</li>
-              <li>Internationalization (11 languages with RTL support)</li>
-              <li>Free tier usage limits with daily reset</li>
-              <li>Pro subscription integration</li>
-              <li>Admin dashboard with analytics</li>
-              <li>Map view with Mapbox integration</li>
-            </ul>
-          </section>
+          {/* SECTION 10: FREE TIER LIMITS */}
+          <h2>10. Entitlement System</h2>
+          <p><strong>Reference:</strong> <code>src/hooks/useEntitlements.tsx</code></p>
+
+          <h3>Free Tier Daily Limits</h3>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`FREE_LIMITS = {
+  swipes: 50,
+  searches: 3,
+  dealInvites: 3,
+  mapUses: 3,
+  maxItems: 4,
+}`}</pre>
+
+          <h3>Pro Benefits</h3>
+          <ul>
+            <li>Unlimited swipes, searches, map uses, deal invites</li>
+            <li>Unlimited active items</li>
+          </ul>
+
+          <h3>State Machine</h3>
+          <p>SUBSCRIPTION_PHASE drives all entitlement decisions (not database is_pro field):</p>
+          <ul>
+            <li><strong>FREE_ACTIVE:</strong> Normal free tier with limits</li>
+            <li><strong>FREE_LIMITED:</strong> Approaching or at limits</li>
+            <li><strong>UPGRADING:</strong> Optimistic unlock during checkout</li>
+            <li><strong>PRO_ACTIVE:</strong> Full Pro access</li>
+            <li><strong>PRO_EXPIRED:</strong> Subscription lapsed</li>
+          </ul>
+
+          <hr />
+
+          <h2>Document Verification</h2>
+          <p>
+            Every claim in this document references actual files in the codebase. Routes are defined in <code>src/App.tsx</code>. 
+            Edge functions exist in <code>supabase/functions/</code>. Database schema is in <code>src/integrations/supabase/types.ts</code>.
+            Algorithm weights are hardcoded constants at specified line numbers.
+          </p>
+          <p className="text-muted-foreground">
+            <strong>Audit completed:</strong> January 2026<br />
+            <strong>Codebase version:</strong> As deployed to Lovable Cloud
+          </p>
 
         </article>
-
-        {/* Footer */}
-        <footer className="mt-12 pt-8 border-t border-border text-center text-muted-foreground text-sm">
-          <p>© 2026 {APP_NAME}. All rights reserved.</p>
-          <p className="mt-2">This document serves as the official technical contract for the {APP_NAME} platform.</p>
-        </footer>
       </main>
     </div>
   );
