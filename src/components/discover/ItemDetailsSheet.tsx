@@ -96,7 +96,7 @@ export function ItemDetailsSheet({
               </div>
             </div>
 
-            {item.value_min && item.value_min > 0 && (
+            {(item.value_min !== undefined && item.value_min !== null) && (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
                 <div className="w-10 h-10 rounded-full bg-price/10 flex items-center justify-center">
                   <DollarSign className="w-5 h-5 text-price" />
@@ -112,8 +112,8 @@ export function ItemDetailsSheet({
 
             {distanceKm !== null && (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
-                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-secondary" />
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Distance</p>

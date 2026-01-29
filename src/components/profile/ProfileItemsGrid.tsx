@@ -37,9 +37,12 @@ export function ProfileItemsGrid({ items, isOwnProfile = true }: ProfileItemsGri
     );
   }
 
+  // Filter out archived items for non-owner view
+  const displayItems = isOwnProfile ? items : items.filter(item => !item.is_archived);
+
   return (
     <div className="grid grid-cols-3 gap-1">
-      {items.map((item, index) => (
+      {displayItems.map((item, index) => (
         <motion.button
           key={item.id}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -83,9 +86,16 @@ export function ProfileItemsGrid({ items, isOwnProfile = true }: ProfileItemsGri
           )}
 
           {/* Inactive indicator */}
-          {!item.is_active && (
+          {!item.is_active && !item.is_archived && (
             <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
               <span className="text-xs text-muted-foreground font-medium">Inactive</span>
+            </div>
+          )}
+
+          {/* Archived/Swapped indicator with blur - only for owner */}
+          {item.is_archived && isOwnProfile && (
+            <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center">
+              <span className="text-xs text-muted-foreground font-medium">Swapped</span>
             </div>
           )}
         </motion.button>
