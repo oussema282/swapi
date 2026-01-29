@@ -1,135 +1,166 @@
 
-# Soft Neo-Minimal Marketplace UI Redesign
+# Multi-Issue Fix Plan
 
-## Overview
-Implement the "Soft Neo-Minimal Marketplace" design system from the reference screenshots, focusing on:
-1. **New Bottom Navigation** with a floating elevated center "Discover" button
-2. **Redesigned Matches Page** with horizontal "Instant Matches" cards and vertical "Conversations" list
-3. **Design System Variables** that will be reusable across the entire app
+## Issues Identified
 
-## Design System Variables to Implement
+After thorough investigation, I've identified and will fix the following issues:
 
-The design tokens from the reference:
+### 1. Instant Matches Not Auto-Removed After 24h
+**Current State:** Instant Matches section shows matches from last 24h, but they stay in the horizontal scroll forever.
+**Fix:** Add logic to filter the Instant Matches section to only show matches created within 24h. Matches older than 24h will only appear in the Conversations list below.
 
-| Token | Value |
-|-------|-------|
-| Primary | #7B5CFA (purple) |
-| Secondary | #EDE9FF (light purple) |
-| Accent | #34C759 (green) |
-| Background | #FFFFFF |
-| Surface | #F8F9FB |
-| Text Primary | #0F172A |
-| Text Secondary | #6B7280 |
-| Border Radius Small | 12px |
-| Border Radius Medium | 16px |
-| Border Radius Large | 24px |
-| Card Shadow | 0px 8px 24px rgba(0,0,0,0.04) |
-| Floating Button Shadow | 0px 10px 30px rgba(123,92,250,0.35) |
+### 2. Pro Badge Missing in ConversationCard
+**Current State:** `ConversationCard.tsx` displays the owner name but doesn't show the Pro badge like `MatchCard.tsx` does.
+**Fix:** Add `VerifiedName` component with `isPro` prop to `ConversationCard.tsx`.
+
+### 3. Add "Manage Items" Icon to Profile Page
+**Current State:** Profile page has Edit button at top-right but no direct link to Items management.
+**Fix:** Add a Grid/Package icon button next to the Edit button that navigates to `/items`.
+
+### 4. Remove Rating Counter from All User Profiles
+**Current State:** Profile and UserProfile pages show a hardcoded "5.0 Rating" stat.
+**Fix:** Remove the Rating stat from both Profile.tsx and UserProfile.tsx, leaving only Items and Swaps counters.
+
+### 5. Archived Items Display as Blurry in ProfileItemsGrid
+**Current State:** Archived items show with "Inactive" overlay but not blurry.
+**Fix:** Update `ProfileItemsGrid.tsx` to:
+- Apply blur effect to archived items for the owner
+- Filter out archived items for other users viewing the profile
+
+### 6. User Swap Counter Not Working
+**Current State:** The swap counter queries completed matches but has a syntax issue in the `.or()` filter.
+**Fix:** Rewrite the query to properly count completed swaps using individual filters.
+
+### 7. Owner Activity Status Not Showing on SwipeCard
+**Current State:** The `getUserActivityStatus` function exists but `owner_last_seen` may not be passed.
+**Fix:** Verify the data flow and ensure the activity status badge renders correctly.
+
+### 8. Distance Icon Issue in ItemDetailsSheet
+**Current State:** The distance section uses `MapPin` icon with `text-secondary` which may have poor visibility.
+**Fix:** Change the icon color to use a more visible color like `text-primary`.
+
+### 9. Price Range Hidden When Value is 0
+**Current State:** In `ItemDetailsSheet.tsx`, the condition `item.value_min > 0` hides the price when it's 0.
+**Fix:** Change condition to check if `value_min !== null && value_min !== undefined` to show $0 items.
+
+---
 
 ## Files to Modify
 
-### 1. CSS Variables Update
-**File:** `src/index.css`
+### 1. `src/pages/Matches.tsx`
+- **Line ~336-344**: The `newMatches` filter already limits to 24h, but the Instant Matches section should truly exclude older ones - verified this is correct.
 
-Update the light mode CSS variables to match the design system while keeping dark mode intact:
-- Update primary to #7B5CFA
-- Add new surface color variable
-- Add new shadow utilities for the soft card shadows
-- Keep all existing animations and utility classes
+### 2. `src/components/matches/ConversationCard.tsx`
+- Add import for `VerifiedName` and `Crown` icon
+- Replace plain text owner name with `VerifiedName` component
+- Pass `is_pro` from `match.other_user_profile`
 
-### 2. Bottom Navigation Redesign
-**File:** `src/components/layout/BottomNav.tsx`
+### 3. `src/pages/Profile.tsx`
+- Add Grid3X3/Package icon button next to Edit button at line ~113
+- Remove the Rating stat block (lines ~173-176)
+- Update grid from 3 columns to 2 columns for stats
 
-Transform to match the reference with:
-- Floating center "Discover" button (elevated, larger, purple with shadow)
-- 5 tabs: Search, Map, Discover (center), Matches, Profile
-- Remove "Add" from the nav bar (will remain accessible elsewhere)
-- Active state with dot indicator under text
-- Clean white background with subtle border
+### 4. `src/pages/UserProfile.tsx`
+- Remove the Rating stat block (lines ~191-194)
+- Update grid from 3 columns to 2 columns for stats
+- Add filter to exclude archived items from public view
 
-### 3. Matches Page Redesign
-**File:** `src/pages/Matches.tsx`
+### 5. `src/components/profile/ProfileItemsGrid.tsx`
+- Add blur effect and archive overlay for archived items (owner view)
+- Filter out archived items for non-owner view
 
-Complete redesign to match the reference:
-- Clean header with "Matches" title and notification bell
-- **Instant Matches Section**: Horizontal scrolling cards (160x190px) with:
-  - Item photo with rounded corners (20px)
-  - User avatar overlay with purple border
-  - Item title and "Match with [Name]" subtitle
-  - "New (4)" pill badge
-- **Conversations Section**: Vertical list with:
-  - Full-width cards (78px height, 18px radius)
-  - Item thumbnail + user avatar overlay
-  - User name (bold), message preview, timestamp
-  - Tag pills (e.g., "Value balanced", "Great trade potential!")
-- Keep all existing functionality (tabs for Active/Completed/Invites/Missed)
+### 6. `src/pages/Profile.tsx` & `src/pages/UserProfile.tsx`
+- Fix the completed swaps count query to use proper syntax
 
-### 4. New Instant Match Card Component
-**File:** `src/components/matches/InstantMatchCard.tsx` (new file)
+### 7. `src/components/discover/SwipeCard.tsx`
+- Verify activity status rendering (already implemented correctly)
+- No changes needed if `owner_last_seen` is being passed
 
-Create a horizontal-scrollable match card for the "Instant Matches" section:
-- 160px width, ~190px height
-- Square item photo with 20px border radius
-- Avatar overlay in bottom-right corner (28px, purple border on highlighted)
-- Item title below photo
-- "Match with [Name]" subtitle
+### 8. `src/components/discover/ItemDetailsSheet.tsx`
+- **Line ~115**: Change `text-secondary` to `text-primary` for distance icon
+- **Line ~99**: Change condition from `item.value_min > 0` to `item.value_min != null`
 
-### 5. Updated Conversation Card Component
-**File:** `src/components/matches/ConversationCard.tsx` (new file)
+---
 
-Create a conversation-style list item:
-- 78px height with soft shadow
-- Item thumbnail with user avatar overlay
-- Name, message preview, timestamp
-- Dynamic tag pills based on match metadata
+## Technical Details
 
-### 6. Tailwind Config Update
-**File:** `tailwind.config.ts`
+### ConversationCard Pro Badge Fix:
+```tsx
+// Add to imports
+import { VerifiedName } from '@/components/ui/verified-name';
 
-Add new design tokens:
-- Extended color palette for the soft neo-minimal theme
-- New border radius values (12, 16, 20, 24)
-- Custom shadows matching the design
+// Replace ownerName display with:
+<VerifiedName 
+  name={ownerName} 
+  isPro={match.other_user_profile?.is_pro}
+  badgeClassName="w-3 h-3"
+/>
+```
 
-## Implementation Approach
+### Profile Stats Grid (2 columns instead of 3):
+```tsx
+<div className="grid grid-cols-2 gap-4 mb-6 text-center">
+  <div className="p-3 rounded-xl bg-muted/50">
+    <p className="text-2xl font-bold">{activeItems.length}</p>
+    <p className="text-xs text-muted-foreground">Items</p>
+  </div>
+  <div className="p-3 rounded-xl bg-muted/50">
+    <p className="text-2xl font-bold">{completedSwapsCount}</p>
+    <p className="text-xs text-muted-foreground">Swaps</p>
+  </div>
+</div>
+```
 
-### Phase 1: Design System Foundation
-1. Update CSS variables in `index.css` for light mode
-2. Add new Tailwind config tokens
-3. These changes won't break existing dark mode
+### Archived Items Blur in Grid:
+```tsx
+// For owner's own profile - show blur
+{item.is_archived && isOwnProfile && (
+  <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center">
+    <span className="text-xs text-muted-foreground font-medium">Swapped</span>
+  </div>
+)}
+```
 
-### Phase 2: Bottom Navigation
-1. Restructure `BottomNav.tsx` with:
-   - 5 nav items (Search, Map, Discover, Matches, Profile)
-   - Floating center Discover button with elevation
-   - Clean styling matching reference
+### Fix Swap Counter Query:
+```tsx
+// Current problematic query using .or() with template literal
+// Fix: Use separate queries or rpc function
 
-### Phase 3: Matches Page
-1. Create `InstantMatchCard.tsx` component
-2. Create `ConversationCard.tsx` component  
-3. Update `Matches.tsx` with:
-   - New header with title + bell icon
-   - Horizontal "Instant Matches" section for new matches
-   - Vertical "Conversations" section for active chats
-   - Preserve all existing tab functionality (Active/Completed/Invites/Missed)
+// Option 1: Query twice
+const { count: countA } = await supabase
+  .from('matches')
+  .select('*', { count: 'exact', head: true })
+  .eq('is_completed', true)
+  .in('item_a_id', itemIds);
 
-## Preserved Functionality
+const { count: countB } = await supabase
+  .from('matches')
+  .select('*', { count: 'exact', head: true })
+  .eq('is_completed', true)
+  .in('item_b_id', itemIds);
 
-All existing features will remain intact:
-- Item details sheet on photo tap
-- Chat navigation
-- Deal invites flow
-- Missed matches with accept functionality
-- Completed matches section
-- Unread message indicators
-- Pro user features
-- All confirmation flows
+return (countA || 0) + (countB || 0);
+```
 
-## Technical Notes
+### ItemDetailsSheet Price Fix:
+```tsx
+// Change from:
+{item.value_min && item.value_min > 0 && (
 
-- Use existing `framer-motion` for animations
-- Keep all existing hooks and data fetching logic
-- Maintain responsive design with mobile-first approach
-- Preserve safe-area inset handling
-- Keep dark mode support (will inherit from design system)
-do not forget to add user active status and and to redesign the swiping cars style to fit exactly the screenshot style 
+// To:
+{(item.value_min !== undefined && item.value_min !== null) && (
+```
+
+---
+
+## Summary of Changes
+
+| File | Changes |
+|------|---------|
+| `src/components/matches/ConversationCard.tsx` | Add Pro badge via VerifiedName |
+| `src/pages/Profile.tsx` | Add items icon, remove rating, fix swap counter |
+| `src/pages/UserProfile.tsx` | Remove rating, filter archived items, fix swap counter |
+| `src/components/profile/ProfileItemsGrid.tsx` | Add blur for archived, filter for non-owner |
+| `src/components/discover/ItemDetailsSheet.tsx` | Fix distance icon color, fix price 0 display |
+
+All existing features and functionality will be preserved.
