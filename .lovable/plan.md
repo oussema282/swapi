@@ -1,130 +1,135 @@
 
-# Fix "Unknown" User Display Issue
+# Soft Neo-Minimal Marketplace UI Redesign
 
-## Problem Analysis
+## Overview
+Implement the "Soft Neo-Minimal Marketplace" design system from the reference screenshots, focusing on:
+1. **New Bottom Navigation** with a floating elevated center "Discover" button
+2. **Redesigned Matches Page** with horizontal "Instant Matches" cards and vertical "Conversations" list
+3. **Design System Variables** that will be reusable across the entire app
 
-After thorough investigation, I found:
+## Design System Variables to Implement
 
-1. **Database is clean** - All users have valid profiles with proper `display_name` values
-2. **"Unknown" is a code fallback** - The string "Unknown" appears in 19 files as a fallback when `profileMap.get(userId)` returns `undefined`
-3. **React ref warning** - The `VerifiedName` component triggers console warnings when used inside Framer Motion components
+The design tokens from the reference:
 
-## Root Causes
-
-### 1. VerifiedName Ref Forwarding Issue
-The console error shows:
-```
-Warning: Function components cannot be given refs.
-Check the render method of `MissedMatchCard`.
-at VerifiedName
-```
-
-When `VerifiedName` is wrapped in `motion.div` or used with certain parent components, React tries to pass a ref that the component cannot accept.
-
-### 2. Profile Lookup Timing Edge Cases
-In hooks like `useMatches`, `useMissedMatches`, and others:
-- Profile data is fetched in a separate query after item data
-- If the profile query partially fails or takes longer, the `profileMap` may be incomplete
-- The code defensively falls back to "Unknown"
-
-### 3. Empty Array Edge Case
-When `userIds` array is empty before calling `.in('user_id', userIds)`:
-- Supabase may return unexpected results
-- The profile map ends up empty, causing all lookups to return `undefined`
-
-## Solution
-
-### Fix 1: Add ref forwarding to VerifiedName
-**File:** `src/components/ui/verified-name.tsx`
-
-Convert to `forwardRef` pattern to prevent React warnings.
-
-### Fix 2: Add defensive checks in profile queries
-**Files to update:**
-- `src/hooks/useMatches.tsx`
-- `src/hooks/useMissedMatches.tsx`
-- `src/pages/Matches.tsx`
-- `src/lib/services/supabase/index.ts`
-- `src/hooks/useRecommendations.tsx`
-
-Add checks:
-```typescript
-// Before querying profiles, check if we have user IDs
-if (userIds.length === 0) return [];
-
-// Add error logging when profile lookup fails
-const profile = profileMap.get(userId);
-if (!profile) {
-  console.warn(`Profile not found for user: ${userId}`);
-}
-```
-
-### Fix 3: Replace "Unknown" with better UX
-Instead of showing "Unknown", show:
-- "Loading..." during data fetch
-- "User" as a neutral fallback
-- Or hide the name element entirely
-
-## Technical Changes
-
-### 1. VerifiedName Component (verified-name.tsx)
-```typescript
-import { forwardRef } from 'react';
-
-interface VerifiedNameProps {
-  // ... existing props
-}
-
-export const VerifiedName = forwardRef<HTMLSpanElement, VerifiedNameProps>(
-  ({ name, className, badgeClassName, isPro = false, userId, clickable = false }, ref) => {
-    // ... existing logic
-    
-    return (
-      <span ref={ref} className={...}>
-        {/* ... existing content */}
-      </span>
-    );
-  }
-);
-
-VerifiedName.displayName = 'VerifiedName';
-```
-
-### 2. useMatches Hook (useMatches.tsx)
-Add validation before profile lookup:
-```typescript
-// Add early return check
-if (userIds.size === 0) {
-  console.warn('No user IDs found in matches data');
-}
-
-// Add fallback logging
-const profile = profileMap.get(otherUserId);
-if (!profile && otherUserId) {
-  console.warn(`Missing profile for user: ${otherUserId}`);
-}
-```
-
-### 3. useMissedMatches Hook (useMissedMatches.tsx)
-Same pattern - add defensive checks and logging.
-
-### 4. Update Fallback Text
-Change from `'Unknown'` to `'User'` across all files for better UX:
-- It's neutral and doesn't imply data issues
-- More professional appearance
+| Token | Value |
+|-------|-------|
+| Primary | #7B5CFA (purple) |
+| Secondary | #EDE9FF (light purple) |
+| Accent | #34C759 (green) |
+| Background | #FFFFFF |
+| Surface | #F8F9FB |
+| Text Primary | #0F172A |
+| Text Secondary | #6B7280 |
+| Border Radius Small | 12px |
+| Border Radius Medium | 16px |
+| Border Radius Large | 24px |
+| Card Shadow | 0px 8px 24px rgba(0,0,0,0.04) |
+| Floating Button Shadow | 0px 10px 30px rgba(123,92,250,0.35) |
 
 ## Files to Modify
 
-1. `src/components/ui/verified-name.tsx` - Add forwardRef
-2. `src/hooks/useMatches.tsx` - Add defensive checks
-3. `src/hooks/useMissedMatches.tsx` - Add defensive checks
-4. `src/pages/Matches.tsx` - Add defensive checks
-5. `src/lib/services/supabase/index.ts` - Add defensive checks
-6. `src/hooks/useRecommendations.tsx` - Add defensive checks
+### 1. CSS Variables Update
+**File:** `src/index.css`
 
-## Validation
+Update the light mode CSS variables to match the design system while keeping dark mode intact:
+- Update primary to #7B5CFA
+- Add new surface color variable
+- Add new shadow utilities for the soft card shadows
+- Keep all existing animations and utility classes
 
-After implementation:
-- Console warnings should stop
-- "Unknown" should never appear in normal usage
-- Profile loading edge cases will be logged for debugging
+### 2. Bottom Navigation Redesign
+**File:** `src/components/layout/BottomNav.tsx`
+
+Transform to match the reference with:
+- Floating center "Discover" button (elevated, larger, purple with shadow)
+- 5 tabs: Search, Map, Discover (center), Matches, Profile
+- Remove "Add" from the nav bar (will remain accessible elsewhere)
+- Active state with dot indicator under text
+- Clean white background with subtle border
+
+### 3. Matches Page Redesign
+**File:** `src/pages/Matches.tsx`
+
+Complete redesign to match the reference:
+- Clean header with "Matches" title and notification bell
+- **Instant Matches Section**: Horizontal scrolling cards (160x190px) with:
+  - Item photo with rounded corners (20px)
+  - User avatar overlay with purple border
+  - Item title and "Match with [Name]" subtitle
+  - "New (4)" pill badge
+- **Conversations Section**: Vertical list with:
+  - Full-width cards (78px height, 18px radius)
+  - Item thumbnail + user avatar overlay
+  - User name (bold), message preview, timestamp
+  - Tag pills (e.g., "Value balanced", "Great trade potential!")
+- Keep all existing functionality (tabs for Active/Completed/Invites/Missed)
+
+### 4. New Instant Match Card Component
+**File:** `src/components/matches/InstantMatchCard.tsx` (new file)
+
+Create a horizontal-scrollable match card for the "Instant Matches" section:
+- 160px width, ~190px height
+- Square item photo with 20px border radius
+- Avatar overlay in bottom-right corner (28px, purple border on highlighted)
+- Item title below photo
+- "Match with [Name]" subtitle
+
+### 5. Updated Conversation Card Component
+**File:** `src/components/matches/ConversationCard.tsx` (new file)
+
+Create a conversation-style list item:
+- 78px height with soft shadow
+- Item thumbnail with user avatar overlay
+- Name, message preview, timestamp
+- Dynamic tag pills based on match metadata
+
+### 6. Tailwind Config Update
+**File:** `tailwind.config.ts`
+
+Add new design tokens:
+- Extended color palette for the soft neo-minimal theme
+- New border radius values (12, 16, 20, 24)
+- Custom shadows matching the design
+
+## Implementation Approach
+
+### Phase 1: Design System Foundation
+1. Update CSS variables in `index.css` for light mode
+2. Add new Tailwind config tokens
+3. These changes won't break existing dark mode
+
+### Phase 2: Bottom Navigation
+1. Restructure `BottomNav.tsx` with:
+   - 5 nav items (Search, Map, Discover, Matches, Profile)
+   - Floating center Discover button with elevation
+   - Clean styling matching reference
+
+### Phase 3: Matches Page
+1. Create `InstantMatchCard.tsx` component
+2. Create `ConversationCard.tsx` component  
+3. Update `Matches.tsx` with:
+   - New header with title + bell icon
+   - Horizontal "Instant Matches" section for new matches
+   - Vertical "Conversations" section for active chats
+   - Preserve all existing tab functionality (Active/Completed/Invites/Missed)
+
+## Preserved Functionality
+
+All existing features will remain intact:
+- Item details sheet on photo tap
+- Chat navigation
+- Deal invites flow
+- Missed matches with accept functionality
+- Completed matches section
+- Unread message indicators
+- Pro user features
+- All confirmation flows
+
+## Technical Notes
+
+- Use existing `framer-motion` for animations
+- Keep all existing hooks and data fetching logic
+- Maintain responsive design with mobile-first approach
+- Preserve safe-area inset handling
+- Keep dark mode support (will inherit from design system)
+do not forget to add user active status and and to redesign the swiping cars style to fit exactly the screenshot style 
