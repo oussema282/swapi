@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Package } from 'lucide-react';
+import { Package, Sparkles, Zap, MessageCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
@@ -14,7 +14,7 @@ interface ConversationCardProps {
 }
 
 // Generate a tag based on match metadata
-function getMatchTag(match: MatchWithItems): { text: string; color: string } | null {
+function getMatchTag(match: MatchWithItems): { text: string; color: string; icon: 'sparkles' | 'zap' | 'message' } | null {
   // Value balanced - if both items have similar value range
   const myMin = match.my_item?.value_min || 0;
   const myMax = match.my_item?.value_max || myMin;
@@ -27,10 +27,10 @@ function getMatchTag(match: MatchWithItems): { text: string; color: string } | n
   if (myAvg > 0 && theirAvg > 0) {
     const ratio = Math.min(myAvg, theirAvg) / Math.max(myAvg, theirAvg);
     if (ratio >= 0.7) {
-      return { text: 'Value balanced', color: 'bg-accent/10 text-accent' };
+      return { text: 'Value balanced', color: 'bg-accent/15 text-accent', icon: 'sparkles' };
     }
     if (ratio >= 0.5) {
-      return { text: 'Great trade potential!', color: 'bg-primary/10 text-primary' };
+      return { text: 'Great trade potential!', color: 'bg-primary/15 text-primary', icon: 'sparkles' };
     }
   }
   
@@ -39,7 +39,7 @@ function getMatchTag(match: MatchWithItems): { text: string; color: string } | n
     const lastMessageTime = new Date(match.last_message.created_at);
     const hoursSinceMessage = (Date.now() - lastMessageTime.getTime()) / (1000 * 60 * 60);
     if (hoursSinceMessage < 1) {
-      return { text: 'Fast responder', color: 'bg-tinder-blue/10 text-tinder-blue' };
+      return { text: 'Fast responder', color: 'bg-tinder-blue/15 text-tinder-blue', icon: 'zap' };
     }
   }
   
@@ -60,6 +60,8 @@ export function ConversationCard({
   const lastActivityTime = match.last_message?.created_at || match.created_at;
   const tag = getMatchTag(match);
 
+  const TagIcon = tag?.icon === 'sparkles' ? Sparkles : tag?.icon === 'zap' ? Zap : MessageCircle;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -70,14 +72,14 @@ export function ConversationCard({
       <button
         onClick={onClick}
         className={cn(
-          'w-full h-[78px] rounded-[18px] p-3 flex items-center gap-3',
+          'w-full rounded-[18px] p-3 flex items-start gap-3',
           'bg-card shadow-card border border-transparent',
           'transition-all duration-200',
           'hover:border-primary/20 hover:shadow-lg',
           hasUnread && 'bg-primary/5 border-primary/20'
         )}
       >
-        {/* Item Thumbnail with Avatar Overlay */}
+        {/* Item Thumbnail with Avatar Overlay - Larger size */}
         <div 
           className="relative flex-shrink-0"
           onClick={(e) => {
@@ -85,7 +87,7 @@ export function ConversationCard({
             onItemTap?.();
           }}
         >
-          <div className="w-12 h-12 rounded-xl overflow-hidden bg-muted">
+          <div className="w-[90px] h-[90px] rounded-[16px] overflow-hidden bg-surface">
             {itemPhoto ? (
               <img 
                 src={itemPhoto} 
@@ -94,45 +96,51 @@ export function ConversationCard({
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Package className="w-5 h-5 text-muted-foreground/30" />
+                <Package className="w-8 h-8 text-muted-foreground/30" />
               </div>
             )}
           </div>
-          {/* Avatar Overlay */}
-          <div className="absolute -bottom-1 -right-1 rounded-full ring-2 ring-card">
-            <Avatar className="w-5 h-5">
+          {/* Avatar Overlay - Bottom right with purple ring */}
+          <div className="absolute -bottom-1 -right-1 rounded-full ring-2 ring-primary/30 bg-card">
+            <Avatar className="w-7 h-7">
               <AvatarImage src={ownerAvatar || undefined} />
-              <AvatarFallback className="text-[8px] bg-secondary text-secondary-foreground">
+              <AvatarFallback className="text-[10px] bg-secondary text-secondary-foreground font-medium">
                 {ownerName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-center justify-between gap-2">
+        {/* Content - Right side */}
+        <div className="flex-1 min-w-0 text-left py-0.5">
+          {/* Top row: Name + Time */}
+          <div className="flex items-start justify-between gap-2 mb-1">
             <h4 className={cn(
-              'text-sm truncate',
+              'text-[15px] truncate leading-tight',
               hasUnread ? 'font-bold text-foreground' : 'font-semibold text-foreground'
             )}>
               {ownerName}
             </h4>
-            <span className="text-[10px] text-muted-foreground flex-shrink-0">
+            <span className="text-[11px] text-muted-foreground flex-shrink-0 mt-0.5">
               {formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
             </span>
           </div>
+          
+          {/* Message preview */}
           <p className={cn(
-            'text-xs truncate mt-0.5',
+            'text-[13px] line-clamp-2 leading-snug',
             hasUnread ? 'text-foreground font-medium' : 'text-muted-foreground'
           )}>
             {lastMessage}
           </p>
+          
+          {/* Tag pill */}
           {tag && (
             <span className={cn(
-              'inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium',
+              'inline-flex items-center gap-1 mt-2 px-2.5 py-1 rounded-full text-[11px] font-medium',
               tag.color
             )}>
+              <TagIcon className="w-3 h-3" />
               {tag.text}
             </span>
           )}
@@ -140,7 +148,7 @@ export function ConversationCard({
 
         {/* Unread Indicator */}
         {hasUnread && (
-          <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+          <div className="w-2.5 h-2.5 rounded-full bg-primary flex-shrink-0 mt-1" />
         )}
       </button>
     </motion.div>
