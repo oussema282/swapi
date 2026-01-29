@@ -9,11 +9,13 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { Loader2, Check, X, ArrowLeft, ArrowRight, ArrowLeftRight, CheckCircle2, Send, HeartOff } from 'lucide-react';
+import { Loader2, Check, X, ArrowLeftRight, CheckCircle2, Send, HeartOff, Bell, ChevronRight } from 'lucide-react';
 import { MatchCard } from '@/components/matches/MatchCard';
 import { CompletedMatchCard } from '@/components/matches/CompletedMatchCard';
 import { MissedMatchCard } from '@/components/matches/MissedMatchCard';
 import { MissedMatchModal } from '@/components/matches/MissedMatchModal';
+import { InstantMatchCard } from '@/components/matches/InstantMatchCard';
+import { ConversationCard } from '@/components/matches/ConversationCard';
 import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -22,6 +24,8 @@ import { Item } from '@/types/database';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { useDeviceLocation } from '@/hooks/useLocation';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface DealInviteRaw {
   id: string;
@@ -304,22 +308,6 @@ export default function Matches() {
     },
   });
 
-  const handleBack = () => {
-    navigate('/discover');
-  };
-
-  const handleNext = () => {
-    if (currentStep < SECTIONS.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
   if (authLoading) {
     return (
       <AppLayout>
@@ -343,6 +331,16 @@ export default function Matches() {
 
   const activeMatches = matches?.filter(m => !m.is_completed) || [];
   const completedMatches = matches?.filter(m => m.is_completed) || [];
+  
+  // New matches (created in last 24 hours) for Instant Matches section
+  const newMatches = activeMatches.filter(m => {
+    const createdAt = new Date(m.created_at);
+    const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    return createdAt > dayAgo;
+  });
+  
+  // Older matches for Conversations section
+  const conversationMatches = activeMatches;
 
   const hasUnreadMessages = (match: any) => {
     if (!match.last_message || !user) return false;
@@ -350,328 +348,336 @@ export default function Matches() {
   };
 
   const currentSection = SECTIONS[currentStep];
+  
+  // Calculate total notifications
+  const totalNotifications = 
+    activeMatches.filter(m => hasUnreadMessages(m)).length + 
+    pendingInvites.length + 
+    missedMatches.length;
 
   return (
-    <AppLayout showNav={false}>
-      {/* Main container: h-[100dvh] constrains to viewport, flex-col for vertical layout */}
-      <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
-        {/* Inner container with max width - flex-1 + min-h-0 prevents overflow */}
-        <div className="max-w-lg mx-auto w-full flex-1 flex flex-col min-h-0">
-          
-          {/* Header - FIXED HEIGHT: 72px */}
-          <header className="h-[72px] flex items-center px-4 border-b shrink-0">
-            <Button variant="ghost" size="icon" onClick={handleBack}>
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div className="ml-2 flex-1 min-w-0">
-              <h1 className="text-lg font-display font-bold truncate">{currentSection.title}</h1>
-              <p className="text-sm text-muted-foreground truncate">{currentSection.description}</p>
-            </div>
-            <span className="text-sm font-medium text-muted-foreground shrink-0">
-              {currentStep + 1}/{SECTIONS.length}
-            </span>
-          </header>
+    <AppLayout>
+      {/* Main container */}
+      <div className="min-h-screen bg-surface pb-24">
+        {/* Header - Soft Neo-Minimal style */}
+        <header className="sticky top-0 z-40 bg-background border-b border-border/50 px-4 py-4 safe-area-top">
+          <div className="flex items-center justify-between max-w-lg mx-auto">
+            <h1 className="text-[22px] font-bold text-foreground">
+              {t('matches.title', 'Matches')}
+            </h1>
+            <button className="relative p-2 rounded-full hover:bg-muted transition-colors">
+              <Bell className="w-6 h-6 text-muted-foreground" />
+              {totalNotifications > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {totalNotifications > 9 ? '9+' : totalNotifications}
+                </span>
+              )}
+            </button>
+          </div>
+        </header>
 
-          {/* Progress Bar - FIXED HEIGHT: 40px (includes padding) */}
-          <div className="h-[40px] flex items-center gap-1 px-4 shrink-0">
+        <div className="max-w-lg mx-auto px-4 py-4 space-y-6">
+          {/* Instant Matches Section - Horizontal Scrolling */}
+          {currentStep === 0 && newMatches.length > 0 && (
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-semibold text-foreground">
+                    {t('matches.instantMatches', 'Instant Matches')}
+                  </h2>
+                  <Badge 
+                    variant="secondary" 
+                    className="bg-secondary text-secondary-foreground font-medium text-xs px-2 py-0.5"
+                  >
+                    New ({newMatches.length})
+                  </Badge>
+                </div>
+                <button className="text-primary text-sm font-medium flex items-center gap-1">
+                  See All
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              
+              {/* Horizontal scroll container */}
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+                {newMatches.slice(0, 6).map((match, index) => (
+                  <InstantMatchCard
+                    key={match.id}
+                    match={match}
+                    index={index}
+                    onClick={() => navigate(`/chat/${match.id}`)}
+                    isHighlighted={index === 0}
+                    onItemTap={() => handleViewTheirItemDetails(match)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Tab Navigation Pills */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {SECTIONS.map((section, idx) => {
-              // Calculate notification count for each section
               const notificationCount = 
                 idx === 0 ? activeMatches.filter(m => hasUnreadMessages(m)).length :
                 idx === 2 ? pendingInvites.length :
                 idx === 3 ? missedMatches.length : 0;
               
               return (
-                <div key={section.id} className="flex items-center flex-1 gap-1">
-                  {/* Progress bar segment */}
-                  <button
-                    onClick={() => setCurrentStep(idx)}
-                    className="h-1.5 flex-1"
-                  >
-                    <div className={cn(
-                      'h-full w-full rounded-full transition-all duration-300',
-                      idx <= currentStep ? 'bg-primary' : 'bg-muted'
-                    )} />
-                  </button>
-                  {/* Red notification card with count */}
-                  {notificationCount > 0 && idx !== currentStep && (
-                    <span className="min-w-[18px] h-[16px] px-1.5 flex items-center justify-center text-[10px] font-bold text-destructive-foreground bg-destructive rounded-sm animate-pulse">
+                <button
+                  key={section.id}
+                  onClick={() => setCurrentStep(idx)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
+                    currentStep === idx 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'bg-card text-muted-foreground hover:bg-muted border border-border/50'
+                  )}
+                >
+                  <section.icon className="w-4 h-4" />
+                  {section.title}
+                  {notificationCount > 0 && (
+                    <span className={cn(
+                      'min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center',
+                      currentStep === idx 
+                        ? 'bg-primary-foreground/20 text-primary-foreground' 
+                        : 'bg-destructive text-destructive-foreground'
+                    )}>
                       {notificationCount}
                     </span>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
 
-          {/* Center Container - FIXED: flex-1 fills remaining space, overflow hidden */}
-          <main className="flex-1 flex justify-center overflow-hidden min-h-0">
-            <div className="w-full h-full px-4 py-2 flex flex-col">
-              {/* Card wrapper - takes full height */}
-              <Card className="flex-1 flex flex-col overflow-hidden min-h-0">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentStep}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.2 }}
-                    /* Content area: flex-1 fills card, overflow-y-auto for scrolling */
-                    className="flex-1 overflow-y-auto p-4 min-h-0"
-                  >
-                {/* Active Matches */}
-                {currentStep === 0 && (
-                  <div className="h-full flex flex-col">
-                    {isLoading ? (
-                      /* Loading state - centered in full height */
-                      <div className="flex-1 flex items-center justify-center">
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                      </div>
-                    ) : activeMatches.length > 0 ? (
-                      /* List state - scrollable content */
-                      <div className="space-y-3">
-                        {activeMatches.map((match, index) => (
-                          <MatchCard
-                            key={match.id}
-                            match={match}
-                            index={index}
-                            onClick={() => navigate(`/chat/${match.id}`)}
-                            hasUnread={hasUnreadMessages(match)}
-                            onMyItemTap={() => handleViewMyItemDetails(match)}
-                            onTheirItemTap={() => handleViewTheirItemDetails(match)}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      /* Empty state - centered in full height */
-                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                          <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <p className="text-muted-foreground">No active matches yet</p>
-                        <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Completed Matches */}
-                {currentStep === 1 && (
-                  <div className="h-full flex flex-col">
-                    {isLoading ? (
-                      /* Loading state - centered in full height */
-                      <div className="flex-1 flex items-center justify-center">
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                      </div>
-                    ) : completedMatches.length > 0 ? (
-                      /* List state - scrollable content */
-                      <div className="space-y-3">
-                        {completedMatches.map((match, index) => (
-                          <CompletedMatchCard
-                            key={match.id}
-                            match={match}
-                            index={index}
-                            onClick={() => navigate(`/chat/${match.id}`)}
-                            onMyItemTap={() => handleViewMyItemDetails(match)}
-                            onTheirItemTap={() => handleViewTheirItemDetails(match)}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      /* Empty state - centered in full height */
-                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                          <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <p className="text-muted-foreground">No completed swaps yet</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Deal Invites */}
-                {currentStep === 2 && (
-                  <div className="h-full flex flex-col">
-                    {invitesLoading ? (
-                      /* Loading state - centered in full height */
-                      <div className="flex-1 flex items-center justify-center">
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                      </div>
-                    ) : pendingInvites.length > 0 ? (
-                      /* List state - scrollable content */
-                      <div className="space-y-3">
-                        {pendingInvites.map((invite) => (
-                          <Card key={invite.id} className="p-4 space-y-3">
-                            <div className="flex items-center gap-2">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleViewDealInviteItem(invite, true);
-                                }}
-                                className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                              >
-                                {invite.sender_item?.photos?.[0] ? (
-                                  <img 
-                                    src={invite.sender_item.photos[0]} 
-                                    alt="" 
-                                    className="w-full h-full object-cover" 
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center">📦</div>
-                                )}
-                              </button>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
-                                <p className="text-xs text-muted-foreground">
-                                  from <VerifiedName name={invite.sender_item?.owner_display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" />
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
-
-                            <div className="flex items-center gap-2">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleViewDealInviteItem(invite, false);
-                                }}
-                                className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                              >
-                                {invite.receiver_item?.photos?.[0] ? (
-                                  <img 
-                                    src={invite.receiver_item.photos[0]} 
-                                    alt="" 
-                                    className="w-full h-full object-cover" 
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center">📦</div>
-                                )}
-                              </button>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
-                                <p className="text-xs text-muted-foreground">Your item</p>
-                              </div>
-                            </div>
-
-                            <div className="flex gap-2 pt-2">
-                              <Button
-                                variant="default"
-                                size="sm"
-                                className="flex-1"
-                                disabled={respondMutation.isPending}
-                                onClick={() => respondMutation.mutate({ 
-                                  inviteId: invite.id, 
-                                  accept: true,
-                                  senderItemId: invite.sender_item_id,
-                                  receiverItemId: invite.receiver_item_id,
-                                })}
-                              >
-                                <Check className="w-4 h-4 mr-1" />
-                                Accept
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex-1"
-                                disabled={respondMutation.isPending}
-                                onClick={() => respondMutation.mutate({ 
-                                  inviteId: invite.id, 
-                                  accept: false,
-                                  senderItemId: invite.sender_item_id,
-                                  receiverItemId: invite.receiver_item_id,
-                                })}
-                              >
-                                <X className="w-4 h-4 mr-1" />
-                                Decline
-                              </Button>
-                            </div>
-                          </Card>
-                        ))}
-                      </div>
-                    ) : (
-                      /* Empty state - centered in full height */
-                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                          <Send className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <p className="text-muted-foreground">No pending deal invites</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Missed Matches */}
-                {currentStep === 3 && (
-                  <div className="h-full flex flex-col">
-                    {missedLoading ? (
-                      /* Loading state - centered in full height */
-                      <div className="flex-1 flex items-center justify-center">
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                      </div>
-                    ) : missedMatches.length > 0 ? (
-                      /* List state - scrollable content */
-                      <div className="space-y-3">
-                        <div className="text-center py-2">
-                          <p className="text-sm text-muted-foreground">
-                            <HeartOff className="w-4 h-4 inline mr-1" />
-                            You missed a match! They wanted to swap with you.
-                          </p>
-                        </div>
-                        {missedMatches.map((missed, index) => (
-                          <MissedMatchCard
-                            key={missed.id}
-                            missedMatch={missed}
-                            index={index}
-                            isPro={isPro}
-                            onClick={() => setSelectedMissedMatch(missed)}
-                            onReconsider={isPro ? () => handleAcceptMissedMatch(missed) : undefined}
-                            isRecovering={recoveringId === missed.id}
-                            onMyItemTap={isPro ? () => handleViewMissedItemDetails(missed, true) : undefined}
-                            onTheirItemTap={isPro ? () => handleViewMissedItemDetails(missed, false) : undefined}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      /* Empty state - centered in full height */
-                      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                          <HeartOff className="w-8 h-8 text-muted-foreground" />
-                        </div>
-                        <p className="text-muted-foreground">No missed matches</p>
-                        <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </Card>
-            </div>
-          </main>
-
-          {/* Footer - FIXED HEIGHT: 88px */}
-          <footer className="h-[88px] px-4 flex items-center gap-4 border-t bg-background shrink-0">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentStep === 0}
-              className="flex-1"
+          {/* Conversations Section - Vertical List */}
+          <AnimatePresence mode="wait">
+            <motion.section
+              key={currentStep}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Previous
-            </Button>
-            <Button
-              onClick={handleNext}
-              disabled={currentStep === SECTIONS.length - 1}
-              className="flex-1"
-            >
-              Next
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </footer>
+              {currentStep === 0 && (
+                <div className="space-y-3">
+                  <h2 className="text-lg font-semibold text-foreground">
+                    {t('matches.conversations', 'Conversations')}
+                  </h2>
+                  
+                  {isLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    </div>
+                  ) : conversationMatches.length > 0 ? (
+                    <div className="space-y-2">
+                      {conversationMatches.map((match, index) => (
+                        <ConversationCard
+                          key={match.id}
+                          match={match}
+                          index={index}
+                          onClick={() => navigate(`/chat/${match.id}`)}
+                          hasUnread={hasUnreadMessages(match)}
+                          onItemTap={() => handleViewTheirItemDetails(match)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="p-8 text-center shadow-card">
+                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+                        <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                      <p className="text-muted-foreground font-medium">No active matches yet</p>
+                      <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
+                    </Card>
+                  )}
+                </div>
+              )}
+
+              {/* Completed Matches */}
+              {currentStep === 1 && (
+                <div className="space-y-3">
+                  {isLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    </div>
+                  ) : completedMatches.length > 0 ? (
+                    <div className="space-y-2">
+                      {completedMatches.map((match, index) => (
+                        <CompletedMatchCard
+                          key={match.id}
+                          match={match}
+                          index={index}
+                          onClick={() => navigate(`/chat/${match.id}`)}
+                          onMyItemTap={() => handleViewMyItemDetails(match)}
+                          onTheirItemTap={() => handleViewTheirItemDetails(match)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="p-8 text-center shadow-card">
+                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                      <p className="text-muted-foreground font-medium">No completed swaps yet</p>
+                    </Card>
+                  )}
+                </div>
+              )}
+
+              {/* Deal Invites */}
+              {currentStep === 2 && (
+                <div className="space-y-3">
+                  {invitesLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    </div>
+                  ) : pendingInvites.length > 0 ? (
+                    <div className="space-y-2">
+                      {pendingInvites.map((invite) => (
+                        <Card key={invite.id} className="p-4 space-y-3 shadow-card">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewDealInviteItem(invite, true);
+                              }}
+                              className="w-10 h-10 rounded-xl overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              {invite.sender_item?.photos?.[0] ? (
+                                <img 
+                                  src={invite.sender_item.photos[0]} 
+                                  alt="" 
+                                  className="w-full h-full object-cover" 
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">📦</div>
+                              )}
+                            </button>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
+                              <p className="text-xs text-muted-foreground">
+                                from <VerifiedName name={invite.sender_item?.owner_display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" />
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewDealInviteItem(invite, false);
+                              }}
+                              className="w-10 h-10 rounded-xl overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              {invite.receiver_item?.photos?.[0] ? (
+                                <img 
+                                  src={invite.receiver_item.photos[0]} 
+                                  alt="" 
+                                  className="w-full h-full object-cover" 
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">📦</div>
+                              )}
+                            </button>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
+                              <p className="text-xs text-muted-foreground">Your item</p>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 pt-2">
+                            <Button
+                              variant="default"
+                              size="sm"
+                              className="flex-1 rounded-xl"
+                              disabled={respondMutation.isPending}
+                              onClick={() => respondMutation.mutate({ 
+                                inviteId: invite.id, 
+                                accept: true,
+                                senderItemId: invite.sender_item_id,
+                                receiverItemId: invite.receiver_item_id,
+                              })}
+                            >
+                              <Check className="w-4 h-4 mr-1" />
+                              Accept
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 rounded-xl"
+                              disabled={respondMutation.isPending}
+                              onClick={() => respondMutation.mutate({ 
+                                inviteId: invite.id, 
+                                accept: false,
+                                senderItemId: invite.sender_item_id,
+                                receiverItemId: invite.receiver_item_id,
+                              })}
+                            >
+                              <X className="w-4 h-4 mr-1" />
+                              Decline
+                            </Button>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="p-8 text-center shadow-card">
+                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+                        <Send className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                      <p className="text-muted-foreground font-medium">No pending deal invites</p>
+                    </Card>
+                  )}
+                </div>
+              )}
+
+              {/* Missed Matches */}
+              {currentStep === 3 && (
+                <div className="space-y-3">
+                  {missedLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    </div>
+                  ) : missedMatches.length > 0 ? (
+                    <div className="space-y-2">
+                      <div className="text-center py-2">
+                        <p className="text-sm text-muted-foreground">
+                          <HeartOff className="w-4 h-4 inline mr-1" />
+                          You missed a match! They wanted to swap with you.
+                        </p>
+                      </div>
+                      {missedMatches.map((missed, index) => (
+                        <MissedMatchCard
+                          key={missed.id}
+                          missedMatch={missed}
+                          index={index}
+                          isPro={isPro}
+                          onClick={() => setSelectedMissedMatch(missed)}
+                          onReconsider={isPro ? () => handleAcceptMissedMatch(missed) : undefined}
+                          isRecovering={recoveringId === missed.id}
+                          onMyItemTap={isPro ? () => handleViewMissedItemDetails(missed, true) : undefined}
+                          onTheirItemTap={isPro ? () => handleViewMissedItemDetails(missed, false) : undefined}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="p-8 text-center shadow-card">
+                      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+                        <HeartOff className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                      <p className="text-muted-foreground font-medium">No missed matches</p>
+                      <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
+                    </Card>
+                  )}
+                </div>
+              )}
+            </motion.section>
+          </AnimatePresence>
         </div>
       </div>
       
