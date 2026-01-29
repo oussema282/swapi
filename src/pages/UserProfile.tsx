@@ -60,7 +60,7 @@ export default function UserProfile() {
     enabled: !!userId,
   });
 
-  // Fetch user's items
+  // Fetch user's items (exclude archived for public view)
   const { data: items = [], isLoading: itemsLoading } = useQuery({
     queryKey: ['user-items', userId],
     queryFn: async () => {
@@ -71,6 +71,7 @@ export default function UserProfile() {
         .select('*')
         .eq('user_id', userId)
         .eq('is_active', true)
+        .eq('is_archived', false)
         .order('created_at', { ascending: false });
       
       if (error) throw error;
@@ -95,15 +96,21 @@ export default function UserProfile() {
       
       const itemIds = userItems.map(i => i.id);
       
-      // Count all completed matches involving any of this user's items
-      // This gives the total swaps this user has completed with ANYONE
-      const { count } = await supabase
+      // Count matches where user's items are in item_a_id
+      const { count: countA } = await supabase
         .from('matches')
         .select('*', { count: 'exact', head: true })
         .eq('is_completed', true)
-        .or(`item_a_id.in.(${itemIds.join(',')}),item_b_id.in.(${itemIds.join(',')})`);
+        .in('item_a_id', itemIds);
       
-      return count || 0;
+      // Count matches where user's items are in item_b_id
+      const { count: countB } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_completed', true)
+        .in('item_b_id', itemIds);
+      
+      return (countA || 0) + (countB || 0);
     },
     enabled: !!userId,
   });
@@ -179,7 +186,7 @@ export default function UserProfile() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6 text-center">
+          <div className="grid grid-cols-2 gap-4 mb-6 text-center">
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{items.length}</p>
               <p className="text-xs text-muted-foreground">Items</p>
@@ -187,10 +194,6 @@ export default function UserProfile() {
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{completedSwapsCount}</p>
               <p className="text-xs text-muted-foreground">Swaps</p>
-            </div>
-            <div className="p-3 rounded-xl bg-muted/50">
-              <p className="text-2xl font-bold">5.0</p>
-              <p className="text-xs text-muted-foreground">Rating</p>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Package, Sparkles, Zap, MessageCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { VerifiedName } from '@/components/ui/verified-name';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { MatchWithItems } from '@/hooks/useMatches';
@@ -115,12 +116,15 @@ export function ConversationCard({
         <div className="flex-1 min-w-0 text-left py-0.5">
           {/* Top row: Name + Time */}
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h4 className={cn(
-              'text-[15px] truncate leading-tight',
-              hasUnread ? 'font-bold text-foreground' : 'font-semibold text-foreground'
-            )}>
-              {ownerName}
-            </h4>
+            <VerifiedName
+              name={ownerName}
+              isPro={match.other_user_profile?.is_pro}
+              className={cn(
+                'text-[15px] truncate leading-tight',
+                hasUnread ? 'font-bold text-foreground' : 'font-semibold text-foreground'
+              )}
+              badgeClassName="w-3 h-3"
+            />
             <span className="text-[11px] text-muted-foreground flex-shrink-0 mt-0.5">
               {formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
             </span>

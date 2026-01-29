@@ -39,14 +39,21 @@ export default function Profile() {
       
       const itemIds = userItems.map(i => i.id);
       
-      // Count matches where user's items are involved and is_completed = true
-      const { count } = await supabase
+      // Count matches where user's items are in item_a_id
+      const { count: countA } = await supabase
         .from('matches')
         .select('*', { count: 'exact', head: true })
         .eq('is_completed', true)
-        .or(`item_a_id.in.(${itemIds.join(',')}),item_b_id.in.(${itemIds.join(',')})`);
+        .in('item_a_id', itemIds);
       
-      return count || 0;
+      // Count matches where user's items are in item_b_id
+      const { count: countB } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_completed', true)
+        .in('item_b_id', itemIds);
+      
+      return (countA || 0) + (countB || 0);
     },
     enabled: !!user?.id,
   });
@@ -110,6 +117,9 @@ export default function Profile() {
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
               )}
             </div>
+            <Button variant="outline" size="icon" onClick={() => navigate('/items')}>
+              <Grid3X3 className="w-4 h-4" />
+            </Button>
             <Button variant="outline" size="icon" onClick={() => navigate('/profile/edit')}>
               <Edit className="w-4 h-4" />
             </Button>
@@ -161,7 +171,7 @@ export default function Profile() {
           )}
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6 text-center">
+          <div className="grid grid-cols-2 gap-4 mb-6 text-center">
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{activeItems.length}</p>
               <p className="text-xs text-muted-foreground">{t('nav.items')}</p>
@@ -169,10 +179,6 @@ export default function Profile() {
             <div className="p-3 rounded-xl bg-muted/50">
               <p className="text-2xl font-bold">{completedSwapsCount}</p>
               <p className="text-xs text-muted-foreground">{t('profile.successfulSwaps')}</p>
-            </div>
-            <div className="p-3 rounded-xl bg-muted/50">
-              <p className="text-2xl font-bold">5.0</p>
-              <p className="text-xs text-muted-foreground">Rating</p>
             </div>
           </div>
 
