@@ -357,10 +357,10 @@ export default function Matches() {
 
   return (
     <AppLayout>
-      {/* Main container */}
-      <div className="min-h-screen bg-surface pb-24">
+      {/* Main container - flex column with overflow hidden */}
+      <div className="flex flex-col h-[100dvh] bg-surface">
         {/* Header - Soft Neo-Minimal style */}
-        <header className="sticky top-0 z-40 bg-background border-b border-border/50 px-4 py-4 safe-area-top">
+        <header className="sticky top-0 z-40 bg-background border-b border-border/50 px-4 py-4 safe-area-top shrink-0">
           <div className="flex items-center justify-between max-w-lg mx-auto">
             <h1 className="text-[22px] font-bold text-foreground">
               {t('matches.title', 'Matches')}
@@ -376,7 +376,9 @@ export default function Matches() {
           </div>
         </header>
 
-        <div className="max-w-lg mx-auto px-4 py-4 space-y-6">
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto pb-24">
+          <div className="max-w-lg mx-auto px-4 py-4 space-y-6">
           {/* Instant Matches Section - Horizontal Scrolling */}
           {currentStep === 0 && newMatches.length > 0 && (
             <section>
@@ -678,6 +680,7 @@ export default function Matches() {
               )}
             </motion.section>
           </AnimatePresence>
+          </div>
         </div>
       </div>
       

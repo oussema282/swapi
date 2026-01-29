@@ -1,7 +1,8 @@
-import { SlidersHorizontal, Zap, Bell } from 'lucide-react';
+import { SlidersHorizontal, Plus, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface SwipeTopBarProps {
   activeTab: 'foryou' | 'nearby';
@@ -21,6 +22,7 @@ export function SwipeTopBar({
   className,
 }: SwipeTopBarProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div 
@@ -67,15 +69,15 @@ export function SwipeTopBar({
         </button>
       </div>
 
-      {/* Right - Boost/Notifications */}
+      {/* Right - Upload Item Button */}
       <div className="relative">
         <Button
           variant="ghost"
           size="icon"
-          onClick={onBoostClick}
+          onClick={() => navigate('/items/new')}
           className="w-10 h-10 rounded-full hover:bg-muted"
         >
-          <Zap className="w-5 h-5 text-primary" />
+          <Plus className="w-5 h-5 text-primary" />
         </Button>
         {hasNotifications && (
           <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-destructive rounded-full border-2 border-background" />
@@ -84,3 +86,4 @@ export function SwipeTopBar({
     </div>
   );
 }
+
