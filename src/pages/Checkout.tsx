@@ -26,13 +26,31 @@ const Checkout = () => {
   
   const featureParam = searchParams.get('feature') as FeatureType | null;
 
-  const handleProCheckout = async () => {
-    setIsLoading(true);
+  const handleCheckout = async (productType: string = 'pro') => {
+    if (!user) {
+      toast({
+        title: "Login required",
+        description: "Please login to make a purchase.",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
+    if (productType === 'pro') {
+      setIsLoading(true);
+    } else {
+      setLoadingFeature(productType);
+    }
     
     try {
       const { data, error } = await supabase.functions.invoke('dodo-checkout', {
         method: 'POST',
-        body: { origin: window.location.origin }
+        body: { 
+          origin: window.location.origin,
+          product_type: productType,
+          user_id: user.id
+        }
       });
 
       if (error) {
@@ -65,56 +83,13 @@ const Checkout = () => {
       });
     } finally {
       setIsLoading(false);
+      setLoadingFeature(null);
     }
   };
 
-  const handleFeatureUpgrade = async (featureType: FeatureType) => {
-    if (!user) {
-      toast({
-        title: "Login required",
-        description: "Please login to purchase upgrades.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setLoadingFeature(featureType);
-    
-    try {
-      const upgrade = FEATURE_UPGRADES[featureType];
-      
-      // For now, directly add the bonus (in production, this would go through payment)
-      const expiresAt = new Date();
-      expiresAt.setMonth(expiresAt.getMonth() + 1);
-      
-      const { error } = await supabase
-        .from('feature_upgrades')
-        .upsert({
-          user_id: user.id,
-          feature_type: featureType,
-          bonus_amount: upgrade.bonus,
-          expires_at: expiresAt.toISOString(),
-        }, { onConflict: 'user_id,feature_type' });
-
-      if (error) throw error;
-
-      toast({
-        title: "Upgrade activated!",
-        description: `You now have +${upgrade.bonus} extra ${featureType.replace('_', ' ')}!`,
-      });
-      
-      navigate('/discover');
-      
-    } catch (err) {
-      console.error('Feature upgrade error:', err);
-      toast({
-        title: "Upgrade failed",
-        description: "Unable to process upgrade. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoadingFeature(null);
-    }
+  // Now all purchases go through Dodo Payments
+  const handleFeatureUpgrade = (featureType: FeatureType) => {
+    handleCheckout(featureType);
   };
 
   const proFeatures = [
@@ -257,7 +232,7 @@ const Checkout = () => {
           <CardFooter>
             <Button 
               className="w-full h-12 text-lg font-semibold"
-              onClick={handleProCheckout}
+              onClick={() => handleCheckout('pro')}
               disabled={isLoading}
             >
               {isLoading ? (

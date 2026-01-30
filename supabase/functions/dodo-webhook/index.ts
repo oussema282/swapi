@@ -6,6 +6,15 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-webhook-signature',
 };
 
+// Feature upgrade bonuses (must match FEATURE_UPGRADES in useSubscription.tsx)
+const FEATURE_BONUSES: Record<string, number> = {
+  swipes: 100,
+  deal_invites: 20,
+  map: 20,
+  search: 20,
+  items: 5,
+};
+
 // Structured logging helper
 function log(level: 'info' | 'warn' | 'error', message: string, data?: Record<string, unknown>) {
   console.log(JSON.stringify({
@@ -38,7 +47,6 @@ serve(async (req) => {
     });
 
     // Verify this is a payment success event
-    // Dodo Payments webhook event types may vary - handle common patterns
     const eventType = body.type || body.event;
     const isPaymentSuccess = 
       eventType === 'payment.succeeded' ||
@@ -71,8 +79,9 @@ serve(async (req) => {
       );
     }
 
-    // Extract user ID from metadata if available
+    // Extract user ID and product type from metadata
     const userId = body.data?.metadata?.user_id || body.metadata?.user_id;
+    const productType = body.data?.metadata?.product_type || body.metadata?.product_type || 'pro';
 
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -83,8 +92,17 @@ serve(async (req) => {
     const expiresAt = new Date();
     expiresAt.setMonth(expiresAt.getMonth() + 1);
 
-    // If we have a user ID from metadata, update directly
-    if (userId) {
+    if (!userId) {
+      log('warn', 'No user_id in webhook metadata', { session_id: sessionId });
+      return new Response(
+        JSON.stringify({ received: true, processed: false, reason: 'no user_id' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Handle based on product type
+    if (productType === 'pro') {
+      // Pro subscription
       const { error } = await supabaseAdmin
         .from('user_subscriptions')
         .upsert({
@@ -99,7 +117,6 @@ serve(async (req) => {
         });
 
       if (error) {
-        // Check if it's a duplicate session ID (idempotency)
         if (error.code === '23505' && error.message.includes('dodo_session')) {
           log('info', 'Duplicate webhook - already processed', { session_id: sessionId });
           return new Response(
@@ -110,39 +127,61 @@ serve(async (req) => {
         throw error;
       }
 
-      log('info', 'Subscription activated via webhook', { 
+      log('info', 'Pro subscription activated', { 
         user_id: userId, 
         session_id: sessionId,
         expires_at: expiresAt.toISOString() 
       });
     } else {
-      // No user ID in metadata - store session for later lookup by CheckoutSuccess
-      // This allows the client to poll and find their subscription
-      log('info', 'Payment received without user_id metadata', { session_id: sessionId });
+      // Feature upgrade (swipes, deal_invites, map, search, items)
+      const bonusAmount = FEATURE_BONUSES[productType];
       
-      // Try to find existing subscription with this session ID and mark as paid
+      if (!bonusAmount) {
+        log('warn', 'Unknown product type', { product_type: productType });
+        return new Response(
+          JSON.stringify({ received: true, processed: false, reason: 'unknown product type' }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Get existing upgrade to add to bonus
       const { data: existing } = await supabaseAdmin
-        .from('user_subscriptions')
-        .select('*')
-        .eq('dodo_session_id', sessionId)
+        .from('feature_upgrades')
+        .select('bonus_amount')
+        .eq('user_id', userId)
+        .eq('feature_type', productType)
         .maybeSingle();
 
-      if (existing) {
-        await supabaseAdmin
-          .from('user_subscriptions')
-          .update({
-            is_pro: true,
-            subscribed_at: new Date().toISOString(),
-            expires_at: expiresAt.toISOString(),
-          })
-          .eq('dodo_session_id', sessionId);
-        
-        log('info', 'Updated existing subscription', { session_id: sessionId });
+      const currentBonus = existing?.bonus_amount || 0;
+      const newBonus = currentBonus + bonusAmount;
+
+      const { error } = await supabaseAdmin
+        .from('feature_upgrades')
+        .upsert({
+          user_id: userId,
+          feature_type: productType,
+          bonus_amount: newBonus,
+          expires_at: expiresAt.toISOString(),
+        }, { 
+          onConflict: 'user_id,feature_type',
+          ignoreDuplicates: false 
+        });
+
+      if (error) {
+        throw error;
       }
+
+      log('info', 'Feature upgrade activated', { 
+        user_id: userId,
+        feature_type: productType,
+        bonus_added: bonusAmount,
+        total_bonus: newBonus,
+        expires_at: expiresAt.toISOString() 
+      });
     }
 
     return new Response(
-      JSON.stringify({ received: true, processed: true }),
+      JSON.stringify({ received: true, processed: true, product_type: productType }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
