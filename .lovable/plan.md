@@ -1,518 +1,478 @@
 
-# Valexo Security, Privacy & Compliance Remediation Plan
 
-## Executive Summary
+# Algorithm Policy Database Schema Design
 
-This plan addresses 11 security, privacy, and compliance tasks identified in the Valexo audit. Each task is broken into specific, minimal, and safe changes with exact file references and code modifications.
+## Overview
 
----
-
+This plan implements a database-driven policy configuration system for Valexo's recommendation engine, enabling AI-generated policy parameters to be stored, versioned, tested, and rolled back instantly without code redeployments.
 
 ---
 
-## Task 2: IMAGE_STORAGE_SECURITY
+## Architecture
 
-**Objective**: Secure item-photos bucket and serve images via signed URLs.
-
-### Current State
-- Bucket `item-photos` is PUBLIC (verified in context)
-- Photos served directly via public URLs
-- EXIF metadata NOT stripped
-
-### Changes Required
-
-**1. Database Migration - Make bucket private**
-```sql
-UPDATE storage.buckets 
-SET public = false 
-WHERE id = 'item-photos';
-
--- Create RLS policy for authenticated access to own files
-CREATE POLICY "Users can upload to own folder"
-ON storage.objects
-FOR INSERT
-TO authenticated
-WITH CHECK (
-  bucket_id = 'item-photos' AND
-  (storage.foldername(name))[1] = auth.uid()::text
-);
-
-CREATE POLICY "Users can view item photos"
-ON storage.objects
-FOR SELECT
-TO authenticated
-USING (bucket_id = 'item-photos');
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        ALGORITHM POLICY SYSTEM                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐     │
+│   │                  │    │                  │    │                  │     │
+│   │ algorithm_       │───>│ algorithm_       │───>│ algorithm_       │     │
+│   │ policies         │    │ policy_rollouts  │    │ policy_metrics   │     │
+│   │                  │    │                  │    │                  │     │
+│   │ Stores versions  │    │ Controls A/B     │    │ Stores outcome   │     │
+│   │ of AI-generated  │    │ testing and      │    │ metrics for      │     │
+│   │ parameters       │    │ gradual rollout  │    │ learning         │     │
+│   │                  │    │                  │    │                  │     │
+│   └──────────────────┘    └──────────────────┘    └──────────────────┘     │
+│           │                        │                        │               │
+│           └────────────────────────┼────────────────────────┘               │
+│                                    │                                         │
+│                                    ▼                                         │
+│   ┌────────────────────────────────────────────────────────────────────┐    │
+│   │                    recommend-items Edge Function                    │    │
+│   │                                                                     │    │
+│   │  1. Fetch active policy OR use hardcoded defaults                  │    │
+│   │  2. Apply weights from policy                                       │    │
+│   │  3. Log which policy_version was used                              │    │
+│   │                                                                     │    │
+│   └────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**2. New Edge Function: `supabase/functions/get-signed-photo-url/index.ts`**
-```typescript
-// Creates signed URLs with 1-hour TTL for item photos
-// Input: { path: string } (e.g., "user-id/photo-name.jpg")
-// Output: { signedUrl: string, expiresAt: number }
+---
+
+## Database Schema
+
+### Table 1: `algorithm_policies`
+
+Stores AI-generated policy versions with weights and configuration.
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unique identifier |
+| `policy_version` | text | UNIQUE NOT NULL | Version identifier (e.g., "v1.0.0", "v1.1.0") |
+| `weights` | jsonb | NOT NULL | Weight parameters for recommendation scoring |
+| `exploration_policy` | jsonb | NOT NULL | Exploration/randomness configuration |
+| `reciprocal_policy` | jsonb | NOT NULL | Reciprocal matching configuration |
+| `active` | boolean | DEFAULT false | Whether this is the active production policy |
+| `description` | text | NULL | Optional description of changes |
+| `created_by` | text | NULL | Creator identifier ("ai_optimizer" or admin) |
+| `created_at` | timestamptz | DEFAULT now() | Creation timestamp |
+
+**Constraint**: Only one policy can have `active = true` at a time (enforced by trigger).
+
+**Example `weights` JSONB:**
+```json
+{
+  "geoScore": 0.26,
+  "categorySimilarity": 0.16,
+  "exchangeCompatibility": 0.22,
+  "behaviorAffinity": 0.12,
+  "freshness": 0.05,
+  "conditionScore": 0.07,
+  "reciprocalBoost": 0.12
+}
 ```
 
-**3. Frontend Changes**
-- Create `src/hooks/useSignedImageUrl.tsx` hook
-- Update all image components to use signed URLs:
-  - `SwipeCard.tsx` (line 129)
-  - `ProfileItemsGrid.tsx`
-  - `Items.tsx`, `NewItem.tsx`, `EditItem.tsx`
-
-**4. Documentation**
-- Add note that EXIF stripping is NOT implemented (requires image processing library)
-- Document as known limitation for future enhancement
-
----
-
-## Task 3: LOCATION_PRIVACY_FIX
-
-**Objective**: Prevent exact coordinates from being exposed to unauthorized users.
-
-### Current State
-- `profiles` table RLS allows SELECT on all columns including `latitude`, `longitude`
-- `items` table similarly exposes exact coordinates
-- Frontend calculates distance using exact coords
-
-### Changes Required
-
-**1. Database Migration - Restrict coordinate access**
-```sql
--- Drop existing permissive policy
-DROP POLICY IF EXISTS "Users can view all profiles" ON profiles;
-
--- Create view that excludes exact coordinates for other users
-CREATE OR REPLACE VIEW public.profiles_public AS
-SELECT 
-  id,
-  user_id,
-  display_name,
-  avatar_url,
-  bio,
-  location, -- Text location only
-  last_seen,
-  created_at,
-  -- Round coordinates to ~1km precision for distance calculation
-  ROUND(latitude::numeric, 2) as latitude_approx,
-  ROUND(longitude::numeric, 2) as longitude_approx
-FROM profiles;
-
--- Users can see their own exact location
-CREATE POLICY "Users can view all profiles with limited location"
-ON profiles FOR SELECT
-USING (true);
--- Actual coordinate masking happens in application layer
+**Example `exploration_policy` JSONB:**
+```json
+{
+  "randomness": 0.08,
+  "cold_start_boost": 0.15,
+  "stale_item_penalty": 0.20,
+  "cold_start_threshold_swipes": 5,
+  "stale_threshold_days": 14
+}
 ```
 
-**2. Frontend Changes**
-- `src/hooks/useRecommendations.tsx`: Already only uses coords for distance calculation
-- `src/components/discover/SwipeCard.tsx`: Only shows formatted distance, not coords
-- `src/pages/MapView.tsx`: Uses item coordinates - acceptable for map functionality
-- Add comment documenting that item locations are intentionally visible on map
-
-**3. Alternative Simpler Approach**
-Since the custom knowledge states "we should use location to match items this is not a real threat", we document this as an accepted risk rather than adding complexity.
-
----
-
-## Task 4: CONTENT_MODERATION_SYSTEM
-
-**Objective**: Add user reporting and admin moderation capabilities.
-
-### Database Migration
-```sql
--- Create reports table
-CREATE TABLE public.reports (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  reporter_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  report_type text NOT NULL CHECK (report_type IN ('item', 'user', 'message')),
-  target_id uuid NOT NULL, -- Item ID, User ID, or Message ID
-  reason text NOT NULL CHECK (reason IN (
-    'prohibited_item', 'fake_listing', 'spam', 'harassment', 
-    'inappropriate_content', 'scam', 'other'
-  )),
-  description text,
-  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'reviewed', 'resolved', 'dismissed')),
-  admin_notes text,
-  resolved_by uuid REFERENCES auth.users(id),
-  created_at timestamptz NOT NULL DEFAULT now(),
-  resolved_at timestamptz
-);
-
--- Enable RLS
-ALTER TABLE public.reports ENABLE ROW LEVEL SECURITY;
-
--- Users can create reports
-CREATE POLICY "Users can create reports"
-ON reports FOR INSERT TO authenticated
-WITH CHECK (auth.uid() = reporter_id);
-
--- Users can view their own reports
-CREATE POLICY "Users can view own reports"
-ON reports FOR SELECT TO authenticated
-USING (auth.uid() = reporter_id);
-
--- Admins can view/update all reports
-CREATE POLICY "Admins can manage reports"
-ON reports FOR ALL TO authenticated
-USING (public.is_admin(auth.uid()));
-
--- Add soft-delete flag to items
-ALTER TABLE items ADD COLUMN IF NOT EXISTS is_flagged boolean NOT NULL DEFAULT false;
-ALTER TABLE items ADD COLUMN IF NOT EXISTS flagged_reason text;
+**Example `reciprocal_policy` JSONB:**
+```json
+{
+  "priority": "medium",
+  "boost_cap": 0.25
+}
 ```
 
-### Frontend Changes
+---
 
-**1. New Component: `src/components/report/ReportButton.tsx`**
-- Dialog with reason selection
-- Submits to reports table
-- Shows confirmation toast
+### Table 2: `algorithm_policy_metrics`
 
-**2. Add Report Button to:**
-- `src/components/discover/ItemDetailsSheet.tsx` (item reporting)
-- `src/pages/UserProfile.tsx` (user reporting)
-- `src/pages/Chat.tsx` (message reporting)
+Stores aggregated outcome metrics for AI learning and A/B testing analysis.
 
-**3. Admin Section: `src/components/admin/sections/ReportsSection.tsx`**
-- List pending reports
-- Review/resolve functionality
-- Flag items as prohibited
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unique identifier |
+| `policy_version` | text | NOT NULL, REFERENCES algorithm_policies(policy_version) | Policy this metric belongs to |
+| `metric_snapshot` | jsonb | NOT NULL | Aggregated metrics data |
+| `period_start` | date | NOT NULL | Start of measurement period |
+| `period_end` | date | NOT NULL | End of measurement period |
+| `created_at` | timestamptz | DEFAULT now() | When metric was recorded |
+
+**Example `metric_snapshot` JSONB:**
+```json
+{
+  "total_recommendations": 15420,
+  "total_matches": 342,
+  "total_completed_exchanges": 89,
+  "match_to_exchange_conversion": 0.26,
+  "avg_time_to_match_hours": 48.3,
+  "avg_distance_of_exchanges_km": 12.7,
+  "category_pair_success_rates": {
+    "electronics->games": 0.42,
+    "clothes->books": 0.18
+  },
+  "cold_start_performance": {
+    "items_with_less_5_swipes": 234,
+    "matches_from_cold_items": 12
+  }
+}
+```
 
 ---
 
-## Task 5: AUTH_HARDENING
+### Table 3: `algorithm_policy_rollouts`
 
-**Objective**: Prevent bot abuse and require email verification.
+Controls gradual activation, A/B testing, and instant rollback.
 
-### Current State
-- Email auto-confirm status: UNKNOWN (need to verify)
-- No rate limiting on auth endpoints
-- CAPTCHA: NOT implemented
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | uuid | PRIMARY KEY, DEFAULT gen_random_uuid() | Unique identifier |
+| `policy_version` | text | NOT NULL, REFERENCES algorithm_policies(policy_version) | Policy being rolled out |
+| `traffic_percentage` | integer | CHECK (>= 0 AND <= 100), DEFAULT 0 | Percentage of traffic receiving this policy |
+| `enabled` | boolean | DEFAULT false | Whether rollout is active |
+| `started_at` | timestamptz | NULL | When rollout began |
+| `ended_at` | timestamptz | NULL | When rollout ended |
+| `created_at` | timestamptz | DEFAULT now() | Creation timestamp |
 
-### Changes Required
-
-**1. Supabase Auth Configuration**
-Use the `configure-auth` tool to:
-- Disable email auto-confirm (if currently enabled)
-- Require email verification before login
-
-**2. Documentation for CAPTCHA**
-Create `docs/CAPTCHA_INTEGRATION.md`:
-- Recommend hCaptcha or Cloudflare Turnstile
-- Document integration points:
-  - `src/components/landing/AuthSection.tsx` sign-up form
-  - Verification before sensitive actions
-
-**3. Rate Limiting Documentation**
-- Edge functions already have Supabase's built-in rate limits
-- Document recommendation for additional rate limiting via Cloudflare or similar
+**Rollout Strategy:**
+- Start with `traffic_percentage = 10`
+- Monitor metrics for 24-48 hours
+- Gradually increase to 50%, then 100%
+- Set `enabled = false` for instant rollback
 
 ---
 
-## Task 6: MATCH_CREATION_RACE_SAFETY
+## RLS Policies
 
-**Objective**: Ensure match creation is transaction-safe.
+| Table | Policy | Command | Rule |
+|-------|--------|---------|------|
+| algorithm_policies | Public read | SELECT | `true` (edge functions need access) |
+| algorithm_policies | Admin write | INSERT/UPDATE | `is_admin(auth.uid())` |
+| algorithm_policy_metrics | System only | ALL | `false` (service role only) |
+| algorithm_policy_rollouts | Public read | SELECT | `true` (edge functions need access) |
+| algorithm_policy_rollouts | Admin write | INSERT/UPDATE | `is_admin(auth.uid())` |
 
-### Current State (VERIFIED SAFE)
-The `check_for_match()` trigger already implements:
-- `LEAST()/GREATEST()` for canonical ordering (line verified in function)
-- `ON CONFLICT DO NOTHING` to prevent duplicates
+---
+
+## Database Functions
+
+### Function: `get_active_policy()`
+
+Returns the currently active policy, or NULL if none exists.
 
 ```sql
--- Existing implementation (verified safe):
-INSERT INTO public.matches (item_a_id, item_b_id)
-VALUES (
-  LEAST(NEW.swiper_item_id, NEW.swiped_item_id),
-  GREATEST(NEW.swiper_item_id, NEW.swiped_item_id)
+CREATE OR REPLACE FUNCTION public.get_active_policy()
+RETURNS TABLE (
+  policy_version text,
+  weights jsonb,
+  exploration_policy jsonb,
+  reciprocal_policy jsonb
 )
-ON CONFLICT DO NOTHING;
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    p.policy_version,
+    p.weights,
+    p.exploration_policy,
+    p.reciprocal_policy
+  FROM algorithm_policies p
+  WHERE p.active = true
+  LIMIT 1;
+END;
+$$;
 ```
 
-**No changes required** - existing implementation is correct.
+### Function: `get_policy_for_request()`
 
----
+Returns policy based on rollout percentage (for A/B testing).
 
-## Task 7: PAYMENT_VERIFICATION
-
-**Objective**: Make Pro subscription activation secure via webhook verification.
-
-### Current State (CRITICAL VULNERABILITY)
-- `CheckoutSuccess.tsx` activates Pro status client-side on page load
-- No server-side verification of payment
-- User could manually navigate to `/checkout/success` and get Pro
-
-### Changes Required
-
-**1. New Edge Function: `supabase/functions/dodo-webhook/index.ts`**
-```typescript
-// Webhook handler for Dodo Payments
-// Verifies signature, updates subscription on 'payment.succeeded' event
-// Idempotency: Uses dodo_session_id as unique key
-```
-
-**2. Update `CheckoutSuccess.tsx`**
-- Remove direct subscription upsert (lines 47-56)
-- Only display loading/confirmation UI
-- Poll subscription status instead of creating it
-- Add timeout with retry/support message
-
-**3. Database Migration**
 ```sql
--- Add unique constraint for idempotency
-ALTER TABLE user_subscriptions 
-ADD CONSTRAINT user_subscriptions_dodo_session_unique 
-UNIQUE (dodo_session_id);
+CREATE OR REPLACE FUNCTION public.get_policy_for_request(request_hash integer)
+RETURNS TABLE (
+  policy_version text,
+  weights jsonb,
+  exploration_policy jsonb,
+  reciprocal_policy jsonb
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+DECLARE
+  bucket integer;
+  selected_version text;
+BEGIN
+  bucket := request_hash % 100;
+  
+  -- Check rollouts first
+  SELECT r.policy_version INTO selected_version
+  FROM algorithm_policy_rollouts r
+  WHERE r.enabled = true
+    AND bucket < r.traffic_percentage
+  ORDER BY r.traffic_percentage DESC
+  LIMIT 1;
+  
+  -- If no rollout matched, use active policy
+  IF selected_version IS NULL THEN
+    SELECT p.policy_version INTO selected_version
+    FROM algorithm_policies p
+    WHERE p.active = true
+    LIMIT 1;
+  END IF;
+  
+  -- Return the selected policy
+  RETURN QUERY
+  SELECT 
+    p.policy_version,
+    p.weights,
+    p.exploration_policy,
+    p.reciprocal_policy
+  FROM algorithm_policies p
+  WHERE p.policy_version = selected_version;
+END;
+$$;
 ```
 
-**4. Add to `supabase/config.toml`**
-```toml
-[functions.dodo-webhook]
-verify_jwt = false
+### Trigger: `ensure_single_active_policy`
+
+Ensures only one policy is active at a time.
+
+```sql
+CREATE OR REPLACE FUNCTION public.ensure_single_active_policy()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  IF NEW.active = true THEN
+    UPDATE algorithm_policies 
+    SET active = false 
+    WHERE id != NEW.id AND active = true;
+  END IF;
+  RETURN NEW;
+END;
+$$;
 ```
 
 ---
 
-## Task 8: RECIPROCAL_OPTIMIZER_SAFETY
+## Edge Function Changes
 
-**Objective**: Prevent optimizer from breaking at scale.
+### Update `recommend-items/index.ts`
 
-### Current State
-- Processes ALL active items and swipes in memory
-- No execution limits
-- No TTL on `reciprocal_boost` column
-- Failure returns 500 but doesn't affect core app
+**Change 1**: Add policy loading at request start
 
-### Changes Required
-
-**1. Update `supabase/functions/reciprocal-optimizer/index.ts`**
 ```typescript
-// Add at top of handler:
-const MAX_ITEMS = 1000;
-const MAX_SWIPES = 10000;
-const BOOST_TTL_DAYS = 7;
-
-// Add batching:
-const items = (allItems || []).slice(0, MAX_ITEMS);
-const swipes = (allSwipes || []).slice(0, MAX_SWIPES);
-
-// Add logging for limits:
-if (allItems.length > MAX_ITEMS) {
-  console.warn(`Items truncated: ${allItems.length} -> ${MAX_ITEMS}`);
+// Load active policy from database
+async function loadPolicy(supabaseAdmin: any): Promise<Policy | null> {
+  const { data, error } = await supabaseAdmin
+    .rpc('get_active_policy')
+    .single();
+  
+  if (error || !data) {
+    log('warn', 'No active policy found, using defaults');
+    return null;
+  }
+  
+  return data as Policy;
 }
 ```
 
-**2. Database Migration - Add boost_expires_at**
-```sql
-ALTER TABLE items ADD COLUMN IF NOT EXISTS boost_expires_at timestamptz;
+**Change 2**: Use loaded policy or fall back to hardcoded defaults
 
--- Update recommendation function to check expiry
--- (reciprocal_boost is ignored if boost_expires_at < now())
-```
-
-**3. Update Optimizer to Set Expiry**
 ```typescript
-// When updating reciprocal_boost:
-.update({ 
-  reciprocal_boost: boost,
-  boost_expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-})
-```
+// At start of request handler:
+const policy = await loadPolicy(supabaseAdmin);
 
----
+// Use policy weights or defaults
+const weights = policy?.weights ?? WEIGHTS;
+const explorationFactor = policy?.exploration_policy?.randomness ?? EXPLORATION_FACTOR;
 
-## Task 9: RECOMMENDATION_STABILITY
-
-**Objective**: Improve recommendation robustness.
-
-### Current State
-- Disliked items ARE excluded (verified in code line 335-337)
-- Weights are hardcoded constants
-- No logging hooks for ML upgrade
-
-### Changes Required
-
-**1. Already Implemented (No Change Needed)**
-- Disliked items excluded via `swipedItemIds` filter
-
-**2. Make Weights Configurable**
-Create `supabase/functions/recommend-items/config.ts`:
-```typescript
-export const WEIGHTS = {
-  categorySimilarity: 0.18,
-  geoScore: 0.28,
-  // ... rest of weights
-};
-// Future: Load from database or environment
-```
-
-**3. Add Structured Logging**
-```typescript
-// Add to recommendation function:
-console.log(JSON.stringify({
-  type: 'recommendation_request',
-  user_id: ownerUserId,
-  item_id: myItemId,
+// Log which policy was used
+log('info', 'Recommendation complete', { 
+  user_id: ownerUserId, 
+  item_id: myItemId, 
+  policy_version: policy?.policy_version ?? 'default',
   pool_size: unswiped.length,
-  expanded: searchExpanded,
-  timestamp: new Date().toISOString(),
-}));
+  returned: rankedItems.length,
+  expanded: searchExpanded 
+});
 ```
 
----
+**Change 3**: Implement cold_start_boost and stale_item_penalty
 
-## Task 10: OBSERVABILITY_AND_SAFETY
-
-**Objective**: Improve system visibility and failure handling.
-
-### Changes Required
-
-**1. Add Structured Logging to All Edge Functions**
-Create `supabase/functions/_shared/logger.ts`:
 ```typescript
-export function log(level: 'info' | 'warn' | 'error', message: string, data?: Record<string, unknown>) {
-  console.log(JSON.stringify({
-    level,
-    message,
-    ...data,
-    timestamp: new Date().toISOString(),
-  }));
+// Calculate freshness with exploration policy
+function calculateFreshnessWithPolicy(
+  createdAt: string, 
+  totalSwipes: number,
+  explorationPolicy: ExplorationPolicy
+): { freshness: number; coldStartBoost: number; stalePenalty: number } {
+  const ageInDays = (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24);
+  const freshness = 1 / (1 + ageInDays);
+  
+  // Cold start boost for new items
+  const isColdStart = totalSwipes < (explorationPolicy.cold_start_threshold_swipes ?? 5);
+  const coldStartBoost = isColdStart ? (explorationPolicy.cold_start_boost ?? 0) : 0;
+  
+  // Stale penalty for items with no recent activity
+  const isStale = ageInDays > (explorationPolicy.stale_threshold_days ?? 14);
+  const stalePenalty = isStale ? (explorationPolicy.stale_item_penalty ?? 0) : 0;
+  
+  return { freshness, coldStartBoost, stalePenalty };
 }
 ```
 
-**2. Add Safe Fallbacks**
-Already implemented in `useRecommendations.tsx`:
-- `fallbackFetch()` function exists (line 321)
-- Returns empty array on error
-
-**3. Verify No Sensitive Data in Logs**
-- User IDs are logged (acceptable for debugging)
-- Email addresses: NOT logged
-- Passwords: NOT logged
-- Session tokens: NOT logged
-
 ---
 
-## Task 11: LEGAL_AND_COMPLIANCE
+## Default Policy Seed Data
 
-**Objective**: Add required legal pages and disclaimers.
+Insert the current hardcoded weights as version 1.0.0:
 
-### Changes Required
-
-**1. Create Legal Pages**
-
-**`src/pages/Terms.tsx`**
-```tsx
-// Placeholder Terms of Service
-// Sections: Acceptance, Eligibility, User Conduct, Prohibited Items,
-// Dispute Resolution, Liability Limitation, Termination
+```sql
+INSERT INTO algorithm_policies (
+  policy_version,
+  weights,
+  exploration_policy,
+  reciprocal_policy,
+  active,
+  description,
+  created_by
+) VALUES (
+  'v1.0.0',
+  '{
+    "geoScore": 0.28,
+    "categorySimilarity": 0.18,
+    "exchangeCompatibility": 0.18,
+    "behaviorAffinity": 0.10,
+    "freshness": 0.06,
+    "conditionScore": 0.08,
+    "reciprocalBoost": 0.12
+  }'::jsonb,
+  '{
+    "randomness": 0.1,
+    "cold_start_boost": 0,
+    "stale_item_penalty": 0,
+    "cold_start_threshold_swipes": 5,
+    "stale_threshold_days": 14
+  }'::jsonb,
+  '{
+    "priority": "medium",
+    "boost_cap": 0.5
+  }'::jsonb,
+  true,
+  'Initial baseline policy matching hardcoded defaults',
+  'system'
+);
 ```
 
-**`src/pages/Privacy.tsx`**
-```tsx
-// Placeholder Privacy Policy  
-// Sections: Data Collection, Usage, Storage, Sharing, Rights (GDPR),
-// Cookies, Contact Information
+---
+
+## Rollback Strategy
+
+### Instant Rollback (< 1 second)
+
+1. **Disable problematic rollout:**
+   ```sql
+   UPDATE algorithm_policy_rollouts 
+   SET enabled = false, ended_at = now() 
+   WHERE policy_version = 'v1.1.0';
+   ```
+
+2. **Or switch active policy:**
+   ```sql
+   UPDATE algorithm_policies 
+   SET active = true 
+   WHERE policy_version = 'v1.0.0';
+   -- Trigger automatically deactivates all others
+   ```
+
+### Kill Switch
+
+If no database policy is found, the edge function falls back to hardcoded defaults:
+```typescript
+const weights = policy?.weights ?? WEIGHTS; // Hardcoded fallback
 ```
 
-**`src/pages/Safety.tsx`**
-```tsx
-// Safety Guidelines for In-Person Exchanges
-// - Meet in public places
-// - Bring a friend
-// - Trust your instincts
-// - Report suspicious behavior
-```
-
-**2. Update Router in `src/App.tsx`**
-```tsx
-<Route path="/terms" element={<Terms />} />
-<Route path="/privacy" element={<Privacy />} />
-<Route path="/safety" element={<Safety />} />
-```
-
-**3. Update Footer Links**
-In `src/components/landing/Footer.tsx`:
-- Change `<span>` to `<Link to="/terms">` for Terms
-- Change `<span>` to `<Link to="/privacy">` for Privacy
-
-**4. Add Safety Link**
-- Add to Settings page
-- Add to Chat page header
-
-**5. Document Prohibited Items**
-Add section in Terms covering:
-- Illegal items, weapons, drugs
-- Stolen property
-- Counterfeit goods
-- Hazardous materials
+This means deleting all active policies instantly reverts to safe defaults.
 
 ---
 
-## Implementation Priority Order
+## Files to Create/Modify
 
-| Priority | Task ID | Risk Level | Effort | Dependencies |
-|----------|---------|------------|--------|--------------|
-| 1 | PAYMENT_VERIFICATION | CRITICAL | Medium | None |
-| 2 | AI_CLAIM_CORRECTION | High (Legal) | Low | None |
-| 3 | CONTENT_MODERATION_SYSTEM | Medium | Medium | None |
-| 4 | LEGAL_AND_COMPLIANCE | Medium | Low | None |
-| 5 | AUTH_HARDENING | Medium | Low | Supabase config |
-| 6 | IMAGE_STORAGE_SECURITY | Medium | High | Breaking change |
-| 7 | RECIPROCAL_OPTIMIZER_SAFETY | Low | Low | None |
-| 8 | RECOMMENDATION_STABILITY | Low | Low | None |
-| 9 | OBSERVABILITY_AND_SAFETY | Low | Low | None |
-| 10 | LOCATION_PRIVACY_FIX | Low* | Low | None |
-| 11 | MATCH_CREATION_RACE_SAFETY | N/A | None | Already safe |
+### New Files
 
-*Per user custom knowledge: "location to match items this is not a real threat"
+| File | Purpose |
+|------|---------|
+| `supabase/migrations/[timestamp]_algorithm_policy_tables.sql` | Database schema migration |
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/recommend-items/index.ts` | Add policy loading, logging, new scoring parameters |
+| `src/integrations/supabase/types.ts` | Auto-updated after migration |
 
 ---
 
-## Breaking Changes Warning
+## Implementation Steps
 
-1. **IMAGE_STORAGE_SECURITY**: Making bucket private will break existing image URLs. Requires:
-   - Frontend code update BEFORE bucket change
-   - Or: Gradual rollout with fallback
-
-2. **PAYMENT_VERIFICATION**: Removing client-side activation could leave users stuck if webhook fails. Requires:
-   - Robust error handling
-   - Manual activation fallback for support
-
----
-
-## Testing Requirements
-
-| Task | Test Method |
-|------|-------------|
-| AI Claims | Manual review of all translation files |
-| Image Security | Verify signed URLs work, old URLs fail |
-| Moderation | Submit test report, verify admin can see it |
-| Payment Webhook | Use Dodo test mode to trigger webhook |
-| Auth Hardening | Attempt signup without email verification |
-| Legal Pages | Navigate to /terms, /privacy, /safety |
+1. **Create database migration** with three tables, RLS policies, and functions
+2. **Insert seed data** for v1.0.0 baseline policy
+3. **Update recommend-items edge function** to:
+   - Load active policy from database
+   - Fall back to hardcoded defaults if no policy
+   - Implement cold_start_boost and stale_item_penalty
+   - Log which policy version was used
+4. **Deploy edge function** changes
+5. **Verify** fallback works by querying with no active policies
 
 ---
 
-## Known Limitations (Not Addressed)
+## Testing Plan
 
-1. **EXIF Metadata Stripping**: Requires server-side image processing - documented as future enhancement
-2. **Push Notifications**: Not implemented - documented in WhitePaper
-3. **Identity Verification (KYC)**: Not implemented - documented in WhitePaper
-4. **Automated Content Moderation**: Explicitly excluded per requirements
-5. **Server-Side Rate Limiting**: Relies on Supabase/Cloudflare defaults
-
----
-
-## Estimated Implementation Time
-
-- Priority 1-4 (Critical/High): ~8 hours
-- Priority 5-9 (Medium/Low): ~4 hours
-- Total: ~12 hours of development work
+| Test | Method |
+|------|--------|
+| Policy loads correctly | Call recommend-items, check logs for policy_version |
+| Fallback works | Set all policies to inactive, verify default weights used |
+| Rollout targeting | Create rollout at 50%, verify ~half of requests use new policy |
+| Instant rollback | Disable rollout, verify immediate switch to previous policy |
+| A/B metrics | Compare match rates between policy versions over 48 hours |
 
 ---
 
-## Final Verdict After Implementation
+## Summary
 
-**Production Readiness**: YES (with Priority 1-4 completed)
+| Component | Description |
+|-----------|-------------|
+| `algorithm_policies` | Stores AI-generated policy versions |
+| `algorithm_policy_metrics` | Stores outcome metrics for learning |
+| `algorithm_policy_rollouts` | Controls gradual activation and A/B testing |
+| `get_active_policy()` | Returns current active policy |
+| `get_policy_for_request()` | Returns policy based on rollout percentage |
+| Fallback | Hardcoded defaults if no policy exists |
+| Rollback | Set `active = false` or disable rollout (< 1 second) |
 
-The most critical issue is PAYMENT_VERIFICATION - the current client-side activation is a security vulnerability that allows users to get Pro status without paying. This must be fixed before any commercial launch.
+This design ensures:
+- All AI outputs are stored and versioned
+- Rollback is instant
+- No redeployment required for policy changes
+- A/B testing capability built-in
+- Safe fallback to hardcoded defaults
+
