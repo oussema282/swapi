@@ -126,7 +126,11 @@ export type Database = {
       content_moderation_logs: {
         Row: {
           action_taken: string
+          admin_decision: string | null
+          admin_decision_at: string | null
           analysis_result: Json | null
+          appeal_notes: string | null
+          appeal_status: string | null
           confidence_score: number | null
           content_type: string
           content_url: string
@@ -140,7 +144,11 @@ export type Database = {
         }
         Insert: {
           action_taken: string
+          admin_decision?: string | null
+          admin_decision_at?: string | null
           analysis_result?: Json | null
+          appeal_notes?: string | null
+          appeal_status?: string | null
           confidence_score?: number | null
           content_type: string
           content_url: string
@@ -154,7 +162,11 @@ export type Database = {
         }
         Update: {
           action_taken?: string
+          admin_decision?: string | null
+          admin_decision_at?: string | null
           analysis_result?: Json | null
+          appeal_notes?: string | null
+          appeal_status?: string | null
           confidence_score?: number | null
           content_type?: string
           content_url?: string
@@ -520,40 +532,61 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          ban_reason: string | null
+          banned_at: string | null
           bio: string | null
           created_at: string
           display_name: string
           id: string
+          is_banned: boolean | null
+          is_suspended: boolean | null
+          is_verified: boolean | null
           last_seen: string | null
           latitude: number | null
           location: string | null
           longitude: number | null
+          suspended_until: string | null
+          suspension_reason: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
+          ban_reason?: string | null
+          banned_at?: string | null
           bio?: string | null
           created_at?: string
           display_name: string
           id?: string
+          is_banned?: boolean | null
+          is_suspended?: boolean | null
+          is_verified?: boolean | null
           last_seen?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          suspended_until?: string | null
+          suspension_reason?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
+          ban_reason?: string | null
+          banned_at?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string
           id?: string
+          is_banned?: boolean | null
+          is_suspended?: boolean | null
+          is_verified?: boolean | null
           last_seen?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          suspended_until?: string | null
+          suspension_reason?: string | null
           updated_at?: string
           user_id?: string
         }

@@ -21,7 +21,7 @@ import { formatDistanceToNow } from 'date-fns';
 interface Column {
   key: string;
   label: string;
-  type?: 'text' | 'avatar' | 'badge' | 'date' | 'actions';
+  type?: 'text' | 'avatar' | 'badge' | 'date' | 'actions' | 'custom';
   badgeVariant?: (value: string) => 'default' | 'secondary' | 'destructive' | 'outline';
 }
 
@@ -125,6 +125,10 @@ export function DataTable<T extends Record<string, any>>({
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null;
+
+      case 'custom':
+        // Return the value directly - it should be a React node
+        return value ?? <span className="text-sm">—</span>;
 
       default:
         return <span className="text-sm">{value ?? '—'}</span>;
