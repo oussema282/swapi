@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.get-signed-photo-url]
 verify_jwt = false
+
+[functions.ai-policy-optimizer]
+verify_jwt = false
