@@ -37,8 +37,13 @@ const sectionTitles: Record<string, { title: string; description: string }> = {
   users: { title: 'User Management', description: 'Manage user accounts and permissions' },
   items: { title: 'Item Management', description: 'Review and moderate listings' },
   matches: { title: 'Match Management', description: 'Monitor swaps and transactions' },
+  reports: { title: 'Reports', description: 'Review and resolve user reports' },
+  moderation: { title: 'AI Moderation', description: 'Content safety and fraud detection' },
+  subscriptions: { title: 'Subscriptions', description: 'Manage Pro subscribers and revenue' },
   analytics: { title: 'Analytics', description: 'Performance metrics and insights' },
+  algorithm: { title: 'Algorithm', description: 'Matching algorithm policy management' },
   roles: { title: 'Role Management', description: 'Configure admin access' },
+  system: { title: 'System Health', description: 'Monitor backend services and database' },
 };
 
 export function AdminHeader({ activeSection, onSectionChange }: AdminHeaderProps) {
