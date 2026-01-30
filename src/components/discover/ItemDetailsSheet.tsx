@@ -2,8 +2,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
-import { MapPin, Send, Flag, Package, Star, DollarSign, ArrowLeftRight, User } from 'lucide-react';
+import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
+import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
 
@@ -200,6 +201,7 @@ export function ItemDetailsSheet({
                 Invite to Deal
               </Button>
             )}
+            <ReportButton reportType="item" targetId={item.id} variant="icon" />
           </div>
         </div>
       </SheetContent>

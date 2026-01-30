@@ -6,6 +6,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Structured logging
+function log(level: 'info' | 'warn' | 'error', message: string, data?: Record<string, unknown>) {
+  console.log(JSON.stringify({ level, message, ...data, timestamp: new Date().toISOString() }));
+}
+
 // Pre-computed category embeddings (5-dimensional vectors)
 // Categories are mapped to semantic dimensions: [tech, fashion, media, sports, home]
 const CATEGORY_EMBEDDINGS: Record<string, number[]> = {
@@ -27,7 +32,7 @@ const CONDITION_WEIGHTS: Record<string, number> = {
   poor: 0.3,
 };
 
-// Algorithm weights - Geo score prioritized for location-based discovery
+// Configurable algorithm weights - can be loaded from database in future
 const WEIGHTS = {
   categorySimilarity: 0.18,
   geoScore: 0.28,
@@ -255,7 +260,10 @@ serve(async (req) => {
       });
     }
 
-    console.log(`Processing recommendation request for myItemId=${myItemId}, expanded=${expandedSearch}`);
+    log('info', 'Processing recommendation request', { 
+      item_id: myItemId, 
+      expanded: expandedSearch 
+    });
 
     // Get my item
     const { data: myItem, error: myItemError } = await supabaseAdmin
@@ -398,13 +406,21 @@ serve(async (req) => {
       score: Math.round(score * 1000) / 1000,
     }));
 
-    console.log(`Recommended ${rankedItems.length} items for owner ${ownerUserId}${searchExpanded ? ' (expanded)' : ''}`);
+    log('info', 'Recommendation complete', { 
+      user_id: ownerUserId, 
+      item_id: myItemId, 
+      pool_size: unswiped.length,
+      returned: rankedItems.length,
+      expanded: searchExpanded 
+    });
 
     return new Response(JSON.stringify({ rankedItems, total: unswiped.length, searchExpanded }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error in recommend-items:", error);
+    log('error', 'Recommendation error', { 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    });
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

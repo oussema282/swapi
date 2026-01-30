@@ -180,13 +180,16 @@ export type Database = {
       }
       items: {
         Row: {
+          boost_expires_at: string | null
           category: Database["public"]["Enums"]["item_category"]
           condition: Database["public"]["Enums"]["item_condition"]
           created_at: string
           description: string | null
+          flagged_reason: string | null
           id: string
           is_active: boolean
           is_archived: boolean
+          is_flagged: boolean
           latitude: number | null
           longitude: number | null
           photos: string[] | null
@@ -199,13 +202,16 @@ export type Database = {
           value_min: number | null
         }
         Insert: {
+          boost_expires_at?: string | null
           category: Database["public"]["Enums"]["item_category"]
           condition: Database["public"]["Enums"]["item_condition"]
           created_at?: string
           description?: string | null
+          flagged_reason?: string | null
           id?: string
           is_active?: boolean
           is_archived?: boolean
+          is_flagged?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
@@ -218,13 +224,16 @@ export type Database = {
           value_min?: number | null
         }
         Update: {
+          boost_expires_at?: string | null
           category?: Database["public"]["Enums"]["item_category"]
           condition?: Database["public"]["Enums"]["item_condition"]
           created_at?: string
           description?: string | null
+          flagged_reason?: string | null
           id?: string
           is_active?: boolean
           is_archived?: boolean
+          is_flagged?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
@@ -360,6 +369,48 @@ export type Database = {
           longitude?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          description: string | null
+          id: string
+          reason: string
+          report_type: string
+          reporter_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          target_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          reason: string
+          report_type: string
+          reporter_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          reason?: string
+          report_type?: string
+          reporter_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id?: string
         }
         Relationships: []
       }

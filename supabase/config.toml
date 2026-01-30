@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.reciprocal-optimizer]
 verify_jwt = false
+
+[functions.dodo-webhook]
+verify_jwt = false
+
+[functions.get-signed-photo-url]
+verify_jwt = false

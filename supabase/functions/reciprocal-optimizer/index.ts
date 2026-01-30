@@ -6,6 +6,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Scalability limits
+const MAX_ITEMS = 1000;
+const MAX_SWIPES = 10000;
+const BOOST_TTL_DAYS = 7;
+
+// Structured logging
+function log(level: 'info' | 'warn' | 'error', message: string, data?: Record<string, unknown>) {
+  console.log(JSON.stringify({ level, message, ...data, timestamp: new Date().toISOString() }));
+}
+
 // Category embeddings for preference learning
 const CATEGORY_EMBEDDINGS: Record<string, number[]> = {
   electronics: [0.9, 0.1, 0.3, 0.2, 0.2],
@@ -236,33 +246,53 @@ serve(async (req) => {
   }
 
   try {
-    console.log("Starting reciprocal optimization batch job...");
+    log('info', 'Starting reciprocal optimization batch job');
     
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Fetch all active items
-    const { data: items, error: itemsError } = await supabaseAdmin
+    // Fetch all active items with limit for scalability
+    const { data: allItems, error: itemsError } = await supabaseAdmin
       .from("items")
       .select("*")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .eq("is_archived", false)
+      .limit(MAX_ITEMS + 1); // +1 to detect truncation
 
     if (itemsError) throw itemsError;
-    console.log(`Loaded ${items?.length || 0} active items`);
+    
+    // Apply batching limit
+    const items = (allItems || []).slice(0, MAX_ITEMS);
+    if ((allItems?.length || 0) > MAX_ITEMS) {
+      log('warn', 'Items truncated for scalability', { 
+        original: allItems?.length, 
+        truncated: MAX_ITEMS 
+      });
+    }
+    log('info', 'Loaded active items', { count: items.length });
 
-    // Fetch all swipes for learning
-    const { data: swipes, error: swipesError } = await supabaseAdmin
+    // Fetch swipes with limit
+    const { data: allSwipes, error: swipesError } = await supabaseAdmin
       .from("swipes")
-      .select("swiper_item_id, swiped_item_id, liked");
+      .select("swiper_item_id, swiped_item_id, liked")
+      .limit(MAX_SWIPES + 1);
 
     if (swipesError) throw swipesError;
-    console.log(`Loaded ${swipes?.length || 0} swipes for learning`);
+    
+    const swipes = (allSwipes || []).slice(0, MAX_SWIPES);
+    if ((allSwipes?.length || 0) > MAX_SWIPES) {
+      log('warn', 'Swipes truncated for scalability', { 
+        original: allSwipes?.length, 
+        truncated: MAX_SWIPES 
+      });
+    }
+    log('info', 'Loaded swipes for learning', { count: swipes.length });
 
     // Build item lookup
     const itemsById = new Map<string, Item>();
-    for (const item of (items || [])) {
+    for (const item of items) {
       itemsById.set(item.id, item as Item);
     }
 
@@ -415,11 +445,16 @@ serve(async (req) => {
       }
     }
 
-    // Batch update reciprocal boosts
+    // Batch update reciprocal boosts with expiration
+    const boostExpiresAt = new Date(Date.now() + BOOST_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    
     for (const [itemId, boost] of boostMap) {
       await supabaseAdmin
         .from("items")
-        .update({ reciprocal_boost: boost })
+        .update({ 
+          reciprocal_boost: boost,
+          boost_expires_at: boostExpiresAt 
+        })
         .eq("id", itemId);
     }
 
@@ -428,12 +463,17 @@ serve(async (req) => {
     if (boostedIds.length > 0) {
       await supabaseAdmin
         .from("items")
-        .update({ reciprocal_boost: 0 })
+        .update({ reciprocal_boost: 0, boost_expires_at: null })
         .eq("is_active", true)
         .not("id", "in", `(${boostedIds.join(",")})`);
     }
 
-    console.log("Reciprocal optimization completed successfully");
+    log('info', 'Reciprocal optimization completed', {
+      users_processed: users.size,
+      two_way_opportunities: top2Way.length,
+      three_way_cycles: threeWayCycles.length,
+      items_boosted: boostMap.size,
+    });
 
     return new Response(JSON.stringify({
       success: true,
@@ -448,7 +488,9 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("Reciprocal optimizer error:", error);
+    log('error', 'Reciprocal optimizer error', { 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    });
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error" 
     }), {
