@@ -25,15 +25,15 @@ export function Footer() {
             <a href="#auth-section" className="hover:text-foreground transition-colors">
               {t('landing.footer.signIn')}
             </a>
-            <span className="hover:text-foreground transition-colors cursor-pointer">
+            <Link to="/terms" className="hover:text-foreground transition-colors">
               {t('landing.footer.terms')}
-            </span>
-            <span className="hover:text-foreground transition-colors cursor-pointer">
+            </Link>
+            <Link to="/privacy" className="hover:text-foreground transition-colors">
               {t('landing.footer.privacy')}
-            </span>
-            <span className="hover:text-foreground transition-colors cursor-pointer">
-              {t('landing.footer.contact')}
-            </span>
+            </Link>
+            <Link to="/safety" className="hover:text-foreground transition-colors">
+              Safety
+            </Link>
           </nav>
 
           {/* Language Switcher & Social */}

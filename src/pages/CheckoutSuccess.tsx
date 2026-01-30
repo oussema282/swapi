@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Crown, Home, Sparkles, Loader2, AlertCircle } from "lucide-react";
 import { Confetti } from "@/components/discover/Confetti";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useEntitlements } from "@/hooks/useEntitlements";
 import { useSystemState } from "@/hooks/useSystemState";
+
+const MAX_POLL_ATTEMPTS = 30; // Poll for up to 30 seconds
+const POLL_INTERVAL = 1000; // Poll every 1 second
 
 const CheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -16,84 +18,67 @@ const CheckoutSuccess = () => {
   const { user, refreshProfile } = useAuth();
   const { refreshEntitlements, isPro } = useEntitlements();
   const { startUpgrade, completeUpgrade, failUpgrade } = useSystemState();
-  const [isActivating, setIsActivating] = useState(true);
+  const [isPolling, setIsPolling] = useState(true);
+  const [pollAttempts, setPollAttempts] = useState(0);
   const [activationError, setActivationError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+
+  // Poll for subscription status (webhook-activated)
+  const pollSubscriptionStatus = useCallback(async (): Promise<boolean> => {
+    try {
+      const subscription = await refreshEntitlements();
+      if (subscription?.is_pro) {
+        console.log('Pro subscription detected');
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('Error polling subscription:', err);
+      return false;
+    }
+  }, [refreshEntitlements]);
 
   useEffect(() => {
-    const activateSubscription = async () => {
-      if (!user) {
-        setIsActivating(false);
-        return;
-      }
+    if (!user) {
+      setIsPolling(false);
+      return;
+    }
 
-      // If already Pro, show success immediately
-      if (isPro) {
-        setIsActivating(false);
-        return;
-      }
+    // If already Pro, show success immediately
+    if (isPro) {
+      setIsPolling(false);
+      return;
+    }
 
-      // Signal that upgrade is in progress
-      startUpgrade();
+    // Signal that upgrade is in progress
+    startUpgrade();
 
-      try {
-        console.log('Activating subscription for user:', user.id, 'session:', sessionId || 'none');
-        
-        // Calculate expiry date (1 month from now)
-        const expiresAt = new Date();
-        expiresAt.setMonth(expiresAt.getMonth() + 1);
-        
-        // Upsert subscription record - set user as Pro
-        // Works with or without session_id - reaching this page means payment was successful
-        const { error } = await supabase
-          .from('user_subscriptions')
-          .upsert({
-            user_id: user.id,
-            is_pro: true,
-            subscribed_at: new Date().toISOString(),
-            expires_at: expiresAt.toISOString(),
-            dodo_session_id: sessionId || `manual_${Date.now()}`,
-          }, { onConflict: 'user_id' });
-
-        if (error) {
-          console.error('Error activating subscription:', error);
-          setActivationError('Failed to activate subscription. Please contact support.');
-          failUpgrade();
-          setIsActivating(false);
-          return;
-        }
-
-        console.log('Subscription record updated, refreshing entitlements...');
-        
-        // Force refresh entitlement data and wait for it
-        const newSubscription = await refreshEntitlements();
-        
-        // Verify Pro status is now active
-        if (newSubscription?.is_pro) {
-          console.log('Pro subscription activated successfully');
-          completeUpgrade(true);
-          await refreshProfile();
-          setIsActivating(false);
-        } else if (retryCount < 3) {
-          // Retry a few times if not immediately reflected
-          console.log('Pro status not yet reflected, retrying...');
-          setRetryCount(prev => prev + 1);
-          setTimeout(() => activateSubscription(), 1000);
-        } else {
-          console.log('Pro status confirmed after retries');
-          completeUpgrade(true);
-          setIsActivating(false);
-        }
-      } catch (err) {
-        console.error('Error activating subscription:', err);
-        setActivationError('An unexpected error occurred. Please refresh the page.');
+    // Start polling for webhook-activated subscription
+    const pollInterval = setInterval(async () => {
+      setPollAttempts(prev => prev + 1);
+      
+      const isActive = await pollSubscriptionStatus();
+      
+      if (isActive) {
+        clearInterval(pollInterval);
+        completeUpgrade(true);
+        await refreshProfile();
+        setIsPolling(false);
+      } else if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+        clearInterval(pollInterval);
+        setIsPolling(false);
+        setActivationError(
+          'Subscription activation is taking longer than expected. ' +
+          'Please refresh the page or contact support if the issue persists. ' +
+          'Your payment was successful and your subscription will be activated shortly.'
+        );
         failUpgrade();
-        setIsActivating(false);
       }
-    };
+    }, POLL_INTERVAL);
 
-    activateSubscription();
-  }, [user, sessionId, refreshEntitlements, refreshProfile, retryCount, isPro, startUpgrade, completeUpgrade, failUpgrade]);
+    console.log('Started polling for subscription activation, session:', sessionId);
+
+    return () => clearInterval(pollInterval);
+  }, [user, sessionId, pollSubscriptionStatus, refreshProfile, pollAttempts, isPro, startUpgrade, completeUpgrade, failUpgrade]);
 
   // Show error state
   if (activationError) {
@@ -134,14 +119,16 @@ const CheckoutSuccess = () => {
 
   return (
     <div className="min-h-dvh w-full bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 relative overflow-hidden">
-      <Confetti show={!isActivating} />
+      <Confetti show={!isPolling} />
       
-      {isActivating ? (
+      {isPolling ? (
         <Card className="w-full max-w-md border-2 border-primary/20 shadow-2xl text-center">
           <CardContent className="py-12">
             <Loader2 className="w-12 h-12 mx-auto text-primary animate-spin mb-4" />
-            <p className="text-muted-foreground">Activating your Pro subscription...</p>
-            <p className="text-xs text-muted-foreground/60 mt-2">This may take a moment</p>
+            <p className="text-muted-foreground">Confirming your Pro subscription...</p>
+            <p className="text-xs text-muted-foreground/60 mt-2">
+              Verifying payment... ({Math.min(pollAttempts, MAX_POLL_ATTEMPTS)}/{MAX_POLL_ATTEMPTS})
+            </p>
           </CardContent>
         </Card>
       ) : (

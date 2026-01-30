@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
+import { ReportButton } from '@/components/report/ReportButton';
 import { ArrowLeft, User, Loader2, MapPin, Grid3X3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -155,7 +156,8 @@ export default function UserProfile() {
             <Button variant="ghost" size="icon" onClick={goBack} className="touch-manipulation">
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-lg font-display font-bold">Profile</h1>
+            <h1 className="text-lg font-display font-bold flex-1">Profile</h1>
+            {userId && <ReportButton reportType="user" targetId={userId} variant="icon" />}
           </div>
 
           {/* Profile Header */}

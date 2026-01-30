@@ -27,6 +27,9 @@ import WhitePaper from "./pages/WhitePaper";
 import Admin from "./pages/Admin";
 import Valhalla from "./pages/Valhalla";
 import NotFound from "./pages/NotFound";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Safety from "./pages/Safety";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +65,9 @@ const App = () => (
                   <Route path="/whitepaper" element={<WhitePaper />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/valhalla" element={<Valhalla />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/safety" element={<Safety />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </SystemPhaseRenderer>
