@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useContentModeration } from '@/hooks/useContentModeration';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
@@ -9,12 +10,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Camera, Loader2, Check, User, MapPin } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Check, User, MapPin, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function EditProfile() {
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
+  const { checkImage, isChecking: isModerating } = useContentModeration();
   const navigate = useNavigate();
   
   const [displayName, setDisplayName] = useState('');
@@ -59,6 +61,18 @@ export default function EditProfile() {
       const { data: { publicUrl } } = supabase.storage
         .from('item-photos')
         .getPublicUrl(filePath);
+
+      // Check image with AI content moderator
+      const moderationResult = await checkImage(publicUrl, 'avatar');
+      
+      if (!moderationResult.is_safe) {
+        // Delete the unsafe image
+        await supabase.storage.from('item-photos').remove([filePath]);
+        toast.error('Avatar blocked', {
+          description: `This image cannot be used: ${moderationResult.violation_type || 'policy violation'}`
+        });
+        return;
+      }
 
       setAvatarUrl(publicUrl);
       toast.success('Avatar uploaded!');
@@ -173,7 +187,7 @@ export default function EditProfile() {
                       )}
                     </Avatar>
                     <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full gradient-primary flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform">
-                      {uploading ? (
+                      {uploading || isModerating ? (
                         <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
                       ) : (
                         <Camera className="w-4 h-4 text-primary-foreground" />
@@ -183,7 +197,7 @@ export default function EditProfile() {
                         accept="image/*"
                         onChange={handleAvatarUpload}
                         className="hidden"
-                        disabled={uploading}
+                        disabled={uploading || isModerating}
                       />
                     </label>
                   </div>

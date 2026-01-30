@@ -123,6 +123,51 @@ export type Database = {
           },
         ]
       }
+      content_moderation_logs: {
+        Row: {
+          action_taken: string
+          analysis_result: Json | null
+          confidence_score: number | null
+          content_type: string
+          content_url: string
+          created_at: string
+          id: string
+          is_safe: boolean
+          review_notes: string | null
+          reviewed_by: string | null
+          user_id: string
+          violation_type: string | null
+        }
+        Insert: {
+          action_taken: string
+          analysis_result?: Json | null
+          confidence_score?: number | null
+          content_type: string
+          content_url: string
+          created_at?: string
+          id?: string
+          is_safe?: boolean
+          review_notes?: string | null
+          reviewed_by?: string | null
+          user_id: string
+          violation_type?: string | null
+        }
+        Update: {
+          action_taken?: string
+          analysis_result?: Json | null
+          confidence_score?: number | null
+          content_type?: string
+          content_url?: string
+          created_at?: string
+          id?: string
+          is_safe?: boolean
+          review_notes?: string | null
+          reviewed_by?: string | null
+          user_id?: string
+          violation_type?: string | null
+        }
+        Relationships: []
+      }
       daily_usage: {
         Row: {
           created_at: string
@@ -231,6 +276,39 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      fraud_detection_runs: {
+        Row: {
+          actions_taken: Json
+          completed_at: string | null
+          created_at: string
+          high_risk_found: number
+          id: string
+          run_type: string
+          triggered_by: string | null
+          users_analyzed: number
+        }
+        Insert: {
+          actions_taken?: Json
+          completed_at?: string | null
+          created_at?: string
+          high_risk_found?: number
+          id?: string
+          run_type: string
+          triggered_by?: string | null
+          users_analyzed?: number
+        }
+        Update: {
+          actions_taken?: Json
+          completed_at?: string | null
+          created_at?: string
+          high_risk_found?: number
+          id?: string
+          run_type?: string
+          triggered_by?: string | null
+          users_analyzed?: number
         }
         Relationships: []
       }
@@ -721,6 +799,48 @@ export type Database = {
           computed_at?: string
           id?: string
           user_factors?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_risk_scores: {
+        Row: {
+          admin_notes: string | null
+          admin_reviewed: boolean
+          auto_flagged: boolean
+          created_at: string
+          id: string
+          last_analyzed_at: string
+          risk_level: string
+          risk_score: number
+          signals: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean
+          auto_flagged?: boolean
+          created_at?: string
+          id?: string
+          last_analyzed_at?: string
+          risk_level?: string
+          risk_score?: number
+          signals?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean
+          auto_flagged?: boolean
+          created_at?: string
+          id?: string
+          last_analyzed_at?: string
+          risk_level?: string
+          risk_score?: number
+          signals?: Json
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
