@@ -158,13 +158,14 @@ export default function MapView() {
   };
 
   // Fetch mapbox token
-  const { data: mapboxToken, isLoading: tokenLoading } = useQuery({
+  const { data: mapboxToken, isLoading: tokenLoading, isError: tokenError, refetch: refetchToken } = useQuery({
     queryKey: ['mapbox-token'],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke('get-mapbox-token');
       if (error) throw error;
       return data.token as string;
     },
+    retry: 2,
   });
 
   // Helper function to track map usage on actual interaction (not on page load)
@@ -387,6 +388,35 @@ export default function MapView() {
       <AppLayout showNav>
         <div className="flex items-center justify-center h-[80vh]">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  // Fallback UI when mapbox token fetch fails
+  if (tokenError || !mapboxToken) {
+    return (
+      <AppLayout showNav>
+        <div className="flex flex-col items-center justify-center h-[80vh] px-6 text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+            className="w-24 h-24 rounded-full bg-destructive/10 flex items-center justify-center mb-6"
+          >
+            <AlertTriangle className="w-12 h-12 text-destructive" />
+          </motion.div>
+          <h2 className="text-2xl font-display font-bold mb-3">Map Unavailable</h2>
+          <p className="text-muted-foreground mb-6 max-w-sm">
+            We couldn't load the map. This might be a temporary issue with the map service.
+          </p>
+          <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => refetchToken()}>
+            Try Again
+          </Button>
+          <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
         </div>
       </AppLayout>
     );

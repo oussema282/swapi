@@ -20,7 +20,7 @@ export default function WhitePaper() {
         <article className="prose prose-slate dark:prose-invert max-w-none">
           
           <h1>Valexo – AI-Powered Barter Exchange Platform</h1>
-          <p className="text-muted-foreground">Technical Audit Document • Last Updated: January 2026</p>
+          <p className="text-muted-foreground">Technical Audit Document • Last Updated: January 30, 2026</p>
           
           <hr />
 
@@ -253,16 +253,22 @@ geoScore = Math.exp(-distance / GEO_SIGMA);
           </ol>
 
           <h3>4.2 Bayesian Item Rating</h3>
-          <p><strong>Function:</strong> <code>update_item_rating_on_swipe()</code></p>
+          <p><strong>Trigger Function:</strong> <code>update_item_rating_on_swipe()</code></p>
+          <p><strong>Batch Recalculation:</strong> <code>recalculate_item_ratings_with_decay()</code></p>
           <p><strong>Formula:</strong> <code>rating = 1 + 4 * (alpha / (alpha + beta))</code></p>
           <p><strong>Initial values:</strong> alpha=3, beta=3 (neutral 3-star)</p>
+
+          <h4>Time Decay (Batch Recalculation)</h4>
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`tau_days = 21.0  -- Half-life
+time_weight = exp(-days_old / tau_days)
+-- At 0 days: 1.0, At 21 days: 0.37, At 42 days: 0.14`}</pre>
 
           <table>
             <thead><tr><th>Event</th><th>Weight</th><th>Effect</th></tr></thead>
             <tbody>
               <tr><td>Like</td><td>+1.0</td><td>Increases alpha</td></tr>
               <tr><td>Dislike</td><td>-0.5</td><td>Increases beta</td></tr>
-              <tr><td>Successful exchange</td><td>+2.0</td><td>Increases alpha</td></tr>
+              <tr><td>Successful exchange</td><td>+2.0</td><td>Increases alpha (no decay)</td></tr>
             </tbody>
           </table>
 
@@ -405,7 +411,7 @@ SELECT EXISTS (
           <ul>
             <li><strong>recommend-items fails:</strong> Falls back to fallbackFetch() which queries database directly with swap_preferences filtering (useRecommendations.tsx line 321)</li>
             <li><strong>dodo-checkout fails:</strong> Returns 500 with error message, user sees "Payment configuration error"</li>
-            <li><strong>get-mapbox-token fails:</strong> Map fails to load, fallback UI NOT IMPLEMENTED</li>
+            <li><strong>get-mapbox-token fails:</strong> Displays "Map Unavailable" fallback UI with retry button (IMPLEMENTED)</li>
           </ul>
 
           <h3>Partial Data Handling</h3>
@@ -451,7 +457,12 @@ SELECT EXISTS (
             <li>Push notifications</li>
             <li>Identity verification</li>
             <li>Shipping/logistics integration</li>
-            <li>Time decay on Bayesian ratings (mentioned in docs, NOT in code)</li>
+          </ul>
+
+          <h3>Recently Implemented</h3>
+          <ul>
+            <li><strong>Time decay on Bayesian ratings</strong> – Implemented via <code>recalculate_item_ratings_with_decay()</code> function. Uses formula <code>exp(-days/21)</code> where older swipes have less impact. Should be scheduled to run periodically.</li>
+            <li><strong>Mapbox fallback UI</strong> – Error state with retry button when map token fails to load.</li>
           </ul>
 
           <h3>Out of Scope</h3>
