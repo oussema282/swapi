@@ -1,437 +1,359 @@
 
-# AI Content Moderation & Fraud Detection System
+
+# Comprehensive Admin Moderation Tools Design
 
 ## Overview
 
-This plan implements two AI-powered safety systems for Valexo:
-1. **Content Moderation AI** - Analyzes uploaded images to detect prohibited content (nudity, alcohol, weapons, drugs, violence)
-2. **Fraud & Risk Detection AI** - Analyzes user behavior patterns to detect scam attempts, fake listings, and suspicious activity
-
-Both systems use Lovable AI (Gemini) for analysis and integrate with the existing reporting and flagging infrastructure.
+After thorough review of the project codebase, WhitePaper, and all admin sections, this plan identifies the complete set of admin needs and proposes updates to the admin panel to give administrators full visibility and control over the Valexo platform.
 
 ---
 
-## Architecture
+## Current Admin Capabilities (What Exists)
+
+| Section | Current Features | Status |
+|---------|-----------------|--------|
+| **Overview** | Platform stats, charts, recent activity, quick actions | Basic metrics |
+| **Users** | List users, search, make admin, view profile | Missing: ban, suspend, details |
+| **Items** | List items, filter by category, archive, delete | Missing: flag, moderation status |
+| **Matches** | List matches, filter by status, force complete, delete | Basic management |
+| **Reports** | View user reports, resolve/dismiss, flag items | Functional |
+| **Moderation** | Content moderation logs, fraud detection (basic) | Missing: actions, details |
+| **Analytics** | DAU/WAU/MAU, match rate, category breakdown | Simulated data |
+| **Roles** | Add/remove admin/moderator roles | Functional |
+| **Valhalla** | Algorithm stats, swipe history, Bayesian ratings | Observation only |
+
+---
+
+## Admin Needs Analysis (What's Missing)
+
+### 1. User Management Enhancements
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **User Detail View** | Full profile with all items, matches, messages, reports, risk score | High |
+| **Suspend User** | Temporarily disable account with reason and duration | High |
+| **Ban User** | Permanently disable account with audit log | High |
+| **Verify User** | Mark user as verified (trust badge) | Medium |
+| **View User Risk Score** | Show fraud detection results inline | High |
+| **View User Moderation History** | Content blocks, appeals | High |
+| **Impersonate User** | Debug issues from user perspective | Low |
+| **User Activity Timeline** | Chronological log of all actions | Medium |
+
+### 2. Content Moderation Enhancements
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Review Queue** | Pending images requiring human review (confidence 0.60-0.85) | High |
+| **Approve/Reject Controls** | Admin can override AI decisions | High |
+| **Appeal Management** | Handle user appeals for blocked content | High |
+| **View Original Image** | Preview moderated content with blur/reveal | High |
+| **Bulk Actions** | Approve/reject multiple items at once | Medium |
+| **Content Stats Dashboard** | Violations by type, trend over time | Medium |
+| **AI Accuracy Metrics** | False positive/negative tracking | Low |
+
+### 3. Fraud Detection Enhancements
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Trigger Manual Scan** | Run fraud detection on-demand | High (Done) |
+| **User Risk Details** | Expand to show all signals and AI reasoning | High |
+| **Take Action Buttons** | Suspend/ban directly from risk list | High |
+| **Clear Risk Flag** | Admin can clear false positives | High |
+| **Add Admin Notes** | Document review decisions | High |
+| **Risk Score History** | Track changes over time | Medium |
+| **Export High-Risk Users** | Download list for offline review | Low |
+
+### 4. Algorithm Policy Management
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **View All Policies** | List algorithm_policies with weights | High |
+| **Compare Policies** | Side-by-side weight comparison | Medium |
+| **Trigger AI Optimization** | Run ai-policy-optimizer | High |
+| **Activate/Deactivate Policy** | Toggle active status | High |
+| **View Policy Metrics** | See performance during each policy period | High |
+| **Rollout Management** | Create/manage A/B tests | Medium |
+| **Revert to Previous** | One-click rollback | High |
+
+### 5. Subscription & Revenue Management
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Pro Subscribers List** | All paying users with subscription details | High |
+| **Revenue Dashboard** | MRR, churn, conversion rates | High |
+| **Grant Pro Status** | Manually upgrade user for testing/support | Medium |
+| **Revoke Pro Status** | Remove subscription (refund cases) | Medium |
+| **Subscription History** | View user's subscription timeline | Medium |
+| **Feature Upgrade Sales** | One-time purchase tracking | Low |
+
+### 6. System Health & Monitoring
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Edge Function Status** | Last invocation, error rates | High |
+| **Database Health** | Row counts, connection stats | Medium |
+| **AI API Status** | Lovable AI availability | Medium |
+| **Storage Usage** | item-photos bucket size | Low |
+| **Rate Limit Monitor** | Track users hitting limits | Medium |
+
+### 7. Communication & Notifications
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Broadcast Message** | Send system-wide notification | Medium |
+| **User Message Log** | View all messages (with privacy controls) | Medium |
+| **Email Templates** | Manage transactional emails | Low |
+| **Notification Center** | Admin alerts for critical events | Medium |
+
+### 8. Data Export & Reporting
+
+| Need | Description | Priority |
+|------|-------------|----------|
+| **Export Users** | CSV download with filters | Medium |
+| **Export Items** | CSV download with filters | Medium |
+| **Export Matches** | CSV download with filters | Medium |
+| **Scheduled Reports** | Daily/weekly email summaries | Low |
+| **Custom Report Builder** | Ad-hoc queries | Low |
+
+---
+
+## Proposed Admin Panel Updates
+
+### New Sections to Add
+
+#### 1. **Subscriptions Section** (New)
+- Pro subscribers table with expiration dates
+- Revenue metrics (MRR, churn rate, conversion)
+- Grant/revoke Pro controls
+- Subscription history timeline
+
+#### 2. **Algorithm Section** (New)
+- Policy version list with weights visualization
+- Trigger AI optimization button
+- Activate/deactivate policy toggle
+- A/B test rollout management
+- Performance metrics per policy
+
+#### 3. **System Section** (New)
+- Edge function health monitors
+- Database statistics
+- Storage usage
+- API rate limit status
+
+### Existing Section Enhancements
+
+#### Users Section Enhancements
+- Add risk score badge inline
+- Add suspend/ban dropdown actions
+- Add "View Details" modal with full user profile
+- Add moderation history tab
+- Add activity timeline
+
+#### Items Section Enhancements
+- Add moderation status column (safe/blocked/pending)
+- Add "flagged" filter
+- Add flag/unflag actions
+- Add moderation log view per item
+
+#### Moderation Section Enhancements
+- Add "Pending Review" tab for human review queue
+- Add image preview with blur/reveal
+- Add approve/reject/appeal actions
+- Add user risk score expansion panel
+- Add take action buttons (suspend/ban from risk view)
+- Add admin notes field with save
+
+#### Analytics Section Enhancements
+- Replace simulated data with real calculations
+- Add algorithm performance metrics
+- Add moderation effectiveness metrics
+- Add revenue analytics
+
+---
+
+## Implementation Roadmap
+
+### Phase 1: High Priority (Immediate)
+
+1. **Enhanced Moderation Section**
+   - Pending review queue with approve/reject
+   - Image preview with blur control
+   - User risk detail expansion with actions
+   - Admin notes for risk scores
+
+2. **User Management Actions**
+   - Suspend user with reason/duration
+   - Ban user with confirmation
+   - View user detail modal
+
+3. **Algorithm Policy Section**
+   - List all policies
+   - Trigger AI optimization
+   - Activate/deactivate toggle
+
+### Phase 2: Medium Priority
+
+4. **Subscriptions Section**
+   - Pro subscribers list
+   - Basic revenue metrics
+   - Grant/revoke Pro
+
+5. **Analytics Improvements**
+   - Real data for all metrics
+   - Algorithm performance tracking
+
+6. **System Health Section**
+   - Edge function status
+   - Basic monitoring
+
+### Phase 3: Lower Priority
+
+7. **Data Export**
+   - CSV exports for users/items/matches
+
+8. **Communication Tools**
+   - Broadcast messaging
+   - Message logs
+
+9. **Advanced Features**
+   - Impersonation
+   - Custom report builder
+   - Scheduled reports
+
+---
+
+## Technical Implementation Details
+
+### New Files to Create
+
+| File | Purpose |
+|------|---------|
+| `src/components/admin/sections/SubscriptionsSection.tsx` | Pro subscribers & revenue |
+| `src/components/admin/sections/AlgorithmSection.tsx` | Policy management & AI optimization |
+| `src/components/admin/sections/SystemSection.tsx` | Health monitoring |
+| `src/components/admin/UserDetailModal.tsx` | Full user detail view |
+| `src/components/admin/ImagePreviewModal.tsx` | Moderation image preview |
+| `src/components/admin/RiskDetailPanel.tsx` | Expandable fraud details |
+| `src/components/admin/PolicyCard.tsx` | Algorithm policy display |
+| `src/components/admin/WeightsChart.tsx` | Visual weights comparison |
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/pages/Admin.tsx` | Add new section routes |
+| `src/components/admin/AdminSidebar.tsx` | Add new nav items |
+| `src/components/admin/sections/UsersSection.tsx` | Add suspend/ban, detail view, risk badge |
+| `src/components/admin/sections/ItemsSection.tsx` | Add moderation status, flag actions |
+| `src/components/admin/sections/ModerationSection.tsx` | Add review queue, image preview, actions |
+| `src/components/admin/sections/AnalyticsSection.tsx` | Real data, additional metrics |
+
+### Database Changes Required
+
+| Table | Changes Needed |
+|-------|----------------|
+| `profiles` | Add `is_suspended`, `suspended_until`, `suspension_reason`, `is_banned`, `banned_at`, `ban_reason`, `is_verified` columns |
+| `content_moderation_logs` | Add `appeal_status`, `appeal_notes`, `admin_decision` columns |
+| `user_risk_scores` | Already has `admin_reviewed`, `admin_notes` - sufficient |
+| `algorithm_policies` | Already sufficient |
+
+### RLS Policy Updates
+
+- Add admin write policies for new profile fields
+- Add admin update policies for content_moderation_logs appeal fields
+
+---
+
+## Admin Dashboard Data Flow
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         CONTENT SAFETY SYSTEM                               │
+│                        ADMIN CONTROL CENTER                                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  IMAGE UPLOAD FLOW (Real-time blocking)                                     │
-│  ┌──────────────┐    ┌──────────────────┐    ┌──────────────────┐          │
-│  │              │    │                  │    │                  │          │
-│  │  User Upload │───>│  content-        │───>│  Lovable AI      │          │
-│  │  (NewItem,   │    │  moderator       │    │  (Gemini Vision) │          │
-│  │  EditProfile)│    │  Edge Function   │    │                  │          │
-│  │              │    │                  │    │                  │          │
-│  └──────────────┘    └────────┬─────────┘    └──────────────────┘          │
-│                               │                                             │
-│                               ▼                                             │
-│                    ┌──────────────────────┐                                │
-│                    │ Result: SAFE / BLOCK │                                │
-│                    │ + Violation Details  │                                │
-│                    └────────┬─────────────┘                                │
-│                             │                                               │
-│           ┌─────────────────┴─────────────────┐                            │
-│           ▼                                   ▼                            │
-│    ┌──────────────┐                    ┌──────────────┐                    │
-│    │ SAFE: Allow  │                    │ BLOCK: Reject│                    │
-│    │ upload + log │                    │ + log + flag │                    │
-│    └──────────────┘                    └──────────────┘                    │
+│  OVERVIEW                    USERS                       ITEMS              │
+│  ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐│
+│  │ Platform Stats   │       │ User List        │       │ Item List        ││
+│  │ Activity Feed    │       │ Risk Badges      │       │ Moderation Status││
+│  │ Quick Actions    │       │ Suspend/Ban      │       │ Flag/Unflag      ││
+│  │ Health Status    │       │ Detail Modal     │       │ Archive/Delete   ││
+│  └──────────────────┘       └──────────────────┘       └──────────────────┘│
 │                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
+│  MODERATION                  FRAUD                       ALGORITHM          │
+│  ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐│
+│  │ Content Logs     │       │ Risk Scores      │       │ Policy List      ││
+│  │ Pending Review   │       │ Signal Details   │       │ Weight Viz       ││
+│  │ Image Preview    │       │ Take Action      │       │ Run Optimizer    ││
+│  │ Approve/Reject   │       │ Admin Notes      │       │ Activate/Revert  ││
+│  └──────────────────┘       └──────────────────┘       └──────────────────┘│
 │                                                                             │
-│  FRAUD DETECTION FLOW (Scheduled batch + on-demand)                        │
-│  ┌──────────────┐    ┌──────────────────┐    ┌──────────────────┐          │
-│  │              │    │                  │    │                  │          │
-│  │  Scheduled   │───>│  fraud-detector  │───>│  Lovable AI      │          │
-│  │  Cron or     │    │  Edge Function   │    │  (Gemini)        │          │
-│  │  Admin Call  │    │                  │    │                  │          │
-│  │              │    │                  │    │                  │          │
-│  └──────────────┘    └────────┬─────────┘    └──────────────────┘          │
-│                               │                                             │
-│                               ▼                                             │
-│                    ┌──────────────────────┐                                │
-│                    │ Risk Scores + Flags  │                                │
-│                    │ for users/items      │                                │
-│                    └────────┬─────────────┘                                │
-│                             │                                               │
-│                             ▼                                               │
-│                    ┌──────────────────────┐                                │
-│                    │ user_risk_scores     │                                │
-│                    │ content_moderation   │                                │
-│                    │ _logs                │                                │
-│                    └──────────────────────┘                                │
+│  SUBSCRIPTIONS               ANALYTICS                   SYSTEM             │
+│  ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐│
+│  │ Pro Subscribers  │       │ Real Metrics     │       │ Edge Functions   ││
+│  │ Revenue Stats    │       │ Algorithm Perf   │       │ Database Health  ││
+│  │ Grant/Revoke     │       │ Moderation Stats │       │ Storage Usage    ││
+│  │ History          │       │ Conversion Funnel│       │ API Status       ││
+│  └──────────────────┘       └──────────────────┘       └──────────────────┘│
+│                                                                             │
+│  REPORTS                     ROLES                       SETTINGS           │
+│  ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐│
+│  │ User Reports     │       │ Admin List       │       │ Platform Config  ││
+│  │ Review Queue     │       │ Add/Remove       │       │ Feature Flags    ││
+│  │ Resolution       │       │ Permissions      │       │ Limits Config    ││
+│  └──────────────────┘       └──────────────────┘       └──────────────────┘│
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Part 1: Content Moderation AI
+## Key Admin Workflows
 
-### Prohibited Content Categories
+### Workflow 1: Handle Flagged Content
+1. Admin sees pending count badge on Moderation tab
+2. Opens Moderation → Pending Review tab
+3. Clicks on flagged image → Preview modal opens (blurred)
+4. Reviews image, clicks Reveal to see actual content
+5. Chooses: Approve (allow), Reject (keep blocked), or Escalate
+6. Optionally adds notes
+7. System updates content_moderation_logs and notifies user
 
-| Category | Examples | Action |
-|----------|----------|--------|
-| **Nudity/Sexual** | Explicit images, pornography | Block + flag user |
-| **Weapons** | Guns, knives, explosives | Block + flag item |
-| **Alcohol/Drugs** | Alcohol bottles, drug paraphernalia | Block |
-| **Violence** | Gore, graphic violence | Block + flag user |
-| **Hate Symbols** | Nazi imagery, hate group symbols | Block + flag user |
+### Workflow 2: Handle High-Risk User
+1. Admin runs fraud detection (button in Moderation section)
+2. Views high-risk users sorted by score
+3. Clicks on user row → Expands to show all signals and AI reasoning
+4. Reviews user's profile, items, and activity
+5. Chooses action: Monitor, Suspend (with duration), or Ban
+6. Adds admin notes explaining decision
+7. System updates user_risk_scores.admin_reviewed = true
 
-### Database Schema
+### Workflow 3: Optimize Algorithm
+1. Admin opens Algorithm section
+2. Views current active policy weights
+3. Clicks "Run AI Optimization" button
+4. System calls ai-policy-optimizer edge function
+5. New policy version appears (inactive)
+6. Admin reviews proposed changes and rationale
+7. Clicks "Activate" to set new policy active
+8. If issues, clicks "Revert" to go back to previous
 
-**Table: `content_moderation_logs`**
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | uuid | Primary key |
-| `user_id` | uuid | User who uploaded |
-| `content_type` | text | 'item_photo' or 'avatar' |
-| `content_url` | text | Storage path or URL |
-| `analysis_result` | jsonb | Full AI response |
-| `is_safe` | boolean | Whether content passed |
-| `violation_type` | text | Null if safe, category if blocked |
-| `confidence_score` | decimal | AI confidence (0-1) |
-| `action_taken` | text | 'allowed', 'blocked', 'flagged' |
-| `reviewed_by` | uuid | Admin who reviewed (if appealed) |
-| `created_at` | timestamptz | Timestamp |
-
-### Edge Function: `content-moderator`
-
-**Purpose**: Real-time image moderation before upload completes
-
-**Request Flow**:
-1. Client uploads image to temporary location
-2. Client calls `content-moderator` with image URL
-3. Edge function fetches image and sends to Gemini Vision
-4. AI analyzes for prohibited content categories
-5. Returns verdict: `safe`, `blocked`, or `review_required`
-6. Client either completes upload or shows error
-
-**AI Prompt Design**:
-```typescript
-const systemPrompt = `You are a content moderation AI for Valexo, an item exchange platform.
-
-Analyze images for prohibited content. Users should only upload photos of items they want to swap.
-
-PROHIBITED CONTENT (return violation):
-1. nudity - Any nudity, explicit content, or sexually suggestive material
-2. weapons - Firearms, knives, explosives, ammunition
-3. alcohol - Alcohol bottles, beer cans, liquor
-4. drugs - Drug paraphernalia, pills (unless clearly OTC medicine packaging)
-5. violence - Gore, blood, graphic violence, harm to animals
-6. hate_symbols - Nazi symbols, hate group imagery, offensive gestures
-
-ALLOWED CONTENT:
-- Household items, electronics, books, games, clothes
-- Toys (including toy weapons clearly labeled as toys)
-- Sports equipment
-- Art and collectibles (context matters)
-
-OUTPUT FORMAT (use tool call):
-- is_safe: boolean
-- violation_type: string or null
-- confidence: number 0-1
-- reason: brief explanation`;
-```
-
-**Tool Calling Schema**:
-```typescript
-const tools = [{
-  type: "function",
-  function: {
-    name: "analyze_content",
-    description: "Return content moderation verdict",
-    parameters: {
-      type: "object",
-      properties: {
-        is_safe: { type: "boolean" },
-        violation_type: { 
-          type: "string", 
-          enum: ["nudity", "weapons", "alcohol", "drugs", "violence", "hate_symbols", null]
-        },
-        confidence: { type: "number" },
-        reason: { type: "string" }
-      },
-      required: ["is_safe", "confidence", "reason"]
-    }
-  }
-}];
-```
-
-### Frontend Integration Points
-
-**1. NewItem.tsx - Photo Upload**
-```typescript
-const handleFileUpload = async (e) => {
-  // Upload to temporary path first
-  const tempPath = await uploadToTemp(file);
-  
-  // Call content moderator
-  const { is_safe, violation_type } = await supabase.functions.invoke('content-moderator', {
-    body: { image_url: tempPath }
-  });
-  
-  if (!is_safe) {
-    await deleteFromTemp(tempPath);
-    toast.error(`This image cannot be uploaded: ${violation_type}`);
-    return;
-  }
-  
-  // Move to permanent location
-  await moveToPermament(tempPath);
-};
-```
-
-**2. EditItem.tsx - Same pattern**
-
-**3. EditProfile.tsx - Avatar Upload**
-```typescript
-const handleAvatarUpload = async (e) => {
-  // Same moderation flow for profile pictures
-};
-```
-
----
-
-## Part 2: Fraud & Risk Detection AI
-
-### Risk Signals
-
-| Signal | Weight | Description |
-|--------|--------|-------------|
-| **Rapid listings** | High | Creating many items in short time |
-| **Copy-paste descriptions** | Medium | Identical descriptions across items |
-| **Stolen images** | High | Images found in reverse search |
-| **Report history** | High | Multiple reports from different users |
-| **Account age** | Low | New accounts with suspicious activity |
-| **Message patterns** | Medium | Spammy or external link messages |
-| **No location** | Low | Refusing to set location |
-| **High-value claims** | Medium | Claiming high value for items |
-
-### Database Schema
-
-**Table: `user_risk_scores`**
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | uuid | Primary key |
-| `user_id` | uuid | User being scored |
-| `risk_score` | decimal | Overall risk 0-100 |
-| `risk_level` | text | 'low', 'medium', 'high', 'critical' |
-| `signals` | jsonb | Detected risk signals |
-| `last_analyzed_at` | timestamptz | When last analyzed |
-| `auto_flagged` | boolean | Whether auto-flagged |
-| `admin_reviewed` | boolean | Whether admin reviewed |
-| `admin_notes` | text | Admin notes |
-| `created_at` | timestamptz | First analysis |
-| `updated_at` | timestamptz | Last update |
-
-**Table: `fraud_detection_runs`**
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | uuid | Primary key |
-| `run_type` | text | 'scheduled', 'manual', 'on_report' |
-| `users_analyzed` | integer | Count of users analyzed |
-| `high_risk_found` | integer | Count of high-risk users |
-| `actions_taken` | jsonb | Summary of actions |
-| `triggered_by` | uuid | Admin who triggered (if manual) |
-| `created_at` | timestamptz | When run started |
-| `completed_at` | timestamptz | When run finished |
-
-### Edge Function: `fraud-detector`
-
-**Purpose**: Batch analysis of user behavior patterns for fraud detection
-
-**Triggers**:
-1. Scheduled daily run (analyze all active users)
-2. Manual admin trigger
-3. On-report trigger (when user receives multiple reports)
-
-**Analysis Process**:
-1. Collect user activity data (aggregated, no PII)
-2. Calculate individual risk signals
-3. Send signals to Gemini for pattern analysis
-4. AI returns risk score and recommendations
-5. Auto-flag high-risk users for admin review
-
-**AI Prompt Design**:
-```typescript
-const systemPrompt = `You are a fraud detection AI for Valexo.
-
-Analyze user behavior patterns to detect scam attempts and fake listings.
-You receive AGGREGATED behavioral signals, not personal data.
-
-RISK SIGNALS TO EVALUATE:
-1. Listing velocity - How fast items are created
-2. Description patterns - Are descriptions suspiciously similar?
-3. Value claims - Are claimed values unrealistic?
-4. Report frequency - How often reported by others
-5. Message patterns - Spammy or pushy behavior
-6. Account characteristics - Age, completeness
-
-OUTPUT:
-- risk_score: 0-100 (0=safe, 100=definite fraud)
-- risk_level: low/medium/high/critical
-- primary_concerns: top 3 signals that raised flags
-- recommended_action: none/monitor/review/suspend
-- reasoning: brief explanation`;
-```
-
-**Tool Calling Schema**:
-```typescript
-const tools = [{
-  type: "function",
-  function: {
-    name: "assess_risk",
-    description: "Return fraud risk assessment",
-    parameters: {
-      type: "object",
-      properties: {
-        risk_score: { type: "number" },
-        risk_level: { type: "string", enum: ["low", "medium", "high", "critical"] },
-        primary_concerns: { 
-          type: "array", 
-          items: { type: "string" },
-          maxItems: 3 
-        },
-        recommended_action: { 
-          type: "string", 
-          enum: ["none", "monitor", "review", "suspend"] 
-        },
-        reasoning: { type: "string" }
-      },
-      required: ["risk_score", "risk_level", "primary_concerns", "recommended_action", "reasoning"]
-    }
-  }
-}];
-```
-
----
-
-## Safety Guardrails
-
-### Content Moderation
-
-| Layer | Protection |
-|-------|------------|
-| **Confidence threshold** | Only block if confidence > 0.85 |
-| **Human review queue** | Medium confidence (0.60-0.85) goes to admin |
-| **Appeal system** | Users can dispute blocked content |
-| **Audit log** | All decisions logged for review |
-| **Fallback** | On AI error, allow upload but flag for review |
-
-### Fraud Detection
-
-| Layer | Protection |
-|-------|------------|
-| **No auto-ban** | AI only flags, admin must take action |
-| **Aggregated data only** | AI never sees messages or personal info |
-| **Rate limiting** | Max one full scan per 24 hours |
-| **Override capability** | Admin can clear flags |
-| **Transparency** | Users notified if flagged with reason |
-
----
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `supabase/functions/content-moderator/index.ts` | Real-time image moderation |
-| `supabase/functions/fraud-detector/index.ts` | Batch fraud detection |
-| `src/hooks/useContentModeration.tsx` | Frontend hook for moderation |
-| `src/components/admin/sections/ModerationSection.tsx` | Admin moderation queue |
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/pages/NewItem.tsx` | Add moderation check before upload |
-| `src/pages/EditItem.tsx` | Add moderation check on photo changes |
-| `src/pages/EditProfile.tsx` | Add moderation check for avatar |
-| `src/pages/Admin.tsx` | Add moderation section to admin |
-| `src/components/admin/AdminSidebar.tsx` | Add moderation nav item |
-| `supabase/config.toml` | Add new function configs |
-
-## Database Migration
-
-Creates two new tables and necessary RLS policies:
-- `content_moderation_logs` - Audit trail for all moderation decisions
-- `user_risk_scores` - Current risk assessment per user
-- `fraud_detection_runs` - History of detection runs
-
----
-
-## Implementation Steps
-
-1. **Create database migration** with moderation and fraud tables
-2. **Build `content-moderator` edge function** with Gemini Vision integration
-3. **Update frontend upload flows** to call moderator before completing
-4. **Build `fraud-detector` edge function** with behavior analysis
-5. **Create admin moderation UI** for reviewing flagged content
-6. **Add fraud dashboard** to admin section
-7. **Test with sample prohibited images** (using test accounts)
-
----
-
-## User Experience
-
-### When Content is Blocked
-
-```
-┌─────────────────────────────────────────┐
-│  ⚠️ Image Cannot Be Uploaded            │
-│                                         │
-│  This image was blocked because it      │
-│  appears to contain prohibited content  │
-│           .                             │
-│                                         │
-│  Please upload photos of items you      │
-│  want to swap. If you believe this is   │
-│  an error, you can appeal this decision.│
-│                                         │
-│  [Try Another Photo]  [Appeal Decision] │
-└─────────────────────────────────────────┘
-```
-
-### When Account is Flagged
-
-```
-┌─────────────────────────────────────────┐
-│  ⚠️ Account Under Review                │
-│                                         │
-│  We're reviewing your account for       │
-│  unusual activity. You can continue     │
-│  using Valexo, but some features may    │
-│  be limited.                            │
-│                                         │
-│  If you believe this is an error,       │
-│  please contact support.                │
-│                                         │
-│  [Contact Support]                      │
-└─────────────────────────────────────────┘
-```
+### Workflow 4: Manage Subscriptions
+1. Admin opens Subscriptions section
+2. Views list of Pro subscribers with expiration dates
+3. Searches for specific user to grant Pro
+4. Clicks "Grant Pro" → Sets is_pro=true, expires_at
+5. Or clicks "Revoke Pro" to remove subscription
 
 ---
 
 ## Summary
 
-| Component | Description |
-|-----------|-------------|
-| `content-moderator` | Real-time image analysis for prohibited content |
-| `fraud-detector` | Batch analysis of user behavior patterns |
-| `content_moderation_logs` | Audit trail for moderation decisions |
-| `user_risk_scores` | Risk assessment per user |
-| Admin UI | Queue for reviewing flagged content and users |
-| Appeal system | Users can dispute decisions |
+This plan provides a comprehensive roadmap to transform the admin panel from basic visibility into a full control center. The implementation prioritizes:
 
-This system provides:
-- **Real-time blocking** of prohibited images before they're stored
-- **Batch fraud detection** to identify suspicious behavior patterns
-- **Full audit trail** for all decisions
-- **Human oversight** for edge cases and appeals
-- **Safe fallbacks** when AI is uncertain
+1. **Safety & Trust** - Content moderation queue, fraud detection actions, user suspension/banning
+2. **Algorithm Control** - Policy management, AI optimization triggers, A/B testing
+3. **Business Operations** - Subscription management, revenue tracking
+4. **System Health** - Monitoring and diagnostics
+
+The admin will have complete visibility into all platform operations and the tools needed to maintain a safe, fair, and well-functioning exchange ecosystem.
+
