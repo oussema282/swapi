@@ -12,6 +12,9 @@ import { AnalyticsSection } from '@/components/admin/sections/AnalyticsSection';
 import { RolesSection } from '@/components/admin/sections/RolesSection';
 import { ReportsSection } from '@/components/admin/sections/ReportsSection';
 import { ModerationSection } from '@/components/admin/sections/ModerationSection';
+import { AlgorithmSection } from '@/components/admin/sections/AlgorithmSection';
+import { SubscriptionsSection } from '@/components/admin/sections/SubscriptionsSection';
+import { SystemSection } from '@/components/admin/sections/SystemSection';
 import { Loader2, ShieldX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -74,12 +77,18 @@ export default function Admin() {
         return <MatchesSection />;
       case 'moderation':
         return <ModerationSection />;
+      case 'subscriptions':
+        return <SubscriptionsSection />;
       case 'analytics':
         return <AnalyticsSection />;
+      case 'algorithm':
+        return <AlgorithmSection />;
       case 'roles':
         return <RolesSection />;
       case 'reports':
         return <ReportsSection />;
+      case 'system':
+        return <SystemSection />;
       default:
         return <OverviewSection />;
     }
