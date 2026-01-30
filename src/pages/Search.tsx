@@ -94,7 +94,8 @@ export default function Search() {
   const [searchCount, setSearchCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-  const { canUse, usage, incrementUsage, isPro } = useEntitlements();
+  const { canUse, usage, incrementUsage, isPro, remaining } = useEntitlements();
+  const [hasTrackedInitialSearch, setHasTrackedInitialSearch] = useState(false);
 
   // Auto-request location on mount
   useEffect(() => {
@@ -102,6 +103,20 @@ export default function Search() {
       requestLocation();
     }
   }, [hasLocation, locationLoading, requestLocation]);
+  
+  // Track search usage when user actually performs a search (not on page load)
+  const trackSearchUsage = useCallback(async () => {
+    if (isPro || hasTrackedInitialSearch) return true;
+    
+    if (!canUse.searches) {
+      setShowUpgradePrompt(true);
+      return false;
+    }
+    
+    await incrementUsage('searches');
+    setHasTrackedInitialSearch(true);
+    return true;
+  }, [isPro, hasTrackedInitialSearch, canUse.searches, incrementUsage]);
 
   // Debounce search query for autocomplete
   useEffect(() => {
@@ -332,16 +347,11 @@ export default function Search() {
   }, []);
 
   const handleSuggestionClick = useCallback(async (suggestion: Suggestion) => {
-    // Check search limit for free users
-    if (!canUse.searches) {
-      setShowUpgradePrompt(true);
+    // Check and track search limit for free users
+    const canProceed = await trackSearchUsage();
+    if (!canProceed) {
       setShowSuggestions(false);
       return;
-    }
-
-    // Increment usage for free users
-    if (!isPro) {
-      await incrementUsage('searches');
     }
 
     if (suggestion.type === 'category' && suggestion.category) {
@@ -354,7 +364,7 @@ export default function Search() {
     }
     setShowSuggestions(false);
     inputRef.current?.blur();
-  }, [selectedCategories, canUse.searches, isPro, incrementUsage]);
+  }, [selectedCategories, trackSearchUsage]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
