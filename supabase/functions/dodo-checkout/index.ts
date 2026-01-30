@@ -5,6 +5,18 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Dodo Payments product IDs
+const PRODUCT_IDS = {
+  pro: 'pdt_0NUqlt6o4xC9TVkFhOCA3',           // $9.99/month Pro subscription
+  swipes: 'pdt_0NXQsvv5khSsTgVYJNpfR',        // Extra Swipes $1.99
+  deal_invites: 'pdt_0NXQtDGs03KuzLLY25kCj',  // Extra Deal Invites $0.99
+  map: 'pdt_0NXQtPneUUAPEE9Uhwfky',           // Extra Map Views $0.99
+  search: 'pdt_0NXQtYf8SWSvjMZBvJ2My',        // Extra Searches $0.99
+  items: 'pdt_0NXQtjChdcX0ETonXDsbf',         // Extra Item Slots $1.49
+} as const;
+
+type ProductType = keyof typeof PRODUCT_IDS;
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -29,12 +41,23 @@ serve(async (req) => {
       );
     }
 
-    // Get origin from request headers to build return URL
     const body = await req.json().catch(() => ({}));
     const origin = body.origin || Deno.env.get('APP_URL') || 'https://promonet.digital';
-    const returnUrl = `${origin}/checkout/success`;
+    const productType: ProductType = body.product_type || 'pro';
+    const userId = body.user_id;
+    
+    // Validate product type
+    if (!PRODUCT_IDS[productType]) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid product type' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const productId = PRODUCT_IDS[productType];
+    const returnUrl = `${origin}/checkout/success?product_type=${productType}`;
 
-    console.log('Creating Dodo Payments checkout session with return URL:', returnUrl);
+    console.log(`Creating Dodo Payments checkout for product: ${productType} (${productId})`);
 
     const response = await fetch('https://test.dodopayments.com/checkouts', {
       method: 'POST',
@@ -44,12 +67,14 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         product_cart: [
-          { product_id: 'pdt_0NUqlt6o4xC9TVkFhOCA3', quantity: 1 }
+          { product_id: productId, quantity: 1 }
         ],
         return_url: returnUrl,
         metadata: { 
           source: 'lovable', 
-          site: origin 
+          site: origin,
+          product_type: productType,
+          user_id: userId || 'anonymous'
         }
       })
     });
@@ -69,7 +94,8 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         checkout_url: session.checkout_url, 
-        session_id: session.session_id 
+        session_id: session.session_id,
+        product_type: productType
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
