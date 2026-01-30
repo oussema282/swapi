@@ -1,8 +1,9 @@
-import { SlidersHorizontal, Plus, Bell } from 'lucide-react';
+import { SlidersHorizontal, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { DealInvitesNotification } from '@/components/deals/DealInvitesNotification';
 
 interface SwipeTopBarProps {
   activeTab: 'foryou' | 'nearby';
@@ -69,19 +70,25 @@ export function SwipeTopBar({
         </button>
       </div>
 
-      {/* Right - Upload Item Button */}
-      <div className="relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate('/items/new')}
-          className="w-10 h-10 rounded-full hover:bg-muted"
-        >
-          <Plus className="w-5 h-5 text-primary" />
-        </Button>
-        {hasNotifications && (
-          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-destructive rounded-full border-2 border-background" />
-        )}
+      {/* Right - Deal Invites Notification + Add Item */}
+      <div className="flex items-center gap-1">
+        {/* Deal Invites Notification Bell */}
+        <DealInvitesNotification />
+        
+        {/* Upload Item Button */}
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/items/new')}
+            className="w-10 h-10 rounded-full hover:bg-muted"
+          >
+            <Plus className="w-5 h-5 text-primary" />
+          </Button>
+          {hasNotifications && (
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-destructive rounded-full border-2 border-background" />
+          )}
+        </div>
       </div>
     </div>
   );

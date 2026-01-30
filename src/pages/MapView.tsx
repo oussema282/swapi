@@ -66,7 +66,18 @@ export default function MapView() {
   const [hasTrackedUsage, setHasTrackedUsage] = useState(false);
   const hasNavigatedToFocusItem = useRef(false);
   const [missingCoordsShown, setMissingCoordsShown] = useState(false);
-  const { canUse, usage, incrementUsage, isPro } = useEntitlements();
+  const { canUse, usage, incrementUsage, isPro, remaining } = useEntitlements();
+
+  // Check map usage limit upfront - track first usage on mount
+  const [initialUsageTracked, setInitialUsageTracked] = useState(false);
+  
+  useEffect(() => {
+    // Only track on first mount for non-Pro users who haven't tracked yet
+    if (!isPro && !initialUsageTracked && canUse.mapUses) {
+      incrementUsage('map_uses');
+      setInitialUsageTracked(true);
+    }
+  }, [isPro, initialUsageTracked, canUse.mapUses, incrementUsage]);
 
   // Auto-request location on mount (like Search page)
   useEffect(() => {
@@ -320,6 +331,44 @@ export default function MapView() {
       }
     }
   }, [focusItemId, items, missingCoordsShown]);
+
+  // Block map access if limit reached (non-Pro users only)
+  if (!isPro && !canUse.mapUses) {
+    return (
+      <AppLayout showNav>
+        <div className="flex flex-col items-center justify-center h-[80vh] px-6 text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+            className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6"
+          >
+            <MapPin className="w-12 h-12 text-primary" />
+          </motion.div>
+          <h2 className="text-2xl font-display font-bold mb-3">Map Limit Reached</h2>
+          <p className="text-muted-foreground mb-6 max-w-sm">
+            You've used all {FREE_LIMITS.mapUses} free map views today. Upgrade to Pro for unlimited map access!
+          </p>
+          <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => setShowUpgradePrompt(true)}>
+            Upgrade to Pro
+          </Button>
+          <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go Back
+          </Button>
+        </div>
+        
+        <UpgradePrompt
+          open={showUpgradePrompt}
+          onOpenChange={setShowUpgradePrompt}
+          feature="mapUses"
+          featureType="map"
+          usedCount={usage.mapUses}
+          limit={FREE_LIMITS.mapUses}
+        />
+      </AppLayout>
+    );
+  }
 
   // Block map access entirely if location permission is denied
   if (locationBlocked) {
