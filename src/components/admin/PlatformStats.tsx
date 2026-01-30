@@ -9,7 +9,9 @@ import {
   TrendingUp, 
   TrendingDown,
   Zap,
-  Target
+  Target,
+  Shield,
+  DollarSign
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { subDays, format, parseISO } from 'date-fns';
@@ -32,7 +34,6 @@ export function PlatformStats() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        // Get dates for comparison
         const today = new Date();
         const lastWeekStart = subDays(today, 14);
         const thisWeekStart = subDays(today, 7);
@@ -44,12 +45,14 @@ export function PlatformStats() {
           matchesResult,
           proUsersResult,
           swipesResult,
+          moderationResult,
         ] = await Promise.all([
-          supabase.from('profiles').select('created_at'),
+          supabase.from('profiles').select('created_at, last_seen'),
           supabase.from('items').select('id, created_at, is_archived'),
           supabase.from('matches').select('id, created_at, is_completed'),
           supabase.from('user_subscriptions').select('id, created_at').eq('is_pro', true),
           supabase.from('swipes').select('id, created_at'),
+          supabase.from('content_moderation_logs').select('id, created_at, is_safe'),
         ]);
 
         const profiles = profilesResult.data || [];
@@ -57,6 +60,7 @@ export function PlatformStats() {
         const matches = matchesResult.data || [];
         const proUsers = proUsersResult.data || [];
         const swipes = swipesResult.data || [];
+        const moderation = moderationResult.data || [];
 
         // Calculate totals
         const totalUsers = profiles.length;
@@ -65,6 +69,7 @@ export function PlatformStats() {
         const totalProUsers = proUsers.length;
         const totalSwipes = swipes.length;
         const completedSwaps = matches.filter(m => m.is_completed).length;
+        const safeContent = moderation.filter(m => m.is_safe).length;
 
         // Calculate weekly changes
         const calcWeeklyChange = (data: { created_at: string }[]) => {
@@ -88,6 +93,14 @@ export function PlatformStats() {
           });
         };
 
+        // Generate cumulative sparkline for total counts
+        const generateCumulativeSparkline = (data: { created_at: string }[]) => {
+          return Array.from({ length: 7 }, (_, i) => {
+            const date = subDays(today, 6 - i);
+            return data.filter(d => parseISO(d.created_at) <= date).length;
+          });
+        };
+
         const statsData: StatWithSparkline[] = [
           {
             title: 'Total Users',
@@ -96,7 +109,7 @@ export function PlatformStats() {
             changeLabel: 'vs last week',
             icon: Users,
             iconColor: 'text-blue-500',
-            sparklineData: generateSparkline(profiles),
+            sparklineData: generateCumulativeSparkline(profiles),
             sparklineColor: '#3b82f6',
           },
           {
@@ -126,27 +139,27 @@ export function PlatformStats() {
             changeLabel: 'vs last week',
             icon: Crown,
             iconColor: 'text-amber-500',
-            sparklineData: generateSparkline(proUsers),
+            sparklineData: generateCumulativeSparkline(proUsers),
             sparklineColor: '#f59e0b',
           },
           {
-            title: 'Total Swipes',
-            value: totalSwipes.toLocaleString(),
-            change: calcWeeklyChange(swipes),
-            changeLabel: 'this week',
-            icon: Zap,
-            iconColor: 'text-pink-500',
-            sparklineData: generateSparkline(swipes),
-            sparklineColor: '#ec4899',
+            title: 'Est. Revenue',
+            value: `$${(totalProUsers * 9.99).toFixed(0)}`,
+            change: calcWeeklyChange(proUsers),
+            changeLabel: 'vs last week',
+            icon: DollarSign,
+            iconColor: 'text-green-500',
+            sparklineData: generateCumulativeSparkline(proUsers).map(v => v * 9.99),
+            sparklineColor: '#22c55e',
           },
           {
-            title: 'Completed Swaps',
-            value: completedSwaps.toLocaleString(),
-            change: totalMatches > 0 ? Math.round((completedSwaps / totalMatches) * 100) : 0,
-            changeLabel: 'success rate',
-            icon: Target,
+            title: 'Safety Rate',
+            value: `${moderation.length > 0 ? ((safeContent / moderation.length) * 100).toFixed(0) : 100}%`,
+            change: 0,
+            changeLabel: 'content safe',
+            icon: Shield,
             iconColor: 'text-teal-500',
-            sparklineData: generateSparkline(matches.filter(m => m.is_completed)),
+            sparklineData: generateSparkline(moderation.filter(m => m.is_safe)),
             sparklineColor: '#14b8a6',
           },
         ];
@@ -208,17 +221,21 @@ export function PlatformStats() {
             </p>
 
             <div className="flex items-center gap-1.5 text-xs mb-3">
-              {isPositive ? (
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-              ) : (
-                <TrendingDown className="h-3 w-3 text-destructive" />
+              {stat.change !== 0 && (
+                <>
+                  {isPositive ? (
+                    <TrendingUp className="h-3 w-3 text-emerald-500" />
+                  ) : (
+                    <TrendingDown className="h-3 w-3 text-destructive" />
+                  )}
+                  <span className={cn(
+                    'font-medium',
+                    isPositive ? 'text-emerald-500' : 'text-destructive'
+                  )}>
+                    {isPositive ? '+' : ''}{stat.change}%
+                  </span>
+                </>
               )}
-              <span className={cn(
-                'font-medium',
-                isPositive ? 'text-emerald-500' : 'text-destructive'
-              )}>
-                {isPositive ? '+' : ''}{stat.change}%
-              </span>
               <span className="text-muted-foreground">{stat.changeLabel}</span>
             </div>
 
