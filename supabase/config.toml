@@ -26,3 +26,9 @@ verify_jwt = false
 
 [functions.ai-policy-optimizer]
 verify_jwt = false
+
+[functions.content-moderator]
+verify_jwt = false
+
+[functions.fraud-detector]
+verify_jwt = false

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useItem, useUpdateItem } from '@/hooks/useItems';
+import { useContentModeration } from '@/hooks/useContentModeration';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +29,8 @@ import {
   Star,
   ThumbsUp,
   Zap,
-  Save
+  Save,
+  ShieldAlert
 } from 'lucide-react';
 import { ItemCategory, ItemCondition, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
@@ -60,6 +62,7 @@ export default function EditItem() {
   const { toast } = useToast();
   const { data: item, isLoading: itemLoading } = useItem(id || '');
   const updateItem = useUpdateItem();
+  const { checkImage, isChecking: isModerating } = useContentModeration();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isComplete, setIsComplete] = useState(false);
@@ -137,6 +140,20 @@ export default function EditItem() {
         const { data: urlData } = supabase.storage
           .from('item-photos')
           .getPublicUrl(fileName);
+
+        // Check image with AI content moderator
+        const moderationResult = await checkImage(urlData.publicUrl, 'item_photo');
+        
+        if (!moderationResult.is_safe) {
+          // Delete the unsafe image
+          await supabase.storage.from('item-photos').remove([fileName]);
+          toast({ 
+            variant: 'destructive', 
+            title: 'Image blocked',
+            description: `This image cannot be uploaded: ${moderationResult.violation_type || 'policy violation'}`
+          });
+          continue;
+        }
 
         newPhotos.push(urlData.publicUrl);
       }
@@ -291,10 +308,10 @@ export default function EditItem() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                  className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex items-center justify-center hover:border-primary transition-colors"
+                  disabled={uploading || isModerating}
+                  className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center hover:border-primary transition-colors"
                 >
-                  {uploading ? (
+                  {uploading || isModerating ? (
                     <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
                   ) : (
                     <Upload className="w-5 h-5 text-muted-foreground" />

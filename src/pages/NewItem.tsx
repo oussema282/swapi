@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateItem } from '@/hooks/useItems';
 import { useItemLimit } from '@/hooks/useEntitlements';
+import { useContentModeration } from '@/hooks/useContentModeration';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +31,8 @@ import {
   Star,
   ThumbsUp,
   Zap,
-  Crown
+  Crown,
+  ShieldAlert
 } from 'lucide-react';
 import { ItemCategory, ItemCondition, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
@@ -68,6 +70,7 @@ export default function NewItem() {
   const { toast } = useToast();
   const createItem = useCreateItem();
   const { canAddItem, itemCount, limit, isPro, isLoading: limitLoading } = useItemLimit();
+  const { checkImage, isChecking: isModerating } = useContentModeration();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState(1);
@@ -142,6 +145,20 @@ export default function NewItem() {
         const { data: urlData } = supabase.storage
           .from('item-photos')
           .getPublicUrl(fileName);
+
+        // Check image with AI content moderator
+        const moderationResult = await checkImage(urlData.publicUrl, 'item_photo');
+        
+        if (!moderationResult.is_safe) {
+          // Delete the unsafe image
+          await supabase.storage.from('item-photos').remove([fileName]);
+          toast({ 
+            variant: 'destructive', 
+            title: 'Image blocked',
+            description: `This image cannot be uploaded: ${moderationResult.violation_type || 'policy violation'}`
+          });
+          continue;
+        }
 
         newPhotos.push(urlData.publicUrl);
       }
@@ -336,11 +353,16 @@ export default function NewItem() {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        disabled={uploading}
+                        disabled={uploading || isModerating}
                         className="aspect-square rounded-xl border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center gap-2 hover:border-primary hover:bg-primary/5 transition-all disabled:opacity-50"
                       >
-                        {uploading ? (
-                          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                        {uploading || isModerating ? (
+                          <div className="flex flex-col items-center gap-1">
+                            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">
+                              {isModerating ? 'Checking...' : 'Uploading...'}
+                            </span>
+                          </div>
                         ) : (
                           <>
                             <Upload className="w-6 h-6 text-muted-foreground" />

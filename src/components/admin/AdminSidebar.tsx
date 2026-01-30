@@ -14,7 +14,8 @@ import {
   Sparkles,
   ChevronRight,
   Brain,
-  Flag
+  Flag,
+  ShieldAlert
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { APP_NAME } from '@/config/branding';
@@ -30,6 +31,7 @@ const navItems = [
   { id: 'items', label: 'Items', icon: Package, badge: null },
   { id: 'matches', label: 'Matches', icon: Handshake, badge: null },
   { id: 'reports', label: 'Reports', icon: Flag, badge: null },
+  { id: 'moderation', label: 'AI Moderation', icon: ShieldAlert, badge: null },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, badge: null },
   { id: 'roles', label: 'Role Management', icon: Shield, badge: null },
 ];
