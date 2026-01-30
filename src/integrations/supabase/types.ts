@@ -14,6 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
+      algorithm_policies: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          exploration_policy: Json
+          id: string
+          policy_version: string
+          reciprocal_policy: Json
+          weights: Json
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          exploration_policy: Json
+          id?: string
+          policy_version: string
+          reciprocal_policy: Json
+          weights: Json
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          exploration_policy?: Json
+          id?: string
+          policy_version?: string
+          reciprocal_policy?: Json
+          weights?: Json
+        }
+        Relationships: []
+      }
+      algorithm_policy_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          metric_snapshot: Json
+          period_end: string
+          period_start: string
+          policy_version: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric_snapshot: Json
+          period_end: string
+          period_start: string
+          policy_version: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric_snapshot?: Json
+          period_end?: string
+          period_start?: string
+          policy_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "algorithm_policy_metrics_policy_version_fkey"
+            columns: ["policy_version"]
+            isOneToOne: false
+            referencedRelation: "algorithm_policies"
+            referencedColumns: ["policy_version"]
+          },
+        ]
+      }
+      algorithm_policy_rollouts: {
+        Row: {
+          created_at: string
+          enabled: boolean | null
+          ended_at: string | null
+          id: string
+          policy_version: string
+          started_at: string | null
+          traffic_percentage: number | null
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean | null
+          ended_at?: string | null
+          id?: string
+          policy_version: string
+          started_at?: string | null
+          traffic_percentage?: number | null
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean | null
+          ended_at?: string | null
+          id?: string
+          policy_version?: string
+          started_at?: string | null
+          traffic_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "algorithm_policy_rollouts_policy_version_fkey"
+            columns: ["policy_version"]
+            isOneToOne: false
+            referencedRelation: "algorithm_policies"
+            referencedColumns: ["policy_version"]
+          },
+        ]
+      }
       daily_usage: {
         Row: {
           created_at: string
@@ -676,6 +785,15 @@ export type Database = {
     }
     Functions: {
       confirm_exchange: { Args: { p_match_id: string }; Returns: Json }
+      get_active_policy: {
+        Args: never
+        Returns: {
+          exploration_policy: Json
+          policy_version: string
+          reciprocal_policy: Json
+          weights: Json
+        }[]
+      }
       get_match_with_items: {
         Args: { p_match_id: string }
         Returns: {
@@ -725,6 +843,15 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      get_policy_for_request: {
+        Args: { request_hash: number }
+        Returns: {
+          exploration_policy: Json
+          policy_version: string
+          reciprocal_policy: Json
+          weights: Json
+        }[]
       }
       has_role: {
         Args: {
