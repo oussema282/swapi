@@ -703,6 +703,7 @@ export type Database = {
         }
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      recalculate_item_ratings_with_decay: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
