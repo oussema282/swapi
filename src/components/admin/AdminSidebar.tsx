@@ -28,6 +28,7 @@ import { APP_NAME } from '@/config/branding';
 interface AdminSidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  className?: string;
 }
 
 interface NavItem {
@@ -51,7 +52,7 @@ const navItems: NavItem[] = [
   { id: 'system', label: 'System Health', icon: Server, description: 'Backend monitoring' },
 ];
 
-export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarProps) {
+export function AdminSidebar({ activeSection, onSectionChange, className }: AdminSidebarProps) {
   const navigate = useNavigate();
   const [badges, setBadges] = useState<Record<string, number>>({});
 
@@ -77,7 +78,7 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
   }, []);
 
   return (
-    <aside className="hidden lg:flex w-72 flex-col border-r border-border bg-gradient-to-b from-card to-background">
+    <aside className={cn("flex w-72 flex-col border-r border-border bg-gradient-to-b from-card to-background h-full", className)}>
       {/* Header */}
       <div className="flex h-16 items-center gap-3 border-b border-border px-4">
         <Button 
