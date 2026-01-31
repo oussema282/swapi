@@ -169,20 +169,19 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 </div>
               )}
 
-              {/* Photo tap zones */}
+              {/* Story-style tap zones - left/right like Instagram/Facebook Stories */}
               {hasMultiplePhotos && isTop && (
                 <div className="absolute inset-0 flex z-10" style={{ touchAction: 'manipulation' }}>
+                  {/* Left tap zone - previous photo */}
                   <button
                     onClick={handlePhotoTapLeft}
-                    onTouchEnd={handlePhotoTapLeft}
-                    className="w-1/3 h-full bg-transparent cursor-pointer focus:outline-none"
+                    className="w-2/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors"
                     aria-label="Previous photo"
                   />
-                  <div className="w-1/3 h-full" />
+                  {/* Right tap zone - next photo */}
                   <button
                     onClick={handlePhotoTapRight}
-                    onTouchEnd={handlePhotoTapRight}
-                    className="w-1/3 h-full bg-transparent cursor-pointer focus:outline-none"
+                    className="w-3/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors"
                     aria-label="Next photo"
                   />
                 </div>
