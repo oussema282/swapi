@@ -90,22 +90,15 @@ export default function MapView() {
   const locationBlocked = !hasLocation || permissionStatus === 'denied';
 
   // Fetch completed swap item IDs to exclude from map
+  // Uses a SECURITY DEFINER function to get consistent results for all users
   const { data: completedItemIds = [] } = useQuery({
     queryKey: ['completed-swap-items'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('matches')
-        .select('item_a_id, item_b_id')
-        .eq('is_completed', true);
+      const { data, error } = await supabase.rpc('get_completed_swap_item_ids');
 
       if (error) throw error;
       
-      // Get all item IDs that have been swapped
-      const itemIds: string[] = [];
-      data?.forEach(match => {
-        itemIds.push(match.item_a_id, match.item_b_id);
-      });
-      return [...new Set(itemIds)];
+      return (data || []).map((row: { item_id: string }) => row.item_id);
     },
   });
 

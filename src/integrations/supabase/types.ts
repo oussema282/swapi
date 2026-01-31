@@ -947,6 +947,12 @@ export type Database = {
           weights: Json
         }[]
       }
+      get_completed_swap_item_ids: {
+        Args: never
+        Returns: {
+          item_id: string
+        }[]
+      }
       get_match_with_items: {
         Args: { p_match_id: string }
         Returns: {
