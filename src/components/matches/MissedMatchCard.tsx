@@ -153,7 +153,7 @@ export function MissedMatchCard({
                 </Avatar>
                 <span className="font-medium text-sm">
                   <VerifiedName 
-                    name={missedMatch.their_item?.owner_display_name || 'Unknown'} 
+                    name={missedMatch.their_item?.owner_display_name || 'User'} 
                     isPro={missedMatch.their_item?.owner_is_pro}
                     badgeClassName="w-3.5 h-3.5"
                   />

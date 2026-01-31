@@ -69,7 +69,7 @@ export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheir
               {match.their_item?.title}
             </p>
             <p className="text-xs text-muted-foreground/70">
-              with <VerifiedName name={match.other_user_profile?.display_name || 'Unknown'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
+              with <VerifiedName name={match.other_user_profile?.display_name || 'User'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
             </p>
           </div>
 

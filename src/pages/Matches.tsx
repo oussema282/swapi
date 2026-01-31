@@ -560,7 +560,7 @@ export default function Matches() {
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
                               <p className="text-xs text-muted-foreground">
-                                from <VerifiedName name={invite.sender_item?.owner_display_name || 'Unknown'} className="inline" badgeClassName="w-3 h-3" />
+                                from <VerifiedName name={invite.sender_item?.owner_display_name || 'User'} className="inline" badgeClassName="w-3 h-3" />
                               </p>
                             </div>
                           </div>
