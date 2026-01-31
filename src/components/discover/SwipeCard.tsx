@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Package, MapPin, Home, ChevronUp, Star } from 'lucide-react';
+import { Package, MapPin, Home, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -169,22 +169,35 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
                 </div>
               )}
 
-              {/* Story-style tap zones - left/right like Instagram/Facebook Stories */}
+              {/* Story-style tap zones with arrow indicators */}
               {hasMultiplePhotos && isTop && (
-                <div className="absolute inset-0 flex z-10" style={{ touchAction: 'manipulation' }}>
-                  {/* Left tap zone - previous photo */}
-                  <button
-                    onClick={handlePhotoTapLeft}
-                    className="w-2/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors"
-                    aria-label="Previous photo"
-                  />
-                  {/* Right tap zone - next photo */}
-                  <button
-                    onClick={handlePhotoTapRight}
-                    className="w-3/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors"
-                    aria-label="Next photo"
-                  />
-                </div>
+                <>
+                  {/* Tap zones */}
+                  <div className="absolute inset-0 flex z-10" style={{ touchAction: 'manipulation' }}>
+                    {/* Left tap zone - previous photo */}
+                    <button
+                      onClick={handlePhotoTapLeft}
+                      className="w-2/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors group"
+                      aria-label="Previous photo"
+                    >
+                      {/* Left arrow indicator */}
+                      <div className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card/60 backdrop-blur-sm flex items-center justify-center opacity-60 group-hover:opacity-100 group-active:opacity-100 transition-opacity shadow-sm">
+                        <ChevronLeft className="w-5 h-5 text-foreground" />
+                      </div>
+                    </button>
+                    {/* Right tap zone - next photo */}
+                    <button
+                      onClick={handlePhotoTapRight}
+                      className="w-3/5 h-full bg-transparent cursor-pointer focus:outline-none active:bg-black/5 transition-colors group"
+                      aria-label="Next photo"
+                    >
+                      {/* Right arrow indicator */}
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card/60 backdrop-blur-sm flex items-center justify-center opacity-60 group-hover:opacity-100 group-active:opacity-100 transition-opacity shadow-sm">
+                        <ChevronRight className="w-5 h-5 text-foreground" />
+                      </div>
+                    </button>
+                  </div>
+                </>
               )}
             </>
           ) : (

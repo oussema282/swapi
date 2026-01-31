@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
-import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User } from 'lucide-react';
+import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -35,8 +37,20 @@ export function ItemDetailsSheet({
   onViewOnMap,
 }: ItemDetailsSheetProps) {
   const navigate = useNavigate();
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   if (!item) return null;
+
+  const photos = item.photos || [];
+  const hasMultiplePhotos = photos.length > 1;
+
+  const handlePrevPhoto = () => {
+    setCurrentPhotoIndex(prev => (prev > 0 ? prev - 1 : photos.length - 1));
+  };
+
+  const handleNextPhoto = () => {
+    setCurrentPhotoIndex(prev => (prev < photos.length - 1 ? prev + 1 : 0));
+  };
 
   const distanceKm = userLocation?.latitude && userLocation?.longitude && item.latitude && item.longitude
     ? calculateDistance(userLocation.latitude, userLocation.longitude, item.latitude, item.longitude)
@@ -64,14 +78,59 @@ export function ItemDetailsSheet({
         </SheetHeader>
 
         <div className="space-y-6 py-6">
-          {/* Photo */}
-          {item.photos?.length > 0 && (
-            <div className="w-full h-48 rounded-2xl overflow-hidden bg-muted">
+          {/* Photo Gallery with Navigation */}
+          {photos.length > 0 && (
+            <div className="relative w-full h-56 rounded-2xl overflow-hidden bg-muted">
               <img
-                src={item.photos[0]}
-                alt={item.title}
+                src={photos[currentPhotoIndex]}
+                alt={`${item.title} - Photo ${currentPhotoIndex + 1}`}
                 className="w-full h-full object-cover"
               />
+              
+              {/* Photo indicators */}
+              {hasMultiplePhotos && (
+                <div className="absolute top-3 left-3 right-3 flex gap-1.5 z-10">
+                  {photos.map((_, index) => (
+                    <div 
+                      key={index} 
+                      className={cn(
+                        "flex-1 h-1 rounded-full transition-colors",
+                        index <= currentPhotoIndex ? "bg-card" : "bg-foreground/30"
+                      )}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Navigation arrows */}
+              {hasMultiplePhotos && (
+                <>
+                  {/* Left arrow */}
+                  <button
+                    onClick={handlePrevPhoto}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm flex items-center justify-center hover:bg-card/90 active:scale-95 transition-all shadow-sm z-10"
+                    aria-label="Previous photo"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-foreground" />
+                  </button>
+                  
+                  {/* Right arrow */}
+                  <button
+                    onClick={handleNextPhoto}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm flex items-center justify-center hover:bg-card/90 active:scale-95 transition-all shadow-sm z-10"
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight className="w-5 h-5 text-foreground" />
+                  </button>
+
+                  {/* Photo counter */}
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-foreground/60 backdrop-blur-sm rounded-full z-10">
+                    <span className="text-xs font-medium text-card">
+                      {currentPhotoIndex + 1} / {photos.length}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
