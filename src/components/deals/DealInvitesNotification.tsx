@@ -100,7 +100,7 @@ export function DealInvitesNotification() {
 
         return {
           ...invite,
-          sender_item: senderItem ? { ...senderItem, owner_display_name: ownerProfile?.display_name || 'Unknown' } : undefined,
+          sender_item: senderItem ? { ...senderItem, owner_display_name: ownerProfile?.display_name || 'User' } : undefined,
           receiver_item: receiverItem,
         };
       }) as DealInviteWithItems[];

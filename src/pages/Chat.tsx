@@ -88,7 +88,7 @@ export default function Chat() {
         {/* Professional Chat Header */}
         <ChatHeader
           avatarUrl={match?.other_user_profile?.avatar_url}
-          displayName={match?.other_user_profile?.display_name || 'Unknown'}
+          displayName={match?.other_user_profile?.display_name || 'User'}
           isOnline={otherUserOnline}
           lastSeen={displayLastSeen}
           matchId={matchId}

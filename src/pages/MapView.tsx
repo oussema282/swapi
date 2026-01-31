@@ -144,7 +144,7 @@ export default function MapView() {
         const profile = profilesMap.get(item.user_id);
         return {
           ...item,
-          owner_display_name: profile?.display_name || 'Unknown',
+          owner_display_name: profile?.display_name || 'User',
           owner_avatar_url: profile?.avatar_url || null,
         };
       }) as ItemWithOwner[];

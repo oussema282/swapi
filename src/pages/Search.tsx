@@ -165,7 +165,7 @@ export default function Search() {
 
       return (allItems || []).map(item => ({
         ...item,
-        owner_display_name: profileMap.get(item.user_id)?.display_name || 'Unknown',
+        owner_display_name: profileMap.get(item.user_id)?.display_name || 'User',
         owner_avatar_url: profileMap.get(item.user_id)?.avatar_url || null,
         owner_latitude: profileMap.get(item.user_id)?.latitude || null,
         owner_longitude: profileMap.get(item.user_id)?.longitude || null,
