@@ -93,7 +93,7 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
     });
 
     const sendInviteMutation = useMutation({
-      mutationFn: async (senderItemId: string) => {
+    mutationFn: async (senderItemId: string) => {
         // Check limit for free users
         if (!canUse.dealInvites) {
           setShowModal(false);
@@ -101,11 +101,7 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
           throw new Error('limit_reached');
         }
 
-        // Increment usage for free users
-        if (!isPro) {
-          await incrementUsage('deal_invites');
-        }
-
+        // Insert first — only deduct credit on success
         const { error } = await supabase
           .from('deal_invites' as any)
           .insert({
@@ -113,6 +109,11 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
             receiver_item_id: targetItemId,
           });
         if (error) throw error;
+
+        // Increment usage only after successful insert
+        if (!isPro) {
+          await incrementUsage('deal_invites');
+        }
       },
       onSuccess: () => {
         toast.success('Deal invite sent!');
