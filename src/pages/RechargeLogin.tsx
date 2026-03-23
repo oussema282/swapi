@@ -36,9 +36,10 @@ export default function RechargeLogin() {
           account_id: result.account_id,
           phone: result.phone,
           display_name: result.display_name,
+          balance: result.balance ?? 0,
         }));
         toast.success('Connexion réussie !');
-        navigate('/recharge');
+        navigate('/recharge/operator');
       } else {
         toast.error(result.error || 'Erreur de connexion');
       }
