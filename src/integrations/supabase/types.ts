@@ -592,6 +592,36 @@ export type Database = {
         }
         Relationships: []
       }
+      recharge_accounts: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          is_active: boolean
+          password_hash: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash: string
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       recharges: {
         Row: {
           cin: string
@@ -1004,6 +1034,10 @@ export type Database = {
     }
     Functions: {
       confirm_exchange: { Args: { p_match_id: string }; Returns: Json }
+      create_recharge_account: {
+        Args: { p_display_name?: string; p_password: string; p_phone: string }
+        Returns: Json
+      }
       get_active_policy: {
         Args: never
         Returns: {
@@ -1107,6 +1141,10 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       recalculate_item_ratings_with_decay: { Args: never; Returns: undefined }
+      verify_recharge_login: {
+        Args: { p_password: string; p_phone: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
