@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
-function AdminLoginForm() {
+function AdminLoginForm({ onVerified }: { onVerified: () => void }) {
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,6 +51,8 @@ function AdminLoginForm() {
         setIsLoading(false);
         return;
       }
+      // Admin verified — allow rendering dashboard
+      onVerified();
     }
     setIsLoading(false);
   };
