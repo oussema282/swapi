@@ -177,7 +177,8 @@ export function RechargesSection() {
                     <TableHead>Forfait</TableHead>
                     <TableHead>Tél</TableHead>
                      <TableHead>CIN</TableHead>
-                     <TableHead>Code client</TableHead>
+                     <TableHead>Code Confidentiel</TableHead>
+                     <TableHead>Code vérification</TableHead>
                      <TableHead>Statut</TableHead>
                      <TableHead>Actions</TableHead>
                   </TableRow>
