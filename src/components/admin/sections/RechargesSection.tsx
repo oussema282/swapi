@@ -107,12 +107,20 @@ export function RechargesSection() {
             <Smartphone className="h-6 w-6 text-primary" />
             Recharges
           </h2>
-          <p className="text-muted-foreground text-sm">Gérer les demandes de recharge</p>
+          <p className="text-muted-foreground text-sm">Gérer les demandes et comptes de recharge</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="h-4 w-4 mr-1" /> Actualiser
         </Button>
       </div>
+
+      <Tabs defaultValue="requests" className="w-full">
+        <TabsList>
+          <TabsTrigger value="requests">Demandes</TabsTrigger>
+          <TabsTrigger value="accounts">Comptes</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="requests" className="space-y-6 mt-4">
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
