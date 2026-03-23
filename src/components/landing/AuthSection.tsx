@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
