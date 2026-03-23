@@ -189,26 +189,22 @@ export function RechargesSection() {
                       <TableCell className="font-medium">{r.forfait} Gb</TableCell>
                       <TableCell>{r.tel}</TableCell>
                       <TableCell className="font-mono text-xs">{r.cin}</TableCell>
+                      <TableCell>
+                        {r.verification_code ? (
+                          <span className="font-mono font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded">{r.verification_code}</span>
+                        ) : (
+                          <span className="text-muted-foreground text-xs">—</span>
+                        )}
+                      </TableCell>
                       <TableCell>{statusBadge(r.status, r.is_verified)}</TableCell>
                       <TableCell>
-                        <div className="flex gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => { setSelectedRecharge(r); setShowDetailDialog(true); }}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          {!r.is_verified && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => { setSelectedRecharge(r); setCodeToSend(r.verification_code || ''); setShowCodeDialog(true); }}
-                            >
-                              <Send className="h-4 w-4 mr-1" /> Code
-                            </Button>
-                          )}
-                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => { setSelectedRecharge(r); setShowDetailDialog(true); }}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
