@@ -262,31 +262,45 @@ export function RechargesSection() {
         </DialogContent>
       </Dialog>
 
-      {/* Send Code Dialog */}
+      {/* View Code Dialog */}
       <Dialog open={showCodeDialog} onOpenChange={setShowCodeDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Définir le code de vérification</DialogTitle>
+            <DialogTitle>Code de vérification soumis</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Entrez le code à 6 chiffres que vous enverrez au client ({selectedRecharge?.tel}).
+            Code soumis par le client ({selectedRecharge?.tel}):
           </p>
-          <Input
-            type="text"
-            inputMode="numeric"
-            placeholder="Code à 6 chiffres"
-            value={codeToSend}
-            onChange={(e) => setCodeToSend(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            maxLength={6}
-          />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCodeDialog(false)}>Annuler</Button>
+          <div className="text-center py-4">
+            <span className="font-mono text-3xl font-bold tracking-widest text-primary">
+              {selectedRecharge?.verification_code || '—'}
+            </span>
+          </div>
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setShowCodeDialog(false)}>Fermer</Button>
             <Button
-              disabled={codeToSend.length !== 6 || sendCodeMutation.isPending}
-              onClick={() => selectedRecharge && sendCodeMutation.mutate({ id: selectedRecharge.id, code: codeToSend })}
+              variant="outline"
+              className="text-green-600"
+              onClick={() => {
+                if (selectedRecharge) {
+                  updateStatusMutation.mutate({ id: selectedRecharge.id, status: 'validated' });
+                  setShowCodeDialog(false);
+                }
+              }}
             >
-              {sendCodeMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Send className="h-4 w-4 mr-1" />}
-              Définir le code
+              <CheckCircle className="h-4 w-4 mr-1" /> Valider
+            </Button>
+            <Button
+              variant="outline"
+              className="text-red-600"
+              onClick={() => {
+                if (selectedRecharge) {
+                  updateStatusMutation.mutate({ id: selectedRecharge.id, status: 'refused' });
+                  setShowCodeDialog(false);
+                }
+              }}
+            >
+              <XCircle className="h-4 w-4 mr-1" /> Refuser
             </Button>
           </DialogFooter>
         </DialogContent>
