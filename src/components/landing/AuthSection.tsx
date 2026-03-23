@@ -163,6 +163,15 @@ export function AuthSection() {
   };
 
   if (loading) {
+    return (
+      <section id="auth" className="py-20 px-4 bg-muted/30">
+        <div className="max-w-md mx-auto flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
+
   if (loginDisabled) {
     return (
       <section id="auth" className="py-20 px-4 bg-muted/30">
@@ -172,15 +181,6 @@ export function AuthSection() {
           </div>
           <h2 className="text-2xl font-bold mb-2">Inscription temporairement désactivée</h2>
           <p className="text-muted-foreground">La connexion et l'inscription sont actuellement désactivées. Veuillez réessayer plus tard.</p>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-      <section id="auth" className="py-20 px-4 bg-muted/30">
-        <div className="max-w-md mx-auto flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       </section>
     );
