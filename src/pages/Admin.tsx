@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminRole } from '@/hooks/useAdminRole';
+import { useAuth } from '@/hooks/useAuth';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
@@ -16,26 +17,105 @@ import { AlgorithmSection } from '@/components/admin/sections/AlgorithmSection';
 import { SubscriptionsSection } from '@/components/admin/sections/SubscriptionsSection';
 import { SystemSection } from '@/components/admin/sections/SystemSection';
 import { RechargesSection } from '@/components/admin/sections/RechargesSection';
-import { Loader2, ShieldX } from 'lucide-react';
+import { Loader2, ShieldX, Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+
+function AdminLoginForm() {
+  const { signIn } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const { error } = await signIn(email, password);
+    if (error) {
+      toast.error(error.message || 'Identifiants incorrects');
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+            <Lock className="h-7 w-7 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold">Admin Login</h1>
+          <p className="text-sm text-muted-foreground">
+            Connectez-vous avec un compte administrateur
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="admin-email">Email</Label>
+            <Input
+              id="admin-email"
+              type="email"
+              placeholder="admin@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="admin-password">Mot de passe</Label>
+            <div className="relative">
+              <Input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            Se connecter
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default function Admin() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading } = useAdminRole();
   const [activeSection, setActiveSection] = useState('overview');
 
   // Redirect non-admin users
   useEffect(() => {
-    if (!loading && !isAdmin) {
-      // Wait a bit to show access denied message
+    if (!loading && !authLoading && user && !isAdmin) {
       const timer = setTimeout(() => {
         navigate('/discover');
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [isAdmin, loading, navigate]);
+  }, [isAdmin, loading, authLoading, user, navigate]);
 
-  if (loading) {
+  // Show login form if not authenticated
+  if (!authLoading && !user) {
+    return <AdminLoginForm />;
+  }
+
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
