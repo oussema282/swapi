@@ -74,6 +74,20 @@ export function RechargeAccountsManager() {
     },
   });
 
+  const updateBalanceMutation = useMutation({
+    mutationFn: async ({ id, amount }: { id: string; amount: number }) => {
+      const { error } = await supabase
+        .from('recharge_accounts' as any)
+        .update({ balance: amount } as any)
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recharge-accounts'] });
+      toast.success('Solde mis à jour');
+    },
+  });
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
