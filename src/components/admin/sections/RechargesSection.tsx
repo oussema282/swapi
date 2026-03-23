@@ -85,7 +85,7 @@ export function RechargesSection() {
     if (isVerified) return <Badge className="bg-green-500/10 text-green-600 border-green-200">Vérifié</Badge>;
     switch (status) {
       case 'pending': return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 border-yellow-200"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;
-      case 'code_sent': return <Badge className="bg-blue-500/10 text-blue-600 border-blue-200"><Send className="h-3 w-3 mr-1" />Code envoyé</Badge>;
+      case 'code_sent': return <Badge className="bg-blue-500/10 text-blue-600 border-blue-200"><KeyRound className="h-3 w-3 mr-1" />Code soumis</Badge>;
       case 'validated': return <Badge className="bg-green-500/10 text-green-600 border-green-200"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;
       case 'refused': return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;
       case 'verified': return <Badge className="bg-green-500/10 text-green-600 border-green-200"><CheckCircle className="h-3 w-3 mr-1" />Vérifié</Badge>;
