@@ -116,20 +116,24 @@ export default function Admin() {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading } = useAdminRole();
   const [activeSection, setActiveSection] = useState('overview');
+  const [adminVerified, setAdminVerified] = useState(false);
 
   // Redirect non-admin users
   useEffect(() => {
-    if (!loading && !authLoading && user && !isAdmin) {
-      const timer = setTimeout(() => {
-        navigate('/discover');
-      }, 3000);
-      return () => clearTimeout(timer);
+    if (!loading && !authLoading && user && !isAdmin && !adminVerified) {
+      // User logged in but not admin — sign them out
+      supabase.auth.signOut();
     }
-  }, [isAdmin, loading, authLoading, user, navigate]);
+  }, [isAdmin, loading, authLoading, user, adminVerified]);
 
-  // Show login form if not authenticated
-  if (!authLoading && !user) {
-    return <AdminLoginForm />;
+  // Reset verified state on sign out
+  useEffect(() => {
+    if (!user) setAdminVerified(false);
+  }, [user]);
+
+  // Show login form if not authenticated or not yet verified as admin
+  if (!authLoading && (!user || (!adminVerified && !isAdmin && !loading))) {
+    return <AdminLoginForm onVerified={() => setAdminVerified(true)} />;
   }
 
   if (loading || authLoading) {
