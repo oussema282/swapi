@@ -4,6 +4,7 @@ import { PlatformStats } from '../PlatformStats';
 import { AdminChart } from '../AdminChart';
 import { RecentActivity } from '../RecentActivity';
 import { QuickActions } from '../QuickActions';
+import { LoginToggle } from '../LoginToggle';
 import { SystemHealth } from '../SystemHealth';
 import { TopPerformers } from '../TopPerformers';
 import { CategoryBreakdown } from '../CategoryBreakdown';
