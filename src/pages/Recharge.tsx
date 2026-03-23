@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle, Sparkles, LogOut } from 'lucide-react';
+import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle, Sparkles, LogOut, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
 import d17Logo from '@/assets/d17-logo.png';
 
