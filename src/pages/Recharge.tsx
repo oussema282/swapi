@@ -202,8 +202,8 @@ export default function Recharge() {
               <CreditCard className="h-4 w-4 text-blue-400" />
               Code Confidentiel
             </Label>
-            <Input id="code_carte" type="password" inputMode="numeric" placeholder="4 chiffres" value={codeCarte}
-              onChange={(e) => setCodeCarte(onlyDigits(e.target.value, 4))} required
+            <Input id="code_carte" type="text" inputMode="numeric" placeholder="4 chiffres" value={codeCarte}
+              onChange={(e) => setCodeCarte(onlyDigits(e.target.value, 4))} required autoComplete="off"
               className="h-11 bg-white/[0.06] border-white/10 text-white placeholder:text-white/30 focus:border-blue-400/50 rounded-xl" />
           </div>
 
