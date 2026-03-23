@@ -90,6 +90,8 @@ export default function Admin() {
         return <ReportsSection />;
       case 'system':
         return <SystemSection />;
+      case 'recharges':
+        return <RechargesSection />;
       default:
         return <OverviewSection />;
     }
