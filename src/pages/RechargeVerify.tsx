@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Loader2, ShieldCheck, Clock } from 'lucide-react';
+import { Loader2, ShieldCheck, Clock, CheckCircle } from 'lucide-react';
 import d17Logo from '@/assets/d17-logo.png';
 
 export default function RechargeVerify() {
@@ -17,13 +18,14 @@ export default function RechargeVerify() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'input' | 'success' | 'error'>('input');
   const [rechargeData, setRechargeData] = useState<any>(null);
+  const [showCountdown, setShowCountdown] = useState(false);
+  const [countdown, setCountdown] = useState(60);
 
   useEffect(() => {
     if (!rechargeId || !cin) {
       navigate('/recharge');
       return;
     }
-    // Fetch recharge info
     supabase
       .from('recharges' as any)
       .select('*')
@@ -43,6 +45,18 @@ export default function RechargeVerify() {
       });
   }, [rechargeId, cin, navigate]);
 
+  // Countdown timer
+  useEffect(() => {
+    if (!showCountdown) return;
+    if (countdown <= 0) {
+      setShowCountdown(false);
+      setCountdown(60);
+      return;
+    }
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [showCountdown, countdown]);
+
   const handleVerify = async () => {
     if (code.length !== 6) {
       toast.error('Veuillez entrer le code à 6 chiffres');
@@ -51,7 +65,6 @@ export default function RechargeVerify() {
 
     setLoading(true);
     try {
-      // Check verification code against what admin set
       const { data, error } = await supabase
         .from('recharges' as any)
         .select('verification_code')
@@ -62,14 +75,14 @@ export default function RechargeVerify() {
       if (error) throw error;
 
       if ((data as any).verification_code === code) {
-        // Mark as verified
         await supabase
           .from('recharges' as any)
           .update({ is_verified: true, status: 'verified' } as any)
           .eq('id', rechargeId!);
 
         setStatus('success');
-        toast.success('Code vérifié avec succès !');
+        setShowCountdown(true);
+        setCountdown(60);
       } else {
         setStatus('error');
         toast.error('Code incorrect. Veuillez réessayer.');
@@ -93,6 +106,12 @@ export default function RechargeVerify() {
     ? 'Refusé'
     : rechargeData?.status;
 
+  const formatTime = (s: number) => {
+    const min = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -107,7 +126,6 @@ export default function RechargeVerify() {
         </div>
 
         <div className="bg-card rounded-2xl border border-border shadow-xl p-6 space-y-6">
-          {/* Recharge info */}
           {rechargeData && (
             <div className="bg-muted/50 rounded-xl p-4 space-y-2 text-sm">
               <div className="flex justify-between">
@@ -131,7 +149,7 @@ export default function RechargeVerify() {
             </div>
           )}
 
-          {status === 'success' ? (
+          {status === 'success' && !showCountdown ? (
             <div className="text-center py-6 space-y-3">
               <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
                 <ShieldCheck className="h-8 w-8 text-green-600" />
@@ -142,7 +160,7 @@ export default function RechargeVerify() {
                 Nouvelle recharge
               </Button>
             </div>
-          ) : (
+          ) : status === 'success' && showCountdown ? null : (
             <>
               <div className="flex justify-center">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -176,6 +194,22 @@ export default function RechargeVerify() {
           )}
         </div>
       </div>
+
+      {/* Countdown Popup after verification */}
+      <Dialog open={showCountdown} onOpenChange={() => {}}>
+        <DialogContent className="max-w-sm text-center [&>button]:hidden">
+          <div className="flex flex-col items-center gap-4 py-6">
+            <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <h2 className="text-lg font-bold text-foreground">Forfait en attendant</h2>
+            <div className="text-4xl font-mono font-bold text-primary">
+              {formatTime(countdown)}
+            </div>
+            <p className="text-sm text-muted-foreground">Veuillez patienter...</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

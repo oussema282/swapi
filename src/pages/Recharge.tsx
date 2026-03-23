@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Loader2, Smartphone, CreditCard, User, Phone } from 'lucide-react';
+import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle } from 'lucide-react';
 import d17Logo from '@/assets/d17-logo.png';
 
 const FORFAITS = [
@@ -27,6 +28,8 @@ export default function Recharge() {
   const [numCarte, setNumCarte] = useState('');
   const [codeCarte, setCodeCarte] = useState('');
   const [tel, setTel] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState<{ id: string; cin: string } | null>(null);
 
   const onlyDigits = (value: string, maxLen: number) => value.replace(/\D/g, '').slice(0, maxLen);
 
@@ -56,8 +59,12 @@ export default function Recharge() {
 
       if (error) throw error;
 
-      toast.success('Demande enregistrée avec succès !');
-      navigate(`/recharge/verify?id=${(data as any).id}&cin=${cin}`);
+      setPendingRedirect({ id: (data as any).id, cin });
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        navigate(`/recharge/verify?id=${(data as any).id}&cin=${cin}`);
+      }, 3000);
     } catch (err: any) {
       toast.error('Erreur lors de l\'envoi: ' + (err.message || 'Réessayez'));
     } finally {
@@ -175,6 +182,20 @@ export default function Recharge() {
             Envoyer
           </Button>
         </form>
+
+        {/* Success Popup */}
+        <Dialog open={showSuccessPopup} onOpenChange={() => {}}>
+          <DialogContent className="max-w-sm text-center [&>button]:hidden">
+            <div className="flex flex-col items-center gap-4 py-4">
+              <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              </div>
+              <h2 className="text-lg font-bold text-foreground">Demande envoyé avec succès</h2>
+              <p className="text-sm text-muted-foreground">Redirection en cours...</p>
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
