@@ -175,68 +175,12 @@ export function AuthSection() {
   if (loginDisabled) {
     return (
       <section id="auth" className="py-20 px-4 bg-muted/30">
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <div className="mx-auto h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
-              <Lock className="h-8 w-8 text-destructive" />
-            </div>
-            <h2 className="text-2xl font-bold mb-2">Inscription temporairement désactivée</h2>
-            <p className="text-muted-foreground">La connexion et l'inscription sont actuellement désactivées. Veuillez réessayer plus tard.</p>
+        <div className="max-w-md mx-auto text-center py-12">
+          <div className="mx-auto h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+            <Lock className="h-8 w-8 text-destructive" />
           </div>
-
-          {/* Admin-only login */}
-          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
-            <CardHeader className="pb-4 text-center">
-              <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-                <Lock className="h-4 w-4" />
-                Accès Administrateur
-              </p>
-            </CardHeader>
-            <CardContent className="pb-6">
-              <form onSubmit={handleSignIn} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="admin-email" className="text-sm font-medium">{t('auth.email')}</Label>
-                  <div className="relative group">
-                    <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                    <Input
-                      id="admin-email"
-                      type="email"
-                      placeholder={t('auth.emailPlaceholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="admin-password" className="text-sm font-medium">{t('auth.password')}</Label>
-                  <div className="relative group">
-                    <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                    <Input
-                      id="admin-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                      required
-                    />
-                  </div>
-                </div>
-                <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      {t('auth.signingIn')}
-                    </>
-                  ) : (
-                    'Connexion Admin'
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <h2 className="text-2xl font-bold mb-2">Inscription temporairement désactivée</h2>
+          <p className="text-muted-foreground">La connexion et l'inscription sont actuellement désactivées. Veuillez réessayer plus tard.</p>
         </div>
       </section>
     );
