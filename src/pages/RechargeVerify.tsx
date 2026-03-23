@@ -6,6 +6,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { Loader2, ShieldCheck, Clock, Timer, Sparkles } from 'lucide-react';
+ import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import d17Logo from '@/assets/d17-logo.png';
 
@@ -173,7 +174,7 @@ export default function RechargeVerify() {
               </div>
               <h2 className="text-lg font-bold text-white">Vérifié avec succès !</h2>
               <p className="text-blue-200/50 text-sm">Votre recharge a été confirmée.</p>
-              <Button onClick={() => navigate('/recharge')} variant="outline"
+              <Button onClick={() => navigate('/recharge/operator')} variant="outline"
                 className="rounded-xl border-white/10 text-white hover:bg-white/10">
                 Nouvelle recharge
               </Button>
@@ -202,6 +203,12 @@ export default function RechargeVerify() {
                 disabled={loading || code.length !== 6}>
                 {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
                 Vérifier
+              </Button>
+
+              <Button onClick={() => navigate('/recharge/operator')} variant="ghost"
+                className="w-full text-blue-300/60 hover:text-white hover:bg-white/[0.06]">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour
               </Button>
             </>
           )}
