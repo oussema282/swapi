@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Loader2, UserPlus, Phone, Lock, User, Trash2 } from 'lucide-react';
+import { Loader2, UserPlus, Phone, Lock, User, Trash2, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface RechargeAccount {
