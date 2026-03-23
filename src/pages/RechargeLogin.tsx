@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Loader2, Phone, Lock, Wifi, ShieldX } from 'lucide-react';
+import { Loader2, Phone, Lock, Wifi } from 'lucide-react';
 import { motion } from 'framer-motion';
 import d17Logo from '@/assets/d17-logo.png';
 
@@ -14,18 +14,6 @@ export default function RechargeLogin() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loginDisabled, setLoginDisabled] = useState(false);
-
-  useEffect(() => {
-    supabase
-      .from('system_settings' as any)
-      .select('value')
-      .eq('key', 'login_disabled')
-      .single()
-      .then(({ data }) => {
-        if ((data as any)?.value === true) setLoginDisabled(true);
-      });
-  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +36,10 @@ export default function RechargeLogin() {
           account_id: result.account_id,
           phone: result.phone,
           display_name: result.display_name,
+          balance: result.balance ?? 0,
         }));
         toast.success('Connexion réussie !');
-        navigate('/recharge');
+        navigate('/recharge/operator');
       } else {
         toast.error(result.error || 'Erreur de connexion');
       }
@@ -101,12 +90,6 @@ export default function RechargeLogin() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          {loginDisabled && (
-            <div className="mb-5 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
-              <ShieldX className="h-5 w-5 text-red-400 shrink-0" />
-              <p className="text-sm text-red-200">Le service est temporairement désactivé. Veuillez réessayer plus tard.</p>
-            </div>
-          )}
           <form
             onSubmit={handleLogin}
             className="bg-white/[0.07] backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-7 space-y-5"
@@ -151,7 +134,7 @@ export default function RechargeLogin() {
             <Button
               type="submit"
               className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300"
-              disabled={loading || loginDisabled}
+              disabled={loading}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin mr-2" />

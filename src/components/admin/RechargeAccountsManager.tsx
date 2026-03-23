@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Loader2, UserPlus, Phone, Lock, User, Trash2 } from 'lucide-react';
+import { Loader2, UserPlus, Phone, Lock, User, Trash2, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface RechargeAccount {
@@ -16,6 +16,7 @@ interface RechargeAccount {
   phone: string;
   display_name: string;
   is_active: boolean;
+  balance: number;
   created_at: string;
 }
 
@@ -25,13 +26,14 @@ export function RechargeAccountsManager() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [balanceInput, setBalanceInput] = useState('');
 
   const { data: accounts, isLoading } = useQuery({
     queryKey: ['recharge-accounts'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('recharge_accounts' as any)
-        .select('id, phone, display_name, is_active, created_at')
+        .select('id, phone, display_name, is_active, balance, created_at')
         .order('created_at', { ascending: false });
       if (error) throw error;
       return (data || []) as unknown as RechargeAccount[];
@@ -52,7 +54,7 @@ export function RechargeAccountsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recharge-accounts'] });
       setShowCreate(false);
-      setPhone(''); setPassword(''); setDisplayName('');
+      setPhone(''); setPassword(''); setDisplayName(''); setBalanceInput('');
       toast.success('Compte créé avec succès');
     },
     onError: (err: any) => toast.error(err.message || 'Erreur'),
@@ -69,6 +71,20 @@ export function RechargeAccountsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recharge-accounts'] });
       toast.success('Statut mis à jour');
+    },
+  });
+
+  const updateBalanceMutation = useMutation({
+    mutationFn: async ({ id, amount }: { id: string; amount: number }) => {
+      const { error } = await supabase
+        .from('recharge_accounts' as any)
+        .update({ balance: amount } as any)
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recharge-accounts'] });
+      toast.success('Solde mis à jour');
     },
   });
 
@@ -92,6 +108,7 @@ export function RechargeAccountsManager() {
               <TableRow>
                 <TableHead>Tél</TableHead>
                 <TableHead>Nom</TableHead>
+                <TableHead>Solde</TableHead>
                 <TableHead>Statut</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Actions</TableHead>
@@ -102,6 +119,24 @@ export function RechargeAccountsManager() {
                 <TableRow key={a.id}>
                   <TableCell className="font-mono">{a.phone}</TableCell>
                   <TableCell>{a.display_name || '—'}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1.5">
+                      <Wallet className="h-3.5 w-3.5 text-emerald-500" />
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue={a.balance}
+                        className="w-20 text-sm bg-transparent border border-border rounded px-1.5 py-0.5"
+                        onBlur={(e) => {
+                          const val = parseFloat(e.target.value);
+                          if (!isNaN(val) && val !== a.balance) {
+                            updateBalanceMutation.mutate({ id: a.id, amount: val });
+                          }
+                        }}
+                      />
+                      <span className="text-xs text-muted-foreground">DT</span>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={a.is_active ? 'default' : 'secondary'}>
                       {a.is_active ? 'Actif' : 'Désactivé'}

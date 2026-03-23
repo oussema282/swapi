@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle, Sparkles, LogOut } from 'lucide-react';
+import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle, Sparkles, LogOut, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
 import d17Logo from '@/assets/d17-logo.png';
 
@@ -45,13 +45,19 @@ export default function Recharge() {
       navigate('/recharge/login');
       return;
     }
-    setSession(s);
+    const op = sessionStorage.getItem('recharge_operator');
+    if (!op) {
+      navigate('/recharge/operator');
+      return;
+    }
+    setSession({ ...s, operator: op });
   }, [navigate]);
 
   const onlyDigits = (value: string, maxLen: number) => value.replace(/\D/g, '').slice(0, maxLen);
 
   const handleLogout = () => {
     sessionStorage.removeItem('recharge_session');
+    sessionStorage.removeItem('recharge_operator');
     navigate('/recharge/login');
   };
 
@@ -118,10 +124,16 @@ export default function Recharge() {
             </div>
           </div>
           <h1 className="text-2xl font-bold text-white">Recharge</h1>
-          <p className="text-blue-200/60 mt-1 text-sm">Rechargez votre ligne maintenant</p>
+          <p className="text-blue-200/60 mt-1 text-sm">
+            {session.operator === 'ooredoo' ? 'Ooredoo' : session.operator === 'tt' ? 'Tunisie Telecom' : 'Orange'}
+          </p>
 
-          {/* User info bar */}
-          <div className="mt-3 flex items-center justify-center gap-2">
+          {/* Balance + User info bar */}
+          <div className="mt-3 flex items-center justify-center gap-3">
+            <span className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+              <Wallet className="h-3 w-3" />
+              {(session.balance ?? 0).toFixed(2)} DT
+            </span>
             <span className="text-xs text-blue-300/60 bg-white/[0.06] px-3 py-1 rounded-full">
               {session.phone}
             </span>

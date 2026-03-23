@@ -32,6 +32,7 @@ import Privacy from "./pages/Privacy";
 import Safety from "./pages/Safety";
 import Recharge from "./pages/Recharge";
 import RechargeLogin from "./pages/RechargeLogin";
+import RechargeOperator from "./pages/RechargeOperator";
 import RechargeVerify from "./pages/RechargeVerify";
 
 const queryClient = new QueryClient();
@@ -71,8 +72,9 @@ const App = () => (
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/safety" element={<Safety />} />
-                  <Route path="/recharge" element={<Recharge />} />
+                  <Route path="/recharge/form" element={<Recharge />} />
                   <Route path="/recharge/login" element={<RechargeLogin />} />
+                  <Route path="/recharge/operator" element={<RechargeOperator />} />
                   <Route path="/recharge/verify" element={<RechargeVerify />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
