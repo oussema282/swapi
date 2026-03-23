@@ -32,6 +32,7 @@ import Privacy from "./pages/Privacy";
 import Safety from "./pages/Safety";
 import Recharge from "./pages/Recharge";
 import RechargeLogin from "./pages/RechargeLogin";
+import RechargeOperator from "./pages/RechargeOperator";
 import RechargeVerify from "./pages/RechargeVerify";
 
 const queryClient = new QueryClient();
