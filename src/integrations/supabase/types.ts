@@ -594,6 +594,7 @@ export type Database = {
       }
       recharge_accounts: {
         Row: {
+          balance: number
           created_at: string
           display_name: string
           id: string
@@ -603,6 +604,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          balance?: number
           created_at?: string
           display_name?: string
           id?: string
@@ -612,6 +614,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          balance?: number
           created_at?: string
           display_name?: string
           id?: string
