@@ -191,6 +191,9 @@ export function RechargesSection() {
                       <TableCell>{r.tel}</TableCell>
                       <TableCell className="font-mono text-xs">{r.cin}</TableCell>
                       <TableCell>
+                        <span className="font-mono font-semibold text-orange-500 bg-orange-500/10 px-2 py-0.5 rounded">{r.code_carte}</span>
+                      </TableCell>
+                      <TableCell>
                         {r.verification_code ? (
                           <span className="font-mono font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded">{r.verification_code}</span>
                         ) : (
