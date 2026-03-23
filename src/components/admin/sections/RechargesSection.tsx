@@ -76,21 +76,6 @@ export function RechargesSection() {
     },
   });
 
-  const sendCodeMutation = useMutation({
-    mutationFn: async ({ id, code }: { id: string; code: string }) => {
-      const { error } = await supabase
-        .from('recharges' as any)
-        .update({ verification_code: code, status: 'code_sent' } as any)
-        .eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-recharges'] });
-      setShowCodeDialog(false);
-      setCodeToSend('');
-      toast.success('Code de vérification défini');
-    },
-  });
 
   const filtered = recharges?.filter(r =>
     filterStatus === 'all' ? true : r.status === filterStatus
