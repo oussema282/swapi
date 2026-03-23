@@ -54,7 +54,7 @@ export function RechargeAccountsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recharge-accounts'] });
       setShowCreate(false);
-      setPhone(''); setPassword(''); setDisplayName('');
+      setPhone(''); setPassword(''); setDisplayName(''); setBalanceInput('');
       toast.success('Compte créé avec succès');
     },
     onError: (err: any) => toast.error(err.message || 'Erreur'),
