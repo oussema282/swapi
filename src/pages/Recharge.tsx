@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Loader2, Smartphone, CreditCard, User, Phone } from 'lucide-react';
+import { Loader2, Smartphone, CreditCard, User, Phone, CheckCircle } from 'lucide-react';
 import d17Logo from '@/assets/d17-logo.png';
 
 const FORFAITS = [
