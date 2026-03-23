@@ -57,6 +57,7 @@ export default function Recharge() {
 
   const handleLogout = () => {
     sessionStorage.removeItem('recharge_session');
+    sessionStorage.removeItem('recharge_operator');
     navigate('/recharge/login');
   };
 
