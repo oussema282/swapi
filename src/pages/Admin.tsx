@@ -100,20 +100,20 @@ export default function Admin() {
   const { isAdmin, loading } = useAdminRole();
   const [activeSection, setActiveSection] = useState('overview');
 
-  // Show login form if not authenticated
-  if (!authLoading && !user) {
-    return <AdminLoginForm />;
-  }
-
   // Redirect non-admin users
   useEffect(() => {
-    if (!loading && user && !isAdmin) {
+    if (!loading && !authLoading && user && !isAdmin) {
       const timer = setTimeout(() => {
         navigate('/discover');
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [isAdmin, loading, user, navigate]);
+  }, [isAdmin, loading, authLoading, user, navigate]);
+
+  // Show login form if not authenticated
+  if (!authLoading && !user) {
+    return <AdminLoginForm />;
+  }
 
   if (loading || authLoading) {
     return (
