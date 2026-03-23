@@ -29,8 +29,6 @@ interface Recharge {
 export function RechargesSection() {
   const queryClient = useQueryClient();
   const [selectedRecharge, setSelectedRecharge] = useState<Recharge | null>(null);
-  const [codeToSend, setCodeToSend] = useState('');
-  const [showCodeDialog, setShowCodeDialog] = useState(false);
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
