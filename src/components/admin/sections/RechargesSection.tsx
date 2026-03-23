@@ -176,9 +176,10 @@ export function RechargesSection() {
                     <TableHead>Date</TableHead>
                     <TableHead>Forfait</TableHead>
                     <TableHead>Tél</TableHead>
-                    <TableHead>CIN</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead>Actions</TableHead>
+                     <TableHead>CIN</TableHead>
+                     <TableHead>Code client</TableHead>
+                     <TableHead>Statut</TableHead>
+                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
