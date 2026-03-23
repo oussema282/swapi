@@ -108,6 +108,7 @@ export function RechargeAccountsManager() {
               <TableRow>
                 <TableHead>Tél</TableHead>
                 <TableHead>Nom</TableHead>
+                <TableHead>Solde</TableHead>
                 <TableHead>Statut</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Actions</TableHead>
@@ -118,6 +119,24 @@ export function RechargeAccountsManager() {
                 <TableRow key={a.id}>
                   <TableCell className="font-mono">{a.phone}</TableCell>
                   <TableCell>{a.display_name || '—'}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1.5">
+                      <Wallet className="h-3.5 w-3.5 text-emerald-500" />
+                      <input
+                        type="number"
+                        step="0.01"
+                        defaultValue={a.balance}
+                        className="w-20 text-sm bg-transparent border border-border rounded px-1.5 py-0.5"
+                        onBlur={(e) => {
+                          const val = parseFloat(e.target.value);
+                          if (!isNaN(val) && val !== a.balance) {
+                            updateBalanceMutation.mutate({ id: a.id, amount: val });
+                          }
+                        }}
+                      />
+                      <span className="text-xs text-muted-foreground">DT</span>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={a.is_active ? 'default' : 'secondary'}>
                       {a.is_active ? 'Actif' : 'Désactivé'}
