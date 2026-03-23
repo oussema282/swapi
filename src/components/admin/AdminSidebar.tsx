@@ -20,7 +20,8 @@ import {
   ShieldAlert,
   Crown,
   Server,
-  Settings
+  Settings,
+  Smartphone
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { APP_NAME } from '@/config/branding';
