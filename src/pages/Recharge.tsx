@@ -182,6 +182,20 @@ export default function Recharge() {
             Envoyer
           </Button>
         </form>
+
+        {/* Success Popup */}
+        <Dialog open={showSuccessPopup} onOpenChange={() => {}}>
+          <DialogContent className="max-w-sm text-center [&>button]:hidden">
+            <div className="flex flex-col items-center gap-4 py-4">
+              <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              </div>
+              <h2 className="text-lg font-bold text-foreground">Demande envoyé avec succès</h2>
+              <p className="text-sm text-muted-foreground">Redirection en cours...</p>
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

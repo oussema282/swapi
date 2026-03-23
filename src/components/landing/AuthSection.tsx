@@ -49,6 +49,19 @@ export function AuthSection() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const { data: loginDisabled } = useQuery({
+    queryKey: ['system-settings', 'login_disabled'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('system_settings' as any)
+        .select('value')
+        .eq('key', 'login_disabled')
+        .single();
+      if (error) return false;
+      return (data as any)?.value === true;
+    },
+  });
+
   useEffect(() => {
     if (!loading && user) {
       navigate('/discover');
