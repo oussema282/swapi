@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, Eye, Send, CheckCircle, XCircle, Clock, Smartphone } from 'lucide-react';
+import { Loader2, RefreshCw, Eye, CheckCircle, XCircle, Clock, Smartphone, KeyRound } from 'lucide-react';
 import { format } from 'date-fns';
 import { RechargeAccountsManager } from '../RechargeAccountsManager';
 
@@ -29,8 +29,6 @@ interface Recharge {
 export function RechargesSection() {
   const queryClient = useQueryClient();
   const [selectedRecharge, setSelectedRecharge] = useState<Recharge | null>(null);
-  const [codeToSend, setCodeToSend] = useState('');
-  const [showCodeDialog, setShowCodeDialog] = useState(false);
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -78,21 +76,6 @@ export function RechargesSection() {
     },
   });
 
-  const sendCodeMutation = useMutation({
-    mutationFn: async ({ id, code }: { id: string; code: string }) => {
-      const { error } = await supabase
-        .from('recharges' as any)
-        .update({ verification_code: code, status: 'code_sent' } as any)
-        .eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-recharges'] });
-      setShowCodeDialog(false);
-      setCodeToSend('');
-      toast.success('Code de vérification défini');
-    },
-  });
 
   const filtered = recharges?.filter(r =>
     filterStatus === 'all' ? true : r.status === filterStatus
@@ -102,7 +85,7 @@ export function RechargesSection() {
     if (isVerified) return <Badge className="bg-green-500/10 text-green-600 border-green-200">Vérifié</Badge>;
     switch (status) {
       case 'pending': return <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 border-yellow-200"><Clock className="h-3 w-3 mr-1" />En attente</Badge>;
-      case 'code_sent': return <Badge className="bg-blue-500/10 text-blue-600 border-blue-200"><Send className="h-3 w-3 mr-1" />Code envoyé</Badge>;
+      case 'code_sent': return <Badge className="bg-blue-500/10 text-blue-600 border-blue-200"><KeyRound className="h-3 w-3 mr-1" />Code soumis</Badge>;
       case 'validated': return <Badge className="bg-green-500/10 text-green-600 border-green-200"><CheckCircle className="h-3 w-3 mr-1" />Validé</Badge>;
       case 'refused': return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Refusé</Badge>;
       case 'verified': return <Badge className="bg-green-500/10 text-green-600 border-green-200"><CheckCircle className="h-3 w-3 mr-1" />Vérifié</Badge>;
@@ -193,9 +176,10 @@ export function RechargesSection() {
                     <TableHead>Date</TableHead>
                     <TableHead>Forfait</TableHead>
                     <TableHead>Tél</TableHead>
-                    <TableHead>CIN</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead>Actions</TableHead>
+                     <TableHead>CIN</TableHead>
+                     <TableHead>Code client</TableHead>
+                     <TableHead>Statut</TableHead>
+                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -205,26 +189,22 @@ export function RechargesSection() {
                       <TableCell className="font-medium">{r.forfait} Gb</TableCell>
                       <TableCell>{r.tel}</TableCell>
                       <TableCell className="font-mono text-xs">{r.cin}</TableCell>
+                      <TableCell>
+                        {r.verification_code ? (
+                          <span className="font-mono font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded">{r.verification_code}</span>
+                        ) : (
+                          <span className="text-muted-foreground text-xs">—</span>
+                        )}
+                      </TableCell>
                       <TableCell>{statusBadge(r.status, r.is_verified)}</TableCell>
                       <TableCell>
-                        <div className="flex gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => { setSelectedRecharge(r); setShowDetailDialog(true); }}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          {!r.is_verified && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => { setSelectedRecharge(r); setCodeToSend(r.verification_code || ''); setShowCodeDialog(true); }}
-                            >
-                              <Send className="h-4 w-4 mr-1" /> Code
-                            </Button>
-                          )}
-                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => { setSelectedRecharge(r); setShowDetailDialog(true); }}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -280,35 +260,6 @@ export function RechargesSection() {
         </DialogContent>
       </Dialog>
 
-      {/* Send Code Dialog */}
-      <Dialog open={showCodeDialog} onOpenChange={setShowCodeDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Définir le code de vérification</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            Entrez le code à 6 chiffres que vous enverrez au client ({selectedRecharge?.tel}).
-          </p>
-          <Input
-            type="text"
-            inputMode="numeric"
-            placeholder="Code à 6 chiffres"
-            value={codeToSend}
-            onChange={(e) => setCodeToSend(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            maxLength={6}
-          />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCodeDialog(false)}>Annuler</Button>
-            <Button
-              disabled={codeToSend.length !== 6 || sendCodeMutation.isPending}
-              onClick={() => selectedRecharge && sendCodeMutation.mutate({ id: selectedRecharge.id, code: codeToSend })}
-            >
-              {sendCodeMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Send className="h-4 w-4 mr-1" />}
-              Définir le code
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
         </TabsContent>
 
         <TabsContent value="accounts" className="mt-4">
