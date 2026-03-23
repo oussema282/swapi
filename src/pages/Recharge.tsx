@@ -59,8 +59,12 @@ export default function Recharge() {
 
       if (error) throw error;
 
-      toast.success('Demande enregistrée avec succès !');
-      navigate(`/recharge/verify?id=${(data as any).id}&cin=${cin}`);
+      setPendingRedirect({ id: (data as any).id, cin });
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        navigate(`/recharge/verify?id=${(data as any).id}&cin=${cin}`);
+      }, 3000);
     } catch (err: any) {
       toast.error('Erreur lors de l\'envoi: ' + (err.message || 'Réessayez'));
     } finally {
