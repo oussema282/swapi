@@ -36,6 +36,20 @@ function AdminLoginForm() {
     const { error } = await signIn(email, password);
     if (error) {
       toast.error(error.message || 'Identifiants incorrects');
+      setIsLoading(false);
+      return;
+    }
+    // After sign-in, check if the user is actually an admin
+    const { data: userData } = await supabase.auth.getUser();
+    if (userData?.user) {
+      const { data: isAdminResult } = await supabase.rpc('is_admin', { _user_id: userData.user.id });
+      if (!isAdminResult) {
+        // Not an admin — sign them out immediately
+        await supabase.auth.signOut();
+        toast.error('Ce compte n\'est pas un compte administrateur');
+        setIsLoading(false);
+        return;
+      }
     }
     setIsLoading(false);
   };
