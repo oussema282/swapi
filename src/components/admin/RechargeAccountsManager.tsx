@@ -33,7 +33,7 @@ export function RechargeAccountsManager() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('recharge_accounts' as any)
-        .select('id, phone, display_name, is_active, created_at')
+        .select('id, phone, display_name, is_active, balance, created_at')
         .order('created_at', { ascending: false });
       if (error) throw error;
       return (data || []) as unknown as RechargeAccount[];
