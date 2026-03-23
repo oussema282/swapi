@@ -291,6 +291,12 @@ export function RechargesSection() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </TabsContent>
+
+        <TabsContent value="accounts" className="mt-4">
+          <RechargeAccountsManager />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
