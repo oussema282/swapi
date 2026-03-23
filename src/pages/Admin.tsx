@@ -15,6 +15,7 @@ import { ModerationSection } from '@/components/admin/sections/ModerationSection
 import { AlgorithmSection } from '@/components/admin/sections/AlgorithmSection';
 import { SubscriptionsSection } from '@/components/admin/sections/SubscriptionsSection';
 import { SystemSection } from '@/components/admin/sections/SystemSection';
+import { RechargesSection } from '@/components/admin/sections/RechargesSection';
 import { Loader2, ShieldX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -89,6 +90,8 @@ export default function Admin() {
         return <ReportsSection />;
       case 'system':
         return <SystemSection />;
+      case 'recharges':
+        return <RechargesSection />;
       default:
         return <OverviewSection />;
     }

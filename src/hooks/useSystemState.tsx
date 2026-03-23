@@ -263,7 +263,7 @@ const SystemStateContext = createContext<SystemStateContextValue | null>(null);
 export function SystemStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(systemReducer, initialState);
   const { user, profile, loading: authLoading } = useAuth();
-  const bootstrapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const bootstrapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasExitedBootstrapping = useRef(false);
 
   // CRITICAL: Bootstrap timeout - ensures BOOTSTRAPPING always exits

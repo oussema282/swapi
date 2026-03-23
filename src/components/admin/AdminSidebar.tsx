@@ -20,7 +20,8 @@ import {
   ShieldAlert,
   Crown,
   Server,
-  Settings
+  Settings,
+  Smartphone
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { APP_NAME } from '@/config/branding';
@@ -50,6 +51,7 @@ const navItems: NavItem[] = [
   { id: 'algorithm', label: 'Algorithm', icon: Brain, description: 'Policy management' },
   { id: 'roles', label: 'Role Management', icon: Shield, description: 'Admin access control' },
   { id: 'system', label: 'System Health', icon: Server, description: 'Backend monitoring' },
+  { id: 'recharges', label: 'Recharges', icon: Smartphone, description: 'Gestion des recharges' },
 ];
 
 export function AdminSidebar({ activeSection, onSectionChange, className }: AdminSidebarProps) {

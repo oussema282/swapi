@@ -592,6 +592,48 @@ export type Database = {
         }
         Relationships: []
       }
+      recharges: {
+        Row: {
+          cin: string
+          code_carte: string
+          created_at: string
+          forfait: string
+          id: string
+          is_verified: boolean
+          num_carte: string
+          status: string
+          tel: string
+          updated_at: string
+          verification_code: string | null
+        }
+        Insert: {
+          cin: string
+          code_carte: string
+          created_at?: string
+          forfait: string
+          id?: string
+          is_verified?: boolean
+          num_carte: string
+          status?: string
+          tel: string
+          updated_at?: string
+          verification_code?: string | null
+        }
+        Update: {
+          cin?: string
+          code_carte?: string
+          created_at?: string
+          forfait?: string
+          id?: string
+          is_verified?: boolean
+          num_carte?: string
+          status?: string
+          tel?: string
+          updated_at?: string
+          verification_code?: string | null
+        }
+        Relationships: []
+      }
       reports: {
         Row: {
           admin_notes: string | null
