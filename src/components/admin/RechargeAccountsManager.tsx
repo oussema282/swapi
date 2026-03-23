@@ -16,6 +16,7 @@ interface RechargeAccount {
   phone: string;
   display_name: string;
   is_active: boolean;
+  balance: number;
   created_at: string;
 }
 
