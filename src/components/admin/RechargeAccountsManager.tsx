@@ -26,6 +26,7 @@ export function RechargeAccountsManager() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [balanceInput, setBalanceInput] = useState('');
 
   const { data: accounts, isLoading } = useQuery({
     queryKey: ['recharge-accounts'],
