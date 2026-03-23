@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Loader2, Phone, Lock, Wifi, ShieldX } from 'lucide-react';
+import { Loader2, Phone, Lock, Wifi } from 'lucide-react';
 import { motion } from 'framer-motion';
 import d17Logo from '@/assets/d17-logo.png';
 
@@ -14,18 +14,6 @@ export default function RechargeLogin() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loginDisabled, setLoginDisabled] = useState(false);
-
-  useEffect(() => {
-    supabase
-      .from('system_settings' as any)
-      .select('value')
-      .eq('key', 'login_disabled')
-      .single()
-      .then(({ data }) => {
-        if ((data as any)?.value === true) setLoginDisabled(true);
-      });
-  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
