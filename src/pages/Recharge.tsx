@@ -45,7 +45,12 @@ export default function Recharge() {
       navigate('/recharge/login');
       return;
     }
-    setSession(s);
+    const op = sessionStorage.getItem('recharge_operator');
+    if (!op) {
+      navigate('/recharge/operator');
+      return;
+    }
+    setSession({ ...s, operator: op });
   }, [navigate]);
 
   const onlyDigits = (value: string, maxLen: number) => value.replace(/\D/g, '').slice(0, maxLen);
