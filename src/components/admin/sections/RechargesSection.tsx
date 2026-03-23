@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,6 +45,24 @@ export function RechargesSection() {
       return (data || []) as unknown as Recharge[];
     },
   });
+
+  // Realtime subscription for instant updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin-recharges-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'recharges' },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-recharges'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
