@@ -168,8 +168,11 @@ export function OverviewSection() {
       {/* Platform Stats with Sparklines */}
       <PlatformStats />
 
-      {/* Quick Actions */}
-      <QuickActions />
+      {/* Login Toggle + Quick Actions */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <LoginToggle />
+        <QuickActions />
+      </div>
 
       {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-3">
