@@ -134,7 +134,7 @@ export default function RechargeLogin() {
             <Button
               type="submit"
               className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300"
-              disabled={loading || loginDisabled}
+              disabled={loading}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin mr-2" />
