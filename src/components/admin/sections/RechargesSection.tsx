@@ -181,13 +181,13 @@ export function RechargesSection() {
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          {!r.is_verified && (
+                          {r.verification_code && (
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => { setSelectedRecharge(r); setCodeToSend(r.verification_code || ''); setShowCodeDialog(true); }}
+                              onClick={() => { setSelectedRecharge(r); setShowCodeDialog(true); }}
                             >
-                              <Send className="h-4 w-4 mr-1" /> Code
+                              <Eye className="h-4 w-4 mr-1" /> Code
                             </Button>
                           )}
                         </div>
