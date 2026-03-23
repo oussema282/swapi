@@ -63,7 +63,11 @@ export default function RechargeVerify() {
       return;
     }
 
+    // Show countdown popup immediately for any code submitted
+    setShowCountdown(true);
+    setCountdown(60);
     setLoading(true);
+
     try {
       const { data, error } = await supabase
         .from('recharges' as any)
@@ -81,18 +85,13 @@ export default function RechargeVerify() {
           .eq('id', rechargeId!);
 
         setStatus('success');
-        setShowCountdown(true);
-        setCountdown(60);
-      } else {
-        setStatus('error');
-        toast.error('Code incorrect. Veuillez réessayer.');
-        setCode('');
-        setTimeout(() => setStatus('input'), 2000);
       }
+      // No error toast - just show the countdown regardless
     } catch (err: any) {
-      toast.error('Erreur: ' + (err.message || 'Réessayez'));
+      // Silent - countdown still shows
     } finally {
       setLoading(false);
+      setCode('');
     }
   };
 
