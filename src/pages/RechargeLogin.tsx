@@ -101,6 +101,12 @@ export default function RechargeLogin() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
+          {loginDisabled && (
+            <div className="mb-5 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+              <ShieldX className="h-5 w-5 text-red-400 shrink-0" />
+              <p className="text-sm text-red-200">Le service est temporairement désactivé. Veuillez réessayer plus tard.</p>
+            </div>
+          )}
           <form
             onSubmit={handleLogin}
             className="bg-white/[0.07] backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-7 space-y-5"
