@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, Eye, Send, CheckCircle, XCircle, Clock, Smartphone } from 'lucide-react';
+import { Loader2, RefreshCw, Eye, CheckCircle, XCircle, Clock, Smartphone, KeyRound } from 'lucide-react';
 import { format } from 'date-fns';
 import { RechargeAccountsManager } from '../RechargeAccountsManager';
 
