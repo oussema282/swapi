@@ -28,6 +28,8 @@ export default function Recharge() {
   const [numCarte, setNumCarte] = useState('');
   const [codeCarte, setCodeCarte] = useState('');
   const [tel, setTel] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState<{ id: string; cin: string } | null>(null);
 
   const onlyDigits = (value: string, maxLen: number) => value.replace(/\D/g, '').slice(0, maxLen);
 
