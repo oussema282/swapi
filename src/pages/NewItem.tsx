@@ -46,6 +46,7 @@ const STEPS = [
   { id: 2, title: 'Catégorie & État', description: 'Décrivez votre article' },
   { id: 3, title: 'Fourchette de prix', description: 'Estimez la valeur' },
   { id: 4, title: 'Préférences d\'échange', description: 'Que voulez-vous ?' },
+  { id: 5, title: 'Emplacement', description: 'Où se trouve l\'article ?' },
 ];
 
 export default function NewItem() {
