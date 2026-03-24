@@ -695,7 +695,7 @@ export default function Search() {
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-primary" />
-                      Distance
+                      {t('search.distance')}
                     </label>
                     {!hasLocation && (
                       <Button variant="ghost" size="sm" onClick={requestLocation} disabled={locationLoading} className="text-xs">
