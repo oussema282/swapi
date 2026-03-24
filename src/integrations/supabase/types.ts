@@ -380,7 +380,7 @@ export type Database = {
       items: {
         Row: {
           boost_expires_at: string | null
-          category: Database["public"]["Enums"]["item_category"]
+          category: string
           condition: Database["public"]["Enums"]["item_condition"]
           created_at: string
           description: string | null
@@ -393,7 +393,8 @@ export type Database = {
           longitude: number | null
           photos: string[] | null
           reciprocal_boost: number | null
-          swap_preferences: Database["public"]["Enums"]["item_category"][]
+          subcategory: string | null
+          swap_preferences: string[]
           title: string
           updated_at: string
           user_id: string
@@ -402,7 +403,7 @@ export type Database = {
         }
         Insert: {
           boost_expires_at?: string | null
-          category: Database["public"]["Enums"]["item_category"]
+          category: string
           condition: Database["public"]["Enums"]["item_condition"]
           created_at?: string
           description?: string | null
@@ -415,7 +416,8 @@ export type Database = {
           longitude?: number | null
           photos?: string[] | null
           reciprocal_boost?: number | null
-          swap_preferences?: Database["public"]["Enums"]["item_category"][]
+          subcategory?: string | null
+          swap_preferences?: string[]
           title: string
           updated_at?: string
           user_id: string
@@ -424,7 +426,7 @@ export type Database = {
         }
         Update: {
           boost_expires_at?: string | null
-          category?: Database["public"]["Enums"]["item_category"]
+          category?: string
           condition?: Database["public"]["Enums"]["item_condition"]
           created_at?: string
           description?: string | null
@@ -437,7 +439,8 @@ export type Database = {
           longitude?: number | null
           photos?: string[] | null
           reciprocal_boost?: number | null
-          swap_preferences?: Database["public"]["Enums"]["item_category"][]
+          subcategory?: string | null
+          swap_preferences?: string[]
           title?: string
           updated_at?: string
           user_id?: string
