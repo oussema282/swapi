@@ -48,7 +48,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   className="text-center mb-6"
                 >
                   <h2 className="text-4xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse">
-                    It's a Match!
+                    {t('match.itsAMatch')}
                   </h2>
                 </motion.div>
 
