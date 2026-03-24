@@ -1,15 +1,22 @@
 
 
-## Plan: Fix Swiped Items Reappearing on Page Return
+## Plan: Fix Blank Page After Swiping Multiple Items
 
 ### Root Cause
-Two problems combine to cause this bug:
+After each swipe, `queryClient.invalidateQueries({ queryKey: ['recommended-items'] })` (line 233 in Index.tsx) triggers a background refetch. The server returns a new, shorter list (excluding swiped items), but `currentIndex` keeps incrementing on the old list count. After 5-6 swipes, `currentIndex` exceeds the new list length, so `hasMoreCards` becomes false and the page goes blank -- neither showing cards nor the exhausted state properly.
 
-1. **Stale cache served instantly**: When you return to `/discover`, React Query has cached the old item list (with `staleTime: 30s`). It shows this cached list immediately while refetching in the background. Since `currentIndex` resets to 0 on remount, you see the same items at the same positions.
+### Fix (2 changes)
 
-2. **Cache survives navigation**: `gcTime: 2 minutes` means the cached recommendation list persists in memory even after leaving the page. When you return, the stale list is shown before the fresh server response arrives.
+**1. Stop invalidating cache after every swipe (`src/pages/Index.tsx`)**
+- Remove line 233: `queryClient.invalidateQueries({ queryKey: ['recommended-items'] })`
+- The local `currentIndex` already tracks progress through the list. Server-side filtering happens on next mount (with `gcTime: 0`, cache is cleared on unmount). No need to refetch mid-session.
 
-### Fix
+**2. Reset `currentIndex` to 0 when `swipeableItems` data changes (`src/pages/Index.tsx`)**  
+- Add a `useEffect` that watches `swipeableItems` identity (via a ref tracking the previous array reference). When the array reference changes (new fetch result), reset `currentIndex` to 0 via `actions.reset()` or a new `resetIndex` action, since the new list already excludes previously swiped items.
+- Actually, the simpler approach: just remove the invalidation. The list is fetched once per mount, `currentIndex` advances through it, and when all items are swiped the exhausted state shows. On next visit, `gcTime: 0` ensures a fresh fetch.
 
-**File: `src/hooks/useRecommendations.tsx`**
-- Set `gcTime: 0` — garbage collect cached recommendations immediately when the component unmounts. This means
+### Technical Detail
+- With `gcTime: 0` already set, cache is garbage-collected on unmount. Returning to the page always fetches fresh data (no stale items).
+- During a session, the user progresses through the pre-fetched list via `currentIndex`. No mid-session refetch means no index/data mismatch.
+- The exhausted state triggers correctly when `currentIndex >= swipeableItems.length`.
+
