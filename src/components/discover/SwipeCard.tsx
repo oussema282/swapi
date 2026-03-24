@@ -171,7 +171,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
               {/* Condition Badge - Top Right - Soft style */}
               {isTop && item.condition && (
                 <div className="absolute top-10 right-3 z-20 px-3 py-1.5 bg-card/90 backdrop-blur-sm rounded-xl shadow-soft">
-                  <span className="text-xs font-semibold text-foreground">{CONDITION_LABELS[item.condition]}</span>
+                  <span className="text-xs font-semibold text-foreground">{t(`conditions.${item.condition}`)}</span>
                 </div>
               )}
 
