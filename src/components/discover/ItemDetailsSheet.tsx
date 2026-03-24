@@ -143,7 +143,7 @@ export function ItemDetailsSheet({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Category</p>
-                <p className="font-medium">{CATEGORY_LABELS[item.category]}</p>
+                <p className="font-medium">{getCategoryLabel(item.category)}</p>
               </div>
             </div>
 
