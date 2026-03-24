@@ -158,6 +158,3 @@ export function useUnarchiveItem() {
   });
 }
 
-export function useItemLimit() {
-  // Re-exported for backward compatibility
-}
