@@ -557,9 +557,9 @@ export default function NewItem() {
             {/* Step 4: Swap Preferences */}
             {step === 4 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Que souhaitez-vous en échange ?</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.whatLookingFor')}</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Sélectionnez toutes les catégories que vous accepteriez
+                  {t('newItem.preferencesHelp')}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-3">
