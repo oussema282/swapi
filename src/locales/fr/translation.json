@@ -392,16 +392,6 @@
     "good": "Bon état",
     "fair": "État correct"
   },
-  "dealInvite": {
-    "title": "Envoyer une invitation",
-    "selectYourItem": "Sélectionnez votre article à proposer",
-    "send": "Envoyer l'invitation",
-    "pending": "En attente",
-    "accepted": "Acceptée",
-    "rejected": "Refusée",
-    "accept": "Accepter",
-    "decline": "Refuser"
-  },
   "missedMatch": {
     "title": "Vous avez manqué un match !",
     "description": "Cette personne a aimé votre article, mais vous avez passé le sien.",
