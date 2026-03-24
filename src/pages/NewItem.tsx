@@ -462,7 +462,7 @@ export default function NewItem() {
                               : 'border-border hover:border-primary/50 hover:bg-muted/50'
                           )}
                         >
-                          <span className="font-medium text-sm">{sub.name}</span>
+                          <span className="font-medium text-sm">{t(`categories.${sub.id}`)}</span>
                           <ChevronRight className="w-4 h-4 opacity-50" />
                         </button>
                       ))}
