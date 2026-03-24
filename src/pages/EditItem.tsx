@@ -287,7 +287,7 @@ export default function EditItem() {
                       subcategory === sub.id ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/50'
                     )}
                   >
-                    <span className="font-medium">{sub.name}</span>
+                    <span className="font-medium">{t(`categories.${sub.id}`)}</span>
                     <ChevronRight className="w-4 h-4 opacity-50" />
                   </button>
                 ))}
