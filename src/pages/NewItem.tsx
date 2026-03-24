@@ -524,7 +524,7 @@ export default function NewItem() {
                       />
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Maximum (DT)</Label>
+                      <Label className="text-sm text-muted-foreground">{t('newItem.maximum')}</Label>
                       <Input 
                         type="number" 
                         value={valueMax} 
