@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Package, Trash2, Edit, Loader2, Archive, ArchiveRestore } from 'lucide-react';
-import { CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
