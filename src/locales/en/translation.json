@@ -338,17 +338,7 @@
     "any": "Any",
     "km": "km"
   },
-  "chat": {
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "online": "Online",
-    "lastSeen": "Last seen",
-    "today": "today",
-    "yesterday": "yesterday",
-    "startConversation": "Start the conversation!",
-    "startConversationDescription": "Say hi and discuss the swap details. You can share photos, negotiate, and plan the exchange.",
-    "swapDetails": "Swap Details"
-  },
+  "_chat_moved_below": true,
   "settings": {
     "title": "Settings",
     "account": "Account",
