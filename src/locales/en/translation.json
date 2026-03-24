@@ -594,7 +594,10 @@
     "alreadyConfirmed": "You already confirmed this exchange.",
     "failedConfirmExchange": "Failed to confirm exchange",
     "completed": "Completed",
-    "waiting": "Waiting..."
+    "waiting": "Waiting...",
+    "justNow": "Just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago"
   },
   "swap": {
     "completeThisSwap": "Complete This Swap?",
