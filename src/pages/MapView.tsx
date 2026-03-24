@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
