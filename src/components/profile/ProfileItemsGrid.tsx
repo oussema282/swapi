@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Package, Plus } from 'lucide-react';
 import { Item } from '@/types/database';
-import { getCategoryLabel } from '@/config/categories';
+import { Item } from '@/types/database';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
