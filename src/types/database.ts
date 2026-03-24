@@ -1,11 +1,5 @@
-export type ItemCategory = 
-  | 'games' 
-  | 'electronics' 
-  | 'clothes' 
-  | 'books' 
-  | 'home_garden' 
-  | 'sports' 
-  | 'other';
+// Category is now a free-form text ID that maps to the hierarchy in src/config/categories.ts
+export type ItemCategory = string;
 
 export type ItemCondition = 
   | 'new' 
@@ -32,9 +26,10 @@ export interface Item {
   title: string;
   description: string | null;
   category: ItemCategory;
+  subcategory: string | null;
   condition: ItemCondition;
   photos: string[];
-  swap_preferences: ItemCategory[];
+  swap_preferences: string[];
   value_min: number;
   value_max: number | null;
   is_active: boolean;
@@ -85,15 +80,15 @@ export interface Message {
   created_at: string;
 }
 
-export const CATEGORY_LABELS: Record<ItemCategory, string> = {
-  games: 'Games',
-  electronics: 'Electronics',
-  clothes: 'Clothes',
-  books: 'Books',
-  home_garden: 'Home & Garden',
-  sports: 'Sports',
-  other: 'Other',
-};
+// Re-export from categories config for backward compatibility
+import { getCategoryLabel, CATEGORY_LABEL_MAP } from '@/config/categories';
+
+// CATEGORY_LABELS is now a proxy that looks up from the config
+export const CATEGORY_LABELS: Record<string, string> = new Proxy({} as Record<string, string>, {
+  get(_, prop: string) {
+    return getCategoryLabel(prop);
+  },
+});
 
 export const CONDITION_LABELS: Record<ItemCondition, string> = {
   new: 'New',
@@ -102,12 +97,9 @@ export const CONDITION_LABELS: Record<ItemCondition, string> = {
   fair: 'Fair',
 };
 
-export const CATEGORY_ICONS: Record<ItemCategory, string> = {
-  games: '🎮',
-  electronics: '📱',
-  clothes: '👕',
-  books: '📚',
-  home_garden: '🏡',
-  sports: '⚽',
-  other: '📦',
-};
+export const CATEGORY_ICONS: Record<string, string> = new Proxy({} as Record<string, string>, {
+  get(_, prop: string) {
+    // Return empty string - icons are now handled via getCategoryIcon from config
+    return '📦';
+  },
+});
