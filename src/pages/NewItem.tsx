@@ -205,6 +205,8 @@ export default function NewItem() {
         swap_preferences: swapPreferences,
         value_min: parseInt(valueMin) || 0,
         value_max: valueMax ? parseInt(valueMax) : null,
+        latitude: itemLatitude ?? undefined,
+        longitude: itemLongitude ?? undefined,
       });
 
       setIsComplete(true);
