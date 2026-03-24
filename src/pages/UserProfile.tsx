@@ -8,7 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { ReportButton } from '@/components/report/ReportButton';
-import { ArrowLeft, User, Loader2, MapPin, Grid3X3 } from 'lucide-react';
+import { ArrowLeft, User, Loader2, MapPin, Grid3X3, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -148,6 +148,12 @@ export default function UserProfile() {
               )}
               {profile.bio && (
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
+              )}
+              {(profile as any).phone_visible && (profile as any).phone_number && (
+                <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
+                  <Phone className="w-3 h-3" />
+                  <span>{(profile as any).phone_number}</span>
+                </div>
               )}
             </div>
           </div>
