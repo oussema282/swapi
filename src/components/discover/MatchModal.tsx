@@ -145,7 +145,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                       className="w-full gradient-primary shadow-glow"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
-                      Chat Now
+                      {t('match.chatNow')}
                     </Button>
                   </motion.div>
                 </motion.div>
