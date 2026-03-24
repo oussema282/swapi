@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Item, ItemCategory } from '@/types/database';
+import { Item } from '@/types/database';
 import { useAuth } from './useAuth';
 
 interface SwipeableItem extends Item {
