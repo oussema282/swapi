@@ -81,6 +81,7 @@ const popularSearches = [
 ];
 
 export default function Search() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { latitude, longitude, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
