@@ -293,7 +293,7 @@ export default function Matches() {
     },
     onSuccess: (result, { accept }) => {
       if (accept) {
-        toast.success('Deal accepted! Opening chat...');
+        toast.success(t('matches.dealAccepted'));
         queryClient.invalidateQueries({ queryKey: ['matches'] });
         if (result?.matchId) {
           navigate(`/chat/${result.matchId}`);
