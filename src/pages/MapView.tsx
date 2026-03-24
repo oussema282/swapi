@@ -411,7 +411,7 @@ export default function MapView() {
           </Button>
           
           <p className="text-xs text-muted-foreground mt-4 max-w-xs">
-            Your location is only used to find nearby items and is never shared publicly.
+            {t('map.locationPrivacy')}
           </p>
         </div>
       </AppLayout>
