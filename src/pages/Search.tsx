@@ -817,7 +817,7 @@ export default function Search() {
                     </motion.div>
                   ))}
                   {filteredItems.length > 0 && (
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">Items</p>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">{t('search.itemsLabel')}</p>
                   )}
                 </>
               )}
