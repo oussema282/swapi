@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Item, ItemCategory } from '@/types/database';
+import { Item } from '@/types/database';
 import { useAuth } from './useAuth';
 import { useSystemState } from './useSystemState';
 import { useDeviceLocation, calculateDistance } from './useLocation';
