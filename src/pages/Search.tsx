@@ -231,9 +231,14 @@ export default function Search() {
     }
 
     // Category matches
-    categories.forEach(cat => {
-      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 7) {
+    CATEGORIES.forEach(cat => {
+      if (t(`categories.${cat.id}`).toLowerCase().includes(query) && newSuggestions.length < 7) {
         newSuggestions.push({
+          type: 'category',
+          text: t(`categories.${cat.id}`),
+          icon: 'category',
+          category: cat.id,
+        });
           type: 'category',
           text: cat.label,
           icon: 'category',
