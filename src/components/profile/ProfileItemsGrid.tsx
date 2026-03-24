@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
-import { useLocation } from '@/hooks/useLocation';
+import { useDeviceLocation } from '@/hooks/useLocation';
 
 interface OwnerInfo {
   user_id: string;
