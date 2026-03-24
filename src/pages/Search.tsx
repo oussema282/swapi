@@ -605,7 +605,7 @@ export default function Search() {
                           )}
                           {suggestion.itemData?.valueMin !== null && suggestion.itemData?.valueMin !== undefined && (
                             <Badge className="text-[10px] py-0 px-1.5 bg-price/15 text-price border-price/30">
-                              €{suggestion.itemData.valueMin}
+                              {suggestion.itemData.valueMin} DT
                             </Badge>
                           )}
                           {suggestion.itemData?.latitude && suggestion.itemData?.longitude && (
