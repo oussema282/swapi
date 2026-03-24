@@ -130,7 +130,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   className="flex gap-3"
                 >
                   <Button variant="outline" onClick={onClose} className="flex-1">
-                    Keep Swiping
+                    {t('match.keepSwiping')}
                   </Button>
                   <motion.div
                     className="flex-1"
