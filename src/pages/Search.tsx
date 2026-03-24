@@ -740,7 +740,7 @@ export default function Search() {
                 {isSearchActive && (
                   <Button variant="ghost" size="sm" onClick={clearAllFilters} className="w-full text-muted-foreground">
                     <X className="w-4 h-4 mr-2" />
-                    Clear all filters
+                    {t('search.clearAllFilters')}
                   </Button>
                 )}
               </motion.div>
