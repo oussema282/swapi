@@ -310,8 +310,8 @@ export default function MapView() {
         // Item has no coordinates - show toast and don't center on it
         setMissingCoordsShown(true);
         hasNavigatedToFocusItem.current = true;
-        toast.error('This item has no location data', {
-          description: 'The item owner has not set their location.',
+        toast.error(t('map.noLocationData'), {
+          description: t('map.noLocationDataDescription'),
           icon: <AlertTriangle className="w-4 h-4" />,
         });
       }
