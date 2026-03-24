@@ -622,7 +622,7 @@ export default function Matches() {
                               })}
                             >
                               <X className="w-4 h-4 mr-1" />
-                              Decline
+                              {t('matches.decline')}
                             </Button>
                           </div>
                         </Card>
