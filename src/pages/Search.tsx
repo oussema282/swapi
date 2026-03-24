@@ -670,17 +670,17 @@ export default function Search() {
 
           {/* Category pills (multi-select) */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {categories.map(cat => (
+            {CATEGORIES.map(cat => (
               <button
-                key={cat.value}
-                onClick={() => toggleCategory(cat.value)}
+                key={cat.id}
+                onClick={() => toggleCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all border ${
-                  selectedCategories.includes(cat.value)
+                  selectedCategories.includes(cat.id)
                     ? 'bg-primary text-primary-foreground border-primary'
                     : 'bg-background text-muted-foreground border-border hover:border-primary/50'
                 }`}
               >
-                {cat.label}
+                {t(`categories.${cat.id}`)}
               </button>
             ))}
           </div>
