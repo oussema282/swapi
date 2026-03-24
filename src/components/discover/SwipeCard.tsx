@@ -263,13 +263,13 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             {activityStatus === 'active' && (
               <div className="flex items-center gap-1 px-2 py-0.5 bg-accent/90 rounded-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-foreground animate-pulse" />
-                <span className="text-[10px] font-semibold text-accent-foreground">Active</span>
+                <span className="text-[10px] font-semibold text-accent-foreground">{t('discover.ownerActive')}</span>
               </div>
             )}
             {activityStatus === 'recent' && (
               <div className="flex items-center gap-1 px-2 py-0.5 bg-tinder-gold/90 rounded-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-foreground" />
-                <span className="text-[10px] font-semibold text-foreground">Recently Active</span>
+                <span className="text-[10px] font-semibold text-foreground">{t('discover.ownerRecentlyActive')}</span>
               </div>
             )}
           </div>
@@ -294,7 +294,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             {(item.value_min !== undefined && item.value_min !== null) && (
               <div className="px-2.5 py-1 bg-accent rounded-xl">
                 <span className="text-xs font-semibold text-accent-foreground">
-                  ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
+                  {item.value_min}{item.value_max ? ` - ${item.value_max}` : '+'} DT
                 </span>
               </div>
             )}

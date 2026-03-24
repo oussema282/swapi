@@ -149,7 +149,7 @@ export default function Items() {
                           </div>
                           {item.value_min && item.value_max && (
                             <p className="text-xs text-muted-foreground mt-2">
-                              ${item.value_min} - ${item.value_max}
+                              {item.value_min} - {item.value_max} DT
                             </p>
                           )}
                         </div>

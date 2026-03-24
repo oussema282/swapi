@@ -161,7 +161,7 @@ export function ItemDetailsSheet({
                 <div>
                   <p className="text-xs text-muted-foreground">{t('itemDetails.valueRange')}</p>
                   <p className="font-medium">
-                    ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
+                    {item.value_min}{item.value_max ? ` - ${item.value_max}` : '+'} DT
                   </p>
                 </div>
               </div>
