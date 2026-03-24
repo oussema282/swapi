@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import i18n from '@/i18n';
 import { useAuth } from './useAuth';
 
 interface PresenceState {
