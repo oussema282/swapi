@@ -533,46 +533,54 @@ export default function Search() {
                         }`}
                       >
                         {/* Thumbnail or Icon - Fixed 40x40 */}
-                        <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
-                          {suggestion.itemData?.photo ? (
-                            <img 
-                              src={suggestion.itemData.photo} 
-                              alt="" 
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                              onError={(e) => {
-                                // Replace with placeholder on error
-                                e.currentTarget.style.display = 'none';
-                                const placeholder = e.currentTarget.nextElementSibling;
-                                if (placeholder) {
-                                  (placeholder as HTMLElement).style.display = 'flex';
-                                }
-                              }}
-                            />
-                          ) : null}
-                          {/* Placeholder - hidden by default when image present, shown on error or no image */}
-                          <div 
-                            className={cn(
-                              'w-full h-full items-center justify-center',
-                              suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
-                              suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
-                              'bg-muted text-muted-foreground',
-                              suggestion.itemData?.photo ? 'hidden' : 'flex'
-                            )}
-                          >
-                            {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
-                            {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
-                            {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                        {suggestion.type === 'user' ? (
+                          <Avatar className="w-10 h-10 flex-shrink-0">
+                            <AvatarImage src={suggestion.userData?.avatarUrl || undefined} />
+                            <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
+                              {suggestion.text.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
+                            {suggestion.itemData?.photo ? (
+                              <img 
+                                src={suggestion.itemData.photo} 
+                                alt="" 
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  const placeholder = e.currentTarget.nextElementSibling;
+                                  if (placeholder) {
+                                    (placeholder as HTMLElement).style.display = 'flex';
+                                  }
+                                }}
+                              />
+                            ) : null}
+                            <div 
+                              className={cn(
+                                'w-full h-full items-center justify-center',
+                                suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
+                                suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
+                                'bg-muted text-muted-foreground',
+                                suggestion.itemData?.photo ? 'hidden' : 'flex'
+                              )}
+                            >
+                              {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
+                              {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
+                              {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                            </div>
                           </div>
-                        </div>
+                        )}
                         
-                        {/* Content - with line clamp */}
+                        {/* Content */}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">
                             {highlightMatch(suggestion.text, searchQuery)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {suggestion.type === 'category' ? 'Category' : 
+                            {suggestion.type === 'user' ? (suggestion.userData?.location || 'User') :
+                             suggestion.type === 'category' ? 'Category' : 
                              suggestion.type === 'popular' ? 'Popular search' : 'Item'}
                           </p>
                         </div>
