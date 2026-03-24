@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import i18n from '@/i18n';
 import { useAuth } from './useAuth';
 
 interface PresenceState {
@@ -118,11 +119,14 @@ export function formatLastSeen(date: Date | undefined | null): string {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
+  const t = i18n.t.bind(i18n);
   
-  return date.toLocaleDateString(undefined, { 
+  if (diffMins < 1) return t('chat.justNow');
+  if (diffMins < 60) return t('chat.minutesAgo', { count: diffMins });
+  if (diffHours < 24) return t('chat.hoursAgo', { count: diffHours });
+  
+  const lng = i18n.language || 'en';
+  return date.toLocaleDateString(lng, { 
     month: 'short', 
     day: 'numeric',
     hour: '2-digit',
