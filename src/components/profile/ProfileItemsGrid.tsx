@@ -73,7 +73,7 @@ export function ProfileItemsGrid({ items, isOwnProfile = true }: ProfileItemsGri
               {item.title}
             </p>
             <Badge variant="secondary" className="text-[10px] py-0">
-              {CATEGORY_LABELS[item.category]}
+              {getCategoryLabel(item.category)}
             </Badge>
           </div>
 
