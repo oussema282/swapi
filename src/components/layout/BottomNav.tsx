@@ -32,7 +32,7 @@ export function BottomNav() {
         <div className="absolute inset-0 bg-card rounded-2xl shadow-card border border-border/50" />
         
         {/* Navigation content */}
-        <div className="relative flex items-center justify-around h-full px-2">
+        <div className="relative flex items-center h-full px-2">
           {navItems.map(({ icon: Icon, label, path, isCenter }) => {
             const active = isActive(path);
             const hasNotification = path === '/matches' && hasNewMatches;
@@ -43,7 +43,7 @@ export function BottomNav() {
                 <Link
                   key={path}
                   to={path}
-                  className="relative -mt-6"
+                  className="relative -mt-6 flex-1 flex flex-col items-center"
                 >
                   <motion.div
                     className={cn(
@@ -72,7 +72,7 @@ export function BottomNav() {
               <Link
                 key={path}
                 to={path}
-                className="flex flex-col items-center justify-center py-2 px-3"
+                className="flex-1 flex flex-col items-center justify-center py-2"
               >
                 <div className="relative">
                   <Icon 
