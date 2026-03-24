@@ -1,5 +1,4 @@
-import i18n from '@/i18n';
-import { formatDistanceToNow, type Locale } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { es } from 'date-fns/locale/es';
 import { de } from 'date-fns/locale/de';
@@ -9,10 +8,11 @@ import { ru } from 'date-fns/locale/ru';
 import { ko } from 'date-fns/locale/ko';
 import { ar } from 'date-fns/locale/ar';
 
-const localeMap: Record<string, Locale> = { fr, es, de, pt, ja, ru, ko, ar };
+const localeMap: Record<string, typeof fr> = { fr, es, de, pt, ja, ru, ko, ar };
 
-function getDateLocale(): Locale | undefined {
-  return localeMap[i18n.language];
+function getDateLocale(): typeof fr | undefined {
+  const lng = typeof window !== 'undefined' ? localStorage.getItem('i18n-language') || 'en' : 'en';
+  return localeMap[lng];
 }
 
 export function formatTimeAgo(date: Date, options?: { addSuffix?: boolean }): string {
