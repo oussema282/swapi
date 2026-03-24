@@ -595,6 +595,24 @@ export default function NewItem() {
                 </p>
               </Card>
             )}
+
+            {/* Step 5: Location */}
+            {step === 5 && (
+              <Card className="p-6">
+                <Label className="text-base font-semibold mb-2 block">Emplacement de l'article</Label>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Choisissez où se trouve votre article. Vous pouvez glisser le marqueur ou cliquer sur la carte.
+                </p>
+                <LocationPickerMap
+                  latitude={itemLatitude}
+                  longitude={itemLongitude}
+                  onChange={(lat, lng) => {
+                    setItemLatitude(lat);
+                    setItemLongitude(lng);
+                  }}
+                />
+              </Card>
+            )}
           </motion.div>
         </AnimatePresence>
 
