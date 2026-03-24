@@ -480,7 +480,7 @@ export default function NewItem() {
 
                 {/* Condition */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">État de l'article</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.itemCondition')}</Label>
                   <div className="grid grid-cols-2 gap-3">
                     {conditions.map((cond) => (
                       <button
