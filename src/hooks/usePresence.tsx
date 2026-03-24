@@ -118,13 +118,21 @@ export function formatLastSeen(date: Date | undefined | null): string {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   
-  const t = i18n.t.bind(i18n);
+  // Lazy import to avoid circular dependency with React
+  const { default: i18nInstance } = await import('@/i18n') as any;
+  // Use synchronous access since i18n is already initialized
+  const lng = typeof window !== 'undefined' ? localStorage.getItem('i18n-language') || 'en' : 'en';
   
-  if (diffMins < 1) return t('chat.justNow');
-  if (diffMins < 60) return t('chat.minutesAgo', { count: diffMins });
-  if (diffHours < 24) return t('chat.hoursAgo', { count: diffHours });
+  const translations: Record<string, Record<string, string>> = {
+    en: { justNow: 'Just now', minutesAgo: '{{count}}m ago', hoursAgo: '{{count}}h ago' },
+    fr: { justNow: "À l'instant", minutesAgo: 'il y a {{count}}min', hoursAgo: 'il y a {{count}}h' },
+  };
+  const tr = translations[lng] || translations.en;
   
-  const lng = i18n.language || 'en';
+  if (diffMins < 1) return tr.justNow;
+  if (diffMins < 60) return tr.minutesAgo.replace('{{count}}', String(diffMins));
+  if (diffHours < 24) return tr.hoursAgo.replace('{{count}}', String(diffHours));
+  
   return date.toLocaleDateString(lng, { 
     month: 'short', 
     day: 'numeric',
