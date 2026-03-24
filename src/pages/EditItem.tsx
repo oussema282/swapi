@@ -347,6 +347,19 @@ export default function EditItem() {
             </div>
           </Card>
 
+          {/* Location */}
+          <Card className="p-4">
+            <Label className="text-sm font-semibold mb-3 block">Emplacement de l'article</Label>
+            <LocationPickerMap
+              latitude={itemLatitude}
+              longitude={itemLongitude}
+              onChange={(lat, lng) => {
+                setItemLatitude(lat);
+                setItemLongitude(lng);
+              }}
+            />
+          </Card>
+
           <div className="h-4" />
         </div>
       </div>
