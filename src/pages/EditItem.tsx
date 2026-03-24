@@ -320,8 +320,8 @@ export default function EditItem() {
           <Card className="p-4">
             <Label className="text-sm font-semibold mb-3 block">{t('editItem.priceRange')}</Label>
             <div className="grid grid-cols-2 gap-3">
-              <Input type="number" value={valueMin} onChange={(e) => setValueMin(e.target.value)} placeholder="Min" />
-              <Input type="number" value={valueMax} onChange={(e) => setValueMax(e.target.value)} placeholder="Max" />
+              <Input type="number" value={valueMin} onChange={(e) => setValueMin(e.target.value)} placeholder={t('items.minPrice')} />
+              <Input type="number" value={valueMax} onChange={(e) => setValueMax(e.target.value)} placeholder={t('items.maxPrice')} />
             </div>
           </Card>
 
