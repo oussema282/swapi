@@ -26,6 +26,7 @@ interface ProfileItemsGridProps {
 
 export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: ProfileItemsGridProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { latitude, longitude } = useDeviceLocation();
   const userLocation = { latitude, longitude };
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
