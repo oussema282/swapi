@@ -118,9 +118,6 @@ export function formatLastSeen(date: Date | undefined | null): string {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   
-  // Lazy import to avoid circular dependency with React
-  const { default: i18nInstance } = await import('@/i18n') as any;
-  // Use synchronous access since i18n is already initialized
   const lng = typeof window !== 'undefined' ? localStorage.getItem('i18n-language') || 'en' : 'en';
   
   const translations: Record<string, Record<string, string>> = {
