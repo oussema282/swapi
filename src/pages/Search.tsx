@@ -783,7 +783,7 @@ export default function Search() {
               {/* User Profile Results */}
               {filteredProfiles.length > 0 && (
                 <>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Users</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('search.users')}</p>
                   {filteredProfiles.map((profile, index) => (
                     <motion.div
                       key={profile.user_id}
