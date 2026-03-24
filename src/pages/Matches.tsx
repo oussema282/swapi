@@ -322,8 +322,8 @@ export default function Matches() {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center min-h-[80vh] gap-4">
-          <p className="text-destructive">Failed to load matches</p>
-          <Button onClick={() => refetch()} variant="outline">Try Again</Button>
+          <p className="text-destructive">{t('matches.failedToLoadMatches')}</p>
+          <Button onClick={() => refetch()} variant="outline">{t('matches.tryAgain')}</Button>
         </div>
       </AppLayout>
     );
