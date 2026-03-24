@@ -12,7 +12,8 @@ import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { CATEGORY_LABELS, CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
+import { CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
+import { CATEGORIES, getCategoryLabel } from '@/config/categories';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -45,15 +46,7 @@ interface Suggestion {
   };
 }
 
-const categories: { value: ItemCategory; label: string }[] = [
-  { value: 'games', label: 'Games' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'clothes', label: 'Clothes' },
-  { value: 'books', label: 'Books' },
-  { value: 'home_garden', label: 'Home & Garden' },
-  { value: 'sports', label: 'Sports' },
-  { value: 'other', label: 'Other' },
-];
+const categories = CATEGORIES.map(c => ({ value: c.id, label: c.name }));
 
 const distanceOptions = [
   { value: 'any', label: 'Any' },
@@ -281,7 +274,7 @@ export default function Search() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => {
-        const categoryLabel = CATEGORY_LABELS[item.category]?.toLowerCase() || '';
+        const categoryLabel = getCategoryLabel(item.category)?.toLowerCase() || '';
         return (
           item.title.toLowerCase().includes(query) ||
           item.description?.toLowerCase().includes(query) ||
@@ -587,7 +580,7 @@ export default function Search() {
                   className="pl-2 pr-1 py-1 gap-1 cursor-pointer"
                   onClick={() => toggleCategory(cat)}
                 >
-                  {CATEGORY_LABELS[cat]}
+                  {getCategoryLabel(cat)}
                   <X className="w-3 h-3" />
                 </Badge>
               ))}
@@ -751,7 +744,7 @@ export default function Search() {
                       
                       {/* Metadata row - always at same position */}
                       <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-1">
-                        <Badge variant="secondary" className="text-xs py-0.5">{CATEGORY_LABELS[item.category]}</Badge>
+                        <Badge variant="secondary" className="text-xs py-0.5">{getCategoryLabel(item.category)}</Badge>
                         {item.distance !== undefined && (
                           <Badge variant="outline" className="text-xs py-0.5 flex items-center gap-1">
                             <MapPin className="w-3 h-3" />

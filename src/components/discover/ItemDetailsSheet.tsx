@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item, CONDITION_LABELS } from '@/types/database';
+import { getCategoryLabel } from '@/config/categories';
 import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
@@ -142,7 +143,7 @@ export function ItemDetailsSheet({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Category</p>
-                <p className="font-medium">{CATEGORY_LABELS[item.category]}</p>
+                <p className="font-medium">{getCategoryLabel(item.category)}</p>
               </div>
             </div>
 
@@ -203,7 +204,7 @@ export function ItemDetailsSheet({
               <div className="flex flex-wrap gap-2">
                 {item.swap_preferences.map((pref) => (
                   <Badge key={pref} variant="secondary" className="rounded-full">
-                    {CATEGORY_LABELS[pref]}
+                    {getCategoryLabel(pref)}
                   </Badge>
                 ))}
               </div>

@@ -1,32 +1,31 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
-import { 
-  Gamepad2, 
-  Smartphone, 
-  Shirt, 
-  BookOpen, 
-  Home, 
-  Dumbbell,
-  MoreHorizontal
-} from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
-
-const categoryConfig: Record<string, { icon: React.ElementType; color: string; label: string }> = {
-  games: { icon: Gamepad2, color: 'text-purple-500 bg-purple-500', label: 'Games' },
-  electronics: { icon: Smartphone, color: 'text-blue-500 bg-blue-500', label: 'Electronics' },
-  clothes: { icon: Shirt, color: 'text-pink-500 bg-pink-500', label: 'Clothes' },
-  books: { icon: BookOpen, color: 'text-amber-500 bg-amber-500', label: 'Books' },
-  home_garden: { icon: Home, color: 'text-emerald-500 bg-emerald-500', label: 'Home & Garden' },
-  sports: { icon: Dumbbell, color: 'text-orange-500 bg-orange-500', label: 'Sports' },
-  other: { icon: MoreHorizontal, color: 'text-slate-500 bg-slate-500', label: 'Other' },
-};
+import { CATEGORIES, getCategoryLabel, getCategoryIcon } from '@/config/categories';
 
 interface CategoryData {
   category: string;
   count: number;
   percentage: number;
 }
+
+const CATEGORY_COLORS: Record<string, string> = {
+  electronique: '#3b82f6',
+  vehicules: '#f97316',
+  immobilier: '#10b981',
+  mode: '#ec4899',
+  maison_jardin: '#10b981',
+  sports: '#f97316',
+  jeux_jouets: '#a855f7',
+  livres_medias: '#f59e0b',
+  animaux: '#6366f1',
+  beaute_sante: '#ec4899',
+  bricolage: '#64748b',
+  alimentation: '#22c55e',
+  bebe_enfants: '#f472b6',
+  autres: '#64748b',
+};
 
 export function CategoryBreakdown() {
   const [categories, setCategories] = useState<CategoryData[]>([]);
@@ -90,30 +89,26 @@ export function CategoryBreakdown() {
     <div className="rounded-xl border border-border bg-card p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="font-semibold">Items by Category</h3>
+          <h3 className="font-semibold">Articles par catégorie</h3>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {total.toLocaleString()} total active items
+            {total.toLocaleString()} articles actifs au total
           </p>
         </div>
       </div>
 
       <div className="space-y-4">
         {categories.map((cat) => {
-          const config = categoryConfig[cat.category] || categoryConfig.other;
-          const Icon = config.icon;
-          const colorClass = config.color.split(' ');
+          const Icon = getCategoryIcon(cat.category);
+          const color = CATEGORY_COLORS[cat.category] || '#64748b';
 
           return (
             <div key={cat.category} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className={cn(
-                    'p-1.5 rounded-md',
-                    colorClass[1] + '/10'
-                  )}>
-                    <Icon className={cn('h-3.5 w-3.5', colorClass[0])} />
+                  <div className="p-1.5 rounded-md" style={{ backgroundColor: `${color}15` }}>
+                    <Icon className="h-3.5 w-3.5" style={{ color }} />
                   </div>
-                  <span className="text-sm font-medium">{config.label}</span>
+                  <span className="text-sm font-medium">{getCategoryLabel(cat.category)}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-muted-foreground">{cat.count}</span>
@@ -123,16 +118,7 @@ export function CategoryBreakdown() {
               <Progress
                 value={cat.percentage}
                 className="h-1.5"
-                style={{
-                  // @ts-ignore
-                  '--progress-color': config.color.includes('purple') ? '#a855f7' :
-                    config.color.includes('blue') ? '#3b82f6' :
-                    config.color.includes('pink') ? '#ec4899' :
-                    config.color.includes('amber') ? '#f59e0b' :
-                    config.color.includes('emerald') ? '#10b981' :
-                    config.color.includes('orange') ? '#f97316' :
-                    '#64748b'
-                } as React.CSSProperties}
+                style={{ '--progress-color': color } as React.CSSProperties}
               />
             </div>
           );
@@ -140,7 +126,7 @@ export function CategoryBreakdown() {
 
         {categories.length === 0 && (
           <p className="text-center text-muted-foreground py-4">
-            No items found
+            Aucun article trouvé
           </p>
         )}
       </div>

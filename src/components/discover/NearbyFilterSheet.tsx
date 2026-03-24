@@ -1,18 +1,17 @@
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { MapPin, DollarSign, Package, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell } from 'lucide-react';
-import { ItemCategory, CATEGORY_LABELS } from '@/types/database';
+import { MapPin, DollarSign, Package } from 'lucide-react';
+import { CATEGORIES, getCategoryIcon } from '@/config/categories';
 import { cn } from '@/lib/utils';
 
 export interface DiscoverFilters {
   priceMin: number;
   priceMax: number;
-  maxDistance: number; // in km, 0 means no limit
-  selectedCategories?: ItemCategory[];
+  maxDistance: number;
+  selectedCategories?: string[];
 }
 
-// Keep old interface for backwards compatibility
 export type NearbyFilters = DiscoverFilters;
 
 interface DiscoverFilterSheetProps {
@@ -22,56 +21,33 @@ interface DiscoverFilterSheetProps {
   onFiltersChange: (filters: DiscoverFilters) => void;
 }
 
-const DISTANCE_OPTIONS = [5, 10, 25, 50, 100, 200, 0]; // 0 = any distance
-
-const CATEGORY_ICONS: Record<ItemCategory, React.ReactNode> = {
-  games: <Gamepad2 className="w-4 h-4" />,
-  electronics: <Smartphone className="w-4 h-4" />,
-  clothes: <Shirt className="w-4 h-4" />,
-  books: <BookOpen className="w-4 h-4" />,
-  home_garden: <Home className="w-4 h-4" />,
-  sports: <Dumbbell className="w-4 h-4" />,
-  other: <Package className="w-4 h-4" />,
-};
-
-const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'books', 'home_garden', 'sports', 'other'];
+const DISTANCE_OPTIONS = [5, 10, 25, 50, 100, 200, 0];
 
 export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChange }: DiscoverFilterSheetProps) {
   
   const handlePriceMinChange = (value: number[]) => {
     const newMin = value[0];
-    onFiltersChange({
-      ...filters,
-      priceMin: newMin,
-      priceMax: Math.max(newMin, filters.priceMax),
-    });
+    onFiltersChange({ ...filters, priceMin: newMin, priceMax: Math.max(newMin, filters.priceMax) });
   };
   
   const handlePriceMaxChange = (value: number[]) => {
     const newMax = value[0];
-    onFiltersChange({
-      ...filters,
-      priceMin: Math.min(filters.priceMin, newMax),
-      priceMax: newMax,
-    });
+    onFiltersChange({ ...filters, priceMin: Math.min(filters.priceMin, newMax), priceMax: newMax });
   };
   
   const handleDistanceChange = (value: number[]) => {
     const idx = value[0];
-    onFiltersChange({
-      ...filters,
-      maxDistance: DISTANCE_OPTIONS[idx],
-    });
+    onFiltersChange({ ...filters, maxDistance: DISTANCE_OPTIONS[idx] });
   };
 
-  const toggleCategory = (category: ItemCategory) => {
+  const toggleCategory = (categoryId: string) => {
     const current = filters.selectedCategories || [];
-    const isSelected = current.includes(category);
+    const isSelected = current.includes(categoryId);
     onFiltersChange({
       ...filters,
       selectedCategories: isSelected 
-        ? current.filter(c => c !== category)
-        : [...current, category],
+        ? current.filter(c => c !== categoryId)
+        : [...current, categoryId],
     });
   };
   
@@ -84,38 +60,39 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
   };
 
   const distanceIndex = DISTANCE_OPTIONS.indexOf(filters.maxDistance);
-  const distanceLabel = filters.maxDistance === 0 ? 'Any distance' : `${filters.maxDistance} km`;
+  const distanceLabel = filters.maxDistance === 0 ? 'Toute distance' : `${filters.maxDistance} km`;
   const selectedCategories = filters.selectedCategories || [];
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="w-[320px] sm:w-[380px] bg-background">
         <SheetHeader>
-          <SheetTitle>Filter Items</SheetTitle>
+          <SheetTitle>Filtrer les articles</SheetTitle>
           <SheetDescription>
-            Set your preferences to find the best matches
+            Définissez vos préférences pour trouver les meilleurs échanges
           </SheetDescription>
         </SheetHeader>
         
-        <div className="mt-6 space-y-8 pb-24">
+        <div className="mt-6 space-y-8 pb-24 overflow-y-auto max-h-[calc(100vh-200px)]">
           {/* Category Filter */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Package className="w-4 h-4 text-primary" />
-              <span>Category</span>
+              <span>Catégorie</span>
               {selectedCategories.length > 0 && (
                 <span className="text-xs text-muted-foreground">
-                  ({selectedCategories.length} selected)
+                  ({selectedCategories.length} sélectionnée{selectedCategories.length > 1 ? 's' : ''})
                 </span>
               )}
             </div>
             <div className="flex flex-wrap gap-2">
-              {ALL_CATEGORIES.map((category) => {
-                const isSelected = selectedCategories.includes(category);
+              {CATEGORIES.map((cat) => {
+                const isSelected = selectedCategories.includes(cat.id);
+                const Icon = cat.icon;
                 return (
                   <button
-                    key={category}
-                    onClick={() => toggleCategory(category)}
+                    key={cat.id}
+                    onClick={() => toggleCategory(cat.id)}
                     className={cn(
                       'flex items-center gap-2 px-3 py-2 rounded-full text-sm transition-all',
                       isSelected
@@ -123,14 +100,14 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
                         : 'bg-muted text-muted-foreground hover:bg-muted/80'
                     )}
                   >
-                    {CATEGORY_ICONS[category]}
-                    <span>{CATEGORY_LABELS[category]}</span>
+                    <Icon className="w-4 h-4" />
+                    <span>{cat.name}</span>
                   </button>
                 );
               })}
             </div>
             <p className="text-xs text-muted-foreground">
-              {selectedCategories.length === 0 ? 'Showing all categories' : 'Tap to toggle'}
+              {selectedCategories.length === 0 ? 'Toutes les catégories' : 'Appuyez pour basculer'}
             </p>
           </div>
 
@@ -138,7 +115,7 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-medium">
               <MapPin className="w-4 h-4 text-primary" />
-              <span>Maximum Distance</span>
+              <span>Distance maximale</span>
             </div>
             <div className="space-y-3">
               <Slider
@@ -152,7 +129,7 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>5 km</span>
                 <span className="font-medium text-foreground">{distanceLabel}</span>
-                <span>Any</span>
+                <span>Tout</span>
               </div>
             </div>
           </div>
@@ -161,40 +138,26 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-medium">
               <DollarSign className="w-4 h-4 text-primary" />
-              <span>Price Range</span>
+              <span>Fourchette de prix</span>
             </div>
             
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Minimum</span>
-                  <span className="font-medium text-foreground">${filters.priceMin}</span>
+                  <span className="font-medium text-foreground">{filters.priceMin} DT</span>
                 </div>
-                <Slider
-                  value={[filters.priceMin]}
-                  onValueChange={handlePriceMinChange}
-                  min={0}
-                  max={1000}
-                  step={10}
-                  className="w-full"
-                />
+                <Slider value={[filters.priceMin]} onValueChange={handlePriceMinChange} min={0} max={1000} step={10} className="w-full" />
               </div>
               
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Maximum</span>
                   <span className="font-medium text-foreground">
-                    ${filters.priceMax === 1000 ? '1000+' : filters.priceMax}
+                    {filters.priceMax === 1000 ? '1000+ DT' : `${filters.priceMax} DT`}
                   </span>
                 </div>
-                <Slider
-                  value={[filters.priceMax]}
-                  onValueChange={handlePriceMaxChange}
-                  min={0}
-                  max={1000}
-                  step={10}
-                  className="w-full"
-                />
+                <Slider value={[filters.priceMax]} onValueChange={handlePriceMaxChange} min={0} max={1000} step={10} className="w-full" />
               </div>
             </div>
           </div>
@@ -202,18 +165,11 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
         
         {/* Actions */}
         <div className="absolute bottom-6 left-6 right-6 flex gap-3">
-          <Button
-            variant="outline"
-            onClick={handleReset}
-            className="flex-1"
-          >
-            Reset
+          <Button variant="outline" onClick={handleReset} className="flex-1">
+            Réinitialiser
           </Button>
-          <Button
-            onClick={handleApply}
-            className="flex-1"
-          >
-            Apply Filters
+          <Button onClick={handleApply} className="flex-1">
+            Appliquer
           </Button>
         </div>
       </SheetContent>
@@ -221,5 +177,4 @@ export function DiscoverFilterSheet({ open, onOpenChange, filters, onFiltersChan
   );
 }
 
-// Backward compatibility export
 export { DiscoverFilterSheet as NearbyFilterSheet };

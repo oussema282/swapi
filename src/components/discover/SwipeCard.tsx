@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item, CONDITION_LABELS } from '@/types/database';
+import { getCategoryLabel, getCategoryIcon } from '@/config/categories';
 import { cn } from '@/lib/utils';
-import { Package, MapPin, Home, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Package, MapPin, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -279,8 +280,8 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           {/* Category, Distance & Price Row */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-card/20 backdrop-blur-sm rounded-xl">
-              <Home className="w-3.5 h-3.5 text-card" />
-              <span className="text-xs font-medium text-card">{CATEGORY_LABELS[item.category]}</span>
+              {(() => { const Icon = getCategoryIcon(item.category); return <Icon className="w-3.5 h-3.5 text-card" />; })()}
+              <span className="text-xs font-medium text-card">{getCategoryLabel(item.category)}</span>
             </div>
             {distanceKm !== null && (
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-card/20 backdrop-blur-sm rounded-xl">

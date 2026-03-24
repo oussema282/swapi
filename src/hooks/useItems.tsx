@@ -1,7 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Item, ItemCategory, ItemCondition } from '@/types/database';
+import { Item } from '@/types/database';
 import { useAuth } from './useAuth';
+
+interface CreateItemData {
+  title: string;
+  description: string | null;
+  category: string;
+  subcategory?: string | null;
+  condition: string;
+  photos: string[];
+  swap_preferences: string[];
+  value_min: number;
+  value_max: number | null;
+}
 
 export function useMyItems() {
   const { user } = useAuth();
@@ -18,7 +30,7 @@ export function useMyItems() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as Item[];
+      return data as unknown as Item[];
     },
     enabled: !!user,
   });
@@ -35,21 +47,10 @@ export function useItem(id: string) {
         .single();
 
       if (error) throw error;
-      return data as Item;
+      return data as unknown as Item;
     },
     enabled: !!id,
   });
-}
-
-interface CreateItemData {
-  title: string;
-  description: string | null;
-  category: ItemCategory;
-  condition: ItemCondition;
-  photos: string[];
-  swap_preferences: ItemCategory[];
-  value_min: number;
-  value_max: number | null;
 }
 
 export function useCreateItem() {
@@ -60,7 +61,6 @@ export function useCreateItem() {
     mutationFn: async (data: CreateItemData & { latitude?: number; longitude?: number }) => {
       if (!user) throw new Error('Not authenticated');
 
-      // Get user's current location from profile
       const { data: profile } = await supabase
         .from('profiles')
         .select('latitude, longitude')
@@ -70,16 +70,24 @@ export function useCreateItem() {
       const { data: item, error } = await supabase
         .from('items')
         .insert({
-          ...data,
+          title: data.title,
+          description: data.description,
+          category: data.category as any,
+          subcategory: data.subcategory || null,
+          condition: data.condition as any,
+          photos: data.photos,
+          swap_preferences: data.swap_preferences as any,
+          value_min: data.value_min,
+          value_max: data.value_max,
           user_id: user.id,
           latitude: data.latitude ?? profile?.latitude ?? null,
           longitude: data.longitude ?? profile?.longitude ?? null,
-        })
+        } as any)
         .select()
         .single();
 
       if (error) throw error;
-      return item as Item;
+      return item as unknown as Item;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['my-items'] });
@@ -95,13 +103,13 @@ export function useUpdateItem() {
     mutationFn: async ({ id, ...data }: Partial<Item> & { id: string }) => {
       const { data: item, error } = await supabase
         .from('items')
-        .update(data)
+        .update(data as any)
         .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
-      return item as Item;
+      return item as unknown as Item;
     },
     onSuccess: (item) => {
       queryClient.invalidateQueries({ queryKey: ['my-items'] });
@@ -141,7 +149,7 @@ export function useUnarchiveItem() {
         .single();
 
       if (error) throw error;
-      return item as Item;
+      return item as unknown as Item;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['my-items'] });
@@ -149,3 +157,4 @@ export function useUnarchiveItem() {
     },
   });
 }
+

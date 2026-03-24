@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Item, ItemCategory } from '@/types/database';
+import { Item } from '@/types/database';
 import { useAuth } from './useAuth';
 
 interface SwipeableItem extends Item {
@@ -25,8 +25,8 @@ export function useSwipeableItems(myItemId: string | null) {
 
       if (myItemError || !myItem) return [];
 
-      const mySwapPreferences = myItem.swap_preferences as ItemCategory[];
-      const myCategory = myItem.category as ItemCategory;
+      const mySwapPreferences = myItem.swap_preferences as string[];
+      const myCategory = myItem.category as string;
 
       // Get items I've already swiped on with this item
       const { data: existingSwipes } = await supabase

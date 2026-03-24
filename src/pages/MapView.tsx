@@ -14,7 +14,8 @@ import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
 import { useSmartBack } from '@/hooks/useSmartBack';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
-import { Item, ItemCategory, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item, ItemCategory, CONDITION_LABELS } from '@/types/database';
+import { CATEGORIES, getCategoryLabel } from '@/config/categories';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
@@ -31,17 +32,7 @@ const MAP_STYLES = {
   light: 'mapbox://styles/mapbox/light-v11',
 };
 
-const CATEGORY_ICONS: Record<ItemCategory, React.ReactNode> = {
-  games: <Gamepad2 className="w-4 h-4" />,
-  electronics: <Smartphone className="w-4 h-4" />,
-  clothes: <Shirt className="w-4 h-4" />,
-  books: <BookOpen className="w-4 h-4" />,
-  home_garden: <Home className="w-4 h-4" />,
-  sports: <Dumbbell className="w-4 h-4" />,
-  other: <Package className="w-4 h-4" />,
-};
-
-const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'books', 'home_garden', 'sports', 'other'];
+const ALL_CATEGORIES = CATEGORIES;
 
 export default function MapView() {
   const navigate = useNavigate();
@@ -503,21 +494,24 @@ export default function MapView() {
                 className="overflow-hidden mt-3"
               >
                 <div className="flex flex-wrap gap-2">
-                  {ALL_CATEGORIES.map((category) => (
-                    <Button
-                      key={category}
-                      variant={selectedCategories.includes(category) ? 'default' : 'secondary'}
-                      size="sm"
-                      onClick={() => toggleCategory(category)}
-                      className={cn(
-                        'flex items-center gap-1.5',
-                        selectedCategories.includes(category) && 'ring-2 ring-primary/50'
-                      )}
-                    >
-                      {CATEGORY_ICONS[category]}
-                      <span className="text-xs">{CATEGORY_LABELS[category]}</span>
-                    </Button>
-                  ))}
+                  {ALL_CATEGORIES.map((cat) => {
+                    const Icon = cat.icon;
+                    return (
+                      <Button
+                        key={cat.id}
+                        variant={selectedCategories.includes(cat.id) ? 'default' : 'secondary'}
+                        size="sm"
+                        onClick={() => toggleCategory(cat.id)}
+                        className={cn(
+                          'flex items-center gap-1.5',
+                          selectedCategories.includes(cat.id) && 'ring-2 ring-primary/50'
+                        )}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="text-xs">{cat.name}</span>
+                      </Button>
+                    );
+                  })}
                   {selectedCategories.length > 0 && (
                     <Button
                       variant="outline"
@@ -582,7 +576,7 @@ export default function MapView() {
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <Badge variant="secondary" className="text-xs">
-                        {CATEGORY_LABELS[selectedItem.category]}
+                        {getCategoryLabel(selectedItem.category)}
                       </Badge>
                       <Badge variant="outline" className="text-xs">
                         {CONDITION_LABELS[selectedItem.condition]}

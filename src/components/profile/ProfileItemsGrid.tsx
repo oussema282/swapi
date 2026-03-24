@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Package, Plus } from 'lucide-react';
-import { Item, CATEGORY_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
+import { getCategoryLabel } from '@/config/categories';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -72,7 +73,7 @@ export function ProfileItemsGrid({ items, isOwnProfile = true }: ProfileItemsGri
               {item.title}
             </p>
             <Badge variant="secondary" className="text-[10px] py-0">
-              {CATEGORY_LABELS[item.category]}
+              {getCategoryLabel(item.category)}
             </Badge>
           </div>
 
