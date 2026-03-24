@@ -449,7 +449,8 @@ export default function NewItem() {
                 {selectedCategory && selectedSubcategories.length > 0 && (
                   <Card className="p-6">
                     <Label className="text-base font-semibold mb-4 block">
-                      Sous-catégorie de {selectedCategory.name}
+                      {t('newItem.subcategoryOf', { name: selectedCategory.name })}
+                    </Label>
                     </Label>
                     <div className="space-y-2">
                       {selectedSubcategories.map((sub) => (
