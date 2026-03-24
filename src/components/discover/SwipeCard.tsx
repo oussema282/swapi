@@ -53,6 +53,7 @@ function getUserActivityStatus(lastSeen: string | null | undefined): 'active' | 
 }
 
 export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, onInfoTap, showFeedbackOverlay }: SwipeCardProps) {
+  const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
