@@ -331,7 +331,7 @@ export default function MapView() {
           >
             <MapPin className="w-12 h-12 text-primary" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Map Limit Reached</h2>
+          <h2 className="text-2xl font-display font-bold mb-3">{t('map.mapLimitReached')}</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
             You've used all {FREE_LIMITS.mapUses} free map views today. Upgrade to Pro for unlimited map access!
           </p>
