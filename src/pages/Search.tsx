@@ -183,6 +183,21 @@ export default function Search() {
     refetchInterval: 30000,
   });
 
+  // Fetch all profiles for user search
+  const { data: allProfiles } = useQuery({
+    queryKey: ['search-profiles'],
+    queryFn: async (): Promise<ProfileResult[]> => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url, location, is_verified')
+        .neq('user_id', user?.id || '');
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
+    staleTime: 60000,
+  });
+
   // Generate suggestions based on debounced query
   useEffect(() => {
     if (debouncedQuery.length < 2) {
