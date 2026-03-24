@@ -44,7 +44,7 @@ export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps)
                 <div className="text-left min-w-0">
                   <p className="text-sm font-medium truncate">{selectedItem.title}</p>
                   <p className="text-xs text-muted-foreground">
-                    {CATEGORY_LABELS[selectedItem.category]}
+                    {t(`categories.${selectedItem.category}`)}
                   </p>
                 </div>
               </div>
