@@ -208,9 +208,29 @@ export default function Search() {
     const query = debouncedQuery.toLowerCase();
     const newSuggestions: Suggestion[] = [];
 
+    // User profile matches (show first)
+    if (allProfiles) {
+      const profileMatches = allProfiles
+        .filter(p => p.display_name.toLowerCase().includes(query))
+        .slice(0, 3);
+      
+      profileMatches.forEach(profile => {
+        newSuggestions.push({
+          type: 'user',
+          text: profile.display_name,
+          icon: 'user',
+          userData: {
+            userId: profile.user_id,
+            avatarUrl: profile.avatar_url,
+            location: profile.location,
+          },
+        });
+      });
+    }
+
     // Category matches
     categories.forEach(cat => {
-      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 5) {
+      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 7) {
         newSuggestions.push({
           type: 'category',
           text: cat.label,
@@ -222,7 +242,6 @@ export default function Search() {
 
     // Item title matches - with full item data for rich previews
     if (items) {
-      // Calculate distance for items if we have location
       const itemsWithDistance = items.map(item => {
         let distance: number | undefined;
         if (hasLocation && latitude && longitude && item.owner_latitude && item.owner_longitude) {
@@ -233,7 +252,7 @@ export default function Search() {
 
       const titleMatches = itemsWithDistance
         .filter(item => item.title.toLowerCase().includes(query))
-        .slice(0, 5 - newSuggestions.length);
+        .slice(0, 5 - Math.min(newSuggestions.length, 3));
       
       titleMatches.forEach(item => {
         if (!newSuggestions.some(s => s.text.toLowerCase() === item.title.toLowerCase())) {
@@ -257,7 +276,7 @@ export default function Search() {
 
     // Popular search matches
     popularSearches.forEach(search => {
-      if (search.toLowerCase().includes(query) && newSuggestions.length < 5) {
+      if (search.toLowerCase().includes(query) && newSuggestions.length < 7) {
         if (!newSuggestions.some(s => s.text.toLowerCase() === search.toLowerCase())) {
           newSuggestions.push({
             type: 'popular',
@@ -268,9 +287,9 @@ export default function Search() {
       }
     });
 
-    setSuggestions(newSuggestions.slice(0, 5));
+    setSuggestions(newSuggestions.slice(0, 7));
     setSelectedSuggestionIndex(-1);
-  }, [debouncedQuery, items, hasLocation, latitude, longitude]);
+  }, [debouncedQuery, items, allProfiles, hasLocation, latitude, longitude]);
 
   // Determine if search/filters are active
   useEffect(() => {
