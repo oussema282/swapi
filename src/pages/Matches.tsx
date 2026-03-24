@@ -673,8 +673,8 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <HeartOff className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No missed matches</p>
-                      <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noMissedMatchesYet')}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{t('matches.keepSwiping')}</p>
                     </Card>
                   )}
                 </div>
