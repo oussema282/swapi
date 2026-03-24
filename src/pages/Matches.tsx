@@ -651,7 +651,7 @@ export default function Matches() {
                       <div className="text-center py-2">
                         <p className="text-sm text-muted-foreground">
                           <HeartOff className="w-4 h-4 inline mr-1" />
-                          You missed a match! They wanted to swap with you.
+                          {t('matches.youMissedMatch')}
                         </p>
                       </div>
                       {missedMatches.map((missed, index) => (
