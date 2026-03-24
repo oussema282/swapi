@@ -324,7 +324,7 @@ export default function NewItem() {
             {step === 1 && (
               <div className="space-y-6">
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Télécharger des photos</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.uploadPhotos')}</Label>
                   
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     {photos.map((photo, index) => (
