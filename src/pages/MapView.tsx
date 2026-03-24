@@ -494,21 +494,24 @@ export default function MapView() {
                 className="overflow-hidden mt-3"
               >
                 <div className="flex flex-wrap gap-2">
-                  {ALL_CATEGORIES.map((category) => (
-                    <Button
-                      key={category}
-                      variant={selectedCategories.includes(category) ? 'default' : 'secondary'}
-                      size="sm"
-                      onClick={() => toggleCategory(category)}
-                      className={cn(
-                        'flex items-center gap-1.5',
-                        selectedCategories.includes(category) && 'ring-2 ring-primary/50'
-                      )}
-                    >
-                      {CATEGORY_ICONS[category]}
-                      <span className="text-xs">{CATEGORY_LABELS[category]}</span>
-                    </Button>
-                  ))}
+                  {ALL_CATEGORIES.map((cat) => {
+                    const Icon = cat.icon;
+                    return (
+                      <Button
+                        key={cat.id}
+                        variant={selectedCategories.includes(cat.id) ? 'default' : 'secondary'}
+                        size="sm"
+                        onClick={() => toggleCategory(cat.id)}
+                        className={cn(
+                          'flex items-center gap-1.5',
+                          selectedCategories.includes(cat.id) && 'ring-2 ring-primary/50'
+                        )}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="text-xs">{cat.name}</span>
+                      </Button>
+                    );
+                  })}
                   {selectedCategories.length > 0 && (
                     <Button
                       variant="outline"
