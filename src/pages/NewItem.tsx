@@ -596,7 +596,10 @@ export default function NewItem() {
                 
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   {swapPreferences.length === 0 
-                    ? 'Sélectionnez au moins une catégorie'
+                    ? t('newItem.selectAtLeastOne')
+                    : t('newItem.categoriesSelected', { count: swapPreferences.length })
+                  }
+                </p>
                     : `${swapPreferences.length} catégorie${swapPreferences.length === 1 ? '' : 's'} sélectionnée${swapPreferences.length === 1 ? '' : 's'}`
                   }
                 </p>
