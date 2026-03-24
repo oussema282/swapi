@@ -367,7 +367,13 @@ export default function Search() {
     }
 
     return filtered;
-  }, [items, searchQuery, selectedCategories, hasLocation, latitude, longitude, maxDistance, budgetRange, isSearchActive]);
+
+  // Filter profiles based on search query
+  const filteredProfiles = useMemo(() => {
+    if (!allProfiles || !searchQuery.trim() || searchQuery.trim().length < 2) return [];
+    const query = searchQuery.toLowerCase();
+    return allProfiles.filter(p => p.display_name.toLowerCase().includes(query)).slice(0, 5);
+  }, [allProfiles, searchQuery]);
 
   const handleRefresh = useCallback(() => {
     refetch();
