@@ -35,6 +35,8 @@ interface EdgeFunctionStatus {
 export function SystemSection() {
   const [loading, setLoading] = useState(true);
   const [tableStats, setTableStats] = useState<TableStats[]>([]);
+  const [allUsersPro, setAllUsersPro] = useState(false);
+  const [proToggleLoading, setProToggleLoading] = useState(true);
   const [edgeFunctions, setEdgeFunctions] = useState<EdgeFunctionStatus[]>([
     { name: 'content-moderator', status: 'unknown' },
     { name: 'fraud-detector', status: 'unknown' },
@@ -49,7 +51,52 @@ export function SystemSection() {
 
   useEffect(() => {
     fetchStats();
+    fetchAllUsersProSetting();
   }, []);
+
+  const fetchAllUsersProSetting = async () => {
+    setProToggleLoading(true);
+    const { data } = await supabase
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'all_users_pro')
+      .maybeSingle();
+    setAllUsersPro(data?.value === true);
+    setProToggleLoading(false);
+  };
+
+  const toggleAllUsersPro = async (enabled: boolean) => {
+    setProToggleLoading(true);
+    try {
+      // Upsert the system setting
+      const { data: existing } = await supabase
+        .from('system_settings')
+        .select('id')
+        .eq('key', 'all_users_pro')
+        .maybeSingle();
+
+      if (existing) {
+        await supabase
+          .from('system_settings')
+          .update({ value: enabled, updated_at: new Date().toISOString() })
+          .eq('key', 'all_users_pro');
+      } else {
+        await supabase
+          .from('system_settings')
+          .insert({ key: 'all_users_pro', value: enabled as any });
+      }
+
+      setAllUsersPro(enabled);
+      toast.success(enabled 
+        ? 'Tous les utilisateurs sont maintenant Pro à vie !' 
+        : 'Mode Pro gratuit désactivé. Retour au mode payant.'
+      );
+    } catch (err) {
+      toast.error('Erreur lors de la mise à jour');
+    } finally {
+      setProToggleLoading(false);
+    }
+  };
 
   const fetchStats = async () => {
     setLoading(true);
