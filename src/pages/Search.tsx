@@ -588,9 +588,9 @@ export default function Search() {
                             {highlightMatch(suggestion.text, searchQuery)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {suggestion.type === 'user' ? (suggestion.userData?.location || 'User') :
-                             suggestion.type === 'category' ? 'Category' : 
-                             suggestion.type === 'popular' ? 'Popular search' : 'Item'}
+                            {suggestion.type === 'user' ? (suggestion.userData?.location || t('search.user')) :
+                             suggestion.type === 'category' ? t('search.category') : 
+                             suggestion.type === 'popular' ? t('search.popularSearch') : t('search.item')}
                           </p>
                         </div>
                         
