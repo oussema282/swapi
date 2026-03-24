@@ -607,7 +607,7 @@ export default function Matches() {
                               })}
                             >
                               <Check className="w-4 h-4 mr-1" />
-                              Accept
+                              {t('matches.accept')}
                             </Button>
                             <Button
                               variant="outline"
