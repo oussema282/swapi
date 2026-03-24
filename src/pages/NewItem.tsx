@@ -649,7 +649,7 @@ export default function NewItem() {
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 5 ? 'Créer l\'article' : 'Continuer'}
+              {step === 5 ? t('newItem.createItem') : t('common.continue')}
             </Button>
           </div>
         </div>
