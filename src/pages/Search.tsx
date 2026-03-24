@@ -725,7 +725,7 @@ export default function Search() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-primary" />
-                    Value: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
+                    {t('search.value')}: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
                   </label>
                   <Slider
                     value={budgetRange}
