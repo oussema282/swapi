@@ -634,7 +634,7 @@ export default function NewItem() {
               onClick={handleBack}
               className="flex-1"
             >
-              {step === 1 ? 'Annuler' : 'Retour'}
+              {step === 1 ? t('newItem.cancel') : t('newItem.back')}
             </Button>
             
             <Button
