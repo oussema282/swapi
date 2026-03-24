@@ -506,9 +506,9 @@ export default function NewItem() {
             {/* Step 3: Value Range */}
             {step === 3 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Valeur estimée</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.estimatedValue')}</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Aidez les autres à comprendre la valeur de votre article
+                  {t('newItem.valueHelp')}
                 </p>
                 
                 <div className="space-y-6">
