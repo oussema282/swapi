@@ -144,8 +144,8 @@ export default function NewItem() {
           await supabase.storage.from('item-photos').remove([fileName]);
           toast({ 
             variant: 'destructive', 
-            title: 'Image bloquée',
-            description: `Cette image ne peut pas être téléchargée : ${moderationResult.violation_type || 'violation de politique'}`
+            title: t('newItem.imageBlocked'),
+            description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
           });
           continue;
         }
