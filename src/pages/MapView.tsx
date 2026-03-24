@@ -369,9 +369,9 @@ export default function MapView() {
           >
             <MapPin className="w-12 h-12 text-primary" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Enable Location</h2>
+           <h2 className="text-2xl font-display font-bold mb-3">{t('map.enableLocation')}</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            Map view needs your location to show items near you and connect you with local traders.
+            {t('map.enableLocationDescription')}
           </p>
           
           {permissionStatus === 'denied' && (
