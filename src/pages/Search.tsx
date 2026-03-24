@@ -770,12 +770,12 @@ export default function Search() {
           ) : filteredItems.length === 0 && filteredProfiles.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No results found</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('search.noResults')}</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                {isSearchActive ? 'Try adjusting your filters or search terms' : 'No items available in your area yet'}
+                {isSearchActive ? t('search.noResultsDescription') : t('search.noItemsInArea')}
               </p>
               {isSearchActive && (
-                <Button variant="outline" size="sm" onClick={clearAllFilters}>Clear filters</Button>
+                <Button variant="outline" size="sm" onClick={clearAllFilters}>{t('search.clearFilters')}</Button>
               )}
             </div>
           ) : (
