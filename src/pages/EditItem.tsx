@@ -28,6 +28,7 @@ import {
 import { ItemCondition, CONDITION_LABELS } from '@/types/database';
 import { CATEGORIES, getCategoryLabel, type Category } from '@/config/categories';
 import { cn } from '@/lib/utils';
+import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 
 const conditions: ItemCondition[] = ['new', 'like_new', 'good', 'fair'];
 
