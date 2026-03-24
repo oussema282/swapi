@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import {
   Server,
@@ -17,6 +18,7 @@ import {
   AlertTriangle,
   Zap,
   Cloud,
+  Crown,
 } from 'lucide-react';
 
 interface TableStats {
@@ -33,6 +35,8 @@ interface EdgeFunctionStatus {
 export function SystemSection() {
   const [loading, setLoading] = useState(true);
   const [tableStats, setTableStats] = useState<TableStats[]>([]);
+  const [allUsersPro, setAllUsersPro] = useState(false);
+  const [proToggleLoading, setProToggleLoading] = useState(true);
   const [edgeFunctions, setEdgeFunctions] = useState<EdgeFunctionStatus[]>([
     { name: 'content-moderator', status: 'unknown' },
     { name: 'fraud-detector', status: 'unknown' },
@@ -47,7 +51,52 @@ export function SystemSection() {
 
   useEffect(() => {
     fetchStats();
+    fetchAllUsersProSetting();
   }, []);
+
+  const fetchAllUsersProSetting = async () => {
+    setProToggleLoading(true);
+    const { data } = await supabase
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'all_users_pro')
+      .maybeSingle();
+    setAllUsersPro(data?.value === true);
+    setProToggleLoading(false);
+  };
+
+  const toggleAllUsersPro = async (enabled: boolean) => {
+    setProToggleLoading(true);
+    try {
+      // Upsert the system setting
+      const { data: existing } = await supabase
+        .from('system_settings')
+        .select('id')
+        .eq('key', 'all_users_pro')
+        .maybeSingle();
+
+      if (existing) {
+        await supabase
+          .from('system_settings')
+          .update({ value: enabled, updated_at: new Date().toISOString() })
+          .eq('key', 'all_users_pro');
+      } else {
+        await supabase
+          .from('system_settings')
+          .insert({ key: 'all_users_pro', value: enabled as any });
+      }
+
+      setAllUsersPro(enabled);
+      toast.success(enabled 
+        ? 'Tous les utilisateurs sont maintenant Pro à vie !' 
+        : 'Mode Pro gratuit désactivé. Retour au mode payant.'
+      );
+    } catch (err) {
+      toast.error('Erreur lors de la mise à jour');
+    } finally {
+      setProToggleLoading(false);
+    }
+  };
 
   const fetchStats = async () => {
     setLoading(true);
@@ -133,7 +182,38 @@ export function SystemSection() {
         </Button>
       </div>
 
-      {/* Quick Stats */}
+      {/* All Users Pro Toggle */}
+      <Card className={allUsersPro ? 'border-primary/50 bg-primary/5' : ''}>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex items-center gap-3">
+            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${allUsersPro ? 'bg-primary/20' : 'bg-muted'}`}>
+              <Crown className={`h-5 w-5 ${allUsersPro ? 'text-primary' : 'text-muted-foreground'}`} />
+            </div>
+            <div>
+              <CardTitle className="text-base">Pro Gratuit pour Tous</CardTitle>
+              <CardDescription className="text-xs">
+                {allUsersPro 
+                  ? 'Tous les utilisateurs ont un accès Pro illimité à vie' 
+                  : 'Mode payant actif — les utilisateurs doivent souscrire pour accéder au Pro'}
+              </CardDescription>
+            </div>
+          </div>
+          <Switch
+            checked={allUsersPro}
+            onCheckedChange={toggleAllUsersPro}
+            disabled={proToggleLoading}
+          />
+        </CardHeader>
+        {allUsersPro && (
+          <CardContent className="pt-2">
+            <Badge variant="default" className="bg-primary text-primary-foreground">
+              <Crown className="h-3 w-3 mr-1" />
+              Actif — Tous Pro à vie
+            </Badge>
+          </CardContent>
+        )}
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

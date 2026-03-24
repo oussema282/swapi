@@ -78,12 +78,31 @@ export function useEntitlements() {
   const { setSubscriptionPhase, markSubscriptionReady, state: systemState } = useSystemState();
 
   // ============================================
+  // GLOBAL PRO OVERRIDE (admin toggle)
+  // ============================================
+  
+  const { data: allUsersProEnabled } = useQuery({
+    queryKey: ['system-setting-all-users-pro'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('system_settings')
+        .select('value')
+        .eq('key', 'all_users_pro')
+        .maybeSingle();
+      return data?.value === true;
+    },
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
+  });
+
+  // ============================================
   // DECISION AUTHORITY: SUBSCRIPTION_PHASE
   // ============================================
   
   // isPro is derived from SUBSCRIPTION_PHASE, NOT from database is_pro field
   const subscriptionPhase = systemState.subscription;
-  const isPro = subscriptionPhase === 'PRO_ACTIVE';
+  const isProFromPhase = subscriptionPhase === 'PRO_ACTIVE';
+  const isPro = isProFromPhase || !!allUsersProEnabled;
   const isUpgrading = subscriptionPhase === 'UPGRADING';
   const isProOrUpgrading = isPro || isUpgrading;
 
