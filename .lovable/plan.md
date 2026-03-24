@@ -1,69 +1,34 @@
 
 
-## Plan: Translate Categories and Conditions via i18n
+## Plan: Complete Arabic Translation to Match French
 
 ### Problem
-Category names (e.g. "Électronique", "Mode") are hardcoded in French in `src/config/categories.ts`. Condition labels ("New", "Like New", etc.) are hardcoded in English in `src/types/database.ts`. Neither adapts to the user's language.
-
-### Approach
-Add translation keys for all categories, subcategories, and conditions in the three language files (EN, FR, AR). Then replace direct label lookups with `t()` calls throughout the app.
+The Arabic translation file (543 lines) is significantly incomplete compared to French (868 lines). Many sections are missing or have outdated/minimal versions. There are also duplicate `categories` and `conditions` blocks (old ones at lines 391-405, new ones at 429-542).
 
 ### Changes
 
-**1. Add keys to all 3 translation files**
+**Single file: `src/locales/ar/translation.json`** — Rewrite the full file to include all sections matching the French version:
 
-Each file gets a `categories` block (14 top-level categories + their subcategories/children) and a `conditions` block:
+**Missing sections to add (with Arabic translations):**
+- `map` — full map section (location permissions, filters, nearby items, etc.)
+- `matches` — extended keys: `instantMatches`, `conversations`, `seeAll`, `keepSwiping`, `wantsToSwapFor`, `yourItem`, `from`, `accept`, `decline`, `failedToLoadMatches`, `tryAgain`, `matchCreated`, `dealAccepted`, `dealDeclined`, `failedToRecover`, `failedToRespond`, `matchWith`, `startConversation`, `done`, `confirm`, `waiting`, `proOnly`, `upgradeToSee`, `hiddenUser`, `hiddenItemTitle`, `theyWantedSwap`, `noMatchesYet`, `startSwipingDescription`, `discoverItems`, `valueBalanced`, `greatTradePotential`, `fastResponder`, `with`, `subtitle`
+- `chat` — extended keys: `offline`, `exchangeCompleted`, `exchangeCompletedDescription`, `exchangeConfirmed`, `exchangeConfirmedDescription`, `alreadyConfirmed`, `failedConfirmExchange`, `completed`, `waiting`, `justNow`, `minutesAgo`, `hoursAgo`
+- `swap` — full section (completeThisSwap, confirmDescription, rateExchange, etc.)
+- `dealInvite` — extended keys: `inviteDeal`, `selectItemToOffer`, `noItemsToOffer`, `resendOneLeft`, `blocked`, `matched`, `resendInfo`, `resendInfoBlocked`, `sent`, `pendingExists`, `maxAttempts`, `alreadySent`, `failedSend`, `noPending`, `wantsToSwapFor`, `yourItem`, `dealAccepted`, `dealDeclined`, `failedRespond`
+- `unmatch` — full section
+- `newItem` — extended keys: `subcategoryOf`, `locationTitle`, `locationDescription`, `imagesOnly`, `imageTooLarge`, `uploadFailed`, `imageBlocked`, `checking`, `uploading`, `cancel`, `back`, `itemLocation`, `locationHelp`, `creationFailed`, `policyViolation`, `maximumOptional`
+- `search` — extended keys: `clearFilters`, `noItemsInArea`, `results`, `topNearYou`, `loading`, `users`, `itemsLabel`, `user`, `category`, `popularSearch`, `item`, `profile`, `noDescription`, `value`, `enableLocation`, `gettingLocation`, `clearAllFilters`
+- `itemDetails` — full section
+- `report` — full section with all reason keys
+- `match` — full section (itsAMatch, bothWantToSwap, keepSwiping, chatNow)
+- `editItem` — keys: `subcategory`, `changesRecorded`, `updateFailed`
+- `editProfile` — full section (if missing)
+- `userProfile` — extended keys: `items`, `swaps`, `noItemsListed`
 
-```json
-"conditions": {
-  "new": "New",
-  "like_new": "Like New",
-  "good": "Good",
-  "fair": "Fair"
-},
-"categories": {
-  "electronique": "Electronics",
-  "telephones": "Phones",
-  "smartphones": "Smartphones",
-  ...
-  "mode": "Fashion",
-  ...
-}
-```
-
-French file keeps the current French names. Arabic file gets Arabic translations.
-
-**2. Update `src/config/categories.ts`** — Add a `getCategoryLabelTranslated(id, t)` helper that looks up `t('categories.' + id)` with the raw `name` as fallback. Export it alongside the existing helpers.
-
-**3. Update `src/types/database.ts`** — Add a `getConditionLabel(condition, t)` helper that returns `t('conditions.' + condition)`. Keep `CONDITION_LABELS` as fallback for non-i18n contexts.
-
-**4. Update all consuming components** to use the new translated helpers:
-- `SwipeCard.tsx` — condition label
-- `ItemDetailsSheet.tsx` — condition + category labels
-- `Items.tsx` — condition + category badges
-- `NewItem.tsx` — condition buttons + category names
-- `EditItem.tsx` — condition buttons + category names
-- `Search.tsx` — condition labels
-- `MapView.tsx` — condition label
-- `ItemSelector.tsx` — category label
-- `ProfileItemsGrid.tsx` — category label (if shown)
-- `ItemsSection.tsx` (admin) — category filter labels
-
-Each component already has `useTranslation` or will get it added, then replaces `CONDITION_LABELS[x]` with `t('conditions.' + x)` and `getCategoryLabel(x)` with `t('categories.' + x)`.
+**Cleanup:**
+- Remove duplicate old `categories` block (lines 391-398) and old `conditions` block (lines 400-405) — keep only the full versions at lines 429+
+- Fix `discover` section: add missing `swappingFrom` and `lookingForCategories` keys
 
 ### Files Modified
-- `src/locales/en/translation.json`
-- `src/locales/fr/translation.json`
 - `src/locales/ar/translation.json`
-- `src/config/categories.ts`
-- `src/types/database.ts`
-- `src/components/discover/SwipeCard.tsx`
-- `src/components/discover/ItemDetailsSheet.tsx`
-- `src/components/discover/ItemSelector.tsx`
-- `src/pages/Items.tsx`
-- `src/pages/NewItem.tsx`
-- `src/pages/EditItem.tsx`
-- `src/pages/Search.tsx`
-- `src/pages/MapView.tsx`
-- `src/components/admin/sections/ItemsSection.tsx`
 
