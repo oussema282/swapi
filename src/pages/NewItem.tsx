@@ -104,7 +104,7 @@ export default function NewItem() {
     if (!files || !user) return;
 
     if (photos.length + files.length > 4) {
-      toast({ variant: 'destructive', title: 'Maximum 4 photos autorisées' });
+      toast({ variant: 'destructive', title: t('newItem.maxPhotos') });
       return;
     }
 
