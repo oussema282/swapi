@@ -229,7 +229,9 @@
     "nope": "NOPE",
     "ownerActive": "Owner Active",
     "ownerRecentlyActive": "Owner Recently Active",
-    "boost": "Boost"
+    "boost": "Boost",
+    "swappingFrom": "Swapping from:",
+    "lookingForCategories": "Looking for {{count}} categories"
   },
   "matches": {
     "title": "Matches",
