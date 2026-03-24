@@ -19,6 +19,7 @@ interface MatchModalProps {
 
 export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!myItem || !theirItem) return null;
 
