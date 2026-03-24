@@ -566,7 +566,7 @@ export default function Matches() {
                             </div>
                           </div>
 
-                          <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
+                          <div className="text-xs text-muted-foreground text-center">{t('matches.wantsToSwapFor')}</div>
 
                           <div className="flex items-center gap-2">
                             <button
