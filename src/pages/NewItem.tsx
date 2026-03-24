@@ -6,7 +6,6 @@ import { useCreateItem } from '@/hooks/useItems';
 import { useItemLimit } from '@/hooks/useEntitlements';
 import { useContentModeration } from '@/hooks/useContentModeration';
 import { useTranslation } from 'react-i18next';
-import { useContentModeration } from '@/hooks/useContentModeration';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
