@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS set_item_location_trigger ON public.items;
