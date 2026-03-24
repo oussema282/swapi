@@ -26,7 +26,8 @@ interface ProfileItemsGridProps {
 
 export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: ProfileItemsGridProps) {
   const navigate = useNavigate();
-  const { userLocation } = useLocation();
+  const { latitude, longitude } = useDeviceLocation();
+  const userLocation = { latitude, longitude };
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dealInviteOpen, setDealInviteOpen] = useState(false);
