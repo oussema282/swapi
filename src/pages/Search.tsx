@@ -325,9 +325,12 @@ export default function Search() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => {
-        const categoryLabel = getCategoryLabel(item.category)?.toLowerCase() || '';
+        const categoryLabel = t(`categories.${item.category}`).toLowerCase();
         return (
           item.title.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.owner_display_name.toLowerCase().includes(query) ||
+          categoryLabel.includes(query)
           item.description?.toLowerCase().includes(query) ||
           item.owner_display_name.toLowerCase().includes(query) ||
           categoryLabel.includes(query)
