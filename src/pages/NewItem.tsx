@@ -170,12 +170,13 @@ export default function NewItem() {
       case 2: return category !== null && subcategory !== null && condition !== null;
       case 3: return true;
       case 4: return swapPreferences.length > 0;
+      case 5: return itemLatitude !== null && itemLongitude !== null;
       default: return false;
     }
   };
 
   const handleNext = () => {
-    if (step < 4) {
+    if (step < 5) {
       setStep(step + 1);
     } else {
       handleSubmit();
