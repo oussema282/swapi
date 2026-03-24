@@ -44,13 +44,7 @@ const CONDITION_ICONS: Record<ItemCondition, React.ReactNode> = {
   fair: <Zap className="w-5 h-5" />,
 };
 
-const STEPS = [
-  { id: 1, title: 'Photos & Titre', description: 'Montrez votre article' },
-  { id: 2, title: 'Catégorie & État', description: 'Décrivez votre article' },
-  { id: 3, title: 'Fourchette de prix', description: 'Estimez la valeur' },
-  { id: 4, title: 'Préférences d\'échange', description: 'Que voulez-vous ?' },
-  { id: 5, title: 'Emplacement', description: 'Où se trouve l\'article ?' },
-];
+// Steps are now computed inside the component using t()
 
 export default function NewItem() {
   const { user, loading: authLoading } = useAuth();
