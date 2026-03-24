@@ -441,16 +441,6 @@
     "good": "Good",
     "fair": "Fair"
   },
-  "dealInvite": {
-    "title": "Send Deal Invite",
-    "selectYourItem": "Select your item to offer",
-    "send": "Send Invite",
-    "pending": "Pending",
-    "accepted": "Accepted",
-    "rejected": "Rejected",
-    "accept": "Accept",
-    "decline": "Decline"
-  },
   "missedMatch": {
     "title": "You Missed a Match!",
     "description": "This person liked your item, but you passed on theirs.",
