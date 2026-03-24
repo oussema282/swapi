@@ -114,7 +114,7 @@ export default function NewItem() {
     try {
       for (const file of Array.from(files)) {
         if (!file.type.startsWith('image/')) {
-          toast({ variant: 'destructive', title: 'Seules les images sont autorisées' });
+          toast({ variant: 'destructive', title: t('newItem.imagesOnly') });
           continue;
         }
 
