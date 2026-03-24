@@ -315,6 +315,14 @@ export function SystemStateProvider({ children }: { children: ReactNode }) {
     }
   }, [state.authReady, state.profileReady, user, profile]);
 
+  // Mark subscription as ready when auth is ready
+  // useEntitlements handles actual subscription logic at page level
+  useEffect(() => {
+    if (state.authReady && !state.subscriptionReady) {
+      dispatch({ type: 'SUBSCRIPTION_READY' });
+    }
+  }, [state.authReady, state.subscriptionReady]);
+
   const initialize = useCallback(() => {
     dispatch({ type: 'INITIALIZE' });
   }, []);
