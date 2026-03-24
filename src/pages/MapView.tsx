@@ -336,7 +336,7 @@ export default function MapView() {
             {t('map.mapLimitDescription', { limit: FREE_LIMITS.mapUses })}
           </p>
           <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => setShowUpgradePrompt(true)}>
-            Upgrade to Pro
+            {t('map.upgradeToPro')}
           </Button>
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
