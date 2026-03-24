@@ -86,8 +86,8 @@ export default function NewItem() {
     if (!authLoading && !limitLoading && user && !canAddItem) {
       toast({ 
         variant: 'destructive', 
-        title: 'Limite atteinte',
-        description: `Les utilisateurs gratuits ne peuvent avoir que ${limit} articles. Passez à Pro pour des articles illimités !`
+        title: t('newItem.itemLimitReached'),
+        description: t('newItem.itemLimitDescription', { limit })
       });
       navigate('/checkout');
     }
