@@ -288,7 +288,7 @@ export default function NewItem() {
             <p className="text-sm text-muted-foreground">{STEPS[step - 1].description}</p>
           </div>
           <span className="text-sm font-medium text-muted-foreground">
-            {step}/4
+            {step}/{STEPS.length}
           </span>
         </div>
 
