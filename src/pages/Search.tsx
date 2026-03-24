@@ -331,9 +331,6 @@ export default function Search() {
           item.description?.toLowerCase().includes(query) ||
           item.owner_display_name.toLowerCase().includes(query) ||
           categoryLabel.includes(query)
-          item.description?.toLowerCase().includes(query) ||
-          item.owner_display_name.toLowerCase().includes(query) ||
-          categoryLabel.includes(query)
         );
       });
     }
