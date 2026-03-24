@@ -522,7 +522,7 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No completed swaps yet</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noCompletedSwapsYet')}</p>
                     </Card>
                   )}
                 </div>
