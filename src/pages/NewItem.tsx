@@ -403,7 +403,7 @@ export default function NewItem() {
                         id="description" 
                         value={description} 
                         onChange={(e) => setDescription(e.target.value)} 
-                        placeholder="Décrivez votre article..."
+                        placeholder={t('newItem.descriptionPlaceholder')}
                         rows={3}
                         className="mt-2"
                       />
