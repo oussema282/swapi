@@ -545,7 +545,10 @@
     "alreadyConfirmed": "Vous avez déjà confirmé cet échange.",
     "failedConfirmExchange": "Échec de la confirmation de l'échange",
     "completed": "Terminé",
-    "waiting": "En attente..."
+    "waiting": "En attente...",
+    "justNow": "À l'instant",
+    "minutesAgo": "il y a {{count}}min",
+    "hoursAgo": "il y a {{count}}h"
   },
   "swap": {
     "completeThisSwap": "Terminer cet échange ?",
