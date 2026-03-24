@@ -1,34 +1,23 @@
 
 
-## Plan: Complete Arabic Translation to Match French
+## Plan: Fix Discover Button Centering in Bottom Nav
 
 ### Problem
-The Arabic translation file (543 lines) is significantly incomplete compared to French (868 lines). Many sections are missing or have outdated/minimal versions. There are also duplicate `categories` and `conditions` blocks (old ones at lines 391-405, new ones at 429-542).
+The nav uses `justify-around` which distributes items based on their content width. Since translated labels like "Rechercher" are wider than "Search", the spacing becomes uneven, pushing the center Discover button off-center.
+
+### Solution
+Give each nav item a fixed equal width using `flex-1` and center their content. This ensures all 5 slots take equal space regardless of label length, keeping Discover perfectly centered.
 
 ### Changes
 
-**Single file: `src/locales/ar/translation.json`** — Rewrite the full file to include all sections matching the French version:
+**File: `src/components/layout/BottomNav.tsx`**
 
-**Missing sections to add (with Arabic translations):**
-- `map` — full map section (location permissions, filters, nearby items, etc.)
-- `matches` — extended keys: `instantMatches`, `conversations`, `seeAll`, `keepSwiping`, `wantsToSwapFor`, `yourItem`, `from`, `accept`, `decline`, `failedToLoadMatches`, `tryAgain`, `matchCreated`, `dealAccepted`, `dealDeclined`, `failedToRecover`, `failedToRespond`, `matchWith`, `startConversation`, `done`, `confirm`, `waiting`, `proOnly`, `upgradeToSee`, `hiddenUser`, `hiddenItemTitle`, `theyWantedSwap`, `noMatchesYet`, `startSwipingDescription`, `discoverItems`, `valueBalanced`, `greatTradePotential`, `fastResponder`, `with`, `subtitle`
-- `chat` — extended keys: `offline`, `exchangeCompleted`, `exchangeCompletedDescription`, `exchangeConfirmed`, `exchangeConfirmedDescription`, `alreadyConfirmed`, `failedConfirmExchange`, `completed`, `waiting`, `justNow`, `minutesAgo`, `hoursAgo`
-- `swap` — full section (completeThisSwap, confirmDescription, rateExchange, etc.)
-- `dealInvite` — extended keys: `inviteDeal`, `selectItemToOffer`, `noItemsToOffer`, `resendOneLeft`, `blocked`, `matched`, `resendInfo`, `resendInfoBlocked`, `sent`, `pendingExists`, `maxAttempts`, `alreadySent`, `failedSend`, `noPending`, `wantsToSwapFor`, `yourItem`, `dealAccepted`, `dealDeclined`, `failedRespond`
-- `unmatch` — full section
-- `newItem` — extended keys: `subcategoryOf`, `locationTitle`, `locationDescription`, `imagesOnly`, `imageTooLarge`, `uploadFailed`, `imageBlocked`, `checking`, `uploading`, `cancel`, `back`, `itemLocation`, `locationHelp`, `creationFailed`, `policyViolation`, `maximumOptional`
-- `search` — extended keys: `clearFilters`, `noItemsInArea`, `results`, `topNearYou`, `loading`, `users`, `itemsLabel`, `user`, `category`, `popularSearch`, `item`, `profile`, `noDescription`, `value`, `enableLocation`, `gettingLocation`, `clearAllFilters`
-- `itemDetails` — full section
-- `report` — full section with all reason keys
-- `match` — full section (itsAMatch, bothWantToSwap, keepSwiping, chatNow)
-- `editItem` — keys: `subcategory`, `changesRecorded`, `updateFailed`
-- `editProfile` — full section (if missing)
-- `userProfile` — extended keys: `items`, `swaps`, `noItemsListed`
+1. Change the nav container from `justify-around` to just `flex` (line 35)
+2. Add `flex-1` to the center Discover link (line 46) and center it
+3. Add `flex-1` to each regular nav link (line 75) and ensure content is centered
 
-**Cleanup:**
-- Remove duplicate old `categories` block (lines 391-398) and old `conditions` block (lines 400-405) — keep only the full versions at lines 429+
-- Fix `discover` section: add missing `swappingFrom` and `lookingForCategories` keys
+This way each of the 5 items gets exactly 20% width, and the Discover circle stays perfectly centered regardless of language.
 
 ### Files Modified
-- `src/locales/ar/translation.json`
+- `src/components/layout/BottomNav.tsx`
 
