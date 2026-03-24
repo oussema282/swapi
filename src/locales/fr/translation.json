@@ -702,5 +702,11 @@
     "viewProfile": "Voir le profil",
     "viewOnMap": "Voir sur la carte",
     "inviteToDeal": "Inviter à un échange"
+  },
+  "conditions": {
+    "new": "Neuf",
+    "like_new": "Comme neuf",
+    "good": "Bon état",
+    "fair": "État correct"
   }
 }

@@ -751,5 +751,11 @@
     "viewProfile": "View profile",
     "viewOnMap": "View on Map",
     "inviteToDeal": "Invite to Deal"
+  },
+  "conditions": {
+    "new": "New",
+    "like_new": "Like New",
+    "good": "Good",
+    "fair": "Fair"
   }
 }
