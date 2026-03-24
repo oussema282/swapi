@@ -37,6 +37,7 @@ const ALL_CATEGORIES = CATEGORIES;
 
 export default function MapView() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   // Support both focusItemId (new) and itemId (legacy) for backward compatibility
   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
