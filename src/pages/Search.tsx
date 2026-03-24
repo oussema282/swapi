@@ -274,7 +274,7 @@ export default function Search() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => {
-        const categoryLabel = CATEGORY_LABELS[item.category]?.toLowerCase() || '';
+        const categoryLabel = getCategoryLabel(item.category)?.toLowerCase() || '';
         return (
           item.title.toLowerCase().includes(query) ||
           item.description?.toLowerCase().includes(query) ||
