@@ -395,6 +395,12 @@ export default function Search() {
       return;
     }
 
+    if (suggestion.type === 'user' && suggestion.userData) {
+      navigate(`/user/${suggestion.userData.userId}`);
+      setShowSuggestions(false);
+      return;
+    }
+
     if (suggestion.type === 'category' && suggestion.category) {
       if (!selectedCategories.includes(suggestion.category)) {
         setSelectedCategories(prev => [...prev, suggestion.category!]);
@@ -405,7 +411,7 @@ export default function Search() {
     }
     setShowSuggestions(false);
     inputRef.current?.blur();
-  }, [selectedCategories, trackSearchUsage]);
+  }, [selectedCategories, trackSearchUsage, navigate]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
