@@ -492,7 +492,7 @@ export default function NewItem() {
                         )}
                       >
                         {CONDITION_ICONS[cond]}
-                        <span className="font-medium">{CONDITION_LABELS[cond]}</span>
+                        <span className="font-medium">{t(`conditions.${cond}`)}</span>
                       </button>
                     ))}
                   </div>
