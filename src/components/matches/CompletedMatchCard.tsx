@@ -3,7 +3,7 @@ import { Package, ArrowLeftRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { formatDistanceToNow } from 'date-fns';
+import { formatTimeAgo } from '@/lib/dateLocale';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
 
@@ -64,7 +64,7 @@ export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheir
               {match.their_item?.title}
             </p>
             <p className="text-xs text-muted-foreground/70">
-              {t('matches.with')} <VerifiedName name={match.other_user_profile?.display_name || 'User'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
+              {t('matches.with')} <VerifiedName name={match.other_user_profile?.display_name || 'User'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatTimeAgo(new Date(match.completed_at || match.created_at), { addSuffix: true })}
             </p>
           </div>
 

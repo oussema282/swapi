@@ -3,7 +3,7 @@ import { Package, Sparkles, Zap, MessageCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
+import { formatTimeAgo } from '@/lib/dateLocale';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
 
@@ -116,7 +116,7 @@ export function ConversationCard({
               badgeClassName="w-3 h-3"
             />
             <span className="text-[11px] text-muted-foreground flex-shrink-0 mt-0.5">
-              {formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+              {formatTimeAgo(new Date(lastActivityTime))}
             </span>
           </div>
           

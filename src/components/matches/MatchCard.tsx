@@ -3,7 +3,7 @@ import { Package, ArrowLeftRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { formatDistanceToNow } from 'date-fns';
+import { formatTimeAgo } from '@/lib/dateLocale';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
@@ -127,7 +127,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
                     ? "bg-primary text-primary-foreground" 
                     : "bg-muted text-muted-foreground"
                 )}>
-                  {hasUnread ? t('matches.new') : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+                  {hasUnread ? t('matches.new') : formatTimeAgo(new Date(lastActivityTime))}
                 </span>
               )}
             </div>
