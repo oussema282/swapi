@@ -1,66 +1,86 @@
 
 
-## Plan: Complete French Translation Coverage
+## Plan: Wire Up Remaining Hardcoded English Strings to i18n
 
 ### Problem
-Many pages and components have hardcoded English (or mixed-language) strings instead of using the `t()` translation function. Only 4 out of ~20 user-facing pages import `useTranslation`. The rest render English text regardless of the selected language.
+Translation keys exist in `en/translation.json` and `fr/translation.json` but many components still have hardcoded English strings instead of `t()` calls.
 
-### Scope of Work
+### Files to Update
 
-**Pages missing `useTranslation` entirely** (need full i18n wrapping):
-- `Settings.tsx` (690 lines — largest offender, all labels/headers hardcoded)
-- `Search.tsx` (911 lines — buttons, placeholders, section headers)
-- `NewItem.tsx` (hardcoded French strings instead of using `t()`)
-- `EditItem.tsx` (hardcoded French strings)
-- `EditProfile.tsx`
-- `MapView.tsx`
-- `UserProfile.tsx`
-- `Checkout.tsx` / `CheckoutSuccess.tsx`
-- `Recharge.tsx` / `RechargeLogin.tsx` / `RechargeVerify.tsx`
-- `Privacy.tsx`, `Terms.tsx`, `Safety.tsx`
+**1. Matches page components (highest impact):**
 
-**Pages with `useTranslation` but still having hardcoded strings**:
-- `Matches.tsx` — empty states use hardcoded English ("No active matches yet", "Failed to load matches", "No pending deal invites", etc.)
-- `Profile.tsx` — partial coverage
-- `Chat.tsx` — partial coverage
+- **`MatchesHeader.tsx`** — "Matches", "Your active and completed exchanges", "Active", "Completed", "Invites", "Missed" all hardcoded
+- **`MatchCard.tsx`** — "Start a conversation...", "Done", "Confirm", "Waiting", "New" hardcoded
+- **`ConversationCard.tsx`** — "Start a conversation...", "Value balanced", "Great trade potential!", "Fast responder" hardcoded
+- **`CompletedMatchCard.tsx`** — "Done" hardcoded
+- **`InstantMatchCard.tsx`** — "Match with" hardcoded
+- **`MissedMatchCard.tsx`** — "Pro Only", "Upgrade to see who wants your item!", "Hidden User", "Hidden item title", "They wanted to swap for your" hardcoded
+- **`EmptyMatchesState.tsx`** — "No matches yet", "Start swiping...", "Discover Items" hardcoded
+- **`UnmatchButton.tsx`** — "Unmatch", "Unmatch with {name}?", dialog description, "Cancel" hardcoded
+- **`CompleteSwapModal.tsx`** — "Complete This Swap?", "Rate This Exchange", "Cancel", "Yes, Complete", "Feedback (optional)", "Submit & Complete", "Swap Complete!", "Thanks for using Valexo", "Done", "Completing..." hardcoded
 
-**Components with hardcoded strings**:
-- `src/components/matches/*.tsx` (MatchCard, ConversationCard, CompleteSwapModal, etc.)
-- `src/components/discover/*.tsx` (EmptyState, ItemDetailsSheet, SwipeCard)
-- `src/components/deals/*.tsx`
-- `src/components/report/ReportButton.tsx`
-- `src/components/subscription/*.tsx`
+**2. Chat components:**
+
+- **`ChatHeader.tsx`** — "Online", "Last seen", "Offline", "Completed", "Waiting...", "Confirm", toast messages ("Exchange completed!", "Exchange confirmed!", etc.) all hardcoded
+
+**3. Deal invite components:**
+
+- **`DealInviteButton.tsx`** — "Invite Deal", "Send Deal Invite", "Select one of your items to offer for", "You don't have any items...", "Pending", "Resend (1 left)", "Blocked", "Matched!", toast messages hardcoded
+- **`DealInvitesNotification.tsx`** — "Deal Invites", "No pending deal invites", "from", "wants to swap for", "Your item", "Accept", "Decline", toast messages hardcoded
+
+**4. Search page (`Search.tsx`):**
+
+- Hardcoded: "Search items, categories, users...", "Distance", "Enable location", "Getting...", "Value:", "Clear all filters", "Loading...", "Top 10 near you", "No results found", "Try adjusting...", "No items available...", "Clear filters", "Clear all", "Users", "Items", "Profile", "No description", "Category", "Popular search", "Item", "User", "View on map"
+
+**5. `EditItem.tsx`:**
+
+- Placeholders "Min", "Max" hardcoded (line 323-324). Most other strings already use `t()`.
 
 ### Approach
 
-1. **Add missing translation keys to `en/translation.json`** — add keys for all hardcoded strings found across pages and components (settings sections, search UI, map labels, user profile, checkout flow, report flow, etc.)
+1. **Add ~40 new translation keys** to both `en/translation.json` and `fr/translation.json` for strings not yet covered (swap modal, chat header states, deal invite UI, match tags, missed match pro-only text, etc.)
 
-2. **Add corresponding French translations to `fr/translation.json`** — translate all new keys
+2. **Wire `useTranslation` into 11 components** — add `import { useTranslation } from 'react-i18next'` and replace hardcoded strings with `t()` calls:
+   - `MatchesHeader.tsx`, `MatchCard.tsx`, `ConversationCard.tsx`, `CompletedMatchCard.tsx`, `InstantMatchCard.tsx`, `MissedMatchCard.tsx`, `EmptyMatchesState.tsx`, `UnmatchButton.tsx`, `CompleteSwapModal.tsx`, `ChatHeader.tsx`, `DealInviteButton.tsx`, `DealInvitesNotification.tsx`
 
-3. **Update all other 9 language files** (`es`, `de`, `pt`, `zh`, `ja`, `hi`, `ru`, `ko`, `ar`) with translated values for the new keys
+3. **Wire `t()` into `Search.tsx`** — replace all remaining hardcoded strings with existing `search.*` keys
 
-4. **Wire up `useTranslation` in each page/component** — replace every hardcoded string with `t('key')` calls
+4. **Fix `EditItem.tsx`** placeholders — use `t()` for "Min"/"Max"
 
-5. **Fix NewItem.tsx and EditItem.tsx** — these have hardcoded French strings (not using `t()`) which means they show French even when English is selected. Replace with proper `t()` calls.
+### New Translation Keys Needed
 
-### Priority Order (user-facing impact)
-1. **Settings.tsx** — most visited, fully hardcoded
-2. **Matches.tsx** — empty states and error messages hardcoded
-3. **Search.tsx** — headers, filters, placeholders
-4. **NewItem.tsx / EditItem.tsx** — fix hardcoded French → use `t()`
-5. **Match/discover components** — modal text, card labels
-6. **Profile-related pages** (EditProfile, UserProfile)
-7. **Legal pages** (Terms, Privacy, Safety) — lower priority
-8. **Checkout/Recharge pages**
+```
+matches.matchWith, matches.startConversation, matches.done, matches.confirm,
+matches.waiting, matches.proOnly, matches.upgradeToSee, matches.hiddenUser,
+matches.hiddenItemTitle, matches.theyWantedSwap, matches.noMatchesYet,
+matches.startSwipingDescription, matches.discoverItems,
+matches.valueBalanced, matches.greatTradePotential, matches.fastResponder
+
+chat.online, chat.offline, chat.lastSeenPrefix,
+chat.exchangeCompleted, chat.exchangeCompletedDescription,
+chat.exchangeConfirmed, chat.exchangeConfirmedDescription,
+chat.alreadyConfirmed, chat.failedConfirmExchange,
+chat.completed, chat.waiting
+
+swap.completeThisSwap, swap.confirmDescription, swap.cancel, swap.yesComplete,
+swap.rateExchange, swap.rateDescription, swap.feedbackOptional,
+swap.shareFeedback, swap.submitComplete, swap.completing,
+swap.swapComplete, swap.thankYou, swap.done
+
+dealInvite.inviteDeal, dealInvite.selectItemToOffer,
+dealInvite.noItemsToOffer, dealInvite.resendOneLeft, dealInvite.blocked,
+dealInvite.matched, dealInvite.resendInfo, dealInvite.sent,
+dealInvite.pendingExists, dealInvite.maxAttempts, dealInvite.alreadySent,
+dealInvite.failedSend, dealInvite.noPending, dealInvite.wantsToSwapFor,
+dealInvite.yourItem, dealInvite.dealAccepted, dealInvite.dealDeclined,
+dealInvite.failedRespond
+
+unmatch.title, unmatch.description, unmatch.button, unmatch.success, unmatch.failed
+```
 
 ### Technical Detail
-- Each page gets `import { useTranslation } from 'react-i18next'` and `const { t } = useTranslation()`
-- All string literals replaced with `t('section.key')` pattern matching existing conventions
-- New keys follow the existing nested structure (e.g., `settings.profilePhoto`, `matches.noActiveMatches`)
-- All 11 language files updated in parallel with the new keys
-- No structural changes to components — only string replacements
-
-### Estimated Changes
-- ~11 translation JSON files updated with ~80-100 new keys each
-- ~15-20 TSX files updated to use `t()` calls
+- All new keys added to `en` and `fr` JSON files
+- Each component gets `const { t } = useTranslation()` and all string literals replaced
+- No structural/logic changes — only string replacements
+- Estimated: ~13 TSX files + 2 JSON files updated
 
