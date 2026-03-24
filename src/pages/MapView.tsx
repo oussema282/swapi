@@ -32,17 +32,7 @@ const MAP_STYLES = {
   light: 'mapbox://styles/mapbox/light-v11',
 };
 
-const CATEGORY_ICONS: Record<ItemCategory, React.ReactNode> = {
-  games: <Gamepad2 className="w-4 h-4" />,
-  electronics: <Smartphone className="w-4 h-4" />,
-  clothes: <Shirt className="w-4 h-4" />,
-  books: <BookOpen className="w-4 h-4" />,
-  home_garden: <Home className="w-4 h-4" />,
-  sports: <Dumbbell className="w-4 h-4" />,
-  other: <Package className="w-4 h-4" />,
-};
-
-const ALL_CATEGORIES: ItemCategory[] = ['games', 'electronics', 'clothes', 'books', 'home_garden', 'sports', 'other'];
+const ALL_CATEGORIES = CATEGORIES;
 
 export default function MapView() {
   const navigate = useNavigate();
