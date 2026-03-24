@@ -751,7 +751,7 @@ export default function Search() {
           <div className="flex items-center gap-2">
             {!isSearchActive && hasLocation && <Sparkles className="w-4 h-4 text-primary" />}
             <span className="text-sm text-muted-foreground">
-              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''}` : 'Top 10 near you'}
+              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length + filteredProfiles.length} result${(filteredItems.length + filteredProfiles.length) !== 1 ? 's' : ''}` : 'Top 10 near you'}
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={isFetching} className="h-8 px-2">
