@@ -515,7 +515,10 @@
     "enableLocationFilter": "Enable location",
     "viewOnMap": "View on map",
     "sendDealInvite": "Send Deal Invite",
-    "filters": "Filters"
+    "filters": "Filters",
+    "nearbyItems": "Nearby Items",
+    "itemsNearYou": "{{count}} items near you",
+    "clearAll": "Clear All"
   },
   "matches": {
     "title": "Matches",

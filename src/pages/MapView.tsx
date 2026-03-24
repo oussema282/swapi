@@ -521,7 +521,7 @@ export default function MapView() {
                       onClick={() => setSelectedCategories([])}
                       className="text-xs"
                     >
-                      Clear All
+                      {t('map.clearAll')}
                     </Button>
                   )}
                 </div>

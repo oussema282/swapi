@@ -599,7 +599,10 @@
     "enableLocationFilter": "تفعيل الموقع",
     "viewOnMap": "عرض على الخريطة",
     "sendDealInvite": "إرسال دعوة",
-    "filters": "الفلاتر"
+    "filters": "الفلاتر",
+    "nearbyItems": "عناصر قريبة",
+    "itemsNearYou": "{{count}} عناصر بالقرب منك",
+    "clearAll": "مسح الكل"
   },
   "itemDetails": {
     "category": "الفئة",
