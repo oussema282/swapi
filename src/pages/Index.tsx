@@ -229,9 +229,6 @@ export default function Index() {
         // Complete the swipe - transitions SWIPING → COMMITTING → READY
         actions.completeSwipe(swipedItemId);
         
-        // Invalidate recommendations cache so next fetch excludes swiped items
-        queryClient.invalidateQueries({ queryKey: ['recommended-items'] });
-        
         // Clear feedback overlay after card exits
         setTimeout(() => setFeedbackOverlay(null), 200);
       } catch (error) {
