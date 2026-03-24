@@ -181,7 +181,9 @@
     "nope": "NON",
     "ownerActive": "Propriétaire actif",
     "ownerRecentlyActive": "Propriétaire récemment actif",
-    "boost": "Boost"
+    "boost": "Boost",
+    "swappingFrom": "Échange depuis :",
+    "lookingForCategories": "Recherche {{count}} catégories"
   },
   "matches": {
     "title": "Matchs",
