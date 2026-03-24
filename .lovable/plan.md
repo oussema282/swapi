@@ -1,34 +1,41 @@
 
 
-## Plan: Translate "Swapping from" and Report Dialog
+## Plan: Translate Match Popup
 
 ### Problem
-1. **"Swapping from:"** — The `discover` section with keys like `swappingFrom`, `selectItem`, etc. exists in `fr/translation.json` but is completely **missing from `en/translation.json`**. Since `en` is the fallback language, `t()` returns the raw key instead of the French translation.
-2. **Report User dialog** — `ReportButton.tsx` has all strings hardcoded: title, description, reason labels, reason descriptions, buttons, placeholder, toast messages.
+`MatchModal.tsx` has 4 hardcoded English strings: "It's a Match!", "You both want to swap! Start chatting to arrange the exchange.", "Keep Swiping", "Chat Now".
 
 ### Changes
 
-**1. Add `discover` section to `en/translation.json`**
-Add the full discover block with English values matching the keys already used in `fr/translation.json`:
-- `swappingFrom`, `selectItem`, `selectItemDescription`, `lookingForCategories`, `forYou`, `nearby`, `noMoreMatches`, `noMoreDescription`, `switchItem`, `addFirstItem`, `addFirstItemDescription`, `addItem`, `like`, `nope`, `ownerActive`, `ownerRecentlyActive`, `boost`, `title`
+**1. Add `match` keys to `en/translation.json` and `fr/translation.json`**
 
-**2. Add `report` section to both `en/translation.json` and `fr/translation.json`**
-New keys (~20):
-- `report.title` (Report Item / Signaler un article, Report User / Signaler un utilisateur, Report Message / Signaler un message)
-- `report.description` (Help us understand... / Aidez-nous à comprendre...)
-- `report.whatsTheIssue` (What's the issue? / Quel est le problème ?)
-- Reason labels and descriptions for: `prohibitedItem`, `fakeListing`, `spam`, `harassment`, `inappropriateContent`, `scam`, `other`
-- `report.additionalDetails`, `report.placeholder`, `report.submitReport`, `report.submitting`, `report.cancel`
-- `report.submitted`, `report.submittedDescription`, `report.failedSubmit`, `report.failedSubmitDescription`
-- Menu item text: `report.report`
+English:
+```json
+"match": {
+  "itsAMatch": "It's a Match!",
+  "bothWantToSwap": "You both want to swap! Start chatting to arrange the exchange.",
+  "keepSwiping": "Keep Swiping",
+  "chatNow": "Chat Now"
+}
+```
 
-**3. Wire `useTranslation` into `ReportButton.tsx`**
-- Import `useTranslation`, add `const { t } = useTranslation()`
-- Replace the hardcoded `REASON_LABELS` object with `t()` calls for each reason's label and description
-- Replace dialog title, description, labels, buttons, placeholder, and toast messages with `t()` calls
+French:
+```json
+"match": {
+  "itsAMatch": "C'est un Match !",
+  "bothWantToSwap": "Vous voulez tous les deux échanger ! Commencez à discuter pour organiser l'échange.",
+  "keepSwiping": "Continuer",
+  "chatNow": "Discuter"
+}
+```
+
+**2. Wire `useTranslation` into `MatchModal.tsx`**
+- Add `import { useTranslation } from 'react-i18next'`
+- Add `const { t } = useTranslation()` inside component
+- Replace the 4 hardcoded strings with `t('match.itsAMatch')`, `t('match.bothWantToSwap')`, `t('match.keepSwiping')`, `t('match.chatNow')`
 
 ### Files Modified
-- `src/locales/en/translation.json` — add `discover` + `report` sections
-- `src/locales/fr/translation.json` — add `report` section
-- `src/components/report/ReportButton.tsx` — wire up `useTranslation`
+- `src/locales/en/translation.json`
+- `src/locales/fr/translation.json`
+- `src/components/discover/MatchModal.tsx`
 
