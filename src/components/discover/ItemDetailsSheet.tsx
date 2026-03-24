@@ -241,7 +241,7 @@ export function ItemDetailsSheet({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t border-border/50">
+          <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
             {item.latitude && item.longitude && (
               <Button
                 variant="outline"
