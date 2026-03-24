@@ -418,7 +418,7 @@ export default function NewItem() {
               <div className="space-y-6">
                 {/* Category Selection */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Catégorie</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.selectCategory')}</Label>
                   <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
                     {CATEGORIES.map((cat) => {
                       const Icon = cat.icon;
