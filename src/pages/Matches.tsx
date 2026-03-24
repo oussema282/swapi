@@ -398,7 +398,6 @@ export default function Matches() {
                   {t('matches.seeAll')}
                   <ChevronRight className="w-4 h-4" />
                 </button>
-                </button>
               </div>
               
               {/* Horizontal scroll container */}
