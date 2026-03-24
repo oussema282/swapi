@@ -25,8 +25,8 @@ export function useSwipeableItems(myItemId: string | null) {
 
       if (myItemError || !myItem) return [];
 
-      const mySwapPreferences = myItem.swap_preferences as ItemCategory[];
-      const myCategory = myItem.category as ItemCategory;
+      const mySwapPreferences = myItem.swap_preferences as string[];
+      const myCategory = myItem.category as string;
 
       // Get items I've already swiped on with this item
       const { data: existingSwipes } = await supabase
