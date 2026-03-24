@@ -392,7 +392,7 @@ export default function NewItem() {
                         id="title" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
-                        placeholder="Que souhaitez-vous échanger ?"
+                        placeholder={t('newItem.itemNamePlaceholder')}
                         className="mt-2 text-lg"
                       />
                     </div>
