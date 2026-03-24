@@ -304,7 +304,7 @@ export default function Matches() {
       queryClient.invalidateQueries({ queryKey: ['pending-deal-invites'] });
     },
     onError: () => {
-      toast.error('Failed to respond to invite');
+      toast.error(t('matches.failedToRespond'));
     },
   });
 
