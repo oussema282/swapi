@@ -699,7 +699,7 @@ export default function Search() {
                     </label>
                     {!hasLocation && (
                       <Button variant="ghost" size="sm" onClick={requestLocation} disabled={locationLoading} className="text-xs">
-                        {locationLoading ? 'Getting...' : 'Enable location'}
+                        {locationLoading ? t('search.gettingLocation') : t('search.enableLocation')}
                       </Button>
                     )}
                   </div>
