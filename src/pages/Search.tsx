@@ -860,7 +860,7 @@ export default function Search() {
                       
                       {/* Metadata row - always at same position */}
                       <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-1">
-                        <Badge variant="secondary" className="text-xs py-0.5">{getCategoryLabel(item.category)}</Badge>
+                        <Badge variant="secondary" className="text-xs py-0.5">{t(`categories.${item.category}`)}</Badge>
                         {item.distance !== undefined && (
                           <Badge variant="outline" className="text-xs py-0.5 flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
