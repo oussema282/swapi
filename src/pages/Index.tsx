@@ -27,7 +27,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(() => sessionStorage.getItem('discover_selected_item'));
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
   const [discoverFilters, setDiscoverFilters] = useState<NearbyFilters>({ priceMin: 0, priceMax: 1000, maxDistance: 0, selectedCategories: [] });
