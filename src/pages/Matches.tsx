@@ -176,7 +176,7 @@ export default function Matches() {
         onSuccess: (result) => {
           setSelectedMissedMatch(null);
           setRecoveringId(null);
-          toast.success('Match created! Opening chat...');
+          toast.success(t('matches.matchCreated'));
           if (result.matchId) {
             navigate(`/chat/${result.matchId}`);
           }
