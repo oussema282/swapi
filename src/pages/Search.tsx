@@ -659,7 +659,7 @@ export default function Search() {
                 onClick={() => setSelectedCategories([])}
                 className="text-xs text-muted-foreground hover:text-foreground"
               >
-                Clear all
+                {t('search.clearAll')}
               </button>
             </div>
           )}
