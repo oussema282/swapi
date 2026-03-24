@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { ExpandableDescription } from '@/components/search/ExpandableDescription';
+import { useTranslation } from 'react-i18next';
 
 interface SearchItem extends Item {
   owner_display_name: string;
@@ -80,6 +81,7 @@ const popularSearches = [
 ];
 
 export default function Search() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { latitude, longitude, hasLocation, requestLocation, loading: locationLoading } = useDeviceLocation();
@@ -462,7 +464,7 @@ export default function Search() {
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">{t('common.loading')}</div>
       </div>
     );
   }
@@ -488,7 +490,7 @@ export default function Search() {
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
               <Input
                 ref={inputRef}
-                placeholder="Search items, categories, users..."
+                placeholder={t('search.placeholder')}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -586,9 +588,9 @@ export default function Search() {
                             {highlightMatch(suggestion.text, searchQuery)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {suggestion.type === 'user' ? (suggestion.userData?.location || 'User') :
-                             suggestion.type === 'category' ? 'Category' : 
-                             suggestion.type === 'popular' ? 'Popular search' : 'Item'}
+                            {suggestion.type === 'user' ? (suggestion.userData?.location || t('search.user')) :
+                             suggestion.type === 'category' ? t('search.category') : 
+                             suggestion.type === 'popular' ? t('search.popularSearch') : t('search.item')}
                           </p>
                         </div>
                         
@@ -657,7 +659,7 @@ export default function Search() {
                 onClick={() => setSelectedCategories([])}
                 className="text-xs text-muted-foreground hover:text-foreground"
               >
-                Clear all
+                {t('search.clearAll')}
               </button>
             </div>
           )}
@@ -693,11 +695,11 @@ export default function Search() {
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-primary" />
-                      Distance
+                      {t('search.distance')}
                     </label>
                     {!hasLocation && (
                       <Button variant="ghost" size="sm" onClick={requestLocation} disabled={locationLoading} className="text-xs">
-                        {locationLoading ? 'Getting...' : 'Enable location'}
+                        {locationLoading ? t('search.gettingLocation') : t('search.enableLocation')}
                       </Button>
                     )}
                   </div>
@@ -723,7 +725,7 @@ export default function Search() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-primary" />
-                    Value: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
+                    {t('search.value')}: €{budgetRange[0]} - €{budgetRange[1] >= 1000 ? '1000+' : budgetRange[1]}
                   </label>
                   <Slider
                     value={budgetRange}
@@ -738,7 +740,7 @@ export default function Search() {
                 {isSearchActive && (
                   <Button variant="ghost" size="sm" onClick={clearAllFilters} className="w-full text-muted-foreground">
                     <X className="w-4 h-4 mr-2" />
-                    Clear all filters
+                    {t('search.clearAllFilters')}
                   </Button>
                 )}
               </motion.div>
@@ -751,7 +753,7 @@ export default function Search() {
           <div className="flex items-center gap-2">
             {!isSearchActive && hasLocation && <Sparkles className="w-4 h-4 text-primary" />}
             <span className="text-sm text-muted-foreground">
-              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length + filteredProfiles.length} result${(filteredItems.length + filteredProfiles.length) !== 1 ? 's' : ''}` : 'Top 10 near you'}
+              {isLoading ? t('search.loading') : isSearchActive ? t('search.results', { count: filteredItems.length + filteredProfiles.length }) : t('search.topNearYou')}
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={isFetching} className="h-8 px-2">
@@ -768,12 +770,12 @@ export default function Search() {
           ) : filteredItems.length === 0 && filteredProfiles.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No results found</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('search.noResults')}</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                {isSearchActive ? 'Try adjusting your filters or search terms' : 'No items available in your area yet'}
+                {isSearchActive ? t('search.noResultsDescription') : t('search.noItemsInArea')}
               </p>
               {isSearchActive && (
-                <Button variant="outline" size="sm" onClick={clearAllFilters}>Clear filters</Button>
+                <Button variant="outline" size="sm" onClick={clearAllFilters}>{t('search.clearFilters')}</Button>
               )}
             </div>
           ) : (
@@ -781,7 +783,7 @@ export default function Search() {
               {/* User Profile Results */}
               {filteredProfiles.length > 0 && (
                 <>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Users</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('search.users')}</p>
                   {filteredProfiles.map((profile, index) => (
                     <motion.div
                       key={profile.user_id}
@@ -809,13 +811,13 @@ export default function Search() {
                         </div>
                         <Badge variant="secondary" className="flex-shrink-0 text-xs">
                           <User className="w-3 h-3 mr-1" />
-                          Profile
+                          {t('search.profile')}
                         </Badge>
                       </div>
                     </motion.div>
                   ))}
                   {filteredItems.length > 0 && (
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">Items</p>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">{t('search.itemsLabel')}</p>
                   )}
                 </>
               )}
@@ -847,7 +849,7 @@ export default function Search() {
                       
                       {/* Expandable Description */}
                       <ExpandableDescription 
-                        description={item.description || 'No description'} 
+                        description={item.description || t('search.noDescription')} 
                         maxLines={2}
                         className="min-h-[2.5rem]"
                       />

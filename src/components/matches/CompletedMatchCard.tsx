@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { formatDistanceToNow } from 'date-fns';
 import { MatchWithItems } from '@/hooks/useMatches';
+import { useTranslation } from 'react-i18next';
 
 interface CompletedMatchCardProps {
   match: MatchWithItems;
@@ -15,6 +16,8 @@ interface CompletedMatchCardProps {
 }
 
 export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheirItemTap }: CompletedMatchCardProps) {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -26,14 +29,10 @@ export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheir
         onClick={onClick}
       >
         <div className="flex items-center gap-3">
-          {/* Compact Swap Visual */}
           <div className="flex items-center gap-1 flex-shrink-0">
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMyItemTap?.();
-              }}
+              onClick={(e) => { e.stopPropagation(); onMyItemTap?.(); }}
               className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {match.my_item?.photos?.[0] ? (
@@ -47,10 +46,7 @@ export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheir
             <ArrowLeftRight className="w-3 h-3 text-success -mx-1.5 z-10" />
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onTheirItemTap?.();
-              }}
+              onClick={(e) => { e.stopPropagation(); onTheirItemTap?.(); }}
               className="w-10 h-10 rounded-lg overflow-hidden bg-muted focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {match.their_item?.photos?.[0] ? (
@@ -63,20 +59,18 @@ export function CompletedMatchCard({ match, index, onClick, onMyItemTap, onTheir
             </button>
           </div>
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-muted-foreground truncate">
               {match.their_item?.title}
             </p>
             <p className="text-xs text-muted-foreground/70">
-              with <VerifiedName name={match.other_user_profile?.display_name || 'User'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
+              {t('matches.with')} <VerifiedName name={match.other_user_profile?.display_name || 'User'} isPro={match.other_user_profile?.is_pro} className="inline" badgeClassName="w-3 h-3" /> • {formatDistanceToNow(new Date(match.completed_at || match.created_at), { addSuffix: true })}
             </p>
           </div>
 
-          {/* Status Badge */}
           <Badge variant="secondary" className="bg-success/10 text-success border-0 text-xs">
             <CheckCircle2 className="w-3 h-3 mr-1" />
-            Done
+            {t('matches.done')}
           </Badge>
         </div>
       </Card>
