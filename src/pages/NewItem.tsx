@@ -600,9 +600,6 @@ export default function NewItem() {
                     : t('newItem.categoriesSelected', { count: swapPreferences.length })
                   }
                 </p>
-                    : `${swapPreferences.length} catégorie${swapPreferences.length === 1 ? '' : 's'} sélectionnée${swapPreferences.length === 1 ? '' : 's'}`
-                  }
-                </p>
               </Card>
             )}
 
