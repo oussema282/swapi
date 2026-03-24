@@ -376,12 +376,12 @@ export default function MapView() {
           
           {permissionStatus === 'denied' && (
             <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 max-w-sm">
-              <div className="flex items-center gap-2 text-destructive mb-1">
+               <div className="flex items-center gap-2 text-destructive mb-1">
                 <AlertTriangle className="w-4 h-4" />
-                <span className="font-medium text-sm">Location Access Denied</span>
+                <span className="font-medium text-sm">{t('map.locationDenied')}</span>
               </div>
               <p className="text-xs text-muted-foreground">
-                Please enable location in your browser settings and try again.
+                {t('map.locationDeniedDescription')}
               </p>
             </div>
           )}
