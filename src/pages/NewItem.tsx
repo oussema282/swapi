@@ -514,7 +514,7 @@ export default function NewItem() {
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Minimum (DT)</Label>
+                      <Label className="text-sm text-muted-foreground">{t('newItem.minimum')}</Label>
                       <Input 
                         type="number" 
                         value={valueMin} 
