@@ -263,7 +263,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             {activityStatus === 'active' && (
               <div className="flex items-center gap-1 px-2 py-0.5 bg-accent/90 rounded-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-foreground animate-pulse" />
-                <span className="text-[10px] font-semibold text-accent-foreground">Active</span>
+                <span className="text-[10px] font-semibold text-accent-foreground">{t('discover.ownerActive')}</span>
               </div>
             )}
             {activityStatus === 'recent' && (
