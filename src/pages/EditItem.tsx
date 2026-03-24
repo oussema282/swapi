@@ -157,6 +157,8 @@ export default function EditItem() {
         swap_preferences: swapPreferences,
         value_min: parseInt(valueMin) || 0,
         value_max: valueMax ? parseInt(valueMax) : null,
+        latitude: itemLatitude,
+        longitude: itemLongitude,
       } as any);
 
       setIsComplete(true);
