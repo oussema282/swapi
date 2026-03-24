@@ -549,7 +549,11 @@
     "avatarUploaded": "تم تحميل الصورة الرمزية!",
     "avatarBlocked": "تم حظر الصورة الرمزية",
     "failedUploadAvatar": "فشل تحميل الصورة الرمزية",
-    "failedSaveProfile": "فشل حفظ الملف الشخصي"
+    "failedSaveProfile": "فشل حفظ الملف الشخصي",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "رقم هاتفك",
+    "phoneVisible": "إظهار الرقم للتطابقات",
+    "phoneVisibleDescription": "سيكون رقمك مرئياً في الدردشة مع تطابقاتك"
   },
   "editItem": {
     "title": "تعديل العنصر",

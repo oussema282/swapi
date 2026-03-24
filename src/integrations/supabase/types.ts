@@ -548,6 +548,8 @@ export type Database = {
           latitude: number | null
           location: string | null
           longitude: number | null
+          phone_number: string | null
+          phone_visible: boolean | null
           suspended_until: string | null
           suspension_reason: string | null
           updated_at: string
@@ -568,6 +570,8 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          phone_number?: string | null
+          phone_visible?: boolean | null
           suspended_until?: string | null
           suspension_reason?: string | null
           updated_at?: string
@@ -588,6 +592,8 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          phone_number?: string | null
+          phone_visible?: boolean | null
           suspended_until?: string | null
           suspension_reason?: string | null
           updated_at?: string

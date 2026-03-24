@@ -6,7 +6,7 @@ import { usePresence } from '@/hooks/usePresence';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Phone } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { MessageBubble } from '@/components/chat/MessageBubble';
@@ -101,6 +101,16 @@ export default function Chat() {
           confirmedByOther={match?.confirmed_by_other}
           isCompleted={match?.is_completed}
         />
+
+        {/* Phone Number Banner */}
+        {match?.other_user_profile?.phone_visible && match?.other_user_profile?.phone_number && (
+          <div className="flex items-center justify-center gap-2 px-4 py-2.5 bg-green-500 text-white">
+            <Phone className="w-4 h-4" />
+            <a href={`tel:${match.other_user_profile.phone_number}`} className="font-bold text-sm">
+              {match.other_user_profile.phone_number}
+            </a>
+          </div>
+        )}
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto px-4 py-3 bg-gradient-to-b from-muted/20 to-background">

@@ -19,6 +19,8 @@ interface OtherUserProfile {
   avatar_url: string | null;
   last_seen: string | null;
   is_pro: boolean;
+  phone_number: string | null;
+  phone_visible: boolean;
 }
 
 interface MatchWithItems extends Match {
@@ -62,7 +64,7 @@ export function useMatches() {
       const { data: profiles } = userIdsArray.length > 0 
         ? await supabase
             .from('profiles')
-            .select('user_id, display_name, avatar_url, last_seen')
+            .select('user_id, display_name, avatar_url, last_seen, phone_number, phone_visible')
             .in('user_id', userIdsArray)
         : { data: [] };
 
@@ -139,6 +141,8 @@ export function useMatches() {
             avatar_url: otherUserProfile?.avatar_url || null,
             last_seen: otherUserProfile?.last_seen || null,
             is_pro: otherUserProfile?.is_pro || false,
+            phone_number: otherUserProfile?.phone_number || null,
+            phone_visible: otherUserProfile?.phone_visible || false,
           },
           last_message: lastMessage,
           confirmed_by_me: confirmedByMe ?? false,

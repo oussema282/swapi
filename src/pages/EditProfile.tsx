@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Camera, Loader2, Check, User, MapPin, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Camera, Loader2, Check, User, MapPin, ShieldAlert, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +26,8 @@ export default function EditProfile() {
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneVisible, setPhoneVisible] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -41,6 +44,8 @@ export default function EditProfile() {
       setBio(profile.bio || '');
       setLocation(profile.location || '');
       setAvatarUrl(profile.avatar_url);
+      setPhoneNumber((profile as any).phone_number || '');
+      setPhoneVisible((profile as any).phone_visible || false);
     }
   }, [profile]);
 
@@ -99,8 +104,10 @@ export default function EditProfile() {
           bio: bio.trim() || null,
           location: location.trim() || null,
           avatar_url: avatarUrl,
+          phone_number: phoneNumber.trim() || null,
+          phone_visible: phoneVisible,
           updated_at: new Date().toISOString(),
-        })
+        } as any)
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -246,6 +253,32 @@ export default function EditProfile() {
                     rows={4}
                   />
                   <p className="text-xs text-muted-foreground text-right">{bio.length}/300</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber" className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    {t('editProfile.phoneNumber')}
+                  </Label>
+                  <Input
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder={t('editProfile.phoneNumberPlaceholder')}
+                    maxLength={20}
+                    type="tel"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">{t('editProfile.phoneVisible')}</Label>
+                    <p className="text-xs text-muted-foreground">{t('editProfile.phoneVisibleDescription')}</p>
+                  </div>
+                  <Switch
+                    checked={phoneVisible}
+                    onCheckedChange={setPhoneVisible}
+                  />
                 </div>
               </Card>
             </div>
