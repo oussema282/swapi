@@ -849,7 +849,7 @@ export default function Search() {
                       
                       {/* Expandable Description */}
                       <ExpandableDescription 
-                        description={item.description || 'No description'} 
+                        description={item.description || t('search.noDescription')} 
                         maxLines={2}
                         className="min-h-[2.5rem]"
                       />
