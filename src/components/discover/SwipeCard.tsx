@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Item, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item, CONDITION_LABELS } from '@/types/database';
+import { getCategoryLabel, getCategoryIcon } from '@/config/categories';
 import { cn } from '@/lib/utils';
-import { Package, MapPin, Home, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Package, MapPin, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
