@@ -865,7 +865,7 @@ export default function Search() {
                           </Badge>
                         )}
                         {(item.value_min || item.value_max) && (
-                          <Badge className="text-xs py-0.5 bg-price/15 text-price border-price/30 font-semibold">€{item.value_min || 0}-{item.value_max || '?'}</Badge>
+                          <Badge className="text-xs py-0.5 bg-price/15 text-price border-price/30 font-semibold">{item.value_min || 0}-{item.value_max || '?'} DT</Badge>
                         )}
                       </div>
                     </div>
