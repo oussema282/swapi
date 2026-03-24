@@ -609,9 +609,9 @@ export default function NewItem() {
             {/* Step 5: Location */}
             {step === 5 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Emplacement de l'article</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.itemLocation')}</Label>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Choisissez où se trouve votre article. Vous pouvez glisser le marqueur ou cliquer sur la carte.
+                  {t('newItem.locationHelp')}
                 </p>
                 <LocationPickerMap
                   latitude={itemLatitude}
