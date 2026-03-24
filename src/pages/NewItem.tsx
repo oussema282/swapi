@@ -220,7 +220,7 @@ export default function NewItem() {
         navigate('/items');
       }, 2500);
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Échec de la création' });
+      toast({ variant: 'destructive', title: t('newItem.creationFailed') });
     }
   };
 
