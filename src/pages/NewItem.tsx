@@ -387,7 +387,7 @@ export default function NewItem() {
                 <Card className="p-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="title" className="text-base font-semibold">Nom de l'article *</Label>
+                      <Label htmlFor="title" className="text-base font-semibold">{t('newItem.itemName')}</Label>
                       <Input 
                         id="title" 
                         value={title} 
