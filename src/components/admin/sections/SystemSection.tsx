@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import {
   Server,
@@ -17,6 +18,7 @@ import {
   AlertTriangle,
   Zap,
   Cloud,
+  Crown,
 } from 'lucide-react';
 
 interface TableStats {
