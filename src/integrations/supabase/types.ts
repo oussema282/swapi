@@ -1118,6 +1118,7 @@ export type Database = {
           weights: Json
         }[]
       }
+      get_user_swap_count: { Args: { p_user_id: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

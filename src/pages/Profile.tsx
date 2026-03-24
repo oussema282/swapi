@@ -28,32 +28,8 @@ export default function Profile() {
     queryKey: ['completed-swaps-count', user?.id],
     queryFn: async () => {
       if (!user?.id) return 0;
-      
-      // Get user's items first
-      const { data: userItems } = await supabase
-        .from('items')
-        .select('id')
-        .eq('user_id', user.id);
-      
-      if (!userItems?.length) return 0;
-      
-      const itemIds = userItems.map(i => i.id);
-      
-      // Count matches where user's items are in item_a_id
-      const { count: countA } = await supabase
-        .from('matches')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_completed', true)
-        .in('item_a_id', itemIds);
-      
-      // Count matches where user's items are in item_b_id
-      const { count: countB } = await supabase
-        .from('matches')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_completed', true)
-        .in('item_b_id', itemIds);
-      
-      return (countA || 0) + (countB || 0);
+      const { data } = await supabase.rpc('get_user_swap_count' as any, { p_user_id: user.id });
+      return data ?? 0;
     },
     enabled: !!user?.id,
   });

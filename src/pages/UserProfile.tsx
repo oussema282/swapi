@@ -77,23 +77,8 @@ export default function UserProfile() {
     queryKey: ['user-completed-swaps-global', userId],
     queryFn: async () => {
       if (!userId) return 0;
-      const { data: userItems } = await supabase
-        .from('items')
-        .select('id')
-        .eq('user_id', userId);
-      if (!userItems?.length) return 0;
-      const itemIds = userItems.map(i => i.id);
-      const { count: countA } = await supabase
-        .from('matches')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_completed', true)
-        .in('item_a_id', itemIds);
-      const { count: countB } = await supabase
-        .from('matches')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_completed', true)
-        .in('item_b_id', itemIds);
-      return (countA || 0) + (countB || 0);
+      const { data } = await supabase.rpc('get_user_swap_count' as any, { p_user_id: userId });
+      return data ?? 0;
     },
     enabled: !!userId,
   });
