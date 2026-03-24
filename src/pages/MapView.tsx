@@ -441,9 +441,9 @@ export default function MapView() {
           >
             <AlertTriangle className="w-12 h-12 text-destructive" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Map Unavailable</h2>
+           <h2 className="text-2xl font-display font-bold mb-3">{t('map.mapUnavailable')}</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            We couldn't load the map. This might be a temporary issue with the map service.
+            {t('map.mapUnavailableDescription')}
           </p>
           <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => refetchToken()}>
             Try Again
