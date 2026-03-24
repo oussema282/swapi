@@ -20,35 +20,19 @@ import {
   Upload, 
   X, 
   Check,
-  Gamepad2,
-  Smartphone,
-  Shirt,
-  BookOpen,
-  Home,
-  Dumbbell,
-  Package,
   Sparkles,
   Star,
   ThumbsUp,
   Zap,
   Crown,
-  ShieldAlert
+  ShieldAlert,
+  ChevronRight
 } from 'lucide-react';
-import { ItemCategory, ItemCondition, CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { ItemCondition, CONDITION_LABELS } from '@/types/database';
+import { CATEGORIES, getCategoryLabel, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
 import { cn } from '@/lib/utils';
 
-const categories: ItemCategory[] = ['games', 'electronics', 'clothes', 'books', 'home_garden', 'sports', 'other'];
 const conditions: ItemCondition[] = ['new', 'like_new', 'good', 'fair'];
-
-const CATEGORY_ICONS: Record<ItemCategory, React.ReactNode> = {
-  games: <Gamepad2 className="w-6 h-6" />,
-  electronics: <Smartphone className="w-6 h-6" />,
-  clothes: <Shirt className="w-6 h-6" />,
-  books: <BookOpen className="w-6 h-6" />,
-  home_garden: <Home className="w-6 h-6" />,
-  sports: <Dumbbell className="w-6 h-6" />,
-  other: <Package className="w-6 h-6" />,
-};
 
 const CONDITION_ICONS: Record<ItemCondition, React.ReactNode> = {
   new: <Sparkles className="w-5 h-5" />,
@@ -58,10 +42,10 @@ const CONDITION_ICONS: Record<ItemCondition, React.ReactNode> = {
 };
 
 const STEPS = [
-  { id: 1, title: 'Photos & Title', description: 'Show off your item' },
-  { id: 2, title: 'Category & Condition', description: 'Tell us about it' },
-  { id: 3, title: 'Value Range', description: 'Set your price range' },
-  { id: 4, title: 'Swap Preferences', description: 'What do you want?' },
+  { id: 1, title: 'Photos & Titre', description: 'Montrez votre article' },
+  { id: 2, title: 'Catégorie & État', description: 'Décrivez votre article' },
+  { id: 3, title: 'Fourchette de prix', description: 'Estimez la valeur' },
+  { id: 4, title: 'Préférences d\'échange', description: 'Que voulez-vous ?' },
 ];
 
 export default function NewItem() {
@@ -77,9 +61,10 @@ export default function NewItem() {
   const [isComplete, setIsComplete] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState<ItemCategory | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const [subcategory, setSubcategory] = useState<string | null>(null);
   const [condition, setCondition] = useState<ItemCondition | null>(null);
-  const [swapPreferences, setSwapPreferences] = useState<ItemCategory[]>([]);
+  const [swapPreferences, setSwapPreferences] = useState<string[]>([]);
   const [valueMin, setValueMin] = useState('');
   const [valueMax, setValueMax] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
@@ -89,20 +74,19 @@ export default function NewItem() {
     if (!authLoading && !user) {
       navigate('/');
     }
-    // Wait for subscription data to load before checking limits
     if (!authLoading && !limitLoading && user && !canAddItem) {
       toast({ 
         variant: 'destructive', 
-        title: 'Item limit reached',
-        description: `Free users can only have ${limit} items. Upgrade to Pro for unlimited items!`
+        title: 'Limite atteinte',
+        description: `Les utilisateurs gratuits ne peuvent avoir que ${limit} articles. Passez à Pro pour des articles illimités !`
       });
       navigate('/checkout');
     }
   }, [user, authLoading, limitLoading, navigate, canAddItem, limit, toast]);
 
-  const toggleSwapPreference = (cat: ItemCategory) => {
+  const toggleSwapPreference = (catId: string) => {
     setSwapPreferences(prev =>
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+      prev.includes(catId) ? prev.filter(c => c !== catId) : [...prev, catId]
     );
   };
 
@@ -111,7 +95,7 @@ export default function NewItem() {
     if (!files || !user) return;
 
     if (photos.length + files.length > 4) {
-      toast({ variant: 'destructive', title: 'Maximum 4 photos allowed' });
+      toast({ variant: 'destructive', title: 'Maximum 4 photos autorisées' });
       return;
     }
 
@@ -121,12 +105,12 @@ export default function NewItem() {
     try {
       for (const file of Array.from(files)) {
         if (!file.type.startsWith('image/')) {
-          toast({ variant: 'destructive', title: 'Only images are allowed' });
+          toast({ variant: 'destructive', title: 'Seules les images sont autorisées' });
           continue;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-          toast({ variant: 'destructive', title: 'Image must be less than 5MB' });
+          toast({ variant: 'destructive', title: 'L\'image doit faire moins de 5 Mo' });
           continue;
         }
 
@@ -138,7 +122,7 @@ export default function NewItem() {
 
         if (uploadError) {
           console.error('Upload error:', uploadError);
-          toast({ variant: 'destructive', title: 'Failed to upload image' });
+          toast({ variant: 'destructive', title: 'Échec du téléchargement' });
           continue;
         }
 
@@ -146,16 +130,14 @@ export default function NewItem() {
           .from('item-photos')
           .getPublicUrl(fileName);
 
-        // Check image with AI content moderator
         const moderationResult = await checkImage(urlData.publicUrl, 'item_photo');
         
         if (!moderationResult.is_safe) {
-          // Delete the unsafe image
           await supabase.storage.from('item-photos').remove([fileName]);
           toast({ 
             variant: 'destructive', 
-            title: 'Image blocked',
-            description: `This image cannot be uploaded: ${moderationResult.violation_type || 'policy violation'}`
+            title: 'Image bloquée',
+            description: `Cette image ne peut pas être téléchargée : ${moderationResult.violation_type || 'violation de politique'}`
           });
           continue;
         }
@@ -166,7 +148,7 @@ export default function NewItem() {
       setPhotos(prev => [...prev, ...newPhotos]);
     } catch (error) {
       console.error('Upload error:', error);
-      toast({ variant: 'destructive', title: 'Upload failed' });
+      toast({ variant: 'destructive', title: 'Échec du téléchargement' });
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -182,8 +164,8 @@ export default function NewItem() {
   const canProceed = () => {
     switch (step) {
       case 1: return title.trim().length > 0;
-      case 2: return category !== null && condition !== null;
-      case 3: return true; // Value is optional
+      case 2: return category !== null && subcategory !== null && condition !== null;
+      case 3: return true;
       case 4: return swapPreferences.length > 0;
       default: return false;
     }
@@ -213,6 +195,7 @@ export default function NewItem() {
         title: title.trim(),
         description: description.trim() || null,
         category,
+        subcategory: subcategory || null,
         condition,
         photos,
         swap_preferences: swapPreferences,
@@ -222,16 +205,18 @@ export default function NewItem() {
 
       setIsComplete(true);
       
-      // Navigate after animation
       setTimeout(() => {
         navigate('/items');
       }, 2500);
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Failed to create item' });
+      toast({ variant: 'destructive', title: 'Échec de la création' });
     }
   };
 
-  // Success Animation Screen
+  // Get current category object
+  const selectedCategory = CATEGORIES.find(c => c.id === category);
+  const selectedSubcategories = selectedCategory?.subcategories || [];
+
   if (isComplete) {
     return (
       <AppLayout showNav={false}>
@@ -257,7 +242,7 @@ export default function NewItem() {
             transition={{ delay: 0.4 }}
             className="text-2xl font-display font-bold text-foreground mb-2"
           >
-            Item Created!
+            Article créé !
           </motion.h2>
           
           <motion.p
@@ -266,7 +251,7 @@ export default function NewItem() {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground text-center"
           >
-            Your item is now live and ready to be swapped
+            Votre article est en ligne et prêt à être échangé
           </motion.p>
           
           <motion.div
@@ -328,7 +313,7 @@ export default function NewItem() {
             {step === 1 && (
               <div className="space-y-6">
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Upload Photos</Label>
+                  <Label className="text-base font-semibold mb-4 block">Télécharger des photos</Label>
                   
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     {photos.map((photo, index) => (
@@ -338,7 +323,7 @@ export default function NewItem() {
                         animate={{ scale: 1 }}
                         className="relative aspect-square rounded-xl overflow-hidden bg-muted"
                       >
-                        <img src={photo} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+                        <img src={photo} alt={`Photo ${index + 1}`} className="w-full h-full object-cover" />
                         <button
                           type="button"
                           onClick={() => removePhoto(index)}
@@ -360,13 +345,13 @@ export default function NewItem() {
                           <div className="flex flex-col items-center gap-1">
                             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
                             <span className="text-xs text-muted-foreground">
-                              {isModerating ? 'Checking...' : 'Uploading...'}
+                              {isModerating ? 'Vérification...' : 'Téléchargement...'}
                             </span>
                           </div>
                         ) : (
                           <>
                             <Upload className="w-6 h-6 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">Add Photo</span>
+                            <span className="text-xs text-muted-foreground">Ajouter</span>
                           </>
                         )}
                       </button>
@@ -383,30 +368,30 @@ export default function NewItem() {
                   />
                   
                   <p className="text-xs text-muted-foreground">
-                    Add up to 4 photos • Max 5MB each
+                    Jusqu'à 4 photos • Max 5 Mo chacune
                   </p>
                 </Card>
 
                 <Card className="p-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="title" className="text-base font-semibold">Item Name *</Label>
+                      <Label htmlFor="title" className="text-base font-semibold">Nom de l'article *</Label>
                       <Input 
                         id="title" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
-                        placeholder="What are you swapping?"
+                        placeholder="Que souhaitez-vous échanger ?"
                         className="mt-2 text-lg"
                       />
                     </div>
                     
                     <div>
-                      <Label htmlFor="description">Description (optional)</Label>
+                      <Label htmlFor="description">Description (optionnel)</Label>
                       <Textarea 
                         id="description" 
                         value={description} 
                         onChange={(e) => setDescription(e.target.value)} 
-                        placeholder="Tell us more about your item..."
+                        placeholder="Décrivez votre article..."
                         rows={3}
                         className="mt-2"
                       />
@@ -416,33 +401,73 @@ export default function NewItem() {
               </div>
             )}
 
-            {/* Step 2: Category & Condition */}
+            {/* Step 2: Category & Subcategory & Condition */}
             {step === 2 && (
               <div className="space-y-6">
+                {/* Category Selection */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Select Category</Label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        type="button"
-                        onClick={() => setCategory(cat)}
-                        className={cn(
-                          'flex items-center gap-3 p-4 rounded-xl border-2 transition-all',
-                          category === cat
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                        )}
-                      >
-                        {CATEGORY_ICONS[cat]}
-                        <span className="font-medium">{CATEGORY_LABELS[cat]}</span>
-                      </button>
-                    ))}
+                  <Label className="text-base font-semibold mb-4 block">Catégorie</Label>
+                  <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
+                    {CATEGORIES.map((cat) => {
+                      const Icon = cat.icon;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => {
+                            setCategory(cat.id);
+                            setSubcategory(null);
+                          }}
+                          className={cn(
+                            'flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left',
+                            category === cat.id
+                              ? 'border-primary bg-primary/10 text-primary'
+                              : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                          )}
+                        >
+                          <Icon className="w-5 h-5 flex-shrink-0" />
+                          <span className="font-medium text-sm leading-tight">{cat.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </Card>
 
+                {/* Subcategory Selection */}
+                {selectedCategory && selectedSubcategories.length > 0 && (
+                  <Card className="p-6">
+                    <Label className="text-base font-semibold mb-4 block">
+                      Sous-catégorie de {selectedCategory.name}
+                    </Label>
+                    <div className="space-y-2">
+                      {selectedSubcategories.map((sub) => (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => setSubcategory(sub.id)}
+                          className={cn(
+                            'flex items-center justify-between w-full p-3 rounded-xl border-2 transition-all text-left',
+                            subcategory === sub.id
+                              ? 'border-primary bg-primary/10 text-primary'
+                              : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                          )}
+                        >
+                          <span className="font-medium text-sm">{sub.name}</span>
+                          <ChevronRight className="w-4 h-4 opacity-50" />
+                        </button>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+
+                {/* Allow "autres" category without subcategory */}
+                {category === 'autres' && subcategory === null && (
+                  (() => { setSubcategory('autres'); return null; })()
+                )}
+
+                {/* Condition */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Item Condition</Label>
+                  <Label className="text-base font-semibold mb-4 block">État de l'article</Label>
                   <div className="grid grid-cols-2 gap-3">
                     {conditions.map((cond) => (
                       <button
@@ -468,15 +493,15 @@ export default function NewItem() {
             {/* Step 3: Value Range */}
             {step === 3 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Estimated Value</Label>
+                <Label className="text-base font-semibold mb-2 block">Valeur estimée</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Help others understand the value of your item
+                  Aidez les autres à comprendre la valeur de votre article
                 </p>
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Minimum ($)</Label>
+                      <Label className="text-sm text-muted-foreground">Minimum (DT)</Label>
                       <Input 
                         type="number" 
                         value={valueMin} 
@@ -486,12 +511,12 @@ export default function NewItem() {
                       />
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Maximum ($)</Label>
+                      <Label className="text-sm text-muted-foreground">Maximum (DT)</Label>
                       <Input 
                         type="number" 
                         value={valueMax} 
                         onChange={(e) => setValueMax(e.target.value)} 
-                        placeholder="Optional"
+                        placeholder="Optionnel"
                         className="mt-2 text-lg text-center"
                       />
                     </div>
@@ -508,7 +533,7 @@ export default function NewItem() {
                         }}
                         className="px-4 py-2 rounded-full border border-border hover:border-primary hover:bg-primary/5 transition-colors text-sm font-medium"
                       >
-                        ~${val}
+                        ~{val} DT
                       </button>
                     ))}
                   </div>
@@ -519,28 +544,29 @@ export default function NewItem() {
             {/* Step 4: Swap Preferences */}
             {step === 4 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">What would you like in exchange?</Label>
+                <Label className="text-base font-semibold mb-2 block">Que souhaitez-vous en échange ?</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Select all categories you would accept
+                  Sélectionnez toutes les catégories que vous accepteriez
                 </p>
                 
                 <div className="grid grid-cols-2 gap-3">
-                  {categories.map((cat) => {
-                    const isSelected = swapPreferences.includes(cat);
+                  {CATEGORIES.map((cat) => {
+                    const isSelected = swapPreferences.includes(cat.id);
+                    const Icon = cat.icon;
                     return (
                       <button
-                        key={cat}
+                        key={cat.id}
                         type="button"
-                        onClick={() => toggleSwapPreference(cat)}
+                        onClick={() => toggleSwapPreference(cat.id)}
                         className={cn(
-                          'flex items-center gap-3 p-4 rounded-xl border-2 transition-all relative',
+                          'flex items-center gap-3 p-3 rounded-xl border-2 transition-all relative text-left',
                           isSelected
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'border-border hover:border-primary/50 hover:bg-muted/50'
                         )}
                       >
-                        {CATEGORY_ICONS[cat]}
-                        <span className="font-medium">{CATEGORY_LABELS[cat]}</span>
+                        <Icon className="w-5 h-5 flex-shrink-0" />
+                        <span className="font-medium text-sm leading-tight">{cat.name}</span>
                         {isSelected && (
                           <motion.div
                             initial={{ scale: 0 }}
@@ -557,8 +583,8 @@ export default function NewItem() {
                 
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   {swapPreferences.length === 0 
-                    ? 'Select at least one category'
-                    : `${swapPreferences.length} categor${swapPreferences.length === 1 ? 'y' : 'ies'} selected`
+                    ? 'Sélectionnez au moins une catégorie'
+                    : `${swapPreferences.length} catégorie${swapPreferences.length === 1 ? '' : 's'} sélectionnée${swapPreferences.length === 1 ? '' : 's'}`
                   }
                 </p>
               </Card>
@@ -566,7 +592,7 @@ export default function NewItem() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Navigation Buttons - Fixed at bottom */}
+        {/* Navigation Buttons */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border z-10">
           <div className="max-w-lg mx-auto flex gap-3">
             <Button
@@ -574,7 +600,7 @@ export default function NewItem() {
               onClick={handleBack}
               className="flex-1"
             >
-              {step === 1 ? 'Cancel' : 'Back'}
+              {step === 1 ? 'Annuler' : 'Retour'}
             </Button>
             
             <Button
@@ -589,7 +615,7 @@ export default function NewItem() {
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 4 ? 'Create Item' : 'Continue'}
+              {step === 4 ? 'Créer l\'article' : 'Continuer'}
             </Button>
           </div>
         </div>
