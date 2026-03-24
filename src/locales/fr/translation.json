@@ -290,17 +290,6 @@
     "any": "Tout",
     "km": "km"
   },
-  "chat": {
-    "typeMessage": "Tapez un message...",
-    "send": "Envoyer",
-    "online": "En ligne",
-    "lastSeen": "Vu",
-    "today": "aujourd'hui",
-    "yesterday": "hier",
-    "startConversation": "Lancez la conversation !",
-    "startConversationDescription": "Dites bonjour et discutez des détails de l'échange. Partagez des photos, négociez et planifiez.",
-    "swapDetails": "Détails de l'échange"
-  },
   "settings": {
     "title": "Paramètres",
     "account": "Compte",
