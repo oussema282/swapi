@@ -466,7 +466,10 @@
     "enableLocationFilter": "Activer la localisation",
     "viewOnMap": "Voir sur la carte",
     "sendDealInvite": "Envoyer une invitation",
-    "filters": "Filtres"
+    "filters": "Filtres",
+    "nearbyItems": "Articles à proximité",
+    "itemsNearYou": "{{count}} articles près de chez vous",
+    "clearAll": "Tout effacer"
   },
   "matches": {
     "title": "Matchs",

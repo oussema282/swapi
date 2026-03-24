@@ -310,8 +310,8 @@ export default function MapView() {
         // Item has no coordinates - show toast and don't center on it
         setMissingCoordsShown(true);
         hasNavigatedToFocusItem.current = true;
-        toast.error('This item has no location data', {
-          description: 'The item owner has not set their location.',
+        toast.error(t('map.noLocationData'), {
+          description: t('map.noLocationDataDescription'),
           icon: <AlertTriangle className="w-4 h-4" />,
         });
       }
@@ -331,16 +331,16 @@ export default function MapView() {
           >
             <MapPin className="w-12 h-12 text-primary" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Map Limit Reached</h2>
-          <p className="text-muted-foreground mb-6 max-w-sm">
-            You've used all {FREE_LIMITS.mapUses} free map views today. Upgrade to Pro for unlimited map access!
+          <h2 className="text-2xl font-display font-bold mb-3">{t('map.mapLimitReached')}</h2>
+           <p className="text-muted-foreground mb-6 max-w-sm">
+            {t('map.mapLimitDescription', { limit: FREE_LIMITS.mapUses })}
           </p>
           <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => setShowUpgradePrompt(true)}>
-            Upgrade to Pro
+            {t('map.upgradeToPro')}
           </Button>
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
+            {t('map.goBack')}
           </Button>
         </div>
         
@@ -369,19 +369,19 @@ export default function MapView() {
           >
             <MapPin className="w-12 h-12 text-primary" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Enable Location</h2>
+           <h2 className="text-2xl font-display font-bold mb-3">{t('map.enableLocation')}</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            Map view needs your location to show items near you and connect you with local traders.
+            {t('map.enableLocationDescription')}
           </p>
           
           {permissionStatus === 'denied' && (
             <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 max-w-sm">
-              <div className="flex items-center gap-2 text-destructive mb-1">
+               <div className="flex items-center gap-2 text-destructive mb-1">
                 <AlertTriangle className="w-4 h-4" />
-                <span className="font-medium text-sm">Location Access Denied</span>
+                <span className="font-medium text-sm">{t('map.locationDenied')}</span>
               </div>
               <p className="text-xs text-muted-foreground">
-                Please enable location in your browser settings and try again.
+                {t('map.locationDeniedDescription')}
               </p>
             </div>
           )}
@@ -392,26 +392,26 @@ export default function MapView() {
             onClick={requestLocation}
             disabled={locationLoading}
           >
-            {locationLoading ? (
+             {locationLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Getting Location...
+                {t('map.gettingLocation')}
               </>
             ) : (
               <>
                 <MapPin className="w-4 h-4 mr-2" />
-                {permissionStatus === 'denied' ? 'Retry Location Access' : 'Allow Location Access'}
+                {permissionStatus === 'denied' ? t('map.retryLocationAccess') : t('map.allowLocationAccess')}
               </>
             )}
           </Button>
           
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
+            {t('map.goBack')}
           </Button>
           
           <p className="text-xs text-muted-foreground mt-4 max-w-xs">
-            Your location is only used to find nearby items and is never shared publicly.
+            {t('map.locationPrivacy')}
           </p>
         </div>
       </AppLayout>
@@ -441,16 +441,16 @@ export default function MapView() {
           >
             <AlertTriangle className="w-12 h-12 text-destructive" />
           </motion.div>
-          <h2 className="text-2xl font-display font-bold mb-3">Map Unavailable</h2>
+           <h2 className="text-2xl font-display font-bold mb-3">{t('map.mapUnavailable')}</h2>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            We couldn't load the map. This might be a temporary issue with the map service.
+            {t('map.mapUnavailableDescription')}
           </p>
           <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => refetchToken()}>
-            Try Again
+            {t('map.tryAgain')}
           </Button>
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
+            {t('map.goBack')}
           </Button>
         </div>
       </AppLayout>
@@ -468,8 +468,8 @@ export default function MapView() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg font-display font-bold">Nearby Items</h1>
-                <p className="text-xs text-muted-foreground">{filteredItems.length} items near you</p>
+                <h1 className="text-lg font-display font-bold">{t('map.nearbyItems')}</h1>
+                <p className="text-xs text-muted-foreground">{t('map.itemsNearYou', { count: filteredItems.length })}</p>
               </div>
             </div>
             <div className="flex gap-2 mr-12">
@@ -521,7 +521,7 @@ export default function MapView() {
                       onClick={() => setSelectedCategories([])}
                       className="text-xs"
                     >
-                      Clear All
+                      {t('map.clearAll')}
                     </Button>
                   )}
                 </div>
