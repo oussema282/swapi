@@ -5,6 +5,7 @@ import { initReactI18next } from "react-i18next";
 // Import translation files
 import en from "./locales/en/translation.json";
 import fr from "./locales/fr/translation.json";
+import ar from "./locales/ar/translation.json";
 
 // Get saved language from localStorage or default to 'en'
 const savedLanguage = typeof window !== 'undefined' 
@@ -17,15 +18,7 @@ i18n
     resources: {
       en: { translation: en },
       fr: { translation: fr },
-      ar: { translation: ar },
-      es: { translation: es },
-      de: { translation: de },
-      pt: { translation: pt },
-      zh: { translation: zh },
-      ja: { translation: ja },
-      hi: { translation: hi },
-      ru: { translation: ru },
-      ko: { translation: ko }
+      ar: { translation: ar }
     },
     lng: savedLanguage,
     fallbackLng: "en",
