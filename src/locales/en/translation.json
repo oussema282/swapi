@@ -739,5 +739,23 @@
     "unauthorized": "Please log in to continue",
     "notFound": "Not found",
     "swipeFailed": "Swipe failed. Please try again."
+  },
+  "itemDetails": {
+    "category": "Category",
+    "condition": "Condition",
+    "valueRange": "Value Range",
+    "distance": "Distance",
+    "description": "Description",
+    "lookingToSwapFor": "Looking to swap for",
+    "listedBy": "Listed by",
+    "viewProfile": "View profile",
+    "viewOnMap": "View on Map",
+    "inviteToDeal": "Invite to Deal"
+  },
+  "conditions": {
+    "new": "New",
+    "like_new": "Like New",
+    "good": "Good",
+    "fair": "Fair"
   }
 }

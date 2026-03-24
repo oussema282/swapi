@@ -10,6 +10,7 @@ import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -38,6 +39,7 @@ export function ItemDetailsSheet({
   onViewOnMap,
 }: ItemDetailsSheetProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   if (!item) return null;
@@ -88,7 +90,6 @@ export function ItemDetailsSheet({
                 className="w-full h-full object-cover"
               />
               
-              {/* Photo indicators */}
               {hasMultiplePhotos && (
                 <div className="absolute top-3 left-3 right-3 flex gap-1.5 z-10">
                   {photos.map((_, index) => (
@@ -103,10 +104,8 @@ export function ItemDetailsSheet({
                 </div>
               )}
 
-              {/* Navigation arrows */}
               {hasMultiplePhotos && (
                 <>
-                  {/* Left arrow */}
                   <button
                     onClick={handlePrevPhoto}
                     className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm flex items-center justify-center hover:bg-card/90 active:scale-95 transition-all shadow-sm z-10"
@@ -115,7 +114,6 @@ export function ItemDetailsSheet({
                     <ChevronLeft className="w-5 h-5 text-foreground" />
                   </button>
                   
-                  {/* Right arrow */}
                   <button
                     onClick={handleNextPhoto}
                     className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-card/70 backdrop-blur-sm flex items-center justify-center hover:bg-card/90 active:scale-95 transition-all shadow-sm z-10"
@@ -124,7 +122,6 @@ export function ItemDetailsSheet({
                     <ChevronRight className="w-5 h-5 text-foreground" />
                   </button>
 
-                  {/* Photo counter */}
                   <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-foreground/60 backdrop-blur-sm rounded-full z-10">
                     <span className="text-xs font-medium text-card">
                       {currentPhotoIndex + 1} / {photos.length}
@@ -142,7 +139,7 @@ export function ItemDetailsSheet({
                 <Package className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Category</p>
+                <p className="text-xs text-muted-foreground">{t('itemDetails.category')}</p>
                 <p className="font-medium">{getCategoryLabel(item.category)}</p>
               </div>
             </div>
@@ -152,8 +149,8 @@ export function ItemDetailsSheet({
                 <Star className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Condition</p>
-                <p className="font-medium">{CONDITION_LABELS[item.condition]}</p>
+                <p className="text-xs text-muted-foreground">{t('itemDetails.condition')}</p>
+                <p className="font-medium">{t(`conditions.${item.condition}`)}</p>
               </div>
             </div>
 
@@ -163,7 +160,7 @@ export function ItemDetailsSheet({
                   <DollarSign className="w-5 h-5 text-price" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Value Range</p>
+                  <p className="text-xs text-muted-foreground">{t('itemDetails.valueRange')}</p>
                   <p className="font-medium">
                     ${item.value_min}{item.value_max ? ` - $${item.value_max}` : '+'}
                   </p>
@@ -177,7 +174,7 @@ export function ItemDetailsSheet({
                   <MapPin className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Distance</p>
+                  <p className="text-xs text-muted-foreground">{t('itemDetails.distance')}</p>
                   <p className="font-medium">{formatDistance(distanceKm)}</p>
                 </div>
               </div>
@@ -188,7 +185,7 @@ export function ItemDetailsSheet({
           {item.description && (
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                Description
+                {t('itemDetails.description')}
               </h4>
               <p className="text-foreground leading-relaxed">{item.description}</p>
             </div>
@@ -199,7 +196,7 @@ export function ItemDetailsSheet({
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
                 <ArrowLeftRight className="w-4 h-4" />
-                Looking to swap for
+                {t('itemDetails.lookingToSwapFor')}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {item.swap_preferences.map((pref) => (
@@ -214,7 +211,7 @@ export function ItemDetailsSheet({
           {/* Owner Info */}
           <div className="space-y-2">
             <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Listed by
+              {t('itemDetails.listedBy')}
             </h4>
             <button
               onClick={handleViewProfile}
@@ -237,7 +234,7 @@ export function ItemDetailsSheet({
                   isPro={item.owner_is_pro}
                   className="font-semibold"
                 />
-                <p className="text-sm text-muted-foreground">View profile</p>
+                <p className="text-sm text-muted-foreground">{t('itemDetails.viewProfile')}</p>
               </div>
               <User className="w-5 h-5 text-muted-foreground" />
             </button>
@@ -252,13 +249,13 @@ export function ItemDetailsSheet({
                 onClick={handleViewOnMap}
               >
                 <MapPin className="w-4 h-4 mr-2" />
-                View on Map
+                {t('itemDetails.viewOnMap')}
               </Button>
             )}
             {onInviteDeal && (
               <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
                 <Send className="w-4 h-4 mr-2" />
-                Invite to Deal
+                {t('itemDetails.inviteToDeal')}
               </Button>
             )}
             <ReportButton reportType="item" targetId={item.id} variant="icon" />
