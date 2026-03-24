@@ -30,11 +30,24 @@ interface SearchItem extends Item {
   distance?: number;
 }
 
+interface ProfileResult {
+  user_id: string;
+  display_name: string;
+  avatar_url: string | null;
+  location: string | null;
+  is_verified: boolean | null;
+}
+
 interface Suggestion {
-  type: 'item' | 'category' | 'popular';
+  type: 'item' | 'category' | 'popular' | 'user';
   text: string;
-  icon: 'item' | 'category' | 'trending';
+  icon: 'item' | 'category' | 'trending' | 'user';
   category?: ItemCategory;
+  userData?: {
+    userId: string;
+    avatarUrl: string | null;
+    location: string | null;
+  };
   // Extended item data for rich previews
   itemData?: {
     id: string;
