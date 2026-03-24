@@ -232,17 +232,13 @@ export default function Search() {
 
     // Category matches
     CATEGORIES.forEach(cat => {
-      if (t(`categories.${cat.id}`).toLowerCase().includes(query) && newSuggestions.length < 7) {
+      const catLabel = t(`categories.${cat.id}`);
+      if (catLabel.toLowerCase().includes(query) && newSuggestions.length < 7) {
         newSuggestions.push({
           type: 'category',
-          text: t(`categories.${cat.id}`),
+          text: catLabel,
           icon: 'category',
           category: cat.id,
-        });
-          type: 'category',
-          
-          
-        
         });
       }
     });
