@@ -144,8 +144,8 @@ export default function Items() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{item.title}</h3>
                           <div className="flex gap-2 mt-2 flex-wrap">
-                            <Badge variant="outline" className="text-xs">{CATEGORY_LABELS[item.category]}</Badge>
-                            <Badge variant="secondary" className="text-xs">{CONDITION_LABELS[item.condition]}</Badge>
+                            <Badge variant="outline" className="text-xs">{t(`categories.${item.category}`)}</Badge>
+                            <Badge variant="secondary" className="text-xs">{t(`conditions.${item.condition}`)}</Badge>
                           </div>
                           {item.value_min && item.value_max && (
                             <p className="text-xs text-muted-foreground mt-2">
