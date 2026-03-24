@@ -634,12 +634,12 @@ export default function NewItem() {
             >
               {createItem.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : step === 4 ? (
+              ) : step === 5 ? (
                 <Check className="w-4 h-4 mr-2" />
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 4 ? 'Créer l\'article' : 'Continuer'}
+              {step === 5 ? 'Créer l\'article' : 'Continuer'}
             </Button>
           </div>
         </div>
