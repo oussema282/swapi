@@ -119,16 +119,13 @@ export function formatLastSeen(date: Date | undefined | null): string {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   
-  // Use i18n for translated time strings
-  const i18n = await import('@/i18n');
-  const t = i18n.default.t;
+  const t = i18n.t.bind(i18n);
   
   if (diffMins < 1) return t('chat.justNow');
   if (diffMins < 60) return t('chat.minutesAgo', { count: diffMins });
   if (diffHours < 24) return t('chat.hoursAgo', { count: diffHours });
   
-  // Use current language locale for date formatting
-  const lng = i18n.default.language || 'en';
+  const lng = i18n.language || 'en';
   return date.toLocaleDateString(lng, { 
     month: 'short', 
     day: 'numeric',
