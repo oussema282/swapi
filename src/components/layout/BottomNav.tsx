@@ -43,7 +43,7 @@ export function BottomNav() {
                 <Link
                   key={path}
                   to={path}
-                  className="relative -mt-6"
+                  className="relative -mt-6 flex-1 flex flex-col items-center"
                 >
                   <motion.div
                     className={cn(
