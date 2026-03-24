@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { ExpandableDescription } from '@/components/search/ExpandableDescription';
+import { useTranslation } from 'react-i18next';
 
 interface SearchItem extends Item {
   owner_display_name: string;
