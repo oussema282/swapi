@@ -269,7 +269,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
             {activityStatus === 'recent' && (
               <div className="flex items-center gap-1 px-2 py-0.5 bg-tinder-gold/90 rounded-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-foreground" />
-                <span className="text-[10px] font-semibold text-foreground">Recently Active</span>
+                <span className="text-[10px] font-semibold text-foreground">{t('discover.ownerRecentlyActive')}</span>
               </div>
             )}
           </div>
