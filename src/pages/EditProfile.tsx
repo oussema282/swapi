@@ -13,11 +13,13 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Camera, Loader2, Check, User, MapPin, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export default function EditProfile() {
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
   const { checkImage, isChecking: isModerating } = useContentModeration();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
@@ -62,22 +64,20 @@ export default function EditProfile() {
         .from('item-photos')
         .getPublicUrl(filePath);
 
-      // Check image with AI content moderator
       const moderationResult = await checkImage(publicUrl, 'avatar');
       
       if (!moderationResult.is_safe) {
-        // Delete the unsafe image
         await supabase.storage.from('item-photos').remove([filePath]);
-        toast.error('Avatar blocked', {
-          description: `This image cannot be used: ${moderationResult.violation_type || 'policy violation'}`
+        toast.error(t('editProfile.avatarBlocked'), {
+          description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
         });
         return;
       }
 
       setAvatarUrl(publicUrl);
-      toast.success('Avatar uploaded!');
+      toast.success(t('editProfile.avatarUploaded'));
     } catch (error: any) {
-      toast.error('Failed to upload avatar');
+      toast.error(t('editProfile.failedUploadAvatar'));
       console.error(error);
     } finally {
       setUploading(false);
@@ -86,7 +86,7 @@ export default function EditProfile() {
 
   const handleSave = async () => {
     if (!user || !displayName.trim()) {
-      toast.error('Display name is required');
+      toast.error(t('editProfile.displayNameRequired'));
       return;
     }
 
@@ -112,7 +112,7 @@ export default function EditProfile() {
         navigate('/profile');
       }, 1500);
     } catch (error: any) {
-      toast.error('Failed to save profile');
+      toast.error(t('editProfile.failedSaveProfile'));
       console.error(error);
       setSaving(false);
     }
@@ -152,7 +152,7 @@ export default function EditProfile() {
               transition={{ delay: 0.3 }}
               className="text-xl font-semibold"
             >
-              Profile Updated!
+              {t('editProfile.profileUpdated')}
             </motion.p>
           </motion.div>
         ) : (
@@ -168,7 +168,7 @@ export default function EditProfile() {
               <Button variant="ghost" size="icon" onClick={() => navigate('/profile')}>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <h1 className="text-lg font-semibold">Edit Profile</h1>
+              <h1 className="text-lg font-semibold">{t('editProfile.title')}</h1>
             </div>
 
             {/* Content */}
@@ -201,7 +201,7 @@ export default function EditProfile() {
                       />
                     </label>
                   </div>
-                  <p className="text-sm text-muted-foreground">Tap to change photo</p>
+                  <p className="text-sm text-muted-foreground">{t('editProfile.tapToChange')}</p>
                 </div>
               </Card>
 
@@ -210,13 +210,13 @@ export default function EditProfile() {
                 <div className="space-y-2">
                   <Label htmlFor="displayName" className="flex items-center gap-2">
                     <User className="w-4 h-4" />
-                    Display Name *
+                    {t('editProfile.displayName')}
                   </Label>
                   <Input
                     id="displayName"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Your name"
+                    placeholder={t('editProfile.displayNamePlaceholder')}
                     maxLength={50}
                   />
                 </div>
@@ -224,24 +224,24 @@ export default function EditProfile() {
                 <div className="space-y-2">
                   <Label htmlFor="location" className="flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Location
+                    {t('editProfile.location')}
                   </Label>
                   <Input
                     id="location"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="City, Country"
+                    placeholder={t('editProfile.locationPlaceholder')}
                     maxLength={100}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="bio">Bio</Label>
+                  <Label htmlFor="bio">{t('editProfile.bio')}</Label>
                   <Textarea
                     id="bio"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
-                    placeholder="Tell others about yourself..."
+                    placeholder={t('editProfile.bioPlaceholder')}
                     maxLength={300}
                     rows={4}
                   />
@@ -260,10 +260,10 @@ export default function EditProfile() {
                 {saving ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Saving...
+                    {t('editProfile.saving')}
                   </>
                 ) : (
-                  'Save Changes'
+                  t('editProfile.saveChanges')
                 )}
               </Button>
             </div>

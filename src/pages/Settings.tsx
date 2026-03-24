@@ -34,6 +34,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 
 const profileSchema = z.object({
   displayName: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name too long'),
@@ -56,6 +57,7 @@ const emailSchema = z.object({
 export default function Settings() {
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   // Profile state
   const [displayName, setDisplayName] = useState('');
@@ -124,16 +126,15 @@ export default function Settings() {
 
       setAvatarUrl(publicUrl);
       
-      // Update profile immediately
       await supabase
         .from('profiles')
         .update({ avatar_url: publicUrl, updated_at: new Date().toISOString() })
         .eq('user_id', user.id);
       
       await refreshProfile();
-      toast.success('Avatar updated!');
+      toast.success(t('editProfile.avatarUploaded'));
     } catch (error: any) {
-      toast.error('Failed to upload avatar');
+      toast.error(t('editProfile.failedUploadAvatar'));
       console.error(error);
     } finally {
       setUploading(false);
@@ -160,12 +161,12 @@ export default function Settings() {
       if (error) throw error;
 
       await refreshProfile();
-      toast.success('Profile updated successfully!');
+      toast.success(t('editProfile.profileUpdated'));
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error('Failed to save profile');
+        toast.error(t('editProfile.failedSaveProfile'));
       }
     } finally {
       setSavingProfile(false);
@@ -187,12 +188,12 @@ export default function Settings() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      toast.success('Password changed successfully!');
+      toast.success(t('settings.changePassword') + ' ✓');
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error(error.message || 'Failed to change password');
+        toast.error(error.message || t('errors.generic'));
       }
     } finally {
       setChangingPassword(false);
@@ -211,13 +212,13 @@ export default function Settings() {
 
       if (error) throw error;
 
-      toast.success('Verification email sent to your new address!');
+      toast.success(t('settings.sendingVerification'));
       setNewEmail('');
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error(error.message || 'Failed to change email');
+        toast.error(error.message || t('errors.generic'));
       }
     } finally {
       setChangingEmail(false);
@@ -246,7 +247,7 @@ export default function Settings() {
           <Button variant="ghost" size="icon" onClick={() => navigate('/profile')}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Account Settings</h1>
+          <h1 className="text-lg font-semibold">{t('settings.accountSettings')}</h1>
         </div>
 
         {/* Content */}
@@ -256,29 +257,28 @@ export default function Settings() {
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="profile" className="text-xs sm:text-sm">
                   <User className="w-4 h-4 mr-1 hidden sm:inline" />
-                  Profile
+                  {t('settings.profile')}
                 </TabsTrigger>
                 <TabsTrigger value="security" className="text-xs sm:text-sm">
                   <Lock className="w-4 h-4 mr-1 hidden sm:inline" />
-                  Security
+                  {t('settings.security')}
                 </TabsTrigger>
                 <TabsTrigger value="notifications" className="text-xs sm:text-sm">
                   <Bell className="w-4 h-4 mr-1 hidden sm:inline" />
-                  Alerts
+                  {t('settings.alerts')}
                 </TabsTrigger>
                 <TabsTrigger value="privacy" className="text-xs sm:text-sm">
                   <Shield className="w-4 h-4 mr-1 hidden sm:inline" />
-                  Privacy
+                  {t('settings.privacy')}
                 </TabsTrigger>
               </TabsList>
 
               {/* Profile Tab */}
               <TabsContent value="profile" className="space-y-6">
-                {/* Avatar Section */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Profile Photo</CardTitle>
-                    <CardDescription>Update your profile picture</CardDescription>
+                    <CardTitle className="text-lg">{t('settings.profilePhoto')}</CardTitle>
+                    <CardDescription>{t('settings.updatePhoto')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center gap-6">
@@ -315,23 +315,22 @@ export default function Settings() {
                   </CardContent>
                 </Card>
 
-                {/* Personal Info */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Personal Information</CardTitle>
-                    <CardDescription>Update your personal details</CardDescription>
+                    <CardTitle className="text-lg">{t('settings.personalInfo')}</CardTitle>
+                    <CardDescription>{t('settings.updateDetails')}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="displayName" className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        Display Name
+                        {t('profile.displayName')}
                       </Label>
                       <Input
                         id="displayName"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
-                        placeholder="Your name"
+                        placeholder={t('editProfile.displayNamePlaceholder')}
                         maxLength={50}
                       />
                     </div>
@@ -339,13 +338,13 @@ export default function Settings() {
                     <div className="space-y-2">
                       <Label htmlFor="location" className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
-                        Location
+                        {t('profile.location')}
                       </Label>
                       <Input
                         id="location"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        placeholder="City, Country"
+                        placeholder={t('editProfile.locationPlaceholder')}
                         maxLength={100}
                       />
                     </div>
@@ -358,12 +357,12 @@ export default function Settings() {
                       {savingProfile ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Saving...
+                          {t('settings.saving')}
                         </>
                       ) : (
                         <>
                           <Save className="w-4 h-4 mr-2" />
-                          Save Changes
+                          {t('settings.saveChanges')}
                         </>
                       )}
                     </Button>
@@ -373,26 +372,25 @@ export default function Settings() {
 
               {/* Security Tab */}
               <TabsContent value="security" className="space-y-6">
-                {/* Change Email */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Mail className="w-5 h-5" />
-                      Email Address
+                      {t('settings.emailAddress')}
                     </CardTitle>
                     <CardDescription>
-                      Current: {user?.email}
+                      {user?.email}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="newEmail">New Email Address</Label>
+                      <Label htmlFor="newEmail">{t('settings.newEmail')}</Label>
                       <Input
                         id="newEmail"
                         type="email"
                         value={newEmail}
                         onChange={(e) => setNewEmail(e.target.value)}
-                        placeholder="Enter new email"
+                        placeholder={t('auth.emailPlaceholder')}
                       />
                     </div>
                     <Button
@@ -404,39 +402,37 @@ export default function Settings() {
                       {changingEmail ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Sending verification...
+                          {t('settings.sendingVerification')}
                         </>
                       ) : (
                         <>
                           <Mail className="w-4 h-4 mr-2" />
-                          Update Email
+                          {t('settings.updateEmail')}
                         </>
                       )}
                     </Button>
                   </CardContent>
                 </Card>
 
-                {/* Change Password */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Lock className="w-5 h-5" />
-                      Change Password
+                      {t('settings.changePassword')}
                     </CardTitle>
                     <CardDescription>
-                      Update your account password
+                      {t('settings.updateDetails')}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Label htmlFor="currentPassword">{t('settings.currentPassword')}</Label>
                       <div className="relative">
                         <Input
                           id="currentPassword"
                           type={showCurrentPassword ? 'text' : 'password'}
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
-                          placeholder="Enter current password"
                         />
                         <button
                           type="button"
@@ -449,14 +445,13 @@ export default function Settings() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword">New Password</Label>
+                      <Label htmlFor="newPassword">{t('settings.newPassword')}</Label>
                       <div className="relative">
                         <Input
                           id="newPassword"
                           type={showNewPassword ? 'text' : 'password'}
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
-                          placeholder="Enter new password"
                         />
                         <button
                           type="button"
@@ -469,13 +464,12 @@ export default function Settings() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Label htmlFor="confirmPassword">{t('settings.confirmPassword')}</Label>
                       <Input
                         id="confirmPassword"
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Confirm new password"
                       />
                     </div>
 
@@ -488,27 +482,26 @@ export default function Settings() {
                       {changingPassword ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Updating...
+                          {t('settings.updating')}
                         </>
                       ) : (
                         <>
                           <Lock className="w-4 h-4 mr-2" />
-                          Change Password
+                          {t('settings.updatePassword')}
                         </>
                       )}
                     </Button>
                   </CardContent>
                 </Card>
 
-                {/* Two-Factor Auth */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Shield className="w-5 h-5" />
-                      Two-Factor Authentication
+                      {t('settings.twoFactorAuth')}
                     </CardTitle>
                     <CardDescription>
-                      Add an extra layer of security to your account
+                      {t('settings.twoFactorDescription')}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -518,11 +511,11 @@ export default function Settings() {
                           <AlertTriangle className="w-5 h-5 text-amber-500" />
                         </div>
                         <div>
-                          <p className="font-medium">Not enabled</p>
-                          <p className="text-sm text-muted-foreground">Coming soon</p>
+                          <p className="font-medium">{t('settings.notEnabled')}</p>
+                          <p className="text-sm text-muted-foreground">{t('settings.comingSoon')}</p>
                         </div>
                       </div>
-                      <Badge variant="secondary">Soon</Badge>
+                      <Badge variant="secondary">{t('settings.soon')}</Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -532,15 +525,15 @@ export default function Settings() {
               <TabsContent value="notifications" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Notification Preferences</CardTitle>
-                    <CardDescription>Choose how you want to be notified</CardDescription>
+                    <CardTitle className="text-lg">{t('settings.notificationPreferences')}</CardTitle>
+                    <CardDescription>{t('settings.chooseNotifications')}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Email Notifications</Label>
+                        <Label>{t('settings.emailNotifications')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Receive updates via email
+                          {t('settings.emailNotificationsDescription')}
                         </p>
                       </div>
                       <Switch
@@ -553,9 +546,9 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Push Notifications</Label>
+                        <Label>{t('settings.pushNotifications')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Receive push notifications
+                          {t('settings.pushNotificationsDescription')}
                         </p>
                       </div>
                       <Switch
@@ -568,9 +561,9 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>New Match Alerts</Label>
+                        <Label>{t('settings.matchAlerts')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Get notified when you have a new match
+                          {t('settings.matchAlertsDescription')}
                         </p>
                       </div>
                       <Switch
@@ -583,9 +576,9 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Message Alerts</Label>
+                        <Label>{t('settings.messageAlerts')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Get notified for new messages
+                          {t('settings.messageAlertsDescription')}
                         </p>
                       </div>
                       <Switch
@@ -601,15 +594,15 @@ export default function Settings() {
               <TabsContent value="privacy" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Privacy Settings</CardTitle>
-                    <CardDescription>Control your privacy preferences</CardDescription>
+                    <CardTitle className="text-lg">{t('settings.privacySettings')}</CardTitle>
+                    <CardDescription>{t('settings.controlPrivacy')}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Profile Visibility</Label>
+                        <Label>{t('settings.profileVisibility')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Allow others to view your profile
+                          {t('settings.profileVisibilityDescription')}
                         </p>
                       </div>
                       <Switch
@@ -622,9 +615,9 @@ export default function Settings() {
                     
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Show Location</Label>
+                        <Label>{t('settings.showLocation')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Display your approximate location on items
+                          {t('settings.showLocationDescription')}
                         </p>
                       </div>
                       <Switch
@@ -635,21 +628,20 @@ export default function Settings() {
                   </CardContent>
                 </Card>
 
-                {/* Language Settings */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Globe className="w-5 h-5" />
-                      Language
+                      {t('settings.language')}
                     </CardTitle>
-                    <CardDescription>Choose your preferred language</CardDescription>
+                    <CardDescription>{t('settings.selectLanguage')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>App Language</Label>
+                        <Label>{t('settings.appLanguage')}</Label>
                         <p className="text-sm text-muted-foreground">
-                          Select display language
+                          {t('settings.selectLanguage')}
                         </p>
                       </div>
                       <LanguageSwitcher variant="full" />
@@ -657,25 +649,24 @@ export default function Settings() {
                   </CardContent>
                 </Card>
 
-                {/* Danger Zone */}
                 <Card className="border-destructive/50">
                   <CardHeader>
                     <CardTitle className="text-lg text-destructive flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5" />
-                      Danger Zone
+                      {t('settings.dangerZone')}
                     </CardTitle>
                     <CardDescription>
-                      Irreversible actions
+                      {t('settings.irreversibleActions')}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="p-4 rounded-lg bg-destructive/5 border border-destructive/20">
-                      <h4 className="font-medium text-destructive mb-1">Delete Account</h4>
+                      <h4 className="font-medium text-destructive mb-1">{t('settings.deleteAccount')}</h4>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Once you delete your account, there is no going back. This action is permanent.
+                        {t('settings.deleteAccountWarning')}
                       </p>
                       <Button variant="destructive" size="sm" disabled>
-                        Delete Account
+                        {t('settings.deleteAccount')}
                       </Button>
                     </div>
                   </CardContent>

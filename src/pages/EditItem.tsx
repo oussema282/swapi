@@ -29,6 +29,7 @@ import { ItemCondition, CONDITION_LABELS } from '@/types/database';
 import { CATEGORIES, getCategoryLabel, type Category } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { LocationPickerMap } from '@/components/items/LocationPickerMap';
+import { useTranslation } from 'react-i18next';
 
 const conditions: ItemCondition[] = ['new', 'like_new', 'good', 'fair'];
 
@@ -44,6 +45,7 @@ export default function EditItem() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const { data: item, isLoading: itemLoading } = useItem(id || '');
   const updateItem = useUpdateItem();
   const { checkImage, isChecking: isModerating } = useContentModeration();
@@ -99,7 +101,7 @@ export default function EditItem() {
     if (!files || !user) return;
 
     if (photos.length + files.length > 5) {
-      toast({ variant: 'destructive', title: 'Maximum 5 photos' });
+      toast({ variant: 'destructive', title: t('newItem.maxPhotos') });
       return;
     }
 
@@ -164,7 +166,7 @@ export default function EditItem() {
       setIsComplete(true);
       setTimeout(() => navigate('/items'), 2000);
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Échec de la mise à jour' });
+      toast({ variant: 'destructive', title: t('editItem.updateFailed') });
     }
   };
 
@@ -190,8 +192,8 @@ export default function EditItem() {
           >
             <Check className="w-12 h-12 text-success-foreground" strokeWidth={3} />
           </motion.div>
-          <h2 className="text-xl font-display font-bold text-foreground mb-2">Article mis à jour !</h2>
-          <p className="text-muted-foreground text-center text-sm">Vos modifications ont été enregistrées</p>
+          <h2 className="text-xl font-display font-bold text-foreground mb-2">{t('editItem.itemUpdated')}</h2>
+          <p className="text-muted-foreground text-center text-sm">{t('editItem.changesRecorded')}</p>
         </div>
       </AppLayout>
     );
@@ -205,9 +207,9 @@ export default function EditItem() {
             <Button variant="ghost" size="icon" onClick={() => navigate('/items')}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-lg font-display font-bold flex-1">Modifier l'article</h1>
+            <h1 className="text-lg font-display font-bold flex-1">{t('editItem.title')}</h1>
             <Button onClick={handleSubmit} disabled={updateItem.isPending} className="gradient-primary">
-              {updateItem.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4 mr-2" />Sauvegarder</>}
+              {updateItem.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4 mr-2" />{t('editItem.save')}</>}
             </Button>
           </div>
         </div>
@@ -215,7 +217,7 @@ export default function EditItem() {
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
           {/* Photos */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">Photos</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.photos')}</Label>
             <div className="grid grid-cols-4 gap-2">
               {photos.map((photo, index) => (
                 <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
@@ -237,18 +239,18 @@ export default function EditItem() {
           {/* Title & Description */}
           <Card className="p-4 space-y-3">
             <div>
-              <Label htmlFor="title" className="text-sm font-semibold">Titre</Label>
+              <Label htmlFor="title" className="text-sm font-semibold">{t('editItem.itemTitle')}</Label>
               <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="description" className="text-sm font-semibold">Description</Label>
+              <Label htmlFor="description" className="text-sm font-semibold">{t('editItem.description')}</Label>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="mt-1" />
             </div>
           </Card>
 
           {/* Category */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">Catégorie</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.category')}</Label>
             <div className="grid grid-cols-2 gap-2 max-h-[250px] overflow-y-auto">
               {CATEGORIES.map((cat) => {
                 const Icon = cat.icon;
@@ -273,7 +275,7 @@ export default function EditItem() {
           {/* Subcategory */}
           {selectedCategory && selectedSubcategories.length > 0 && (
             <Card className="p-4">
-              <Label className="text-sm font-semibold mb-3 block">Sous-catégorie</Label>
+              <Label className="text-sm font-semibold mb-3 block">{t('editItem.subcategory')}</Label>
               <div className="space-y-2">
                 {selectedSubcategories.map((sub) => (
                   <button
@@ -295,7 +297,7 @@ export default function EditItem() {
 
           {/* Condition */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">État</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.condition')}</Label>
             <div className="grid grid-cols-2 gap-2">
               {conditions.map((cond) => (
                 <button
@@ -316,7 +318,7 @@ export default function EditItem() {
 
           {/* Value Range */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">Fourchette de prix (DT)</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.priceRange')}</Label>
             <div className="grid grid-cols-2 gap-3">
               <Input type="number" value={valueMin} onChange={(e) => setValueMin(e.target.value)} placeholder="Min" />
               <Input type="number" value={valueMax} onChange={(e) => setValueMax(e.target.value)} placeholder="Max" />
@@ -325,7 +327,7 @@ export default function EditItem() {
 
           {/* Swap Preferences */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">Recherche en échange</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.swapPreferences')}</Label>
             <div className="grid grid-cols-2 gap-2">
               {CATEGORIES.map((cat) => {
                 const Icon = cat.icon;
@@ -349,7 +351,7 @@ export default function EditItem() {
 
           {/* Location */}
           <Card className="p-4">
-            <Label className="text-sm font-semibold mb-3 block">Emplacement de l'article</Label>
+            <Label className="text-sm font-semibold mb-3 block">{t('editItem.location')}</Label>
             <LocationPickerMap
               latitude={itemLatitude}
               longitude={itemLongitude}
