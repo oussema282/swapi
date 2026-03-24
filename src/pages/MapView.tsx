@@ -392,15 +392,15 @@ export default function MapView() {
             onClick={requestLocation}
             disabled={locationLoading}
           >
-            {locationLoading ? (
+             {locationLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Getting Location...
+                {t('map.gettingLocation')}
               </>
             ) : (
               <>
                 <MapPin className="w-4 h-4 mr-2" />
-                {permissionStatus === 'denied' ? 'Retry Location Access' : 'Allow Location Access'}
+                {permissionStatus === 'denied' ? t('map.retryLocationAccess') : t('map.allowLocationAccess')}
               </>
             )}
           </Button>
