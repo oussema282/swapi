@@ -150,7 +150,7 @@ export function ItemDetailsSheet({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">{t('itemDetails.condition')}</p>
-                <p className="font-medium">{CONDITION_LABELS[item.condition]}</p>
+                <p className="font-medium">{t(`conditions.${item.condition}`)}</p>
               </div>
             </div>
 
