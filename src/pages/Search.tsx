@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
-import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock, User } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
@@ -29,11 +30,24 @@ interface SearchItem extends Item {
   distance?: number;
 }
 
+interface ProfileResult {
+  user_id: string;
+  display_name: string;
+  avatar_url: string | null;
+  location: string | null;
+  is_verified: boolean | null;
+}
+
 interface Suggestion {
-  type: 'item' | 'category' | 'popular';
+  type: 'item' | 'category' | 'popular' | 'user';
   text: string;
-  icon: 'item' | 'category' | 'trending';
+  icon: 'item' | 'category' | 'trending' | 'user';
   category?: ItemCategory;
+  userData?: {
+    userId: string;
+    avatarUrl: string | null;
+    location: string | null;
+  };
   // Extended item data for rich previews
   itemData?: {
     id: string;
@@ -169,6 +183,21 @@ export default function Search() {
     refetchInterval: 30000,
   });
 
+  // Fetch all profiles for user search
+  const { data: allProfiles } = useQuery({
+    queryKey: ['search-profiles'],
+    queryFn: async (): Promise<ProfileResult[]> => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url, location, is_verified')
+        .neq('user_id', user?.id || '');
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
+    staleTime: 60000,
+  });
+
   // Generate suggestions based on debounced query
   useEffect(() => {
     if (debouncedQuery.length < 2) {
@@ -179,9 +208,29 @@ export default function Search() {
     const query = debouncedQuery.toLowerCase();
     const newSuggestions: Suggestion[] = [];
 
+    // User profile matches (show first)
+    if (allProfiles) {
+      const profileMatches = allProfiles
+        .filter(p => p.display_name.toLowerCase().includes(query))
+        .slice(0, 3);
+      
+      profileMatches.forEach(profile => {
+        newSuggestions.push({
+          type: 'user',
+          text: profile.display_name,
+          icon: 'user',
+          userData: {
+            userId: profile.user_id,
+            avatarUrl: profile.avatar_url,
+            location: profile.location,
+          },
+        });
+      });
+    }
+
     // Category matches
     categories.forEach(cat => {
-      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 5) {
+      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 7) {
         newSuggestions.push({
           type: 'category',
           text: cat.label,
@@ -193,7 +242,6 @@ export default function Search() {
 
     // Item title matches - with full item data for rich previews
     if (items) {
-      // Calculate distance for items if we have location
       const itemsWithDistance = items.map(item => {
         let distance: number | undefined;
         if (hasLocation && latitude && longitude && item.owner_latitude && item.owner_longitude) {
@@ -204,7 +252,7 @@ export default function Search() {
 
       const titleMatches = itemsWithDistance
         .filter(item => item.title.toLowerCase().includes(query))
-        .slice(0, 5 - newSuggestions.length);
+        .slice(0, 5 - Math.min(newSuggestions.length, 3));
       
       titleMatches.forEach(item => {
         if (!newSuggestions.some(s => s.text.toLowerCase() === item.title.toLowerCase())) {
@@ -228,7 +276,7 @@ export default function Search() {
 
     // Popular search matches
     popularSearches.forEach(search => {
-      if (search.toLowerCase().includes(query) && newSuggestions.length < 5) {
+      if (search.toLowerCase().includes(query) && newSuggestions.length < 7) {
         if (!newSuggestions.some(s => s.text.toLowerCase() === search.toLowerCase())) {
           newSuggestions.push({
             type: 'popular',
@@ -239,9 +287,9 @@ export default function Search() {
       }
     });
 
-    setSuggestions(newSuggestions.slice(0, 5));
+    setSuggestions(newSuggestions.slice(0, 7));
     setSelectedSuggestionIndex(-1);
-  }, [debouncedQuery, items, hasLocation, latitude, longitude]);
+  }, [debouncedQuery, items, allProfiles, hasLocation, latitude, longitude]);
 
   // Determine if search/filters are active
   useEffect(() => {
@@ -321,6 +369,13 @@ export default function Search() {
     return filtered;
   }, [items, searchQuery, selectedCategories, hasLocation, latitude, longitude, maxDistance, budgetRange, isSearchActive]);
 
+  // Filter profiles based on search query
+  const filteredProfiles = useMemo(() => {
+    if (!allProfiles || !searchQuery.trim() || searchQuery.trim().length < 2) return [];
+    const query = searchQuery.toLowerCase();
+    return allProfiles.filter(p => p.display_name.toLowerCase().includes(query)).slice(0, 5);
+  }, [allProfiles, searchQuery]);
+
   const handleRefresh = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -347,6 +402,12 @@ export default function Search() {
       return;
     }
 
+    if (suggestion.type === 'user' && suggestion.userData) {
+      navigate(`/user/${suggestion.userData.userId}`);
+      setShowSuggestions(false);
+      return;
+    }
+
     if (suggestion.type === 'category' && suggestion.category) {
       if (!selectedCategories.includes(suggestion.category)) {
         setSelectedCategories(prev => [...prev, suggestion.category!]);
@@ -357,7 +418,7 @@ export default function Search() {
     }
     setShowSuggestions(false);
     inputRef.current?.blur();
-  }, [selectedCategories, trackSearchUsage]);
+  }, [selectedCategories, trackSearchUsage, navigate]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
@@ -479,46 +540,54 @@ export default function Search() {
                         }`}
                       >
                         {/* Thumbnail or Icon - Fixed 40x40 */}
-                        <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
-                          {suggestion.itemData?.photo ? (
-                            <img 
-                              src={suggestion.itemData.photo} 
-                              alt="" 
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                              onError={(e) => {
-                                // Replace with placeholder on error
-                                e.currentTarget.style.display = 'none';
-                                const placeholder = e.currentTarget.nextElementSibling;
-                                if (placeholder) {
-                                  (placeholder as HTMLElement).style.display = 'flex';
-                                }
-                              }}
-                            />
-                          ) : null}
-                          {/* Placeholder - hidden by default when image present, shown on error or no image */}
-                          <div 
-                            className={cn(
-                              'w-full h-full items-center justify-center',
-                              suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
-                              suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
-                              'bg-muted text-muted-foreground',
-                              suggestion.itemData?.photo ? 'hidden' : 'flex'
-                            )}
-                          >
-                            {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
-                            {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
-                            {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                        {suggestion.type === 'user' ? (
+                          <Avatar className="w-10 h-10 flex-shrink-0">
+                            <AvatarImage src={suggestion.userData?.avatarUrl || undefined} />
+                            <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
+                              {suggestion.text.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
+                            {suggestion.itemData?.photo ? (
+                              <img 
+                                src={suggestion.itemData.photo} 
+                                alt="" 
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  const placeholder = e.currentTarget.nextElementSibling;
+                                  if (placeholder) {
+                                    (placeholder as HTMLElement).style.display = 'flex';
+                                  }
+                                }}
+                              />
+                            ) : null}
+                            <div 
+                              className={cn(
+                                'w-full h-full items-center justify-center',
+                                suggestion.icon === 'category' ? 'bg-secondary/20 text-secondary' :
+                                suggestion.icon === 'trending' ? 'bg-primary/20 text-primary' :
+                                'bg-muted text-muted-foreground',
+                                suggestion.itemData?.photo ? 'hidden' : 'flex'
+                              )}
+                            >
+                              {suggestion.icon === 'category' && <Tag className="w-4 h-4" />}
+                              {suggestion.icon === 'trending' && <TrendingUp className="w-4 h-4" />}
+                              {suggestion.icon === 'item' && <Package className="w-4 h-4" />}
+                            </div>
                           </div>
-                        </div>
+                        )}
                         
-                        {/* Content - with line clamp */}
+                        {/* Content */}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">
                             {highlightMatch(suggestion.text, searchQuery)}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
-                            {suggestion.type === 'category' ? 'Category' : 
+                            {suggestion.type === 'user' ? (suggestion.userData?.location || 'User') :
+                             suggestion.type === 'category' ? 'Category' : 
                              suggestion.type === 'popular' ? 'Popular search' : 'Item'}
                           </p>
                         </div>
@@ -682,7 +751,7 @@ export default function Search() {
           <div className="flex items-center gap-2">
             {!isSearchActive && hasLocation && <Sparkles className="w-4 h-4 text-primary" />}
             <span className="text-sm text-muted-foreground">
-              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length} result${filteredItems.length !== 1 ? 's' : ''}` : 'Top 10 near you'}
+              {isLoading ? 'Loading...' : isSearchActive ? `${filteredItems.length + filteredProfiles.length} result${(filteredItems.length + filteredProfiles.length) !== 1 ? 's' : ''}` : 'Top 10 near you'}
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={isFetching} className="h-8 px-2">
@@ -696,10 +765,10 @@ export default function Search() {
             <div className="flex items-center justify-center py-12">
               <div className="w-10 h-10 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
             </div>
-          ) : filteredItems.length === 0 ? (
+          ) : filteredItems.length === 0 && filteredProfiles.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No items found</h3>
+              <h3 className="text-lg font-semibold mb-2">No results found</h3>
               <p className="text-muted-foreground text-sm mb-4">
                 {isSearchActive ? 'Try adjusting your filters or search terms' : 'No items available in your area yet'}
               </p>
@@ -709,6 +778,47 @@ export default function Search() {
             </div>
           ) : (
             <div className="p-4 space-y-3">
+              {/* User Profile Results */}
+              {filteredProfiles.length > 0 && (
+                <>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Users</p>
+                  {filteredProfiles.map((profile, index) => (
+                    <motion.div
+                      key={profile.user_id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.03 }}
+                      className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => navigate(`/user/${profile.user_id}`)}
+                    >
+                      <div className="flex items-center gap-3 p-3">
+                        <Avatar className="w-12 h-12 flex-shrink-0">
+                          <AvatarImage src={profile.avatar_url || undefined} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                            {profile.display_name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-foreground truncate">{profile.display_name}</p>
+                          {profile.location && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 truncate">
+                              <MapPin className="w-3 h-3 flex-shrink-0" />
+                              {profile.location}
+                            </p>
+                          )}
+                        </div>
+                        <Badge variant="secondary" className="flex-shrink-0 text-xs">
+                          <User className="w-3 h-3 mr-1" />
+                          Profile
+                        </Badge>
+                      </div>
+                    </motion.div>
+                  ))}
+                  {filteredItems.length > 0 && (
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">Items</p>
+                  )}
+                </>
+              )}
               {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
