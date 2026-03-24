@@ -589,7 +589,7 @@ export default function Matches() {
                             </button>
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
-                              <p className="text-xs text-muted-foreground">Your item</p>
+                              <p className="text-xs text-muted-foreground">{t('matches.yourItem')}</p>
                             </div>
                           </div>
 
