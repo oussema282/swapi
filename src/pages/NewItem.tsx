@@ -450,7 +450,6 @@ export default function NewItem() {
                     <Label className="text-base font-semibold mb-4 block">
                       {t('newItem.subcategoryOf', { name: selectedCategory.name })}
                     </Label>
-                    </Label>
                     <div className="space-y-2">
                       {selectedSubcategories.map((sub) => (
                         <button
