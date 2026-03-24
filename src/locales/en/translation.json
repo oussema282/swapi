@@ -752,6 +752,10 @@
     "viewOnMap": "View on Map",
     "inviteToDeal": "Invite to Deal"
   },
+  "discover": {
+    "swappingFrom": "Swapping from:",
+    "lookingForCategories": "Looking for {{count}} categories"
+  },
   "conditions": {
     "new": "New",
     "like_new": "Like New",
