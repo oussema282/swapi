@@ -106,7 +106,7 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
                 {item.title}
               </p>
               <Badge variant="secondary" className="text-[10px] py-0">
-                {getCategoryLabel(item.category)}
+                {item.category}
               </Badge>
             </div>
 

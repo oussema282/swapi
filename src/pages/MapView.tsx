@@ -579,7 +579,7 @@ export default function MapView() {
                         {t(`categories.${selectedItem.category}`)}
                       </Badge>
                       <Badge variant="outline" className="text-xs">
-                        {CONDITION_LABELS[selectedItem.condition]}
+                        {t(`conditions.${selectedItem.condition}`)}
                       </Badge>
                     </div>
                     <div className="mt-3">
