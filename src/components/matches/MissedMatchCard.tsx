@@ -141,7 +141,7 @@ export function MissedMatchCard({
               </div>
               
               <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-destructive/10 text-destructive flex-shrink-0">
-                {formatDistanceToNow(new Date(missedMatch.missed_at), { addSuffix: true })}
+                {formatTimeAgo(new Date(missedMatch.missed_at), { addSuffix: true })}
               </span>
             </div>
             

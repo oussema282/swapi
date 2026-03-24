@@ -127,7 +127,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
                     ? "bg-primary text-primary-foreground" 
                     : "bg-muted text-muted-foreground"
                 )}>
-                  {hasUnread ? t('matches.new') : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+                  {hasUnread ? t('matches.new') : formatTimeAgo(new Date(lastActivityTime))}
                 </span>
               )}
             </div>

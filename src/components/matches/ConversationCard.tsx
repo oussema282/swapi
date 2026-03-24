@@ -116,7 +116,7 @@ export function ConversationCard({
               badgeClassName="w-3 h-3"
             />
             <span className="text-[11px] text-muted-foreground flex-shrink-0 mt-0.5">
-              {formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+              {formatTimeAgo(new Date(lastActivityTime))}
             </span>
           </div>
           
