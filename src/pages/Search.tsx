@@ -61,7 +61,7 @@ interface Suggestion {
   };
 }
 
-// categories variable is computed inside the component to use translations
+// categories list is built inside the component to use translations
 
 const distanceOptions = [
   { value: 'any', label: 'Any' },
