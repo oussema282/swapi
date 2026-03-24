@@ -355,9 +355,8 @@ export default function NewItem() {
                         {uploading || isModerating ? (
                           <div className="flex flex-col items-center gap-1">
                             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-                             <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-muted-foreground">
                               {isModerating ? t('newItem.checking') : t('newItem.uploading')}
-                            </span>
                             </span>
                           </div>
                         ) : (
