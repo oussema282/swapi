@@ -63,10 +63,20 @@ export default function Index() {
   // Track feedback overlay for artistic animations
   const [feedbackOverlay, setFeedbackOverlay] = useState<'like' | 'nope' | null>(null);
 
-  // Auto-select first item when items load
+  // Persist selected item to sessionStorage
+  useEffect(() => {
+    if (selectedItemId) {
+      sessionStorage.setItem('discover_selected_item', selectedItemId);
+    }
+  }, [selectedItemId]);
+
+  // Auto-select first item when items load (only if no persisted selection)
   useEffect(() => {
     if (myItems && myItems.length > 0 && !selectedItemId) {
-      setSelectedItemId(myItems[0].id);
+      // Check if persisted item still exists in user's items
+      const persisted = sessionStorage.getItem('discover_selected_item');
+      const validPersisted = persisted && myItems.some(i => i.id === persisted);
+      setSelectedItemId(validPersisted ? persisted : myItems[0].id);
     }
   }, [myItems, selectedItemId]);
 
