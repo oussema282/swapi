@@ -1,23 +1,23 @@
 
 
-## Plan: Fix Discover Button Centering in Bottom Nav
-
-### Problem
-The nav uses `justify-around` which distributes items based on their content width. Since translated labels like "Rechercher" are wider than "Search", the spacing becomes uneven, pushing the center Discover button off-center.
-
-### Solution
-Give each nav item a fixed equal width using `flex-1` and center their content. This ensures all 5 slots take equal space regardless of label length, keeping Discover perfectly centered.
+## Plan: Change Currency to DT & Translate Activity Status Labels
 
 ### Changes
 
-**File: `src/components/layout/BottomNav.tsx`**
+**1. Replace all `$` and `€` currency symbols with `DT` across 4 files:**
 
-1. Change the nav container from `justify-around` to just `flex` (line 35)
-2. Add `flex-1` to the center Discover link (line 46) and center it
-3. Add `flex-1` to each regular nav link (line 75) and ensure content is centered
+- **`src/components/discover/SwipeCard.tsx`** (line 297): `${item.value_min}...` → `{item.value_min} DT...`
+- **`src/components/discover/ItemDetailsSheet.tsx`** (line 164): same pattern → `DT`
+- **`src/pages/Items.tsx`** (line 152): `${item.value_min} - ${item.value_max}` → `{item.value_min} DT - {item.value_max} DT`
+- **`src/pages/Search.tsx`** (lines 608, 729, 868): all `€` references → `DT`
 
-This way each of the 5 items gets exactly 20% width, and the Discover circle stays perfectly centered regardless of language.
+**2. Translate hardcoded "Active" / "Recently Active" on swipe cards:**
+
+- **`src/components/discover/SwipeCard.tsx`** (lines 266, 272): Replace hardcoded `"Active"` with `{t('discover.ownerActive')}` and `"Recently Active"` with `{t('discover.ownerRecentlyActive')}`
 
 ### Files Modified
-- `src/components/layout/BottomNav.tsx`
+- `src/components/discover/SwipeCard.tsx`
+- `src/components/discover/ItemDetailsSheet.tsx`
+- `src/pages/Items.tsx`
+- `src/pages/Search.tsx`
 
