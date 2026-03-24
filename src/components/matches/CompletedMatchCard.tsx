@@ -3,7 +3,7 @@ import { Package, ArrowLeftRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { formatDistanceToNow } from 'date-fns';
+import { formatTimeAgo } from '@/lib/dateLocale';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
 
