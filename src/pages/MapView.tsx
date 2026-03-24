@@ -576,7 +576,7 @@ export default function MapView() {
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <Badge variant="secondary" className="text-xs">
-                        {getCategoryLabel(selectedItem.category)}
+                        {t(`categories.${selectedItem.category}`)}
                       </Badge>
                       <Badge variant="outline" className="text-xs">
                         {CONDITION_LABELS[selectedItem.condition]}
