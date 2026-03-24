@@ -436,7 +436,7 @@ export default function NewItem() {
                           )}
                         >
                           <Icon className="w-5 h-5 flex-shrink-0" />
-                          <span className="font-medium text-sm leading-tight">{cat.name}</span>
+                          <span className="font-medium text-sm leading-tight">{t(`categories.${cat.id}`)}</span>
                         </button>
                       );
                     })}
