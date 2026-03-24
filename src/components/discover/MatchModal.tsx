@@ -119,7 +119,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   transition={{ delay: 0.5 }}
                   className="text-center text-muted-foreground mt-4 mb-6"
                 >
-                  You both want to swap! Start chatting to arrange the exchange.
+                  {t('match.bothWantToSwap')}
                 </motion.p>
 
                 {/* Buttons */}
