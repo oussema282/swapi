@@ -299,7 +299,7 @@ export default function Matches() {
           navigate(`/chat/${result.matchId}`);
         }
       } else {
-        toast.info('Deal invite declined.');
+        toast.info(t('matches.dealDeclined'));
       }
       queryClient.invalidateQueries({ queryKey: ['pending-deal-invites'] });
     },
