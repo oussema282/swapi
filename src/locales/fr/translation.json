@@ -690,5 +690,17 @@
     "unauthorized": "Veuillez vous connecter pour continuer",
     "notFound": "Non trouvé",
     "swipeFailed": "Échec du swipe. Veuillez réessayer."
+  },
+  "itemDetails": {
+    "category": "Catégorie",
+    "condition": "État",
+    "valueRange": "Fourchette de prix",
+    "distance": "Distance",
+    "description": "Description",
+    "lookingToSwapFor": "Recherche en échange",
+    "listedBy": "Publié par",
+    "viewProfile": "Voir le profil",
+    "viewOnMap": "Voir sur la carte",
+    "inviteToDeal": "Inviter à un échange"
   }
 }
