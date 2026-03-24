@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Download, Filter, Flag, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import { CATEGORIES } from '@/config/categories';
 import {
   Select,
   SelectContent,
