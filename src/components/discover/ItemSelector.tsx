@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTranslation } from 'react-i18next';
 
 interface ItemSelectorProps {
   items: Item[];
@@ -16,16 +17,17 @@ interface ItemSelectorProps {
 }
 
 export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps) {
+  const { t } = useTranslation();
   if (items.length === 0) return null;
 
   const selectedItem = items.find(i => i.id === selectedId);
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium text-muted-foreground">Swapping from:</p>
+      <p className="text-sm font-medium text-muted-foreground">{t('discover.swappingFrom')}</p>
       <Select value={selectedId || undefined} onValueChange={onSelect}>
         <SelectTrigger className="w-full h-auto py-2 px-3 bg-card border-border">
-          <SelectValue placeholder="Select an item">
+          <SelectValue placeholder={t('discover.selectItem')}>
             {selectedItem && (
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex items-center justify-center shrink-0">
@@ -52,7 +54,6 @@ export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps)
         <SelectContent className="max-h-[300px]">
           {items.map((item) => {
             const hasPhoto = item.photos && item.photos.length > 0;
-            const isSelected = item.id === selectedId;
 
             return (
               <SelectItem 
@@ -75,7 +76,7 @@ export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps)
                   <div className="text-left min-w-0">
                     <p className="text-sm font-medium truncate">{item.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {CATEGORY_LABELS[item.category]} • Looking for {item.swap_preferences.length} categories
+                      {CATEGORY_LABELS[item.category]} • {t('discover.lookingForCategories', { count: item.swap_preferences.length })}
                     </p>
                   </div>
                 </div>
