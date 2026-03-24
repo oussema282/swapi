@@ -25,8 +25,8 @@ import {
   Save,
   ChevronRight
 } from 'lucide-react';
-import { ItemCondition, CONDITION_LABELS } from '@/types/database';
-import { CATEGORIES, getCategoryLabel, type Category } from '@/config/categories';
+import { ItemCondition } from '@/types/database';
+import { CATEGORIES, type Category } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 import { useTranslation } from 'react-i18next';
