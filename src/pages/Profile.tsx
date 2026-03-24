@@ -28,7 +28,7 @@ export default function Profile() {
     queryKey: ['completed-swaps-count', user?.id],
     queryFn: async () => {
       if (!user?.id) return 0;
-      const { data } = await supabase.rpc('get_user_swap_count', { p_user_id: user.id });
+      const { data } = await supabase.rpc('get_user_swap_count' as any, { p_user_id: user.id });
       return data ?? 0;
     },
     enabled: !!user?.id,
