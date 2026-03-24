@@ -811,7 +811,7 @@ export default function Search() {
                         </div>
                         <Badge variant="secondary" className="flex-shrink-0 text-xs">
                           <User className="w-3 h-3 mr-1" />
-                          Profile
+                          {t('search.profile')}
                         </Badge>
                       </div>
                     </motion.div>
