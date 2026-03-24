@@ -80,6 +80,8 @@ export default function EditItem() {
       setValueMin(item.value_min?.toString() || '');
       setValueMax(item.value_max?.toString() || '');
       setPhotos(item.photos || []);
+      setItemLatitude(item.latitude ?? null);
+      setItemLongitude(item.longitude ?? null);
     }
   }, [item]);
 
