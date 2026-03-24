@@ -50,10 +50,19 @@ export default function NewItem() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const createItem = useCreateItem();
   const { canAddItem, itemCount, limit, isPro, isLoading: limitLoading } = useItemLimit();
   const { checkImage, isChecking: isModerating } = useContentModeration();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const STEPS = [
+    { id: 1, title: t('newItem.steps.photosTitle'), description: t('newItem.steps.photosDescription') },
+    { id: 2, title: t('newItem.steps.categoryCondition'), description: t('newItem.steps.categoryConditionDescription') },
+    { id: 3, title: t('newItem.steps.valueRange'), description: t('newItem.steps.valueRangeDescription') },
+    { id: 4, title: t('newItem.steps.swapPreferences'), description: t('newItem.steps.swapPreferencesDescription') },
+    { id: 5, title: t('newItem.steps.locationTitle'), description: t('newItem.steps.locationDescription') },
+  ];
 
   const [step, setStep] = useState(1);
   const [isComplete, setIsComplete] = useState(false);
