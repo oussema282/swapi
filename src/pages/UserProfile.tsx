@@ -179,7 +179,12 @@ export default function UserProfile() {
                 {t('userProfile.noItemsListed')}
               </div>
             ) : (
-              <ProfileItemsGrid items={items} isOwnProfile={false} />
+              <ProfileItemsGrid items={items} isOwnProfile={false} ownerInfo={{
+                user_id: userId!,
+                display_name: profile.display_name || 'User',
+                avatar_url: profile.avatar_url,
+                is_pro: isPro,
+              }} />
             )}
           </div>
         </motion.div>
