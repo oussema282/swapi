@@ -240,9 +240,9 @@ export default function Search() {
           category: cat.id,
         });
           type: 'category',
-          text: cat.label,
-          icon: 'category',
-          category: cat.value,
+          
+          
+        
         });
       }
     });
