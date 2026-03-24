@@ -29,8 +29,8 @@ import {
   ShieldAlert,
   ChevronRight
 } from 'lucide-react';
-import { ItemCondition, CONDITION_LABELS } from '@/types/database';
-import { CATEGORIES, getCategoryLabel, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
+import { ItemCondition } from '@/types/database';
+import { CATEGORIES, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 
