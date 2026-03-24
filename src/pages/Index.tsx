@@ -27,7 +27,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const { data: myItems, isLoading: itemsLoading } = useMyItems();
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(() => sessionStorage.getItem('discover_selected_item'));
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [activeTab, setActiveTab] = useState<'foryou' | 'nearby'>('foryou');
   const [discoverFilters, setDiscoverFilters] = useState<NearbyFilters>({ priceMin: 0, priceMax: 1000, maxDistance: 0, selectedCategories: [] });
@@ -63,10 +63,20 @@ export default function Index() {
   // Track feedback overlay for artistic animations
   const [feedbackOverlay, setFeedbackOverlay] = useState<'like' | 'nope' | null>(null);
 
-  // Auto-select first item when items load
+  // Persist selected item to sessionStorage
+  useEffect(() => {
+    if (selectedItemId) {
+      sessionStorage.setItem('discover_selected_item', selectedItemId);
+    }
+  }, [selectedItemId]);
+
+  // Auto-select first item when items load (only if no persisted selection)
   useEffect(() => {
     if (myItems && myItems.length > 0 && !selectedItemId) {
-      setSelectedItemId(myItems[0].id);
+      // Check if persisted item still exists in user's items
+      const persisted = sessionStorage.getItem('discover_selected_item');
+      const validPersisted = persisted && myItems.some(i => i.id === persisted);
+      setSelectedItemId(validPersisted ? persisted : myItems[0].id);
     }
   }, [myItems, selectedItemId]);
 
