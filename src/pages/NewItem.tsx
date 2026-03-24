@@ -130,8 +130,7 @@ export default function NewItem() {
           .upload(fileName, file);
 
         if (uploadError) {
-          console.error('Upload error:', uploadError);
-          toast({ variant: 'destructive', title: 'Échec du téléchargement' });
+          toast({ variant: 'destructive', title: t('newItem.uploadFailed') });
           continue;
         }
 
