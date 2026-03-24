@@ -67,8 +67,8 @@ export function useRecommendedItems(
       return fetchForYouItems(user.id, myItemId, latitude, longitude, nearbyFilters);
     },
     enabled: !!user && !!myItemId && !isBlocked,
-    staleTime: 30 * 1000, // 30s – short enough to re-fetch on tab revisit
-    gcTime: 2 * 60 * 1000,
+    staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: false,
     refetchOnMount: 'always', // always fetch fresh list (server excludes already-swiped)
     refetchInterval: false,
