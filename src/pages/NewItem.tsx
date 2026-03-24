@@ -380,7 +380,7 @@ export default function NewItem() {
                   />
                   
                   <p className="text-xs text-muted-foreground">
-                    Jusqu'à 4 photos • Max 5 Mo chacune
+                    {t('newItem.photoLimit')}
                   </p>
                 </Card>
 
