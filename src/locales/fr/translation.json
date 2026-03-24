@@ -743,5 +743,11 @@
       "other": "Autre",
       "other_desc": "Quelque chose d'autre qui vous préoccupe"
     }
+  },
+  "match": {
+    "itsAMatch": "C'est un Match !",
+    "bothWantToSwap": "Vous voulez tous les deux échanger ! Commencez à discuter pour organiser l'échange.",
+    "keepSwiping": "Continuer",
+    "chatNow": "Discuter"
   }
 }

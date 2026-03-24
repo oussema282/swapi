@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Item } from '@/types/database';
 import {
   Dialog,
@@ -18,6 +19,7 @@ interface MatchModalProps {
 
 export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!myItem || !theirItem) return null;
 
@@ -46,7 +48,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   className="text-center mb-6"
                 >
                   <h2 className="text-4xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse">
-                    It's a Match!
+                    {t('match.itsAMatch')}
                   </h2>
                 </motion.div>
 
@@ -117,7 +119,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   transition={{ delay: 0.5 }}
                   className="text-center text-muted-foreground mt-4 mb-6"
                 >
-                  You both want to swap! Start chatting to arrange the exchange.
+                  {t('match.bothWantToSwap')}
                 </motion.p>
 
                 {/* Buttons */}
@@ -128,7 +130,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                   className="flex gap-3"
                 >
                   <Button variant="outline" onClick={onClose} className="flex-1">
-                    Keep Swiping
+                    {t('match.keepSwiping')}
                   </Button>
                   <motion.div
                     className="flex-1"
@@ -143,7 +145,7 @@ export function MatchModal({ open, onClose, myItem, theirItem }: MatchModalProps
                       className="w-full gradient-primary shadow-glow"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
-                      Chat Now
+                      {t('match.chatNow')}
                     </Button>
                   </motion.div>
                 </motion.div>

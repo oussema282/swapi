@@ -792,5 +792,11 @@
       "other": "Other",
       "other_desc": "Something else that concerns you"
     }
+  },
+  "match": {
+    "itsAMatch": "It's a Match!",
+    "bothWantToSwap": "You both want to swap! Start chatting to arrange the exchange.",
+    "keepSwiping": "Keep Swiping",
+    "chatNow": "Chat Now"
   }
 }
