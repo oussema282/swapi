@@ -262,7 +262,7 @@ export default function NewItem() {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground text-center"
           >
-            Votre article est en ligne et prêt à être échangé
+            {t('newItem.itemLive')}
           </motion.p>
           
           <motion.div
