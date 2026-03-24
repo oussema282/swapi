@@ -395,8 +395,9 @@ export default function Matches() {
                   </Badge>
                 </div>
                 <button className="text-primary text-sm font-medium flex items-center gap-1">
-                  See All
+                  {t('matches.seeAll')}
                   <ChevronRight className="w-4 h-4" />
+                </button>
                 </button>
               </div>
               
