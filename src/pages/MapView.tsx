@@ -340,7 +340,7 @@ export default function MapView() {
           </Button>
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
+            {t('map.goBack')}
           </Button>
         </div>
         
