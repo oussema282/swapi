@@ -508,7 +508,7 @@ export default function MapView() {
                         )}
                       >
                         <Icon className="w-4 h-4" />
-                        <span className="text-xs">{cat.name}</span>
+                        <span className="text-xs">{t(`categories.${cat.id}`)}</span>
                       </Button>
                     );
                   })}
