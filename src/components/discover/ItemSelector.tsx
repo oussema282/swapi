@@ -1,4 +1,4 @@
-import { Item, CATEGORY_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
 import { cn } from '@/lib/utils';
 import { Package, ChevronDown, Check } from 'lucide-react';
 import {
