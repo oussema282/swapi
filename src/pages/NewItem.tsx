@@ -70,6 +70,8 @@ export default function NewItem() {
   const [valueMax, setValueMax] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [itemLatitude, setItemLatitude] = useState<number | null>(null);
+  const [itemLongitude, setItemLongitude] = useState<number | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
