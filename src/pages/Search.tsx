@@ -655,7 +655,7 @@ export default function Search() {
                   className="pl-2 pr-1 py-1 gap-1 cursor-pointer"
                   onClick={() => toggleCategory(cat)}
                 >
-                  {getCategoryLabel(cat)}
+                  {t(`categories.${cat}`)}
                   <X className="w-3 h-3" />
                 </Badge>
               ))}
