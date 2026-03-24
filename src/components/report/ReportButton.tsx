@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 type ReportType = 'item' | 'user' | 'message';
 type ReportReason = 
@@ -34,37 +35,6 @@ interface ReportButtonProps {
   className?: string;
 }
 
-const REASON_LABELS: Record<ReportReason, { label: string; description: string }> = {
-  prohibited_item: {
-    label: 'Prohibited Item',
-    description: 'Item is illegal, dangerous, or violates our policies',
-  },
-  fake_listing: {
-    label: 'Fake Listing',
-    description: 'Photos or description don\'t match the actual item',
-  },
-  spam: {
-    label: 'Spam',
-    description: 'Repetitive, promotional, or irrelevant content',
-  },
-  harassment: {
-    label: 'Harassment',
-    description: 'Threatening, abusive, or bullying behavior',
-  },
-  inappropriate_content: {
-    label: 'Inappropriate Content',
-    description: 'Offensive, explicit, or disturbing material',
-  },
-  scam: {
-    label: 'Suspected Scam',
-    description: 'Attempt to defraud or deceive users',
-  },
-  other: {
-    label: 'Other',
-    description: 'Something else that concerns you',
-  },
-};
-
 export function ReportButton({ 
   reportType, 
   targetId, 
@@ -72,17 +42,23 @@ export function ReportButton({
   className 
 }: ReportButtonProps) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState<ReportReason | null>(null);
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Filter reasons based on report type
   const availableReasons: ReportReason[] = reportType === 'item' 
     ? ['prohibited_item', 'fake_listing', 'spam', 'scam', 'other']
     : reportType === 'user'
     ? ['spam', 'harassment', 'scam', 'inappropriate_content', 'other']
     : ['spam', 'harassment', 'inappropriate_content', 'other'];
+
+  const dialogTitle = reportType === 'item' 
+    ? t('report.titleItem') 
+    : reportType === 'user' 
+    ? t('report.titleUser') 
+    : t('report.titleMessage');
 
   const handleSubmit = async () => {
     if (!user || !reason) return;
@@ -101,16 +77,16 @@ export function ReportButton({
 
       if (error) throw error;
 
-      toast.success('Report submitted', {
-        description: 'Thank you for helping keep our community safe.',
+      toast.success(t('report.submitted'), {
+        description: t('report.submittedDescription'),
       });
       setOpen(false);
       setReason(null);
       setDescription('');
     } catch (error) {
       console.error('Failed to submit report:', error);
-      toast.error('Failed to submit report', {
-        description: 'Please try again later.',
+      toast.error(t('report.failedSubmit'), {
+        description: t('report.failedSubmitDescription'),
       });
     } finally {
       setSubmitting(false);
@@ -126,12 +102,12 @@ export function ReportButton({
   ) : variant === 'menu-item' ? (
     <button className={`flex items-center gap-2 w-full px-2 py-1.5 text-sm text-destructive hover:bg-destructive/10 rounded ${className}`}>
       <Flag className="w-4 h-4" />
-      Report
+      {t('report.report')}
     </button>
   ) : (
     <Button variant="outline" size="sm" className={className}>
       <Flag className="w-4 h-4 mr-2" />
-      Report
+      {t('report.report')}
     </Button>
   );
 
@@ -142,15 +118,15 @@ export function ReportButton({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Report {reportType === 'item' ? 'Item' : reportType === 'user' ? 'User' : 'Message'}</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>
-            Help us understand what's wrong. Your report is confidential.
+            {t('report.description')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label>What's the issue?</Label>
+            <Label>{t('report.whatsTheIssue')}</Label>
             <RadioGroup
               value={reason || ''}
               onValueChange={(value) => setReason(value as ReportReason)}
@@ -165,8 +141,8 @@ export function ReportButton({
                 >
                   <RadioGroupItem value={r} className="mt-0.5" />
                   <div>
-                    <p className="font-medium text-sm">{REASON_LABELS[r].label}</p>
-                    <p className="text-xs text-muted-foreground">{REASON_LABELS[r].description}</p>
+                    <p className="font-medium text-sm">{t(`report.reasons.${r}`)}</p>
+                    <p className="text-xs text-muted-foreground">{t(`report.reasons.${r}_desc`)}</p>
                   </div>
                 </label>
               ))}
@@ -174,12 +150,12 @@ export function ReportButton({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Additional details (optional)</Label>
+            <Label htmlFor="description">{t('report.additionalDetails')}</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Provide any additional information that might help us investigate..."
+              placeholder={t('report.placeholder')}
               rows={3}
               maxLength={500}
             />
@@ -191,7 +167,7 @@ export function ReportButton({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)} disabled={submitting}>
-            Cancel
+            {t('report.cancel')}
           </Button>
           <Button 
             onClick={handleSubmit} 
@@ -201,10 +177,10 @@ export function ReportButton({
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Submitting...
+                {t('report.submitting')}
               </>
             ) : (
-              'Submit Report'
+              t('report.submitReport')
             )}
           </Button>
         </DialogFooter>

@@ -759,5 +759,38 @@
     "like_new": "Like New",
     "good": "Good",
     "fair": "Fair"
+  },
+  "report": {
+    "titleItem": "Report Item",
+    "titleUser": "Report User",
+    "titleMessage": "Report Message",
+    "description": "Help us understand what's wrong. Your report is confidential.",
+    "whatsTheIssue": "What's the issue?",
+    "additionalDetails": "Additional details (optional)",
+    "placeholder": "Provide any additional information that might help us investigate...",
+    "submitReport": "Submit Report",
+    "submitting": "Submitting...",
+    "cancel": "Cancel",
+    "report": "Report",
+    "submitted": "Report submitted",
+    "submittedDescription": "Thank you for helping keep our community safe.",
+    "failedSubmit": "Failed to submit report",
+    "failedSubmitDescription": "Please try again later.",
+    "reasons": {
+      "prohibited_item": "Prohibited Item",
+      "prohibited_item_desc": "Item is illegal, dangerous, or violates our policies",
+      "fake_listing": "Fake Listing",
+      "fake_listing_desc": "Photos or description don't match the actual item",
+      "spam": "Spam",
+      "spam_desc": "Repetitive, promotional, or irrelevant content",
+      "harassment": "Harassment",
+      "harassment_desc": "Threatening, abusive, or bullying behavior",
+      "inappropriate_content": "Inappropriate Content",
+      "inappropriate_content_desc": "Offensive, explicit, or disturbing material",
+      "scam": "Suspected Scam",
+      "scam_desc": "Attempt to defraud or deceive users",
+      "other": "Other",
+      "other_desc": "Something else that concerns you"
+    }
   }
 }

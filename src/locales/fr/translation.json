@@ -710,5 +710,38 @@
     "like_new": "Comme neuf",
     "good": "Bon état",
     "fair": "État correct"
+  },
+  "report": {
+    "titleItem": "Signaler un article",
+    "titleUser": "Signaler un utilisateur",
+    "titleMessage": "Signaler un message",
+    "description": "Aidez-nous à comprendre le problème. Votre signalement est confidentiel.",
+    "whatsTheIssue": "Quel est le problème ?",
+    "additionalDetails": "Détails supplémentaires (facultatif)",
+    "placeholder": "Fournissez toute information supplémentaire qui pourrait nous aider à enquêter...",
+    "submitReport": "Envoyer le signalement",
+    "submitting": "Envoi en cours...",
+    "cancel": "Annuler",
+    "report": "Signaler",
+    "submitted": "Signalement envoyé",
+    "submittedDescription": "Merci de contribuer à la sécurité de notre communauté.",
+    "failedSubmit": "Échec de l'envoi du signalement",
+    "failedSubmitDescription": "Veuillez réessayer plus tard.",
+    "reasons": {
+      "prohibited_item": "Article interdit",
+      "prohibited_item_desc": "Article illégal, dangereux ou contraire à nos politiques",
+      "fake_listing": "Annonce frauduleuse",
+      "fake_listing_desc": "Les photos ou la description ne correspondent pas à l'article réel",
+      "spam": "Spam",
+      "spam_desc": "Contenu répétitif, promotionnel ou non pertinent",
+      "harassment": "Harcèlement",
+      "harassment_desc": "Comportement menaçant, abusif ou intimidant",
+      "inappropriate_content": "Contenu inapproprié",
+      "inappropriate_content_desc": "Matériel offensant, explicite ou perturbant",
+      "scam": "Arnaque suspectée",
+      "scam_desc": "Tentative de fraude ou de tromperie des utilisateurs",
+      "other": "Autre",
+      "other_desc": "Quelque chose d'autre qui vous préoccupe"
+    }
   }
 }
