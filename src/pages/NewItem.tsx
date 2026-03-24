@@ -29,8 +29,8 @@ import {
   ShieldAlert,
   ChevronRight
 } from 'lucide-react';
-import { ItemCondition, CONDITION_LABELS } from '@/types/database';
-import { CATEGORIES, getCategoryLabel, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
+import { ItemCondition } from '@/types/database';
+import { CATEGORIES, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 
@@ -436,7 +436,7 @@ export default function NewItem() {
                           )}
                         >
                           <Icon className="w-5 h-5 flex-shrink-0" />
-                          <span className="font-medium text-sm leading-tight">{cat.name}</span>
+                          <span className="font-medium text-sm leading-tight">{t(`categories.${cat.id}`)}</span>
                         </button>
                       );
                     })}
@@ -447,7 +447,7 @@ export default function NewItem() {
                 {selectedCategory && selectedSubcategories.length > 0 && (
                   <Card className="p-6">
                     <Label className="text-base font-semibold mb-4 block">
-                      {t('newItem.subcategoryOf', { name: selectedCategory.name })}
+                      {t('newItem.subcategoryOf', { name: t(`categories.${selectedCategory.id}`) })}
                     </Label>
                     <div className="space-y-2">
                       {selectedSubcategories.map((sub) => (
@@ -462,7 +462,7 @@ export default function NewItem() {
                               : 'border-border hover:border-primary/50 hover:bg-muted/50'
                           )}
                         >
-                          <span className="font-medium text-sm">{sub.name}</span>
+                          <span className="font-medium text-sm">{t(`categories.${sub.id}`)}</span>
                           <ChevronRight className="w-4 h-4 opacity-50" />
                         </button>
                       ))}
@@ -492,7 +492,7 @@ export default function NewItem() {
                         )}
                       >
                         {CONDITION_ICONS[cond]}
-                        <span className="font-medium">{CONDITION_LABELS[cond]}</span>
+                        <span className="font-medium">{t(`conditions.${cond}`)}</span>
                       </button>
                     ))}
                   </div>
@@ -576,7 +576,7 @@ export default function NewItem() {
                         )}
                       >
                         <Icon className="w-5 h-5 flex-shrink-0" />
-                        <span className="font-medium text-sm leading-tight">{cat.name}</span>
+                        <span className="font-medium text-sm leading-tight">{t(`categories.${cat.id}`)}</span>
                         {isSelected && (
                           <motion.div
                             initial={{ scale: 0 }}

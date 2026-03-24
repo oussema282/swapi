@@ -14,13 +14,14 @@ import { useDeviceLocation } from '@/hooks/useLocation';
 import { useAuth } from '@/hooks/useAuth';
 import { useSmartBack } from '@/hooks/useSmartBack';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
-import { Item, ItemCategory, CONDITION_LABELS } from '@/types/database';
-import { CATEGORIES, getCategoryLabel } from '@/config/categories';
+import { Item, ItemCategory } from '@/types/database';
+import { CATEGORIES } from '@/config/categories';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -36,6 +37,7 @@ const ALL_CATEGORIES = CATEGORIES;
 
 export default function MapView() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   // Support both focusItemId (new) and itemId (legacy) for backward compatibility
   const focusItemId = searchParams.get('focusItemId') || searchParams.get('itemId');
@@ -508,7 +510,7 @@ export default function MapView() {
                         )}
                       >
                         <Icon className="w-4 h-4" />
-                        <span className="text-xs">{cat.name}</span>
+                        <span className="text-xs">{t(`categories.${cat.id}`)}</span>
                       </Button>
                     );
                   })}
@@ -576,10 +578,10 @@ export default function MapView() {
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <Badge variant="secondary" className="text-xs">
-                        {getCategoryLabel(selectedItem.category)}
+                        {t(`categories.${selectedItem.category}`)}
                       </Badge>
                       <Badge variant="outline" className="text-xs">
-                        {CONDITION_LABELS[selectedItem.condition]}
+                        {t(`conditions.${selectedItem.condition}`)}
                       </Badge>
                     </div>
                     <div className="mt-3">

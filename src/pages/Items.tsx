@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Package, Trash2, Edit, Loader2, Archive, ArchiveRestore } from 'lucide-react';
-import { CATEGORY_LABELS, CONDITION_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -144,8 +144,8 @@ export default function Items() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{item.title}</h3>
                           <div className="flex gap-2 mt-2 flex-wrap">
-                            <Badge variant="outline" className="text-xs">{CATEGORY_LABELS[item.category]}</Badge>
-                            <Badge variant="secondary" className="text-xs">{CONDITION_LABELS[item.condition]}</Badge>
+                            <Badge variant="outline" className="text-xs">{t(`categories.${item.category}`)}</Badge>
+                            <Badge variant="secondary" className="text-xs">{t(`conditions.${item.condition}`)}</Badge>
                           </div>
                           {item.value_min && item.value_max && (
                             <p className="text-xs text-muted-foreground mt-2">
@@ -227,8 +227,8 @@ export default function Items() {
                             <Badge variant="secondary" className="text-xs bg-muted">{t('items.swapped')}</Badge>
                           </div>
                           <div className="flex gap-2 mt-2 flex-wrap">
-                            <Badge variant="outline" className="text-xs opacity-60">{CATEGORY_LABELS[item.category]}</Badge>
-                            <Badge variant="secondary" className="text-xs opacity-60">{CONDITION_LABELS[item.condition]}</Badge>
+                            <Badge variant="outline" className="text-xs opacity-60">{t(`categories.${item.category}`)}</Badge>
+                            <Badge variant="secondary" className="text-xs opacity-60">{t(`conditions.${item.condition}`)}</Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
                             {t('items.itemWasSwapped')}

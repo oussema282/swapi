@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Package, Plus } from 'lucide-react';
 import { Item } from '@/types/database';
-import { getCategoryLabel } from '@/config/categories';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,7 @@ interface ProfileItemsGridProps {
 
 export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: ProfileItemsGridProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { latitude, longitude } = useDeviceLocation();
   const userLocation = { latitude, longitude };
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
@@ -106,7 +107,7 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
                 {item.title}
               </p>
               <Badge variant="secondary" className="text-[10px] py-0">
-                {getCategoryLabel(item.category)}
+                {t(`categories.${item.category}`)}
               </Badge>
             </div>
 

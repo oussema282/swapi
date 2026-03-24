@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Download, Filter, Flag, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { toast } from 'sonner';
+import { CATEGORIES } from '@/config/categories';
 import {
   Select,
   SelectContent,
@@ -274,13 +275,9 @@ export function ItemsSection() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="electronics">Electronics</SelectItem>
-            <SelectItem value="clothes">Clothes</SelectItem>
-            <SelectItem value="books">Books</SelectItem>
-            <SelectItem value="games">Games</SelectItem>
-            <SelectItem value="home_garden">Home & Garden</SelectItem>
-            <SelectItem value="sports">Sports</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            {CATEGORIES.map(cat => (
+              <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>

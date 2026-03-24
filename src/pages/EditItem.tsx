@@ -25,8 +25,8 @@ import {
   Save,
   ChevronRight
 } from 'lucide-react';
-import { ItemCondition, CONDITION_LABELS } from '@/types/database';
-import { CATEGORIES, getCategoryLabel, type Category } from '@/config/categories';
+import { ItemCondition } from '@/types/database';
+import { CATEGORIES, type Category } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 import { useTranslation } from 'react-i18next';
@@ -265,7 +265,7 @@ export default function EditItem() {
                     )}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0" />
-                    <span className="font-medium leading-tight">{cat.name}</span>
+                    <span className="font-medium leading-tight">{t(`categories.${cat.id}`)}</span>
                   </button>
                 );
               })}
@@ -287,7 +287,7 @@ export default function EditItem() {
                       subcategory === sub.id ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/50'
                     )}
                   >
-                    <span className="font-medium">{sub.name}</span>
+                    <span className="font-medium">{t(`categories.${sub.id}`)}</span>
                     <ChevronRight className="w-4 h-4 opacity-50" />
                   </button>
                 ))}
@@ -310,7 +310,7 @@ export default function EditItem() {
                   )}
                 >
                   {CONDITION_ICONS[cond]}
-                  <span className="font-medium">{CONDITION_LABELS[cond]}</span>
+                  <span className="font-medium">{t(`conditions.${cond}`)}</span>
                 </button>
               ))}
             </div>
@@ -342,7 +342,7 @@ export default function EditItem() {
                     )}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0" />
-                    <span className="font-medium leading-tight">{cat.name}</span>
+                    <span className="font-medium leading-tight">{t(`categories.${cat.id}`)}</span>
                   </button>
                 );
               })}

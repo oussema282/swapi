@@ -1,12 +1,13 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Item, CONDITION_LABELS } from '@/types/database';
-import { getCategoryLabel, getCategoryIcon } from '@/config/categories';
+import { Item } from '@/types/database';
+import { getCategoryIcon } from '@/config/categories';
 import { cn } from '@/lib/utils';
 import { Package, MapPin, ChevronUp, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useTranslation } from 'react-i18next';
 
 interface SwipeCardProps {
   item: Item & { 
@@ -49,6 +50,7 @@ function getUserActivityStatus(lastSeen: string | null | undefined): 'active' | 
 }
 
 export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLocation, onInfoTap, showFeedbackOverlay }: SwipeCardProps) {
+  const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -166,7 +168,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
               {/* Condition Badge - Top Right - Soft style */}
               {isTop && item.condition && (
                 <div className="absolute top-10 right-3 z-20 px-3 py-1.5 bg-card/90 backdrop-blur-sm rounded-xl shadow-soft">
-                  <span className="text-xs font-semibold text-foreground">{CONDITION_LABELS[item.condition]}</span>
+                  <span className="text-xs font-semibold text-foreground">{t(`conditions.${item.condition}`)}</span>
                 </div>
               )}
 
@@ -281,7 +283,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-card/20 backdrop-blur-sm rounded-xl">
               {(() => { const Icon = getCategoryIcon(item.category); return <Icon className="w-3.5 h-3.5 text-card" />; })()}
-              <span className="text-xs font-medium text-card">{getCategoryLabel(item.category)}</span>
+              <span className="text-xs font-medium text-card">{t(`categories.${item.category}`)}</span>
             </div>
             {distanceKm !== null && (
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-card/20 backdrop-blur-sm rounded-xl">

@@ -13,8 +13,8 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Search as SearchIcon, MapPin, Package, Filter, X, DollarSign, Sparkles, RefreshCw, TrendingUp, Tag, Clock, User } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { CONDITION_LABELS, Item, ItemCategory } from '@/types/database';
-import { CATEGORIES, getCategoryLabel } from '@/config/categories';
+import { Item, ItemCategory } from '@/types/database';
+import { CATEGORIES } from '@/config/categories';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -61,7 +61,7 @@ interface Suggestion {
   };
 }
 
-const categories = CATEGORIES.map(c => ({ value: c.id, label: c.name }));
+// categories list is built inside the component to use translations
 
 const distanceOptions = [
   { value: 'any', label: 'Any' },
@@ -231,13 +231,14 @@ export default function Search() {
     }
 
     // Category matches
-    categories.forEach(cat => {
-      if (cat.label.toLowerCase().includes(query) && newSuggestions.length < 7) {
+    CATEGORIES.forEach(cat => {
+      const catLabel = t(`categories.${cat.id}`);
+      if (catLabel.toLowerCase().includes(query) && newSuggestions.length < 7) {
         newSuggestions.push({
           type: 'category',
-          text: cat.label,
+          text: catLabel,
           icon: 'category',
-          category: cat.value,
+          category: cat.id,
         });
       }
     });
@@ -324,7 +325,7 @@ export default function Search() {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => {
-        const categoryLabel = getCategoryLabel(item.category)?.toLowerCase() || '';
+        const categoryLabel = t(`categories.${item.category}`).toLowerCase();
         return (
           item.title.toLowerCase().includes(query) ||
           item.description?.toLowerCase().includes(query) ||
@@ -651,7 +652,7 @@ export default function Search() {
                   className="pl-2 pr-1 py-1 gap-1 cursor-pointer"
                   onClick={() => toggleCategory(cat)}
                 >
-                  {getCategoryLabel(cat)}
+                  {t(`categories.${cat}`)}
                   <X className="w-3 h-3" />
                 </Badge>
               ))}
@@ -666,17 +667,17 @@ export default function Search() {
 
           {/* Category pills (multi-select) */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {categories.map(cat => (
+            {CATEGORIES.map(cat => (
               <button
-                key={cat.value}
-                onClick={() => toggleCategory(cat.value)}
+                key={cat.id}
+                onClick={() => toggleCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-all border ${
-                  selectedCategories.includes(cat.value)
+                  selectedCategories.includes(cat.id)
                     ? 'bg-primary text-primary-foreground border-primary'
                     : 'bg-background text-muted-foreground border-border hover:border-primary/50'
                 }`}
               >
-                {cat.label}
+                {t(`categories.${cat.id}`)}
               </button>
             ))}
           </div>
@@ -856,7 +857,7 @@ export default function Search() {
                       
                       {/* Metadata row - always at same position */}
                       <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-1">
-                        <Badge variant="secondary" className="text-xs py-0.5">{getCategoryLabel(item.category)}</Badge>
+                        <Badge variant="secondary" className="text-xs py-0.5">{t(`categories.${item.category}`)}</Badge>
                         {item.distance !== undefined && (
                           <Badge variant="outline" className="text-xs py-0.5 flex items-center gap-1">
                             <MapPin className="w-3 h-3" />

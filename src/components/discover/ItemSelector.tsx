@@ -1,4 +1,4 @@
-import { Item, CATEGORY_LABELS } from '@/types/database';
+import { Item } from '@/types/database';
 import { cn } from '@/lib/utils';
 import { Package, ChevronDown, Check } from 'lucide-react';
 import {
@@ -44,7 +44,7 @@ export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps)
                 <div className="text-left min-w-0">
                   <p className="text-sm font-medium truncate">{selectedItem.title}</p>
                   <p className="text-xs text-muted-foreground">
-                    {CATEGORY_LABELS[selectedItem.category]}
+                    {t(`categories.${selectedItem.category}`)}
                   </p>
                 </div>
               </div>
@@ -76,7 +76,7 @@ export function ItemSelector({ items, selectedId, onSelect }: ItemSelectorProps)
                   <div className="text-left min-w-0">
                     <p className="text-sm font-medium truncate">{item.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {CATEGORY_LABELS[item.category]} • {t('discover.lookingForCategories', { count: item.swap_preferences.length })}
+                      {t(`categories.${item.category}`)} • {t('discover.lookingForCategories', { count: item.swap_preferences.length })}
                     </p>
                   </div>
                 </div>
