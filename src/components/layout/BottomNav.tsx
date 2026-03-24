@@ -32,7 +32,7 @@ export function BottomNav() {
         <div className="absolute inset-0 bg-card rounded-2xl shadow-card border border-border/50" />
         
         {/* Navigation content */}
-        <div className="relative flex items-center justify-around h-full px-2">
+        <div className="relative flex items-center h-full px-2">
           {navItems.map(({ icon: Icon, label, path, isCenter }) => {
             const active = isActive(path);
             const hasNotification = path === '/matches' && hasNewMatches;
