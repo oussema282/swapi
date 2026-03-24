@@ -227,8 +227,8 @@ export default function Items() {
                             <Badge variant="secondary" className="text-xs bg-muted">{t('items.swapped')}</Badge>
                           </div>
                           <div className="flex gap-2 mt-2 flex-wrap">
-                            <Badge variant="outline" className="text-xs opacity-60">{CATEGORY_LABELS[item.category]}</Badge>
-                            <Badge variant="secondary" className="text-xs opacity-60">{CONDITION_LABELS[item.condition]}</Badge>
+                            <Badge variant="outline" className="text-xs opacity-60">{t(`categories.${item.category}`)}</Badge>
+                            <Badge variant="secondary" className="text-xs opacity-60">{t(`conditions.${item.condition}`)}</Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-2">
                             {t('items.itemWasSwapped')}

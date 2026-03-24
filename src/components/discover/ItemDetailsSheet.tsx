@@ -200,7 +200,7 @@ export function ItemDetailsSheet({
               <div className="flex flex-wrap gap-2">
                 {item.swap_preferences.map((pref) => (
                   <Badge key={pref} variant="secondary" className="rounded-full">
-                    {getCategoryLabel(pref)}
+                    {t(`categories.${pref}`)}
                   </Badge>
                 ))}
               </div>

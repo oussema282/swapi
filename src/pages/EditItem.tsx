@@ -342,7 +342,7 @@ export default function EditItem() {
                     )}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0" />
-                    <span className="font-medium leading-tight">{cat.name}</span>
+                    <span className="font-medium leading-tight">{t(`categories.${cat.id}`)}</span>
                   </button>
                 );
               })}

@@ -61,7 +61,7 @@ interface Suggestion {
   };
 }
 
-const categories = CATEGORIES.map(c => ({ value: c.id, label: c.name }));
+// categories variable is computed inside the component to use translations
 
 const distanceOptions = [
   { value: 'any', label: 'Any' },
