@@ -468,8 +468,8 @@ export default function MapView() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg font-display font-bold">Nearby Items</h1>
-                <p className="text-xs text-muted-foreground">{filteredItems.length} items near you</p>
+                <h1 className="text-lg font-display font-bold">{t('map.nearbyItems')}</h1>
+                <p className="text-xs text-muted-foreground">{t('map.itemsNearYou', { count: filteredItems.length })}</p>
               </div>
             </div>
             <div className="flex gap-2 mr-12">
