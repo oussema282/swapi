@@ -1,5 +1,5 @@
 import i18n from '@/i18n';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, type Locale } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { es } from 'date-fns/locale/es';
 import { de } from 'date-fns/locale/de';
