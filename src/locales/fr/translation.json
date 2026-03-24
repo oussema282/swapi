@@ -416,7 +416,11 @@
     "avatarUploaded": "Avatar téléchargé !",
     "avatarBlocked": "Avatar bloqué",
     "failedUploadAvatar": "Échec du téléchargement de l'avatar",
-    "failedSaveProfile": "Échec de l'enregistrement du profil"
+    "failedSaveProfile": "Échec de l'enregistrement du profil",
+    "phoneNumber": "Numéro de téléphone",
+    "phoneNumberPlaceholder": "Votre numéro de téléphone",
+    "phoneVisible": "Afficher le numéro aux matchs",
+    "phoneVisibleDescription": "Votre numéro sera visible dans le chat avec vos matchs"
   },
   "editItem": {
     "title": "Modifier l'article",

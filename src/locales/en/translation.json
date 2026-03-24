@@ -465,7 +465,11 @@
     "avatarUploaded": "Avatar uploaded!",
     "avatarBlocked": "Avatar blocked",
     "failedUploadAvatar": "Failed to upload avatar",
-    "failedSaveProfile": "Failed to save profile"
+    "failedSaveProfile": "Failed to save profile",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Your phone number",
+    "phoneVisible": "Show phone to matches",
+    "phoneVisibleDescription": "Your number will be visible in chat with your matches"
   },
   "editItem": {
     "title": "Edit Item",
