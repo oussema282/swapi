@@ -156,7 +156,7 @@ export default function NewItem() {
       setPhotos(prev => [...prev, ...newPhotos]);
     } catch (error) {
       console.error('Upload error:', error);
-      toast({ variant: 'destructive', title: 'Échec du téléchargement' });
+      toast({ variant: 'destructive', title: t('newItem.uploadFailed') });
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
