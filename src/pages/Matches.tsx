@@ -183,7 +183,7 @@ export default function Matches() {
         },
         onError: () => {
           setRecoveringId(null);
-          toast.error('Failed to recover match. Please try again.');
+          toast.error(t('matches.failedToRecover'));
         },
       }
     );
