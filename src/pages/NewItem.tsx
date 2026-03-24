@@ -253,7 +253,7 @@ export default function NewItem() {
             transition={{ delay: 0.4 }}
             className="text-2xl font-display font-bold text-foreground mb-2"
           >
-            Article créé !
+            {t('newItem.itemCreated')}
           </motion.h2>
           
           <motion.p
