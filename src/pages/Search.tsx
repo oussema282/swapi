@@ -46,15 +46,7 @@ interface Suggestion {
   };
 }
 
-const categories: { value: ItemCategory; label: string }[] = [
-  { value: 'games', label: 'Games' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'clothes', label: 'Clothes' },
-  { value: 'books', label: 'Books' },
-  { value: 'home_garden', label: 'Home & Garden' },
-  { value: 'sports', label: 'Sports' },
-  { value: 'other', label: 'Other' },
-];
+const categories = CATEGORIES.map(c => ({ value: c.id, label: c.name }));
 
 const distanceOptions = [
   { value: 'any', label: 'Any' },
