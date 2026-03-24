@@ -446,7 +446,7 @@ export default function MapView() {
             {t('map.mapUnavailableDescription')}
           </p>
           <Button size="lg" className="w-full max-w-xs mb-3" onClick={() => refetchToken()}>
-            Try Again
+            {t('map.tryAgain')}
           </Button>
           <Button variant="outline" onClick={goBack} className="w-full max-w-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
