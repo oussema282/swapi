@@ -363,7 +363,7 @@ export default function NewItem() {
                         ) : (
                           <>
                             <Upload className="w-6 h-6 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">Ajouter</span>
+                            <span className="text-xs text-muted-foreground">{t('newItem.addPhoto')}</span>
                           </>
                         )}
                       </button>
