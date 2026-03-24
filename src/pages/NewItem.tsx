@@ -398,7 +398,7 @@ export default function NewItem() {
                     </div>
                     
                     <div>
-                      <Label htmlFor="description">Description (optionnel)</Label>
+                      <Label htmlFor="description">{t('newItem.description')}</Label>
                       <Textarea 
                         id="description" 
                         value={description} 
