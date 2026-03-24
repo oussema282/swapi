@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { formatDistanceToNow } from 'date-fns';
+import { formatTimeAgo } from '@/lib/dateLocale';
 import { MissedMatch } from '@/hooks/useMissedMatches';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
