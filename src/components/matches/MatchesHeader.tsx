@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowLeftRight, Send, HeartOff } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type TabType = 'active' | 'completed' | 'invites' | 'missed';
 
@@ -20,6 +21,8 @@ export function MatchesHeader({
   activeTab,
   onTabChange,
 }: MatchesHeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -32,9 +35,9 @@ export function MatchesHeader({
             <ArrowLeftRight className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-display font-bold">Matches</h1>
+            <h1 className="text-2xl font-display font-bold">{t('matches.title')}</h1>
             <p className="text-sm text-muted-foreground">
-              Your active and completed exchanges
+              {t('matches.subtitle')}
             </p>
           </div>
         </div>
@@ -51,7 +54,7 @@ export function MatchesHeader({
           }`}
         >
           <span className="text-xl font-bold">{activeCount}</span>
-          <span className="text-sm">Active</span>
+          <span className="text-sm">{t('matches.active')}</span>
         </button>
         <button
           onClick={() => onTabChange('completed')}
@@ -62,7 +65,7 @@ export function MatchesHeader({
           }`}
         >
           <span className="text-xl font-bold">{completedCount}</span>
-          <span className="text-sm">Completed</span>
+          <span className="text-sm">{t('matches.completed')}</span>
         </button>
         <button
           onClick={() => onTabChange('invites')}
@@ -74,7 +77,7 @@ export function MatchesHeader({
         >
           <Send className="w-4 h-4" />
           <span className="text-xl font-bold">{invitesCount}</span>
-          <span className="text-sm">Invites</span>
+          <span className="text-sm">{t('matches.dealInvites')}</span>
         </button>
         {missedCount > 0 && (
           <button
@@ -87,7 +90,7 @@ export function MatchesHeader({
           >
             <HeartOff className="w-4 h-4" />
             <span className="text-xl font-bold">{missedCount}</span>
-            <span className="text-sm">Missed</span>
+            <span className="text-sm">{t('matches.missed')}</span>
           </button>
         )}
       </div>

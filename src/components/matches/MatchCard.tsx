@@ -6,6 +6,7 @@ import { VerifiedName } from '@/components/ui/verified-name';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
+import { useTranslation } from 'react-i18next';
 
 interface MatchCardProps {
   match: MatchWithItems;
@@ -17,10 +18,10 @@ interface MatchCardProps {
 }
 
 export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onTheirItemTap }: MatchCardProps) {
-  const lastMessagePreview = match.last_message?.content || 'Start a conversation...';
+  const { t } = useTranslation();
+  const lastMessagePreview = match.last_message?.content || t('matches.startConversation');
   const lastActivityTime = match.last_message?.created_at || match.created_at;
   
-  // Determine confirmation status
   const isCompleted = match.is_completed;
   const pendingMyConfirmation = match.confirmed_by_other && !match.confirmed_by_me;
   const waitingForOther = match.confirmed_by_me && !match.confirmed_by_other;
@@ -47,10 +48,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
             <div className="flex items-center">
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onMyItemTap?.();
-                }}
+                onClick={(e) => { e.stopPropagation(); onMyItemTap?.(); }}
                 className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {match.my_item?.photos?.[0] ? (
@@ -66,10 +64,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
               </div>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onTheirItemTap?.();
-                }}
+                onClick={(e) => { e.stopPropagation(); onTheirItemTap?.(); }}
                 className="w-11 h-11 rounded-lg overflow-hidden bg-muted ring-2 ring-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {match.their_item?.photos?.[0] ? (
@@ -82,7 +77,6 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
               </button>
             </div>
             
-            {/* Pending confirmation indicator */}
             {pendingMyConfirmation && (
               <span className="absolute -top-1 -right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -116,15 +110,15 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
               {isCompleted ? (
                 <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-green-500/10 text-green-500 flex items-center gap-0.5">
                   <CheckCircle2 className="w-2.5 h-2.5" />
-                  Done
+                  {t('matches.done')}
                 </span>
               ) : pendingMyConfirmation ? (
                 <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-orange-500/10 text-orange-500">
-                  Confirm
+                  {t('matches.confirm')}
                 </span>
               ) : waitingForOther ? (
                 <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 bg-muted text-muted-foreground">
-                  Waiting
+                  {t('matches.waiting')}
                 </span>
               ) : (
                 <span className={cn(
@@ -133,7 +127,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
                     ? "bg-primary text-primary-foreground" 
                     : "bg-muted text-muted-foreground"
                 )}>
-                  {hasUnread ? 'New' : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
+                  {hasUnread ? t('matches.new') : formatDistanceToNow(new Date(lastActivityTime), { addSuffix: false })}
                 </span>
               )}
             </div>

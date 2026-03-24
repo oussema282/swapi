@@ -3,6 +3,7 @@ import { Package } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
+import { useTranslation } from 'react-i18next';
 
 interface InstantMatchCardProps {
   match: MatchWithItems;
@@ -19,6 +20,7 @@ export function InstantMatchCard({
   isHighlighted = false,
   onItemTap 
 }: InstantMatchCardProps) {
+  const { t } = useTranslation();
   const itemPhoto = match.their_item?.photos?.[0];
   const ownerName = match.other_user_profile?.display_name || 'User';
   const ownerAvatar = match.other_user_profile?.avatar_url;
@@ -41,27 +43,18 @@ export function InstantMatchCard({
           isHighlighted && 'ring-2 ring-primary ring-offset-2'
         )}
       >
-        {/* Item Photo */}
         <div 
           className="w-full h-[130px] bg-muted relative"
-          onClick={(e) => {
-            e.stopPropagation();
-            onItemTap?.();
-          }}
+          onClick={(e) => { e.stopPropagation(); onItemTap?.(); }}
         >
           {itemPhoto ? (
-            <img 
-              src={itemPhoto} 
-              alt={itemTitle}
-              className="w-full h-full object-cover"
-            />
+            <img src={itemPhoto} alt={itemTitle} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Package className="w-10 h-10 text-muted-foreground/30" />
             </div>
           )}
           
-          {/* Owner Avatar Overlay */}
           <div className={cn(
             'absolute bottom-2 right-2 rounded-full',
             isHighlighted ? 'ring-2 ring-primary' : 'ring-2 ring-card'
@@ -75,13 +68,12 @@ export function InstantMatchCard({
           </div>
         </div>
 
-        {/* Info Section */}
         <div className="p-3 text-left">
           <h4 className="text-sm font-semibold text-foreground truncate leading-tight">
             {itemTitle}
           </h4>
           <p className="text-xs text-muted-foreground truncate mt-0.5">
-            Match with {ownerName}
+            {t('matches.matchWith')} {ownerName}
           </p>
         </div>
       </button>

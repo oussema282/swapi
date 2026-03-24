@@ -2,9 +2,11 @@ import { motion } from 'framer-motion';
 import { ArrowLeftRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function EmptyMatchesState() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <motion.div
@@ -27,9 +29,9 @@ export function EmptyMatchesState() {
         <ArrowLeftRight className="w-10 h-10 text-primary" />
       </motion.div>
       
-      <h3 className="text-xl font-display font-bold mb-2">No matches yet</h3>
+      <h3 className="text-xl font-display font-bold mb-2">{t('matches.noMatchesYet')}</h3>
       <p className="text-muted-foreground mb-6 max-w-xs">
-        Start swiping to find items you'd love to exchange. Your matches will appear here!
+        {t('matches.startSwipingDescription')}
       </p>
       
       <Button 
@@ -38,7 +40,7 @@ export function EmptyMatchesState() {
         size="lg"
       >
         <Sparkles className="w-4 h-4" />
-        Discover Items
+        {t('matches.discoverItems')}
       </Button>
     </motion.div>
   );
