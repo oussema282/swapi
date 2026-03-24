@@ -632,7 +632,7 @@
     "blocked": "Blocked",
     "matched": "Matched!",
     "resendInfo": "Items can be resent once after rejection.",
-    "resendInfoBlocked": "2 rejections = blocked."
+    "resendInfoBlocked": "2 rejections = blocked.",
     "sent": "Deal invite sent!",
     "pendingExists": "A pending invite already exists for this pair",
     "maxAttempts": "You cannot send more invites for this item pair (max 2 attempts)",

@@ -583,7 +583,7 @@
     "blocked": "Bloqué",
     "matched": "Matché !",
     "resendInfo": "Les articles peuvent être renvoyés une fois après refus.",
-    "resendInfoBlocked": "2 refus = bloqué."
+    "resendInfoBlocked": "2 refus = bloqué.",
     "sent": "Invitation envoyée !",
     "pendingExists": "Une invitation en attente existe déjà pour cette paire",
     "maxAttempts": "Vous ne pouvez plus envoyer d'invitations pour cette paire (max 2 tentatives)",
