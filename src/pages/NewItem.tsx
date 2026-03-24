@@ -119,7 +119,7 @@ export default function NewItem() {
         }
 
         if (file.size > 5 * 1024 * 1024) {
-          toast({ variant: 'destructive', title: 'L\'image doit faire moins de 5 Mo' });
+          toast({ variant: 'destructive', title: t('newItem.imageTooLarge') });
           continue;
         }
 
