@@ -31,6 +31,7 @@ import {
 import { ItemCondition, CONDITION_LABELS } from '@/types/database';
 import { CATEGORIES, getCategoryLabel, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
 import { cn } from '@/lib/utils';
+import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 
 const conditions: ItemCondition[] = ['new', 'like_new', 'good', 'fair'];
 
@@ -46,6 +47,7 @@ const STEPS = [
   { id: 2, title: 'Catégorie & État', description: 'Décrivez votre article' },
   { id: 3, title: 'Fourchette de prix', description: 'Estimez la valeur' },
   { id: 4, title: 'Préférences d\'échange', description: 'Que voulez-vous ?' },
+  { id: 5, title: 'Emplacement', description: 'Où se trouve l\'article ?' },
 ];
 
 export default function NewItem() {
@@ -69,6 +71,8 @@ export default function NewItem() {
   const [valueMax, setValueMax] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [itemLatitude, setItemLatitude] = useState<number | null>(null);
+  const [itemLongitude, setItemLongitude] = useState<number | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -167,12 +171,13 @@ export default function NewItem() {
       case 2: return category !== null && subcategory !== null && condition !== null;
       case 3: return true;
       case 4: return swapPreferences.length > 0;
+      case 5: return itemLatitude !== null && itemLongitude !== null;
       default: return false;
     }
   };
 
   const handleNext = () => {
-    if (step < 4) {
+    if (step < 5) {
       setStep(step + 1);
     } else {
       handleSubmit();
@@ -201,6 +206,8 @@ export default function NewItem() {
         swap_preferences: swapPreferences,
         value_min: parseInt(valueMin) || 0,
         value_max: valueMax ? parseInt(valueMax) : null,
+        latitude: itemLatitude ?? undefined,
+        longitude: itemLongitude ?? undefined,
       });
 
       setIsComplete(true);
@@ -282,7 +289,7 @@ export default function NewItem() {
             <p className="text-sm text-muted-foreground">{STEPS[step - 1].description}</p>
           </div>
           <span className="text-sm font-medium text-muted-foreground">
-            {step}/4
+            {step}/{STEPS.length}
           </span>
         </div>
 
@@ -589,6 +596,24 @@ export default function NewItem() {
                 </p>
               </Card>
             )}
+
+            {/* Step 5: Location */}
+            {step === 5 && (
+              <Card className="p-6">
+                <Label className="text-base font-semibold mb-2 block">Emplacement de l'article</Label>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Choisissez où se trouve votre article. Vous pouvez glisser le marqueur ou cliquer sur la carte.
+                </p>
+                <LocationPickerMap
+                  latitude={itemLatitude}
+                  longitude={itemLongitude}
+                  onChange={(lat, lng) => {
+                    setItemLatitude(lat);
+                    setItemLongitude(lng);
+                  }}
+                />
+              </Card>
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -610,12 +635,12 @@ export default function NewItem() {
             >
               {createItem.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : step === 4 ? (
+              ) : step === 5 ? (
                 <Check className="w-4 h-4 mr-2" />
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 4 ? 'Créer l\'article' : 'Continuer'}
+              {step === 5 ? 'Créer l\'article' : 'Continuer'}
             </Button>
           </div>
         </div>

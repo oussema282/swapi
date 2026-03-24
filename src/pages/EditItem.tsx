@@ -28,6 +28,7 @@ import {
 import { ItemCondition, CONDITION_LABELS } from '@/types/database';
 import { CATEGORIES, getCategoryLabel, type Category } from '@/config/categories';
 import { cn } from '@/lib/utils';
+import { LocationPickerMap } from '@/components/items/LocationPickerMap';
 
 const conditions: ItemCondition[] = ['new', 'like_new', 'good', 'fair'];
 
@@ -59,6 +60,8 @@ export default function EditItem() {
   const [valueMax, setValueMax] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [itemLatitude, setItemLatitude] = useState<number | null>(null);
+  const [itemLongitude, setItemLongitude] = useState<number | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -77,6 +80,8 @@ export default function EditItem() {
       setValueMin(item.value_min?.toString() || '');
       setValueMax(item.value_max?.toString() || '');
       setPhotos(item.photos || []);
+      setItemLatitude(item.latitude ?? null);
+      setItemLongitude(item.longitude ?? null);
     }
   }, [item]);
 
@@ -152,6 +157,8 @@ export default function EditItem() {
         swap_preferences: swapPreferences,
         value_min: parseInt(valueMin) || 0,
         value_max: valueMax ? parseInt(valueMax) : null,
+        latitude: itemLatitude,
+        longitude: itemLongitude,
       } as any);
 
       setIsComplete(true);
@@ -338,6 +345,19 @@ export default function EditItem() {
                 );
               })}
             </div>
+          </Card>
+
+          {/* Location */}
+          <Card className="p-4">
+            <Label className="text-sm font-semibold mb-3 block">Emplacement de l'article</Label>
+            <LocationPickerMap
+              latitude={itemLatitude}
+              longitude={itemLongitude}
+              onChange={(lat, lng) => {
+                setItemLatitude(lat);
+                setItemLongitude(lng);
+              }}
+            />
           </Card>
 
           <div className="h-4" />
