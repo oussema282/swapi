@@ -765,10 +765,10 @@ export default function Search() {
             <div className="flex items-center justify-center py-12">
               <div className="w-10 h-10 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
             </div>
-          ) : filteredItems.length === 0 ? (
+          ) : filteredItems.length === 0 && filteredProfiles.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <Package className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No items found</h3>
+              <h3 className="text-lg font-semibold mb-2">No results found</h3>
               <p className="text-muted-foreground text-sm mb-4">
                 {isSearchActive ? 'Try adjusting your filters or search terms' : 'No items available in your area yet'}
               </p>
@@ -778,6 +778,47 @@ export default function Search() {
             </div>
           ) : (
             <div className="p-4 space-y-3">
+              {/* User Profile Results */}
+              {filteredProfiles.length > 0 && (
+                <>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Users</p>
+                  {filteredProfiles.map((profile, index) => (
+                    <motion.div
+                      key={profile.user_id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.03 }}
+                      className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => navigate(`/user/${profile.user_id}`)}
+                    >
+                      <div className="flex items-center gap-3 p-3">
+                        <Avatar className="w-12 h-12 flex-shrink-0">
+                          <AvatarImage src={profile.avatar_url || undefined} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                            {profile.display_name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-foreground truncate">{profile.display_name}</p>
+                          {profile.location && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 truncate">
+                              <MapPin className="w-3 h-3 flex-shrink-0" />
+                              {profile.location}
+                            </p>
+                          )}
+                        </div>
+                        <Badge variant="secondary" className="flex-shrink-0 text-xs">
+                          <User className="w-3 h-3 mr-1" />
+                          Profile
+                        </Badge>
+                      </div>
+                    </motion.div>
+                  ))}
+                  {filteredItems.length > 0 && (
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pt-2">Items</p>
+                  )}
+                </>
+              )}
               {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
