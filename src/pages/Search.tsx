@@ -490,7 +490,7 @@ export default function Search() {
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
               <Input
                 ref={inputRef}
-                placeholder="Search items, categories, users..."
+                placeholder={t('search.placeholder')}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
