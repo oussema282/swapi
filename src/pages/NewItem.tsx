@@ -529,7 +529,7 @@ export default function NewItem() {
                         type="number" 
                         value={valueMax} 
                         onChange={(e) => setValueMax(e.target.value)} 
-                        placeholder="Optionnel"
+                        placeholder={t('newItem.maximumOptional')}
                         className="mt-2 text-lg text-center"
                       />
                     </div>
