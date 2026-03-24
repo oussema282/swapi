@@ -176,7 +176,10 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
               )}
             </div>
 
-            <p className="text-xs text-muted-foreground text-center">{t('dealInvite.resendInfo')}</p>
+            <p className="text-xs text-muted-foreground text-center">
+              {t('dealInvite.resendInfo')}
+              <span className="block font-bold text-foreground mt-0.5">{t('dealInvite.resendInfoBlocked')}</span>
+            </p>
           </DialogContent>
         </Dialog>
 
