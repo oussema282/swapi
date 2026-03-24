@@ -72,7 +72,7 @@ export function BottomNav() {
               <Link
                 key={path}
                 to={path}
-                className="flex flex-col items-center justify-center py-2 px-3"
+                className="flex-1 flex flex-col items-center justify-center py-2"
               >
                 <div className="relative">
                   <Icon 
