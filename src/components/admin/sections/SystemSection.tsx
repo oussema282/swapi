@@ -182,7 +182,38 @@ export function SystemSection() {
         </Button>
       </div>
 
-      {/* Quick Stats */}
+      {/* All Users Pro Toggle */}
+      <Card className={allUsersPro ? 'border-primary/50 bg-primary/5' : ''}>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex items-center gap-3">
+            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${allUsersPro ? 'bg-primary/20' : 'bg-muted'}`}>
+              <Crown className={`h-5 w-5 ${allUsersPro ? 'text-primary' : 'text-muted-foreground'}`} />
+            </div>
+            <div>
+              <CardTitle className="text-base">Pro Gratuit pour Tous</CardTitle>
+              <CardDescription className="text-xs">
+                {allUsersPro 
+                  ? 'Tous les utilisateurs ont un accès Pro illimité à vie' 
+                  : 'Mode payant actif — les utilisateurs doivent souscrire pour accéder au Pro'}
+              </CardDescription>
+            </div>
+          </div>
+          <Switch
+            checked={allUsersPro}
+            onCheckedChange={toggleAllUsersPro}
+            disabled={proToggleLoading}
+          />
+        </CardHeader>
+        {allUsersPro && (
+          <CardContent className="pt-2">
+            <Badge variant="default" className="bg-primary text-primary-foreground">
+              <Crown className="h-3 w-3 mr-1" />
+              Actif — Tous Pro à vie
+            </Badge>
+          </CardContent>
+        )}
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
