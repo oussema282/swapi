@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCreateItem } from '@/hooks/useItems';
 import { useItemLimit } from '@/hooks/useEntitlements';
 import { useContentModeration } from '@/hooks/useContentModeration';
+import { useTranslation } from 'react-i18next';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,22 +43,25 @@ const CONDITION_ICONS: Record<ItemCondition, React.ReactNode> = {
   fair: <Zap className="w-5 h-5" />,
 };
 
-const STEPS = [
-  { id: 1, title: 'Photos & Titre', description: 'Montrez votre article' },
-  { id: 2, title: 'Catégorie & État', description: 'Décrivez votre article' },
-  { id: 3, title: 'Fourchette de prix', description: 'Estimez la valeur' },
-  { id: 4, title: 'Préférences d\'échange', description: 'Que voulez-vous ?' },
-  { id: 5, title: 'Emplacement', description: 'Où se trouve l\'article ?' },
-];
+// Steps are now computed inside the component using t()
 
 export default function NewItem() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const createItem = useCreateItem();
   const { canAddItem, itemCount, limit, isPro, isLoading: limitLoading } = useItemLimit();
   const { checkImage, isChecking: isModerating } = useContentModeration();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const STEPS = [
+    { id: 1, title: t('newItem.steps.photosTitle'), description: t('newItem.steps.photosDescription') },
+    { id: 2, title: t('newItem.steps.categoryCondition'), description: t('newItem.steps.categoryConditionDescription') },
+    { id: 3, title: t('newItem.steps.valueRange'), description: t('newItem.steps.valueRangeDescription') },
+    { id: 4, title: t('newItem.steps.swapPreferences'), description: t('newItem.steps.swapPreferencesDescription') },
+    { id: 5, title: t('newItem.steps.locationTitle'), description: t('newItem.steps.locationDescription') },
+  ];
 
   const [step, setStep] = useState(1);
   const [isComplete, setIsComplete] = useState(false);
@@ -81,8 +85,8 @@ export default function NewItem() {
     if (!authLoading && !limitLoading && user && !canAddItem) {
       toast({ 
         variant: 'destructive', 
-        title: 'Limite atteinte',
-        description: `Les utilisateurs gratuits ne peuvent avoir que ${limit} articles. Passez à Pro pour des articles illimités !`
+        title: t('newItem.itemLimitReached'),
+        description: t('newItem.itemLimitDescription', { limit })
       });
       navigate('/checkout');
     }
@@ -99,7 +103,7 @@ export default function NewItem() {
     if (!files || !user) return;
 
     if (photos.length + files.length > 4) {
-      toast({ variant: 'destructive', title: 'Maximum 4 photos autorisées' });
+      toast({ variant: 'destructive', title: t('newItem.maxPhotos') });
       return;
     }
 
@@ -109,12 +113,12 @@ export default function NewItem() {
     try {
       for (const file of Array.from(files)) {
         if (!file.type.startsWith('image/')) {
-          toast({ variant: 'destructive', title: 'Seules les images sont autorisées' });
+          toast({ variant: 'destructive', title: t('newItem.imagesOnly') });
           continue;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-          toast({ variant: 'destructive', title: 'L\'image doit faire moins de 5 Mo' });
+          toast({ variant: 'destructive', title: t('newItem.imageTooLarge') });
           continue;
         }
 
@@ -125,8 +129,7 @@ export default function NewItem() {
           .upload(fileName, file);
 
         if (uploadError) {
-          console.error('Upload error:', uploadError);
-          toast({ variant: 'destructive', title: 'Échec du téléchargement' });
+          toast({ variant: 'destructive', title: t('newItem.uploadFailed') });
           continue;
         }
 
@@ -140,8 +143,8 @@ export default function NewItem() {
           await supabase.storage.from('item-photos').remove([fileName]);
           toast({ 
             variant: 'destructive', 
-            title: 'Image bloquée',
-            description: `Cette image ne peut pas être téléchargée : ${moderationResult.violation_type || 'violation de politique'}`
+            title: t('newItem.imageBlocked'),
+            description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
           });
           continue;
         }
@@ -152,7 +155,7 @@ export default function NewItem() {
       setPhotos(prev => [...prev, ...newPhotos]);
     } catch (error) {
       console.error('Upload error:', error);
-      toast({ variant: 'destructive', title: 'Échec du téléchargement' });
+      toast({ variant: 'destructive', title: t('newItem.uploadFailed') });
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -216,7 +219,7 @@ export default function NewItem() {
         navigate('/items');
       }, 2500);
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Échec de la création' });
+      toast({ variant: 'destructive', title: t('newItem.creationFailed') });
     }
   };
 
@@ -249,7 +252,7 @@ export default function NewItem() {
             transition={{ delay: 0.4 }}
             className="text-2xl font-display font-bold text-foreground mb-2"
           >
-            Article créé !
+            {t('newItem.itemCreated')}
           </motion.h2>
           
           <motion.p
@@ -258,7 +261,7 @@ export default function NewItem() {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground text-center"
           >
-            Votre article est en ligne et prêt à être échangé
+            {t('newItem.itemLive')}
           </motion.p>
           
           <motion.div
@@ -320,7 +323,7 @@ export default function NewItem() {
             {step === 1 && (
               <div className="space-y-6">
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Télécharger des photos</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.uploadPhotos')}</Label>
                   
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     {photos.map((photo, index) => (
@@ -352,13 +355,13 @@ export default function NewItem() {
                           <div className="flex flex-col items-center gap-1">
                             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
                             <span className="text-xs text-muted-foreground">
-                              {isModerating ? 'Vérification...' : 'Téléchargement...'}
+                              {isModerating ? t('newItem.checking') : t('newItem.uploading')}
                             </span>
                           </div>
                         ) : (
                           <>
                             <Upload className="w-6 h-6 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">Ajouter</span>
+                            <span className="text-xs text-muted-foreground">{t('newItem.addPhoto')}</span>
                           </>
                         )}
                       </button>
@@ -375,30 +378,30 @@ export default function NewItem() {
                   />
                   
                   <p className="text-xs text-muted-foreground">
-                    Jusqu'à 4 photos • Max 5 Mo chacune
+                    {t('newItem.photoLimit')}
                   </p>
                 </Card>
 
                 <Card className="p-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="title" className="text-base font-semibold">Nom de l'article *</Label>
+                      <Label htmlFor="title" className="text-base font-semibold">{t('newItem.itemName')}</Label>
                       <Input 
                         id="title" 
                         value={title} 
                         onChange={(e) => setTitle(e.target.value)} 
-                        placeholder="Que souhaitez-vous échanger ?"
+                        placeholder={t('newItem.itemNamePlaceholder')}
                         className="mt-2 text-lg"
                       />
                     </div>
                     
                     <div>
-                      <Label htmlFor="description">Description (optionnel)</Label>
+                      <Label htmlFor="description">{t('newItem.description')}</Label>
                       <Textarea 
                         id="description" 
                         value={description} 
                         onChange={(e) => setDescription(e.target.value)} 
-                        placeholder="Décrivez votre article..."
+                        placeholder={t('newItem.descriptionPlaceholder')}
                         rows={3}
                         className="mt-2"
                       />
@@ -413,7 +416,7 @@ export default function NewItem() {
               <div className="space-y-6">
                 {/* Category Selection */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">Catégorie</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.selectCategory')}</Label>
                   <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
                     {CATEGORIES.map((cat) => {
                       const Icon = cat.icon;
@@ -444,7 +447,7 @@ export default function NewItem() {
                 {selectedCategory && selectedSubcategories.length > 0 && (
                   <Card className="p-6">
                     <Label className="text-base font-semibold mb-4 block">
-                      Sous-catégorie de {selectedCategory.name}
+                      {t('newItem.subcategoryOf', { name: selectedCategory.name })}
                     </Label>
                     <div className="space-y-2">
                       {selectedSubcategories.map((sub) => (
@@ -474,7 +477,7 @@ export default function NewItem() {
 
                 {/* Condition */}
                 <Card className="p-6">
-                  <Label className="text-base font-semibold mb-4 block">État de l'article</Label>
+                  <Label className="text-base font-semibold mb-4 block">{t('newItem.itemCondition')}</Label>
                   <div className="grid grid-cols-2 gap-3">
                     {conditions.map((cond) => (
                       <button
@@ -500,15 +503,15 @@ export default function NewItem() {
             {/* Step 3: Value Range */}
             {step === 3 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Valeur estimée</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.estimatedValue')}</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Aidez les autres à comprendre la valeur de votre article
+                  {t('newItem.valueHelp')}
                 </p>
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Minimum (DT)</Label>
+                      <Label className="text-sm text-muted-foreground">{t('newItem.minimum')}</Label>
                       <Input 
                         type="number" 
                         value={valueMin} 
@@ -518,12 +521,12 @@ export default function NewItem() {
                       />
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Maximum (DT)</Label>
+                      <Label className="text-sm text-muted-foreground">{t('newItem.maximum')}</Label>
                       <Input 
                         type="number" 
                         value={valueMax} 
                         onChange={(e) => setValueMax(e.target.value)} 
-                        placeholder="Optionnel"
+                        placeholder={t('newItem.maximumOptional')}
                         className="mt-2 text-lg text-center"
                       />
                     </div>
@@ -551,9 +554,9 @@ export default function NewItem() {
             {/* Step 4: Swap Preferences */}
             {step === 4 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Que souhaitez-vous en échange ?</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.whatLookingFor')}</Label>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Sélectionnez toutes les catégories que vous accepteriez
+                  {t('newItem.preferencesHelp')}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-3">
@@ -590,8 +593,8 @@ export default function NewItem() {
                 
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   {swapPreferences.length === 0 
-                    ? 'Sélectionnez au moins une catégorie'
-                    : `${swapPreferences.length} catégorie${swapPreferences.length === 1 ? '' : 's'} sélectionnée${swapPreferences.length === 1 ? '' : 's'}`
+                    ? t('newItem.selectAtLeastOne')
+                    : t('newItem.categoriesSelected', { count: swapPreferences.length })
                   }
                 </p>
               </Card>
@@ -600,9 +603,9 @@ export default function NewItem() {
             {/* Step 5: Location */}
             {step === 5 && (
               <Card className="p-6">
-                <Label className="text-base font-semibold mb-2 block">Emplacement de l'article</Label>
+                <Label className="text-base font-semibold mb-2 block">{t('newItem.itemLocation')}</Label>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Choisissez où se trouve votre article. Vous pouvez glisser le marqueur ou cliquer sur la carte.
+                  {t('newItem.locationHelp')}
                 </p>
                 <LocationPickerMap
                   latitude={itemLatitude}
@@ -625,7 +628,7 @@ export default function NewItem() {
               onClick={handleBack}
               className="flex-1"
             >
-              {step === 1 ? 'Annuler' : 'Retour'}
+              {step === 1 ? t('newItem.cancel') : t('newItem.back')}
             </Button>
             
             <Button
@@ -640,7 +643,7 @@ export default function NewItem() {
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 5 ? 'Créer l\'article' : 'Continuer'}
+              {step === 5 ? t('newItem.createItem') : t('common.continue')}
             </Button>
           </div>
         </div>

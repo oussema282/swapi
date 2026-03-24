@@ -176,14 +176,14 @@ export default function Matches() {
         onSuccess: (result) => {
           setSelectedMissedMatch(null);
           setRecoveringId(null);
-          toast.success('Match created! Opening chat...');
+          toast.success(t('matches.matchCreated'));
           if (result.matchId) {
             navigate(`/chat/${result.matchId}`);
           }
         },
         onError: () => {
           setRecoveringId(null);
-          toast.error('Failed to recover match. Please try again.');
+          toast.error(t('matches.failedToRecover'));
         },
       }
     );
@@ -293,18 +293,18 @@ export default function Matches() {
     },
     onSuccess: (result, { accept }) => {
       if (accept) {
-        toast.success('Deal accepted! Opening chat...');
+        toast.success(t('matches.dealAccepted'));
         queryClient.invalidateQueries({ queryKey: ['matches'] });
         if (result?.matchId) {
           navigate(`/chat/${result.matchId}`);
         }
       } else {
-        toast.info('Deal invite declined.');
+        toast.info(t('matches.dealDeclined'));
       }
       queryClient.invalidateQueries({ queryKey: ['pending-deal-invites'] });
     },
     onError: () => {
-      toast.error('Failed to respond to invite');
+      toast.error(t('matches.failedToRespond'));
     },
   });
 
@@ -322,8 +322,8 @@ export default function Matches() {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center min-h-[80vh] gap-4">
-          <p className="text-destructive">Failed to load matches</p>
-          <Button onClick={() => refetch()} variant="outline">Try Again</Button>
+          <p className="text-destructive">{t('matches.failedToLoadMatches')}</p>
+          <Button onClick={() => refetch()} variant="outline">{t('matches.tryAgain')}</Button>
         </div>
       </AppLayout>
     );
@@ -395,7 +395,7 @@ export default function Matches() {
                   </Badge>
                 </div>
                 <button className="text-primary text-sm font-medium flex items-center gap-1">
-                  See All
+                  {t('matches.seeAll')}
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -489,8 +489,8 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <ArrowLeftRight className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No active matches yet</p>
-                      <p className="text-sm text-muted-foreground mt-1">Start swiping to find swaps!</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noActiveMatchesYet')}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{t('matches.startSwipingToFind')}</p>
                     </Card>
                   )}
                 </div>
@@ -521,7 +521,7 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <CheckCircle2 className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No completed swaps yet</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noCompletedSwapsYet')}</p>
                     </Card>
                   )}
                 </div>
@@ -565,7 +565,7 @@ export default function Matches() {
                             </div>
                           </div>
 
-                          <div className="text-xs text-muted-foreground text-center">wants to swap for</div>
+                          <div className="text-xs text-muted-foreground text-center">{t('matches.wantsToSwapFor')}</div>
 
                           <div className="flex items-center gap-2">
                             <button
@@ -588,7 +588,7 @@ export default function Matches() {
                             </button>
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
-                              <p className="text-xs text-muted-foreground">Your item</p>
+                              <p className="text-xs text-muted-foreground">{t('matches.yourItem')}</p>
                             </div>
                           </div>
 
@@ -606,7 +606,7 @@ export default function Matches() {
                               })}
                             >
                               <Check className="w-4 h-4 mr-1" />
-                              Accept
+                              {t('matches.accept')}
                             </Button>
                             <Button
                               variant="outline"
@@ -621,7 +621,7 @@ export default function Matches() {
                               })}
                             >
                               <X className="w-4 h-4 mr-1" />
-                              Decline
+                              {t('matches.decline')}
                             </Button>
                           </div>
                         </Card>
@@ -632,7 +632,7 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <Send className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No pending deal invites</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noPendingDealInvites')}</p>
                     </Card>
                   )}
                 </div>
@@ -650,7 +650,7 @@ export default function Matches() {
                       <div className="text-center py-2">
                         <p className="text-sm text-muted-foreground">
                           <HeartOff className="w-4 h-4 inline mr-1" />
-                          You missed a match! They wanted to swap with you.
+                          {t('matches.youMissedMatch')}
                         </p>
                       </div>
                       {missedMatches.map((missed, index) => (
@@ -672,8 +672,8 @@ export default function Matches() {
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                         <HeartOff className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">No missed matches</p>
-                      <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your matches!</p>
+                      <p className="text-muted-foreground font-medium">{t('matches.noMissedMatchesYet')}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{t('matches.keepSwiping')}</p>
                     </Card>
                   )}
                 </div>
