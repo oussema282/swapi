@@ -13,36 +13,16 @@ export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const testimonials = [
-    {
-      name: 'Sarah M.',
-      text: t('landing.testimonials.quote1'),
-      initials: 'SM',
-      image: testimonial3,
-    },
-    {
-      name: 'Alex K.',
-      text: t('landing.testimonials.quote2'),
-      initials: 'AK',
-      image: testimonial1,
-    },
-    {
-      name: 'Maria L.',
-      text: t('landing.testimonials.quote3'),
-      initials: 'ML',
-      image: testimonial2,
-    },
+    { name: 'Sarah M.', text: t('landing.testimonials.quote1'), initials: 'SM', image: testimonial3 },
+    { name: 'Alex K.', text: t('landing.testimonials.quote2'), initials: 'AK', image: testimonial1 },
+    { name: 'Maria L.', text: t('landing.testimonials.quote3'), initials: 'ML', image: testimonial2 },
   ];
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  const nextTestimonial = () => setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  const prevTestimonial = () => setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <section className="mt-5 flex min-h-[60vh] w-full flex-col items-center justify-center bg-foreground p-[2%] text-background max-lg:min-h-[40vh]">
+    <section className="mt-5 flex min-h-[60vh] w-full flex-col items-center justify-center bg-card p-[2%] text-foreground max-lg:min-h-[40vh]">
       <motion.h3
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -63,45 +43,43 @@ export function Testimonials() {
         <div className="flex flex-col gap-10">
           <div className="flex items-center justify-center gap-10 rounded-lg p-4">
             <div className="flex items-center">
-              <Avatar className="h-[150px] w-[150px] max-lg:h-[80px] max-lg:w-[80px]">
+              <Avatar className="h-[150px] w-[150px] max-lg:h-[80px] max-lg:w-[80px] ring-2 ring-primary/30">
                 <AvatarImage 
                   src={testimonials[currentIndex].image} 
                   alt={testimonials[currentIndex].name}
                   className="object-cover"
                 />
-                <AvatarFallback className="text-2xl text-foreground">
+                <AvatarFallback className="text-2xl text-foreground bg-muted">
                   {testimonials[currentIndex].initials}
                 </AvatarFallback>
               </Avatar>
             </div>
             <div className="flex max-w-[450px] flex-col gap-4">
-              <p className="mt-4 italic text-background/80">
+              <p className="mt-4 italic text-muted-foreground">
                 "{testimonials[currentIndex].text}"
               </p>
-              <b>- {testimonials[currentIndex].name}</b>
+              <b className="text-primary">- {testimonials[currentIndex].name}</b>
             </div>
           </div>
 
-          {/* Pagination dots */}
           <div className="flex justify-center gap-2">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`h-3 w-3 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-primary' : 'bg-background/30'
+                  index === currentIndex ? 'bg-primary' : 'bg-muted'
                 }`}
               />
             ))}
           </div>
 
-          {/* Navigation */}
           <div className="flex justify-center gap-6">
             <Button
               variant="outline"
               size="icon"
               onClick={prevTestimonial}
-              className="h-10 w-10 rounded-full border-background/30 bg-transparent text-background hover:bg-background/10"
+              className="h-10 w-10 rounded-full"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
@@ -109,7 +87,7 @@ export function Testimonials() {
               variant="outline"
               size="icon"
               onClick={nextTestimonial}
-              className="h-10 w-10 rounded-full border-background/30 bg-transparent text-background hover:bg-background/10"
+              className="h-10 w-10 rounded-full"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>

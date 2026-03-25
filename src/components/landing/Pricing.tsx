@@ -47,7 +47,7 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="bg-muted/30 px-4 py-24">
+    <section id="pricing" className="px-4 py-24">
       <div className="mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ export function Pricing() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className={`relative h-full ${plan.popular ? 'border-2 border-primary shadow-xl' : 'border-border/50'}`}>
+              <Card className={`relative h-full ${plan.popular ? 'border-2 border-primary shadow-gold-lg' : 'border-border'}`}>
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <Badge className="bg-primary px-3 py-1 text-primary-foreground">
@@ -88,7 +88,7 @@ export function Pricing() {
                     <CardTitle className="text-xl">{t(plan.nameKey)}</CardTitle>
                   </div>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-bold">{plan.price}</span>
+                    <span className="text-4xl font-bold text-foreground">{plan.price}</span>
                     <span className="text-muted-foreground">{t(plan.periodKey)}</span>
                   </div>
                   <CardDescription>{t(plan.descriptionKey)}</CardDescription>
@@ -98,13 +98,13 @@ export function Pricing() {
                     {plan.featuresKeys.map((featureKey) => (
                       <li key={featureKey} className="flex items-center gap-2">
                         <Check className="h-4 w-4 flex-shrink-0 text-primary" />
-                        <span className="text-sm">{t(featureKey)}</span>
+                        <span className="text-sm text-foreground">{t(featureKey)}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild variant={plan.variant} className={`w-full ${plan.popular ? 'bg-primary text-primary-foreground' : ''}`}>
+                  <Button asChild variant={plan.variant} className="w-full">
                     <a href="#auth-section">{t(plan.ctaKey)}</a>
                   </Button>
                 </CardFooter>

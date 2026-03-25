@@ -21,25 +21,25 @@ export function TrustBadges() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="flex min-h-[200px] w-full max-w-[80%] items-center justify-around gap-8 rounded-xl bg-muted/50 p-8 max-lg:max-w-full max-md:flex-col"
+        className="flex min-h-[200px] w-full max-w-[80%] items-center justify-around gap-8 rounded-2xl bg-card border border-border p-8 max-lg:max-w-full max-md:flex-col"
       >
         {badges.map((badge, index) => (
           <div key={index} className="flex flex-col items-center gap-4">
-            <div className="flex text-xl text-orange-500">
+            <div className="flex text-xl text-primary">
               <Star className="h-5 w-5 fill-current" />
               <Star className="h-5 w-5 fill-current" />
               <Star className="h-5 w-5 fill-current" />
               <Star className="h-5 w-5 fill-current" />
               <StarHalf className="h-5 w-5 fill-current" />
             </div>
-            <span className="text-lg">
+            <span className="text-lg text-foreground">
               <b>{badge.rating}/5</b>
               <span className="text-muted-foreground"> {t('landing.trust.from')} {badge.reviews} {t('landing.trust.reviews')}</span>
             </span>
             <img 
               src={badge.logo} 
               alt={badge.name} 
-              className="h-8 w-auto object-contain"
+              className="h-8 w-auto object-contain brightness-0 invert opacity-60"
             />
           </div>
         ))}
