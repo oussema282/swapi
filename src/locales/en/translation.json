@@ -469,7 +469,9 @@
     "phoneNumber": "Phone Number",
     "phoneNumberPlaceholder": "Your phone number",
     "phoneVisible": "Show phone to matches",
-    "phoneVisibleDescription": "Your number will be visible in chat with your matches"
+    "phoneVisibleDescription": "Your number will be visible in chat with your matches",
+    "phoneNumberInvalid": "Phone number must be 8 digits",
+    "phoneSaved": "Phone number saved"
   },
   "editItem": {
     "title": "Edit Item",
