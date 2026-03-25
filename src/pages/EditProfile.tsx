@@ -112,7 +112,7 @@ export default function EditProfile() {
           phone_number: phoneNumber.trim() || null,
           phone_visible: phoneVisible,
           updated_at: new Date().toISOString(),
-        } as any)
+        })
         .eq('user_id', user.id);
 
       if (error) throw error;
