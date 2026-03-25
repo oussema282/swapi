@@ -1,56 +1,33 @@
+## Plan: Fix Phone Number Display on User Profile and Chat
 
+### Problem
 
-## Plan: Add Optional Phone Number to Profile with Visibility Toggle
-
-### Overview
-Add a phone number field to user profiles with a visibility switch. When visible, the number appears on the public profile page and as a green banner inside chat conversations with matched users.
+The `UserProfile.tsx` page casts profile fields with `(profile as any)` which is unnecessary since the database types already include `phone_number` and `phone_visible`. While this shouldn't cause a runtime bug, cleaning it up ensures type safety. The actual data flow is correct -- if phone numbers still don't show, it means the other user hasn't enabled visibility.
 
 ### Changes
 
-**1. Database Migration — Add 2 columns to `profiles` table**
+**File: `src/pages/UserProfile.tsx**`
 
-```sql
-ALTER TABLE public.profiles
-  ADD COLUMN phone_number text DEFAULT NULL,
-  ADD COLUMN phone_visible boolean DEFAULT false;
-```
+Remove the `(profile as any)` casts on lines 152-156 and use the typed profile directly:
 
-No new RLS policies needed — existing profile policies already handle select/update.
+- `(profile as any).phone_visible` → `profile.phone_visible`
+- `(profile as any).phone_number` → `profile.phone_number`
 
-**2. Edit Profile Page (`src/pages/EditProfile.tsx`)**
+This is a minor cleanup. The feature should already work if the other user has set their phone number and toggled visibility on.
 
-After the bio field (line 249), add:
-- Phone number input field with a `Phone` icon
-- A Switch toggle labeled "Make phone visible to matches"
-- Load `phone_number` and `phone_visible` from profile, save them in `handleSave`
+make the phone number 8 digits only acceptable 
 
-**3. User Profile Page (`src/pages/UserProfile.tsx`)**
+and make a banner for the phone number in messages section floating with green background and white fonts bold
 
-After the bio line (line 151), if `profile.phone_visible && profile.phone_number`:
-- Show the phone number with a Phone icon, styled like the location row
+### Verification Steps
 
-**4. Chat Page (`src/pages/Chat.tsx`)**
+To confirm the feature works:
 
-Between the ChatHeader and the messages area (after line 103), fetch the other user's profile phone data. If `phone_visible && phone_number`:
-- Render a banner: green background (`bg-green-500`), white bold text, centered, showing the phone number with a Phone icon
-- Sits inside the chat container, above messages, always visible
-
-**5. Update `useMatches.tsx`**
-
-In the profiles query (line 65), add `phone_number, phone_visible` to the select. Extend `OtherUserProfile` interface to include these fields. Pass them through to `MatchWithItems`.
-
-**6. Translation Keys (EN/FR/AR)**
-
-Add to `editProfile` namespace:
-- `phoneNumber`, `phoneNumberPlaceholder`, `phoneVisible`, `phoneVisibleDescription`
+1. Log into a second account
+2. Go to Edit Profile, add a phone number, toggle "Make phone visible" ON, save
+3. From the first account, visit that user's profile -- number should appear below bio
+4. Open a chat with that user -- green banner should appear above messages
 
 ### Files Modified
-- `profiles` table (migration)
-- `src/pages/EditProfile.tsx`
-- `src/pages/UserProfile.tsx`
-- `src/pages/Chat.tsx`
-- `src/hooks/useMatches.tsx`
-- `src/locales/en/translation.json`
-- `src/locales/fr/translation.json`
-- `src/locales/ar/translation.json`
 
+- `src/pages/UserProfile.tsx`
