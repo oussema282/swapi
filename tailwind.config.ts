@@ -14,9 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "SF Mono", "ui-monospace", "monospace"],
+        sans: ["Inter", "SF Pro", "system-ui", "sans-serif"],
+        display: ["Inter", "SF Pro", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -80,26 +79,19 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(circle at center, var(--tw-gradient-stops))',
-        'gold-glow': 'radial-gradient(ellipse at center, hsl(48 96% 53% / 0.08) 0%, transparent 70%)',
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 4px)",
         sm: "calc(var(--radius) - 8px)",
-        xl: "2.5rem",
-        "2xl": "2rem",
-        "3xl": "2.5rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.75rem",
       },
       boxShadow: {
         'card': 'var(--shadow-card)',
         'floating': 'var(--shadow-floating)',
         'soft': 'var(--shadow-soft)',
-        'gold': '0 0 30px hsl(48 96% 53% / 0.15)',
-        'gold-lg': '0 0 60px hsl(48 96% 53% / 0.2)',
-      },
-      letterSpacing: {
-        'luxury': '0.3em',
-        'luxury-wide': '0.4em',
       },
       keyframes: {
         "accordion-down": {

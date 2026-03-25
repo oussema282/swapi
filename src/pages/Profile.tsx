@@ -187,11 +187,11 @@ export default function Profile() {
 
           {/* Pro Status Card */}
           {isPro ? (
-            <Card className="p-4 mb-6 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/30">
+            <Card className="p-4 mb-6 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border-amber-500/30">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center">
-                    <Crown className="w-5 h-5 text-primary-foreground" />
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 flex items-center justify-center">
+                    <Crown className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">Pro Member</p>
@@ -203,7 +203,7 @@ export default function Profile() {
                     </p>
                   </div>
                 </div>
-                <Badge className="gradient-primary text-primary-foreground border-0">
+                <Badge className="bg-gradient-to-r from-amber-400 to-yellow-500 text-white border-0">
                   Active
                 </Badge>
               </div>
@@ -266,8 +266,8 @@ export default function Profile() {
               className="flex items-center justify-between w-full p-4 hover:bg-muted/50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Edit className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                  <Edit className="w-5 h-5 text-blue-500" />
                 </div>
                 <span className="font-medium">{t('profile.editProfile')}</span>
               </div>

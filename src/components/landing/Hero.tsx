@@ -17,9 +17,6 @@ export function Hero() {
   
   return (
     <section className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
-      {/* Radial gold glow behind heading */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] gold-glow animate-gold-pulse pointer-events-none" />
-      
       <div className="flex min-h-screen w-full items-center justify-center gap-6 p-[5%] max-xl:items-center max-lg:flex-col max-lg:p-4 max-md:mt-[50px]">
         {/* Left Content */}
         <div className="flex flex-col justify-center">
@@ -27,7 +24,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-wrap text-6xl font-extrabold uppercase italic leading-[80px] tracking-tighter max-lg:text-4xl max-md:leading-snug"
+            className="flex flex-wrap text-6xl font-semibold uppercase leading-[80px] max-lg:text-4xl max-md:leading-snug"
           >
             <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
               {t('landing.hero.headline1')}
@@ -55,7 +52,7 @@ export function Hero() {
           >
             <Button 
               size="lg" 
-              className="h-12 gap-2 rounded-full pl-6 pr-2 text-lg font-semibold shadow-gold-lg"
+              className="h-12 gap-2 rounded-full pl-6 pr-2 text-lg font-semibold"
               onClick={scrollToAuth}
             >
               <span>{t('landing.hero.getStarted')}</span>
@@ -82,7 +79,7 @@ export function Hero() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="absolute bottom-0 left-1/2 h-[80%] w-[80%] -translate-x-1/2 rounded-full bg-primary/10"
+              className="absolute bottom-0 left-1/2 h-[80%] w-[80%] -translate-x-1/2 rounded-full bg-secondary/30"
             />
           </div>
         </div>

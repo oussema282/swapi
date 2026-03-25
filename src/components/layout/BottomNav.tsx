@@ -10,6 +10,7 @@ export function BottomNav() {
   const { hasNewMatches } = useNotifications();
   const { t } = useTranslation();
 
+  // 5-tab navigation: Search, Map, Discover (center), Matches, Profile
   const navItems = [
     { icon: Search, label: t('nav.search'), path: '/search' },
     { icon: Map, label: t('nav.map'), path: '/map' },
@@ -25,15 +26,18 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 pb-safe">
+      {/* Main container with safe area */}
       <div className="relative h-[72px] mx-4 mb-2">
-        {/* Dark glassmorphism bar */}
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-xl rounded-2xl border border-border" />
+        {/* Background bar - white with soft shadow */}
+        <div className="absolute inset-0 bg-card rounded-2xl shadow-card border border-border/50" />
         
+        {/* Navigation content */}
         <div className="relative flex items-center h-full px-2">
           {navItems.map(({ icon: Icon, label, path, isCenter }) => {
             const active = isActive(path);
             const hasNotification = path === '/matches' && hasNewMatches;
             
+            // Center Discover button - elevated floating style
             if (isCenter) {
               return (
                 <Link
@@ -52,6 +56,7 @@ export function BottomNav() {
                   >
                     <Icon className="w-7 h-7 text-primary-foreground" />
                   </motion.div>
+                  {/* Label below the floating button */}
                   <span className={cn(
                     'absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] font-medium whitespace-nowrap',
                     active ? 'text-primary' : 'text-muted-foreground'
@@ -62,6 +67,7 @@ export function BottomNav() {
               );
             }
             
+            // Regular nav items
             return (
               <Link
                 key={path}
@@ -76,7 +82,7 @@ export function BottomNav() {
                     )} 
                   />
                   {hasNotification && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse" />
                   )}
                 </div>
                 <span 
@@ -87,6 +93,7 @@ export function BottomNav() {
                 >
                   {label}
                 </span>
+                {/* Active dot indicator */}
                 {active && (
                   <motion.div 
                     layoutId="activeNavDot"

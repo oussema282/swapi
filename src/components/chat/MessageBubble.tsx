@@ -28,9 +28,12 @@ export function MessageBubble({
   position,
   animationDelay = 0,
 }: MessageBubbleProps) {
+  // Determine border radius based on position and direction
   const getBorderRadius = () => {
     const base = 'rounded-2xl';
+    
     if (position === 'single') return base;
+    
     if (isOutgoing) {
       switch (position) {
         case 'first': return 'rounded-2xl rounded-br-md';
@@ -64,7 +67,7 @@ export function MessageBubble({
           'min-w-[80px] max-w-[80%] px-4 py-2.5',
           getBorderRadius(),
           isOutgoing
-            ? 'gradient-primary text-primary-foreground shadow-gold'
+            ? 'gradient-primary text-primary-foreground shadow-md'
             : 'bg-card border border-border text-foreground shadow-sm'
         )}
       >
