@@ -37,6 +37,17 @@ export default function Profile() {
     enabled: !!user?.id,
   });
   const navigate = useNavigate();
+  
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneVisible, setPhoneVisible] = useState(false);
+  const [savingPhone, setSavingPhone] = useState(false);
+
+  useEffect(() => {
+    if (profile) {
+      setPhoneNumber(profile.phone_number || '');
+      setPhoneVisible(profile.phone_visible || false);
+    }
+  }, [profile]);
 
   useEffect(() => {
     if (!loading && !user) {
