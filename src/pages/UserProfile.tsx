@@ -149,10 +149,10 @@ export default function UserProfile() {
               {profile.bio && (
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
               )}
-              {(profile as any).phone_visible && (profile as any).phone_number && (
+              {profile.phone_visible && profile.phone_number && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
                   <Phone className="w-3 h-3" />
-                  <span>{(profile as any).phone_number}</span>
+                  <span>{profile.phone_number}</span>
                 </div>
               )}
             </div>

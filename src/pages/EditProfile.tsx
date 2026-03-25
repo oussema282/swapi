@@ -44,8 +44,8 @@ export default function EditProfile() {
       setBio(profile.bio || '');
       setLocation(profile.location || '');
       setAvatarUrl(profile.avatar_url);
-      setPhoneNumber((profile as any).phone_number || '');
-      setPhoneVisible((profile as any).phone_visible || false);
+      setPhoneNumber(profile.phone_number || '');
+      setPhoneVisible(profile.phone_visible || false);
     }
   }, [profile]);
 
@@ -263,11 +263,19 @@ export default function EditProfile() {
                   <Input
                     id="phoneNumber"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                      setPhoneNumber(val);
+                    }}
                     placeholder={t('editProfile.phoneNumberPlaceholder')}
-                    maxLength={20}
+                    maxLength={8}
                     type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]{8}"
                   />
+                  {phoneNumber.length > 0 && phoneNumber.length < 8 && (
+                    <p className="text-xs text-destructive">{t('editProfile.phoneNumberInvalid', 'Phone number must be 8 digits')}</p>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">
