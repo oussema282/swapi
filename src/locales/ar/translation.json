@@ -553,7 +553,9 @@
     "phoneNumber": "رقم الهاتف",
     "phoneNumberPlaceholder": "رقم هاتفك",
     "phoneVisible": "إظهار الرقم للتطابقات",
-    "phoneVisibleDescription": "سيكون رقمك مرئياً في الدردشة مع تطابقاتك"
+    "phoneVisibleDescription": "سيكون رقمك مرئياً في الدردشة مع تطابقاتك",
+    "phoneNumberInvalid": "يجب أن يتكون رقم الهاتف من 8 أرقام",
+    "phoneSaved": "تم حفظ رقم الهاتف"
   },
   "editItem": {
     "title": "تعديل العنصر",

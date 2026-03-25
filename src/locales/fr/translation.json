@@ -420,7 +420,9 @@
     "phoneNumber": "Numéro de téléphone",
     "phoneNumberPlaceholder": "Votre numéro de téléphone",
     "phoneVisible": "Afficher le numéro aux matchs",
-    "phoneVisibleDescription": "Votre numéro sera visible dans le chat avec vos matchs"
+    "phoneVisibleDescription": "Votre numéro sera visible dans le chat avec vos matchs",
+    "phoneNumberInvalid": "Le numéro doit contenir 8 chiffres",
+    "phoneSaved": "Numéro de téléphone enregistré"
   },
   "editItem": {
     "title": "Modifier l'article",

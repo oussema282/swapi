@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles } from 'lucide-react';
+import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone, Save } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
