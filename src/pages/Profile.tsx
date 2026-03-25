@@ -141,6 +141,50 @@ export default function Profile() {
             </Button>
           </div>
 
+          {/* Phone Number Section */}
+          <Card className="p-4 mb-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-muted-foreground" />
+              <Label className="text-sm font-medium">{t('editProfile.phoneNumber')}</Label>
+            </div>
+            <Input
+              value={phoneNumber}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                setPhoneNumber(val);
+              }}
+              maxLength={8}
+              inputMode="numeric"
+              placeholder={t('editProfile.phoneNumberPlaceholder')}
+              className="text-base"
+            />
+            {phoneNumber.length > 0 && phoneNumber.length < 8 && (
+              <p className="text-xs text-destructive">{t('editProfile.phoneNumberInvalid')}</p>
+            )}
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm">{t('editProfile.phoneVisible')}</Label>
+                <p className="text-xs text-muted-foreground">{t('editProfile.phoneVisibleDescription')}</p>
+              </div>
+              <Switch checked={phoneVisible} onCheckedChange={setPhoneVisible} />
+            </div>
+            <Button
+              size="sm"
+              onClick={handleSavePhone}
+              disabled={savingPhone}
+              className="w-full"
+            >
+              {savingPhone ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-1" />
+                  {t('common.save')}
+                </>
+              )}
+            </Button>
+          </Card>
+
           {/* Pro Status Card */}
           {isPro ? (
             <Card className="p-4 mb-6 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border-amber-500/30">
