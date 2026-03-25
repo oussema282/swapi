@@ -95,6 +95,11 @@ export default function EditProfile() {
       return;
     }
 
+    if (phoneNumber && phoneNumber.length !== 8) {
+      toast.error(t('editProfile.phoneNumberInvalid', 'Phone number must be 8 digits'));
+      return;
+    }
+
     setSaving(true);
     try {
       const { error } = await supabase

@@ -16,6 +16,8 @@ export interface Profile {
   location: string | null;
   latitude: number | null;
   longitude: number | null;
+  phone_number: string | null;
+  phone_visible: boolean | null;
   created_at: string;
   updated_at: string;
 }
