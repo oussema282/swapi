@@ -55,6 +55,31 @@ export default function Profile() {
     }
   }, [user, loading, navigate]);
 
+  const handleSavePhone = async () => {
+    if (!user) return;
+    if (phoneNumber.length > 0 && phoneNumber.length !== 8) {
+      toast.error(t('editProfile.phoneNumberInvalid'));
+      return;
+    }
+    setSavingPhone(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          phone_number: phoneNumber.trim() || null,
+          phone_visible: phoneVisible,
+        })
+        .eq('user_id', user.id);
+      if (error) throw error;
+      toast.success(t('editProfile.phoneSaved'));
+    } catch (error) {
+      console.error(error);
+      toast.error(t('editProfile.failedSaveProfile'));
+    } finally {
+      setSavingPhone(false);
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
