@@ -198,11 +198,15 @@ export default function MapView() {
     
     const initialZoom = hasFocusItemLocation ? 15 : 12;
 
+    const TUNISIA_BOUNDS: [[number, number], [number, number]] = [[7.5, 30.2], [11.6, 37.5]];
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: isDarkMode ? MAP_STYLES.dark : MAP_STYLES.light,
       center: initialCenter,
       zoom: initialZoom,
+      maxBounds: TUNISIA_BOUNDS,
+      minZoom: 6,
     });
 
     // Add navigation controls

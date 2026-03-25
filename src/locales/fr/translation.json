@@ -475,7 +475,8 @@
     "filters": "Filtres",
     "nearbyItems": "Articles à proximité",
     "itemsNearYou": "{{count}} articles près de chez vous",
-    "clearAll": "Tout effacer"
+    "clearAll": "Tout effacer",
+    "outsideTunisia": "Les articles ne peuvent être placés qu'en Tunisie"
   },
   "matches": {
     "title": "Matchs",

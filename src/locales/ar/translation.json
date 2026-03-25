@@ -608,7 +608,8 @@
     "filters": "الفلاتر",
     "nearbyItems": "عناصر قريبة",
     "itemsNearYou": "{{count}} عناصر بالقرب منك",
-    "clearAll": "مسح الكل"
+    "clearAll": "مسح الكل",
+    "outsideTunisia": "يمكن وضع العناصر في تونس فقط"
   },
   "itemDetails": {
     "category": "الفئة",
