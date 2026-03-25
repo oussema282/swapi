@@ -28,8 +28,11 @@ import {
   Camera,
   Save,
   AlertTriangle,
-  Globe
+  Globe,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -58,6 +61,7 @@ export default function Settings() {
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { theme, setTheme } = useTheme();
   
   // Profile state
   const [displayName, setDisplayName] = useState('');
@@ -592,6 +596,31 @@ export default function Settings() {
 
               {/* Privacy Tab */}
               <TabsContent value="privacy" className="space-y-6">
+                {/* Appearance / Theme Toggle */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                      {t('settings.appearance', 'Appearance')}
+                    </CardTitle>
+                    <CardDescription>{t('settings.appearanceDescription', 'Switch between light and dark mode')}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>{t('settings.darkMode', 'Dark Mode')}</Label>
+                        <p className="text-sm text-muted-foreground">
+                          {t('settings.darkModeDescription', 'Use the premium dark luxury theme')}
+                        </p>
+                      </div>
+                      <Switch
+                        checked={theme === 'dark'}
+                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">{t('settings.privacySettings')}</CardTitle>

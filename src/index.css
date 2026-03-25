@@ -80,63 +80,76 @@
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 0 0% 95%;
+    /* Premium Dark Luxury / High-Stakes Gaming */
+    --background: 0 0% 2%;
+    --foreground: 0 0% 100%;
 
-    --card: 222 47% 10%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222 47% 10%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    /* Primary: #7B5CFA (adjusted for dark) */
-    --primary: 252 94% 72%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: #facc15 Vibrant Gold */
+    --primary: 48 97% 54%;
+    --primary-foreground: 0 0% 2%;
 
-    /* Secondary */
-    --secondary: 250 30% 20%;
-    --secondary-foreground: 252 94% 72%;
+    /* Secondary: #eab308 Antique Gold */
+    --secondary: 46 92% 20%;
+    --secondary-foreground: 48 97% 54%;
 
-    /* Surface */
-    --surface: 222 47% 8%;
+    /* Surface: #111 */
+    --surface: 0 0% 7%;
 
-    --muted: 220 10% 18%;
-    --muted-foreground: 220 10% 65%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 40%;
 
-    /* Accent */
-    --accent: 142 71% 50%;
+    /* Accent: #22c55e Emerald Green */
+    --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --success: 142 71% 48%;
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    --price: 142 71% 52%;
+    --price: 142 71% 45%;
     --price-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 50%;
+    /* Destructive: #ef4444 Ruby Red */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 10% 20%;
-    --input: 220 10% 20%;
-    --ring: 252 94% 72%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 48 97% 54%;
 
-    /* Dark mode shadows */
-    --shadow-card: 0px 8px 24px rgba(0, 0, 0, 0.2);
-    --shadow-floating: 0px 10px 30px rgba(123, 92, 250, 0.4);
-    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.15);
+    /* Tinder overrides for dark */
+    --tinder-red: 0 84% 60%;
+    --tinder-green: 142 71% 45%;
+    --tinder-blue: 211 100% 50%;
+    --tinder-gold: 48 97% 54%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(252, 94%, 72%) 0%, hsl(340, 82%, 60%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(142, 71%, 50%) 0%, hsl(252, 94%, 72%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(222, 47%, 10%) 0%, hsl(222, 47%, 8%) 100%);
+    /* Dark Luxury Shadows – gold-tinted glows */
+    --shadow-card: 0px 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-floating: 0px 10px 30px rgba(250, 204, 21, 0.15);
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.3);
 
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 252 94% 72%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 10% 15%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 10% 20%;
-    --sidebar-ring: 252 94% 72%;
+    --gradient-primary: linear-gradient(135deg, hsl(48, 97%, 54%) 0%, hsl(46, 92%, 45%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(142, 71%, 45%) 0%, hsl(48, 97%, 54%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 5%) 0%, hsl(0, 0%, 2%) 100%);
+
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(48 97% 54% / 0.15);
+
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 48 97% 54%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 48 97% 54%;
   }
 }
 
