@@ -524,7 +524,8 @@
     "filters": "Filters",
     "nearbyItems": "Nearby Items",
     "itemsNearYou": "{{count}} items near you",
-    "clearAll": "Clear All"
+    "clearAll": "Clear All",
+    "outsideTunisia": "Items can only be placed within Tunisia"
   },
   "matches": {
     "title": "Matches",

@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Loader2, MapPin } from 'lucide-react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface LocationPickerMapProps {
   latitude: number | null;
@@ -10,16 +12,25 @@ interface LocationPickerMapProps {
   onChange: (lat: number, lng: number) => void;
 }
 
+const TUNISIA_BOUNDS: [[number, number], [number, number]] = [[7.5, 30.2], [11.6, 37.5]];
+const TUNISIA_CENTER: [number, number] = [33.85, 9.55]; // [lat, lng]
+
+function isInsideTunisia(lat: number, lng: number): boolean {
+  return lng >= 7.5 && lng <= 11.6 && lat >= 30.2 && lat <= 37.5;
+}
+
 export function LocationPickerMap({ latitude, longitude, onChange }: LocationPickerMapProps) {
+  const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
+  const lastValidPos = useRef<[number, number]>([TUNISIA_CENTER[0], TUNISIA_CENTER[1]]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Default to Tunisia center
-  const defaultLat = latitude ?? 36.8;
-  const defaultLng = longitude ?? 10.18;
+  const defaultLat = latitude ?? TUNISIA_CENTER[0];
+  const defaultLng = longitude ?? TUNISIA_CENTER[1];
 
   useEffect(() => {
     let cancelled = false;
@@ -52,11 +63,23 @@ export function LocationPickerMap({ latitude, longitude, onChange }: LocationPic
 
         if (cancelled || !mapContainer.current) return;
 
+        // Clamp starting position to Tunisia
+        if (!isInsideTunisia(startLat, startLng)) {
+          startLat = TUNISIA_CENTER[0];
+          startLng = TUNISIA_CENTER[1];
+        }
+
+        if (cancelled || !mapContainer.current) return;
+
+        lastValidPos.current = [startLat, startLng];
+
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
           style: 'mapbox://styles/mapbox/streets-v12',
           center: [startLng, startLat],
           zoom: 13,
+          maxBounds: TUNISIA_BOUNDS,
+          minZoom: 6,
         });
 
         map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -73,13 +96,24 @@ export function LocationPickerMap({ latitude, longitude, onChange }: LocationPic
 
         marker.current.on('dragend', () => {
           const lngLat = marker.current!.getLngLat();
-          onChange(lngLat.lat, lngLat.lng);
+          if (isInsideTunisia(lngLat.lat, lngLat.lng)) {
+            lastValidPos.current = [lngLat.lat, lngLat.lng];
+            onChange(lngLat.lat, lngLat.lng);
+          } else {
+            toast.error(t('map.outsideTunisia'));
+            marker.current!.setLngLat([lastValidPos.current[1], lastValidPos.current[0]]);
+          }
         });
 
         // Also allow clicking the map to move the marker
         map.current.on('click', (e) => {
-          marker.current?.setLngLat(e.lngLat);
-          onChange(e.lngLat.lat, e.lngLat.lng);
+          if (isInsideTunisia(e.lngLat.lat, e.lngLat.lng)) {
+            lastValidPos.current = [e.lngLat.lat, e.lngLat.lng];
+            marker.current?.setLngLat(e.lngLat);
+            onChange(e.lngLat.lat, e.lngLat.lng);
+          } else {
+            toast.error(t('map.outsideTunisia'));
+          }
         });
 
         map.current.on('load', () => {
