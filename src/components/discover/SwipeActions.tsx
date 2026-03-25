@@ -37,14 +37,14 @@ export function SwipeActions({
 
   return (
     <div className={cn("flex items-center justify-center gap-4", className)}>
-      {/* Dislike Button - Medium Red */}
+      {/* Dislike Button */}
       <motion.button
         onClick={() => handleAction('dislike', onDislike)}
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white/50 backdrop-blur-md shadow-xl border border-white/20",
-          "hover:scale-110 hover:bg-white/60 active:scale-95",
+          "bg-card/80 backdrop-blur-md shadow-xl border border-border",
+          "hover:scale-110 hover:bg-card active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'dislike' && "ring-4 ring-tinder-red/30"
         )}
@@ -59,7 +59,7 @@ export function SwipeActions({
         />
       </motion.button>
 
-      {/* Deal Invite Button - Medium Blue (between dislike and like) */}
+      {/* Deal Invite Button */}
       {onDealInvite && (
         <TooltipProvider>
           <Tooltip>
@@ -69,8 +69,8 @@ export function SwipeActions({
                 disabled={!canSwipe || isLoading}
                 className={cn(
                   "flex items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200",
-                  "bg-white/50 backdrop-blur-md shadow-lg border border-white/20",
-                  "hover:scale-110 hover:bg-white/60 active:scale-95",
+                  "bg-card/80 backdrop-blur-md shadow-lg border border-border",
+                  "hover:scale-110 hover:bg-card active:scale-95",
                   "disabled:opacity-40 disabled:hover:scale-100",
                   activeButton === 'deal' && "ring-4 ring-tinder-blue/30"
                 )}
@@ -89,14 +89,14 @@ export function SwipeActions({
         </TooltipProvider>
       )}
 
-      {/* Like Button - Medium Green */}
+      {/* Like Button */}
       <motion.button
         onClick={() => handleAction('like', onLike)}
         disabled={!canSwipe || isLoading}
         className={cn(
           "flex items-center justify-center w-[60px] h-[60px] rounded-full transition-all duration-200",
-          "bg-white/50 backdrop-blur-md shadow-xl border border-white/20",
-          "hover:scale-110 hover:bg-white/60 active:scale-95",
+          "bg-card/80 backdrop-blur-md shadow-xl border border-border",
+          "hover:scale-110 hover:bg-card active:scale-95",
           "disabled:opacity-40 disabled:hover:scale-100",
           activeButton === 'like' && "ring-4 ring-tinder-green/30"
         )}
