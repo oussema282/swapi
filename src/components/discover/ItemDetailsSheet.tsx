@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item } from '@/types/database';
-import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
