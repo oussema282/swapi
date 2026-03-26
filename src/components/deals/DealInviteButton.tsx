@@ -1,5 +1,5 @@
 import { useState, forwardRef } from 'react';
-import { Send, Loader2, Lock, RotateCcw } from 'lucide-react';
+import { Send, Loader2, Lock, RotateCcw, ChevronRight, AlertTriangle, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,6 +12,7 @@ import {
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Item, CATEGORY_LABELS } from '@/types/database';
 import { useTranslation } from 'react-i18next';
+import { Separator } from '@/components/ui/separator';
 
 interface ExistingInvite {
   sender_item_id: string;
