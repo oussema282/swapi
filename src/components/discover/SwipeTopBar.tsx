@@ -1,4 +1,4 @@
-import { SlidersHorizontal, Upload } from 'lucide-react';
+import { SlidersHorizontal, Upload, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -70,10 +70,20 @@ export function SwipeTopBar({
         </button>
       </div>
 
-      {/* Right - Deal Invites Notification + Add Item */}
+      {/* Right - Deal Invites Notification + Gift + Add Item */}
       <div className="flex items-center gap-1">
         {/* Deal Invites Notification Bell */}
         <DealInvitesNotification />
+        
+        {/* Gift Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate('/items/new?gift=true')}
+          className="w-10 h-10 rounded-full hover:bg-muted"
+        >
+          <Gift className="w-5 h-5 text-amber-500" />
+        </Button>
         
         {/* Upload Item Button */}
         <div className="relative">
