@@ -317,7 +317,7 @@ export default function Index() {
         {/* Item Selector */}
         <div className="px-4 py-3 border-b border-border/50 bg-background/80 backdrop-blur-sm shrink-0">
           <ItemSelector
-            items={myItems || []}
+            items={(myItems || []).filter(i => !i.is_archived && i.is_active)}
             selectedId={selectedItemId}
             onSelect={handleSelectItem}
           />

@@ -117,11 +117,11 @@ async function fetchForYouItems(
       }
       
       console.log('[RECO] expanded returned', expandedItems.length, 'items');
-      return fetchItemDetailsWithFilter(expandedItems, userLat, userLon, filters);
+      return fetchItemDetailsWithFilter(expandedItems, userId, userLat, userLon, filters);
     }
 
     console.log('[RECO] strict returned', rankedItems.length, 'items');
-    return fetchItemDetailsWithFilter(rankedItems, userLat, userLon, filters);
+    return fetchItemDetailsWithFilter(rankedItems, userId, userLat, userLon, filters);
   } catch (error) {
     console.error('[RECO] exception:', error);
     return fallbackFetch(userId, myItemId, userLat, userLon, filters);
@@ -238,6 +238,7 @@ async function fetchNearbyItems(
 // Helper to fetch item details with category filter applied
 async function fetchItemDetailsWithFilter(
   rankedItems: RecommendationResult[],
+  userId: string,
   userLat: number | null = null,
   userLon: number | null = null,
   filters?: NearbyFilters
@@ -248,7 +249,8 @@ async function fetchItemDetailsWithFilter(
   const { data: items, error } = await supabase
     .from('items')
     .select('*')
-    .in('id', itemIds);
+    .in('id', itemIds)
+    .neq('user_id', userId);
 
   if (error) throw error;
 
