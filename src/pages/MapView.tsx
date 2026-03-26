@@ -310,10 +310,20 @@ export default function MapView() {
       }
 
       if (item.photos && item.photos.length > 0) {
-        const img = document.createElement('img');
-        img.src = item.photos[0];
-        img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-        el.appendChild(img);
+        if (isGift) {
+          const imgWrapper = document.createElement('div');
+          imgWrapper.style.cssText = 'width: 100%; height: 100%; overflow: hidden; border-radius: 3px;';
+          const img = document.createElement('img');
+          img.src = item.photos[0];
+          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+          imgWrapper.appendChild(img);
+          el.appendChild(imgWrapper);
+        } else {
+          const img = document.createElement('img');
+          img.src = item.photos[0];
+          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+          el.appendChild(img);
+        }
       }
 
       // Add gift icon overlay for gift items
