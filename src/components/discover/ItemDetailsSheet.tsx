@@ -43,6 +43,7 @@ export function ItemDetailsSheet({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [fullscreenPhotoOpen, setFullscreenPhotoOpen] = useState(false);
 
   if (!item) return null;
 
