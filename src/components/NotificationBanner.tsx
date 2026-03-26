@@ -3,10 +3,27 @@ import { Button } from '@/components/ui/button';
 import { useNotificationPermission } from '@/hooks/useNotificationPermission';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export function NotificationBanner() {
   const { t } = useTranslation();
   const { shouldShowBanner, requestPermission, dismissBanner } = useNotificationPermission();
+
+  const handleEnable = async () => {
+    try {
+      const result = await requestPermission();
+      if (result === 'granted') {
+        toast.success(t('notifications.enabled'));
+      } else if (result === 'denied') {
+        toast.error(t('notifications.blocked'), { duration: 6000 });
+      } else {
+        // undefined or 'default' — likely blocked by iframe
+        toast.info(t('notifications.notSupported'), { duration: 6000 });
+      }
+    } catch {
+      toast.info(t('notifications.notSupported'), { duration: 6000 });
+    }
+  };
 
   if (!shouldShowBanner) return null;
 
@@ -23,7 +40,7 @@ export function NotificationBanner() {
         <Button
           size="sm"
           variant="secondary"
-          onClick={requestPermission}
+          onClick={handleEnable}
           className="flex-shrink-0"
         >
           {t('notifications.enableButton')}
