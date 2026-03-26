@@ -76,9 +76,20 @@ export function SwipeTopBar({
         {/* Deal Invites Notification Bell */}
         <DealInvitesNotification />
         
-        {/* Gift Requests Notification */}
+      {/* Gift Requests Notification */}
+        <GiftRequestsNotification />
 
-        {/* Upload Item Button */}
+        {/* Gift Create Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate('/items/new?gift=true')}
+          className="w-10 h-10 rounded-full hover:bg-muted"
+        >
+          <Gift className="w-5 h-5 text-amber-500" />
+        </Button>
+
+      {/* Upload Item Button */}
         <div className="relative">
           <Button
             variant="ghost"
