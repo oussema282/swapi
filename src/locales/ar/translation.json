@@ -826,5 +826,26 @@
     "noRequests": "لا توجد طلبات هدايا معلقة",
     "unknownUser": "مستخدم مجهول",
     "wantsYourGift": "يريد هديتك: {{item}}"
+  },
+  "dealInvite": {
+    "title": "إرسال دعوة تبادل",
+    "selectItemToOffer": "اختر عنصرك لعرضه مقابل",
+    "noItemsToOffer": "ليس لديك عناصر لعرضها",
+    "inviteDeal": "إرسال دعوة تبادل",
+    "sent": "تم إرسال دعوة التبادل!",
+    "pendingExists": "لديك بالفعل دعوة معلقة لهذا العنصر",
+    "maxAttempts": "تم الوصول للحد الأقصى من المحاولات",
+    "alreadySent": "تم إرسال الدعوة بالفعل",
+    "failedSend": "فشل إرسال الدعوة",
+    "pending": "قيد الانتظار",
+    "resendOneLeft": "إعادة إرسال واحدة متبقية",
+    "blocked": "محظور",
+    "matched": "متطابق",
+    "resendInfo": "تنتهي صلاحية الدعوات بعد 48 ساعة إذا لم تُقبل.",
+    "resendInfoBlocked": "رفضان = حظر نهائي",
+    "confirmTitle": "تأكيد الصفقة",
+    "confirmDescription": "أنت على وشك اقتراح هذا التبادل",
+    "yourItem": "غرضك",
+    "theirItem": "غرضهم"
   }
 }
