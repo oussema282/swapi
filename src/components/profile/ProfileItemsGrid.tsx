@@ -33,6 +33,9 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dealInviteOpen, setDealInviteOpen] = useState(false);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerPhotos, setViewerPhotos] = useState<string[]>([]);
 
   if (items.length === 0 && isOwnProfile) {
     return (
