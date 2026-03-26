@@ -206,6 +206,14 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
           )}
         </>
       )}
+
+      {/* Photo viewer for own profile items */}
+      <PhotoViewerModal
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        photos={viewerPhotos}
+        initialIndex={0}
+      />
     </>
   );
 }
