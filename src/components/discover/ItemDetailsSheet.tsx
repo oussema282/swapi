@@ -48,6 +48,7 @@ export function ItemDetailsSheet({
   const { t } = useTranslation();
   const { user } = useAuth();
   const { sendRequest, checkRequestStatus } = useGiftRequests();
+  const { toast } = useToast();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [fullscreenPhotoOpen, setFullscreenPhotoOpen] = useState(false);
   const [giftRequestLoading, setGiftRequestLoading] = useState(false);
