@@ -1,47 +1,71 @@
 
 
-## Plan: Replace Edit Icon with Toggle for Phone Visibility on Profile
+## Plan: Add 6 Default Cartoon Animal Avatars for Users Without Profile Pictures
 
-### Changes — `src/pages/Profile.tsx`
+### Approach
 
-**Replace lines 105-121** (the phone compact display section):
+Use 6 cartoon male animal avatar illustrations hosted as static SVGs in `src/assets/avatars/`. Each user without an `avatar_url` gets a deterministic avatar based on a hash of their `user_id`, ensuring the same user always sees the same default avatar.
 
-1. Import `Switch` from `@/components/ui/switch` and `supabase` client
-2. Replace the Edit button with a `Switch` toggle that directly updates `phone_visible` in the database
-3. Show the phone number on the left, and a centered label + toggle on the right
-4. The label text uses `t('editProfile.phoneVisible')` — already translated in all 3 languages
+### 1. Create 6 SVG avatar files
 
-Layout:
-- Row 1: Phone icon + number (left-aligned)
-- Row 2: Centered text label `t('editProfile.phoneVisible')` + Switch toggle
+Create `src/assets/avatars/` with 6 inline SVG files — simple cartoon male animals:
+- `lion.svg` — golden lion with mane
+- `bear.svg` — brown bear
+- `wolf.svg` — grey wolf
+- `fox.svg` — orange fox
+- `eagle.svg` — brown eagle
+- `bull.svg` — dark bull
 
-When toggled, update `profiles.phone_visible` via supabase and call `refreshProfile()`.
+Each SVG will be a simple, clean cartoon head (64×64 viewBox), flat-color style matching the app's aesthetic.
 
-### Implementation detail
+### 2. Create avatar utility (`src/lib/defaultAvatars.ts`)
 
 ```tsx
-{profile?.phone_number && (
-  <div className="flex flex-col items-center gap-2 mb-4 px-1">
-    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-      <Phone className="w-3.5 h-3.5" />
-      <span>{profile.phone_number}</span>
-    </div>
-    <div className="flex items-center gap-2">
-      <span className="text-xs text-muted-foreground">{t('editProfile.phoneVisible')}</span>
-      <Switch
-        checked={!!profile.phone_visible}
-        onCheckedChange={async (checked) => {
-          await supabase.from('profiles').update({ phone_visible: checked }).eq('user_id', user.id);
-          refreshProfile();
-        }}
-      />
-    </div>
-  </div>
-)}
+import lion from '@/assets/avatars/lion.svg';
+import bear from '@/assets/avatars/bear.svg';
+// ... etc
+
+const DEFAULT_AVATARS = [lion, bear, wolf, fox, eagle, bull];
+
+export function getDefaultAvatar(userId: string): string {
+  // Simple hash: sum char codes mod 6
+  const hash = userId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return DEFAULT_AVATARS[hash % DEFAULT_AVATARS.length];
+}
 ```
 
-Remove the `Badge` import if no longer used elsewhere, and remove the `Edit` button from this section.
+### 3. Update all AvatarFallback usages
+
+Replace the generic `<User />` icon fallback with the deterministic animal avatar image. Key files:
+
+- **`src/pages/Profile.tsx`** — own profile header
+- **`src/pages/UserProfile.tsx`** — other user's profile
+- **`src/pages/Settings.tsx`** — settings avatar
+- **`src/components/discover/SwipeCard.tsx`** — item owner avatar on cards
+- **`src/components/chat/ChatHeader.tsx`** — chat partner avatar
+- **`src/components/matches/ConversationCard.tsx`**, **`MatchCard.tsx`**, etc.
+
+Pattern change in each file:
+```tsx
+// Before
+<AvatarFallback><User className="w-8 h-8" /></AvatarFallback>
+
+// After
+<AvatarImage src={profile?.avatar_url || getDefaultAvatar(userId)} alt="Avatar" />
+<AvatarFallback><User className="w-8 h-8" /></AvatarFallback>
+```
+
+The fallback only shows during image load. The `AvatarImage` always has a source — either the user's photo or the deterministic animal avatar.
 
 ### Files Modified
+- `src/assets/avatars/` — 6 new SVG files
+- `src/lib/defaultAvatars.ts` — new utility
 - `src/pages/Profile.tsx`
+- `src/pages/UserProfile.tsx`
+- `src/pages/Settings.tsx`
+- `src/components/discover/SwipeCard.tsx`
+- `src/components/chat/ChatHeader.tsx`
+- `src/components/matches/ConversationCard.tsx`
+- `src/components/matches/MatchCard.tsx`
+- `src/components/matches/InstantMatchCard.tsx`
 
