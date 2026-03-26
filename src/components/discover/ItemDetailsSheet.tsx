@@ -27,6 +27,7 @@ interface ItemDetailsSheetProps {
   userLocation?: { latitude: number | null; longitude: number | null };
   onInviteDeal?: () => void;
   onViewOnMap?: () => void;
+  hideMapButton?: boolean;
 }
 
 export function ItemDetailsSheet({
@@ -36,6 +37,7 @@ export function ItemDetailsSheet({
   userLocation,
   onInviteDeal,
   onViewOnMap,
+  hideMapButton,
 }: ItemDetailsSheetProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -241,7 +243,7 @@ export function ItemDetailsSheet({
 
           {/* Actions */}
           <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-            {item.latitude && item.longitude && (
+            {item.latitude && item.longitude && !hideMapButton && (
               <Button
                 variant="outline"
                 className="flex-1"
