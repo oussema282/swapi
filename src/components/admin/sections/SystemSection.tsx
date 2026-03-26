@@ -37,10 +37,13 @@ interface EdgeFunctionStatus {
 }
 
 export function SystemSection() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [tableStats, setTableStats] = useState<TableStats[]>([]);
   const [allUsersPro, setAllUsersPro] = useState(false);
   const [proToggleLoading, setProToggleLoading] = useState(true);
+  const [watermarkText, setWatermarkText] = useState('');
+  const [watermarkSaving, setWatermarkSaving] = useState(false);
   const [edgeFunctions, setEdgeFunctions] = useState<EdgeFunctionStatus[]>([
     { name: 'content-moderator', status: 'unknown' },
     { name: 'fraud-detector', status: 'unknown' },
@@ -50,6 +53,7 @@ export function SystemSection() {
     { name: 'dodo-checkout', status: 'unknown' },
     { name: 'dodo-webhook', status: 'unknown' },
     { name: 'get-mapbox-token', status: 'unknown' },
+    { name: 'watermark-image', status: 'unknown' },
   ]);
   const [testingFunction, setTestingFunction] = useState<string | null>(null);
 
