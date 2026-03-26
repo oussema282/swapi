@@ -1,47 +1,39 @@
 
 
-## Plan: In-App Notification Permission Banner + Localized Message Times
+## Plan: Fix Notification Permission Button Behavior
 
 ### Problem
-1. Browser auto-blocks `Notification.requestPermission()` if not triggered by a user gesture — the current auto-prompt silently fails
-2. If the user denies, there's no reminder mechanism
-3. Message bubble timestamps show "Yesterday" in English regardless of language
+The app runs inside a preview iframe. Browsers block `Notification.requestPermission()` inside iframes/cross-origin contexts — the call silently fails and returns nothing. Even on the published domain, if the browser has previously denied permission, calling `requestPermission()` again won't show the popup (it immediately returns `'denied'`).
+
+### Solution
+Make the "Enable" button smarter:
+
+1. **If permission is `'default'`** — Call `Notification.requestPermission()` as now. If it silently fails (returns undefined or throws), show a toast explaining the user needs to click the lock icon in the address bar to enable notifications.
+
+2. **If permission is `'denied'`** — The browser will NOT show the popup again. Instead, show a toast with instructions: "Notifications are blocked. Click the lock/site-settings icon in your address bar to allow notifications for this site." This is the only way to re-enable after denial — browsers don't allow re-prompting.
+
+3. **Add user feedback** — After clicking "Enable", always show a toast indicating what happened (granted, blocked, or instructions to unblock).
 
 ### Changes
 
-**1. `src/hooks/useNotificationPermission.tsx`** — Improve logic
-- Remove the auto-prompt on mount (browsers block it without user gesture)
-- Track denial with a localStorage key `notif-last-prompted` storing the timestamp
-- Export a `shouldShowBanner` boolean: true when permission is `default`, OR when permission is `denied` and last prompt was >24h ago
+**1. `src/components/NotificationBanner.tsx`**
+- Wrap `requestPermission` call in a try/catch
+- After the call, check the result:
+  - `'granted'` → success toast, banner hides
+  - `'denied'` → instructional toast explaining how to unblock via browser settings (lock icon)
+  - `'default'` or undefined (iframe blocked) → toast explaining the limitation
+- Import `toast` from sonner
 
-**2. New component: `src/components/NotificationBanner.tsx`** — In-app banner
-- A dismissible banner (Bell icon + message + "Enable" button + X close)
-- On "Enable" click → call `requestPermission()` (this is a user gesture, so browser allows it)
-- On dismiss → store `notif-last-prompted` = now in localStorage, hide banner for 24h
-- Translated text using `t('notifications.enablePrompt')` and `t('notifications.enableButton')`
-- Styled as a subtle top banner (primary accent background, white text)
+**2. `src/hooks/useNotificationPermission.tsx`**
+- No changes needed — the hook logic is correct
 
-**3. `src/components/layout/AppLayout.tsx`** — Render the banner
-- Import and render `<NotificationBanner />` above `{children}` when `shouldShowBanner` is true
-
-**4. `src/components/chat/MessageBubble.tsx`** — Localize timestamps
-- Import `getDateLocale` from `@/lib/dateLocale` (or inline the locale lookup)
-- Import `useTranslation` to get the current language
-- Replace hardcoded `"Yesterday"` with `t('chat.yesterday')` (already exists in translations)
-- Pass locale to `format()` calls so month names are localized: `format(date, 'MMM d, HH:mm', { locale })`
-
-**5. `src/lib/dateLocale.ts`** — Export `getDateLocale` (already exported, no change needed)
-
-**6. Translation keys (EN/FR/AR)** — Add notification banner keys:
-- EN: `"notifications.enablePrompt": "Enable notifications to stay updated on matches and messages"`, `"notifications.enableButton": "Enable"`
-- FR: `"notifications.enablePrompt": "Activez les notifications pour rester informé des matchs et messages"`, `"notifications.enableButton": "Activer"`
-- AR: `"notifications.enablePrompt": "فعّل الإشعارات لتبقى على اطلاع بالمطابقات والرسائل"`, `"notifications.enableButton": "تفعيل"`
+**3. Translation keys (EN/FR/AR)** — Add:
+- `notifications.blocked`: "Notifications are blocked. Tap the lock icon in your browser's address bar, then allow notifications."
+- `notifications.enabled`: "Notifications enabled!"
+- `notifications.notSupported`: "Notifications are not supported in this browser context. Try opening the site directly."
 
 ### Files Modified
-- `src/hooks/useNotificationPermission.tsx`
-- `src/components/NotificationBanner.tsx` (new)
-- `src/components/layout/AppLayout.tsx`
-- `src/components/chat/MessageBubble.tsx`
+- `src/components/NotificationBanner.tsx`
 - `src/locales/en/translation.json`
 - `src/locales/fr/translation.json`
 - `src/locales/ar/translation.json`
