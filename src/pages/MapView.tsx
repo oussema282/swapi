@@ -4,10 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { VerifiedName } from '@/components/ui/verified-name';
-import { ArrowLeft, X, Package, Loader2, Sun, Moon, Gamepad2, Smartphone, Shirt, BookOpen, Home, Dumbbell, Filter, AlertTriangle, MapPin } from 'lucide-react';
+import { ArrowLeft, Loader2, Sun, Moon, Filter, AlertTriangle, MapPin } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -20,12 +17,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
+import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
+  owner_is_pro?: boolean;
+  community_rating?: number;
+  total_interactions?: number;
 }
 
 const MAP_STYLES = {
@@ -49,6 +50,7 @@ export default function MapView() {
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [selectedItem, setSelectedItem] = useState<ItemWithOwner | null>(null);
+  const [showDetailsSheet, setShowDetailsSheet] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem('map-theme');
     return saved ? saved === 'dark' : false; // Default to light mode
@@ -124,7 +126,15 @@ export default function MapView() {
         .select('user_id, display_name, avatar_url')
         .in('user_id', userIds);
 
+      // Fetch subscriptions for pro status
+      const { data: subsData } = await supabase
+        .from('user_subscriptions')
+        .select('user_id, is_pro')
+        .in('user_id', userIds)
+        .eq('is_pro', true);
+
       const profilesMap = new Map(profilesData?.map(p => [p.user_id, p]) || []);
+      const proSet = new Set(subsData?.map(s => s.user_id) || []);
 
       return filteredItems.map((item: any) => {
         const profile = profilesMap.get(item.user_id);
@@ -132,6 +142,7 @@ export default function MapView() {
           ...item,
           owner_display_name: profile?.display_name || 'User',
           owner_avatar_url: profile?.avatar_url || null,
+          owner_is_pro: proSet.has(item.user_id),
         };
       }) as ItemWithOwner[];
     },
@@ -277,8 +288,9 @@ export default function MapView() {
       }
 
       el.addEventListener('click', () => {
-        trackMapUsage(); // Track usage on marker interaction
+        trackMapUsage();
         setSelectedItem(item);
+        setShowDetailsSheet(true);
       });
 
       const marker = new mapboxgl.Marker(el)
@@ -537,69 +549,17 @@ export default function MapView() {
         {/* Map */}
         <div ref={mapContainer} className="absolute inset-0" />
 
-        {/* Selected Item Card */}
-        <AnimatePresence>
-          {selectedItem && (
-            <motion.div
-              initial={{ y: 200, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 200, opacity: 0 }}
-              className="absolute bottom-6 left-4 right-4 z-10"
-            >
-              <Card className="p-4 relative">
-                <button
-                  onClick={() => setSelectedItem(null)}
-                  className="absolute top-2 right-2 p-1 rounded-full hover:bg-muted"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-
-                <div className="flex gap-4">
-                  {/* Photo */}
-                  <div className="w-20 h-20 rounded-xl overflow-hidden bg-muted flex-shrink-0">
-                    {selectedItem.photos && selectedItem.photos.length > 0 ? (
-                      <img
-                        src={selectedItem.photos[0]}
-                        alt={selectedItem.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Package className="w-8 h-8 text-muted-foreground" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{selectedItem.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      <VerifiedName 
-                        name={selectedItem.owner_display_name} 
-                        badgeClassName="w-3.5 h-3.5"
-                        userId={selectedItem.user_id}
-                        clickable
-                      />
-                    </p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {t(`categories.${selectedItem.category}`)}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {t(`conditions.${selectedItem.condition}`)}
-                      </Badge>
-                    </div>
-                    <div className="mt-3">
-                      <DealInviteButton 
-                        targetItemId={selectedItem.id}
-                        targetItemTitle={selectedItem.title}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Item Details Sheet */}
+        <ItemDetailsSheet
+          open={showDetailsSheet}
+          onOpenChange={(open) => {
+            setShowDetailsSheet(open);
+            if (!open) setSelectedItem(null);
+          }}
+          item={selectedItem}
+          userLocation={{ latitude, longitude }}
+          hideMapButton
+        />
 
         {/* Upgrade Prompt - Required (not dismissable) */}
         <UpgradePrompt
