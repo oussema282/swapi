@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 interface PhotoViewerModalProps {
   open: boolean;
@@ -37,12 +38,20 @@ export function PhotoViewerModal({ open, onOpenChange, photos, initialIndex }: P
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 flex flex-col items-center justify-center [&>button]:hidden">
+      <DialogContent
+        className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 flex flex-col items-center justify-center [&>button]:hidden"
+        aria-describedby={undefined}
+        onPointerDownOutside={() => onOpenChange(false)}
+        onEscapeKeyDown={() => onOpenChange(false)}
+      >
+        <VisuallyHidden>
+          <DialogTitle>Photo viewer</DialogTitle>
+        </VisuallyHidden>
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-foreground/20 backdrop-blur-sm flex items-center justify-center hover:bg-foreground/30 transition-colors"
+          className="absolute top-4 right-4 z-[60] w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors active:scale-95"
         >
-          <X className="w-5 h-5 text-white" />
+          <X className="w-6 h-6 text-white" />
         </button>
 
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-3 py-1 bg-foreground/20 backdrop-blur-sm rounded-full">
