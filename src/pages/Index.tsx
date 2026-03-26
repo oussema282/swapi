@@ -70,14 +70,22 @@ export default function Index() {
     }
   }, [selectedItemId]);
 
-  // Auto-select first item when items load (only if no persisted selection)
+  const availableItems = (myItems || []).filter(i => !i.is_archived && i.is_active);
+
+  // Auto-select first available item, validating against active/non-archived items
   useEffect(() => {
-    if (myItems && myItems.length > 0 && !selectedItemId) {
-      // Check if persisted item still exists in user's items
-      const persisted = sessionStorage.getItem('discover_selected_item');
-      const validPersisted = persisted && myItems.some(i => i.id === persisted);
-      setSelectedItemId(validPersisted ? persisted : myItems[0].id);
-    }
+    if (!myItems || myItems.length === 0) return;
+    
+    const available = myItems.filter(i => !i.is_archived && i.is_active);
+    if (available.length === 0) return;
+    
+    // If current selection is valid, keep it
+    if (selectedItemId && available.some(i => i.id === selectedItemId)) return;
+    
+    // Otherwise, try sessionStorage, then fall back to first available
+    const persisted = sessionStorage.getItem('discover_selected_item');
+    const validPersisted = persisted && available.some(i => i.id === persisted);
+    setSelectedItemId(validPersisted ? persisted : available[0].id);
   }, [myItems, selectedItemId]);
 
   const { data: swipeableItems, isLoading: swipeLoading, refetch: refetchItems } = useRecommendedItems(
@@ -317,7 +325,7 @@ export default function Index() {
         {/* Item Selector */}
         <div className="px-4 py-3 border-b border-border/50 bg-background/80 backdrop-blur-sm shrink-0">
           <ItemSelector
-            items={(myItems || []).filter(i => !i.is_archived && i.is_active)}
+            items={availableItems}
             selectedId={selectedItemId}
             onSelect={handleSelectItem}
           />
