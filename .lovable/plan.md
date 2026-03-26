@@ -1,17 +1,28 @@
 
 
-## Plan: Remove Login Success Toast
+## Plan: Add Moderation Toast in EditItem Upload
 
 ### Problem
-When signing in, a toast banner appears saying "Welcome back! You have successfully signed in." — the user wants this removed.
+In `EditItem.tsx`, when a photo fails moderation (line 128-130), it silently removes the file and `continue`s — no toast is shown. The `NewItem.tsx` page correctly shows a destructive toast with `t('newItem.imageBlocked')`.
 
-### Changes — `src/pages/Auth.tsx`
+### Changes — `src/pages/EditItem.tsx`
 
-Remove the toast notification block at lines ~68-73 that fires after successful sign-in. Keep the `navigate('/discover')` call so the user still gets redirected.
+Add a destructive toast after the moderation check fails (line 128-130), matching the NewItem pattern:
 
-Also check `src/components/landing/AuthSection.tsx` lines ~83-88 which has the same "Welcome back" toast for sign-in from the landing page — remove that too.
+```typescript
+if (!moderationResult.is_safe) {
+  await supabase.storage.from('item-photos').remove([fileName]);
+  toast({ 
+    variant: 'destructive', 
+    title: t('newItem.imageBlocked'),
+    description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
+  });
+  continue;
+}
+```
+
+This reuses the existing `t('newItem.imageBlocked')` and `t('newItem.policyViolation')` translation keys which are already defined in en, fr, and ar locale files — so the toast automatically follows the user's language.
 
 ### Files Modified
-- `src/pages/Auth.tsx`
-- `src/components/landing/AuthSection.tsx`
+- `src/pages/EditItem.tsx`
 
