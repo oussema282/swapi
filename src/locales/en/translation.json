@@ -938,5 +938,11 @@
     "enabled": "Notifications enabled!",
     "blocked": "Notifications are blocked. Tap the lock icon in your browser's address bar, then allow notifications.",
     "notSupported": "Notifications are not supported in this context. Try opening the site directly in your browser."
+  },
+  "admin": {
+    "watermarkText": "Watermark Text",
+    "watermarkDescription": "This text will appear as a transparent overlay on all uploaded photos",
+    "watermarkSaved": "Watermark text updated",
+    "watermarkPlaceholder": "e.g. SWAPI"
   }
 }

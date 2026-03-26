@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import {
   Server,
   Database,
@@ -19,6 +21,8 @@ import {
   Zap,
   Cloud,
   Crown,
+  Stamp,
+  Save,
 } from 'lucide-react';
 
 interface TableStats {
@@ -33,10 +37,13 @@ interface EdgeFunctionStatus {
 }
 
 export function SystemSection() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [tableStats, setTableStats] = useState<TableStats[]>([]);
   const [allUsersPro, setAllUsersPro] = useState(false);
   const [proToggleLoading, setProToggleLoading] = useState(true);
+  const [watermarkText, setWatermarkText] = useState('');
+  const [watermarkSaving, setWatermarkSaving] = useState(false);
   const [edgeFunctions, setEdgeFunctions] = useState<EdgeFunctionStatus[]>([
     { name: 'content-moderator', status: 'unknown' },
     { name: 'fraud-detector', status: 'unknown' },
@@ -46,15 +53,55 @@ export function SystemSection() {
     { name: 'dodo-checkout', status: 'unknown' },
     { name: 'dodo-webhook', status: 'unknown' },
     { name: 'get-mapbox-token', status: 'unknown' },
+    { name: 'watermark-image', status: 'unknown' },
   ]);
   const [testingFunction, setTestingFunction] = useState<string | null>(null);
 
   useEffect(() => {
     fetchStats();
     fetchAllUsersProSetting();
+    fetchWatermarkText();
   }, []);
 
-  const fetchAllUsersProSetting = async () => {
+  const fetchWatermarkText = async () => {
+    const { data } = await supabase
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'watermark_text')
+      .maybeSingle();
+    if (data?.value) {
+      const val = typeof data.value === 'string' ? data.value : String(data.value);
+      setWatermarkText(val.replace(/^"|"$/g, ''));
+    }
+  };
+
+  const saveWatermarkText = async () => {
+    setWatermarkSaving(true);
+    try {
+      const { data: existing } = await supabase
+        .from('system_settings')
+        .select('id')
+        .eq('key', 'watermark_text')
+        .maybeSingle();
+
+      if (existing) {
+        await supabase
+          .from('system_settings')
+          .update({ value: watermarkText as any, updated_at: new Date().toISOString() })
+          .eq('key', 'watermark_text');
+      } else {
+        await supabase
+          .from('system_settings')
+          .insert({ key: 'watermark_text', value: watermarkText as any });
+      }
+      toast.success(t('admin.watermarkSaved'));
+    } catch {
+      toast.error('Error saving watermark text');
+    } finally {
+      setWatermarkSaving(false);
+    }
+  };
+
     setProToggleLoading(true);
     const { data } = await supabase
       .from('system_settings')
@@ -212,6 +259,44 @@ export function SystemSection() {
             </Badge>
           </CardContent>
         )}
+      </Card>
+
+      {/* Watermark Settings */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full flex items-center justify-center bg-muted">
+              <Stamp className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <div>
+              <CardTitle className="text-base">{t('admin.watermarkText')}</CardTitle>
+              <CardDescription className="text-xs">
+                {t('admin.watermarkDescription')}
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <div className="flex gap-2">
+            <Input
+              value={watermarkText}
+              onChange={(e) => setWatermarkText(e.target.value)}
+              placeholder={t('admin.watermarkPlaceholder')}
+              className="flex-1"
+            />
+            <Button
+              onClick={saveWatermarkText}
+              disabled={watermarkSaving}
+              size="sm"
+            >
+              {watermarkSaving ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                <><Save className="h-4 w-4 mr-1" />{t('common.save')}</>
+              )}
+            </Button>
+          </div>
+        </CardContent>
       </Card>
 
       <div className="grid gap-4 md:grid-cols-4">
