@@ -895,5 +895,22 @@
     "watermarkDescription": "Ce texte apparaîtra en filigrane transparent sur toutes les photos téléchargées",
     "watermarkSaved": "Texte du filigrane mis à jour",
     "watermarkPlaceholder": "ex. SWAPI"
+  },
+  "gift": {
+    "createGift": "Créer un cadeau",
+    "giftCreated": "Cadeau créé !",
+    "giftLive": "Votre cadeau est maintenant en ligne et prêt à être réclamé",
+    "freeGift": "Cadeau gratuit",
+    "freeGiftDescription": "Cet article est offert gratuitement",
+    "requestGift": "Demander le cadeau",
+    "requestSent": "Demande de cadeau envoyée !",
+    "requestFailed": "Échec de l'envoi de la demande",
+    "requestAccepted": "Demande de cadeau acceptée !",
+    "requestRejected": "Demande de cadeau refusée",
+    "acceptFailed": "Échec de l'acceptation",
+    "requestsTitle": "Demandes de cadeaux",
+    "noRequests": "Aucune demande de cadeau en attente",
+    "unknownUser": "Utilisateur inconnu",
+    "wantsYourGift": "Veut votre cadeau : {{item}}"
   }
 }

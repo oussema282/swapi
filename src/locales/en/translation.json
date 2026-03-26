@@ -944,5 +944,22 @@
     "watermarkDescription": "This text will appear as a transparent overlay on all uploaded photos",
     "watermarkSaved": "Watermark text updated",
     "watermarkPlaceholder": "e.g. SWAPI"
+  },
+  "gift": {
+    "createGift": "Create Gift",
+    "giftCreated": "Gift Created!",
+    "giftLive": "Your gift is now live and ready to be claimed",
+    "freeGift": "Free Gift",
+    "freeGiftDescription": "This item is being given away for free",
+    "requestGift": "Request Gift",
+    "requestSent": "Gift request sent!",
+    "requestFailed": "Failed to send request",
+    "requestAccepted": "Gift request accepted!",
+    "requestRejected": "Gift request rejected",
+    "acceptFailed": "Failed to accept request",
+    "requestsTitle": "Gift Requests",
+    "noRequests": "No pending gift requests",
+    "unknownUser": "Unknown user",
+    "wantsYourGift": "Wants your gift: {{item}}"
   }
 }

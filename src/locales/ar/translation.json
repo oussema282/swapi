@@ -809,5 +809,22 @@
     "watermarkDescription": "سيظهر هذا النص كعلامة مائية شفافة على جميع الصور المرفوعة",
     "watermarkSaved": "تم تحديث نص العلامة المائية",
     "watermarkPlaceholder": "مثال: SWAPI"
+  },
+  "gift": {
+    "createGift": "إنشاء هدية",
+    "giftCreated": "تم إنشاء الهدية!",
+    "giftLive": "هديتك الآن متاحة ومستعدة للمطالبة بها",
+    "freeGift": "هدية مجانية",
+    "freeGiftDescription": "هذا العنصر يُقدم مجانًا",
+    "requestGift": "طلب الهدية",
+    "requestSent": "تم إرسال طلب الهدية!",
+    "requestFailed": "فشل إرسال الطلب",
+    "requestAccepted": "تم قبول طلب الهدية!",
+    "requestRejected": "تم رفض طلب الهدية",
+    "acceptFailed": "فشل قبول الطلب",
+    "requestsTitle": "طلبات الهدايا",
+    "noRequests": "لا توجد طلبات هدايا معلقة",
+    "unknownUser": "مستخدم مجهول",
+    "wantsYourGift": "يريد هديتك: {{item}}"
   }
 }
