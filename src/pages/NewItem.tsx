@@ -51,6 +51,7 @@ export default function NewItem() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isGiftMode = searchParams.get('gift') === 'true';
+  const isOnboarding = searchParams.get('onboarding') === 'true';
   const { toast } = useToast();
   const { t } = useTranslation();
   const createItem = useCreateItem();
@@ -242,7 +243,7 @@ export default function NewItem() {
       setIsComplete(true);
       
       setTimeout(() => {
-        navigate('/items');
+        navigate(isOnboarding ? '/onboarding' : '/items');
       }, 2500);
     } catch (error) {
       toast({ variant: 'destructive', title: t('newItem.creationFailed') });

@@ -64,7 +64,7 @@ export function AuthSection() {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/discover');
+      navigate('/onboarding');
     }
   }, [user, loading, navigate]);
 
@@ -81,7 +81,7 @@ export function AuthSection() {
         description: error.message,
       });
     } else {
-      navigate('/discover');
+      navigate('/onboarding');
     }
 
     setIsLoading(false);
@@ -122,7 +122,7 @@ export function AuthSection() {
         title: t('auth.accountCreated'),
         description: `${t('auth.welcomeTo')} ${APP_NAME}!`,
       });
-      navigate('/discover');
+      navigate('/onboarding');
     }
 
     setIsLoading(false);
@@ -131,7 +131,7 @@ export function AuthSection() {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
-      const redirectTo = `${window.location.origin}/discover`;
+      const redirectTo = `${window.location.origin}/onboarding`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {

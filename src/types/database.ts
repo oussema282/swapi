@@ -18,6 +18,8 @@ export interface Profile {
   longitude: number | null;
   phone_number: string | null;
   phone_visible: boolean | null;
+  birthday: string | null;
+  gender: string | null;
   created_at: string;
   updated_at: string;
 }

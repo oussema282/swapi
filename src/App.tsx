@@ -8,7 +8,9 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { SystemStateProvider } from "@/hooks/useSystemState";
 import { SystemPhaseRenderer } from "@/components/layout/SystemPhaseRenderer";
 import { SetupGate } from "@/components/SetupGate";
+import { OnboardingGate } from "@/components/OnboardingGate";
 import Landing from "./pages/Landing";
+import Onboarding from "./pages/Onboarding";
 import Index from "./pages/Index";
 import Items from "./pages/Items";
 import NewItem from "./pages/NewItem";
@@ -52,8 +54,9 @@ const App = () => (
                 <Routes>
                   {/* Public landing page with integrated auth */}
                   <Route path="/" element={<Landing />} />
+                  <Route path="/onboarding" element={<Onboarding />} />
                   {/* Authenticated app routes */}
-                  <Route path="/discover" element={<Index />} />
+                  <Route path="/discover" element={<OnboardingGate><Index /></OnboardingGate>} />
                   <Route path="/setup" element={<Setup />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/map" element={<MapView />} />
