@@ -10,6 +10,7 @@ import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { PhotoViewerModal } from './PhotoViewerModal';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
