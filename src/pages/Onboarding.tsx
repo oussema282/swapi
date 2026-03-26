@@ -23,6 +23,70 @@ import avatar4 from '@/assets/avatars/avatar4.png';
 import avatar5 from '@/assets/avatars/avatar5.png';
 import avatar6 from '@/assets/avatars/avatar6.png';
 
+const currentYear = new Date().getFullYear();
+const maxYear = currentYear - 13;
+const years = Array.from({ length: maxYear - 1920 + 1 }, (_, i) => maxYear - i);
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+function BirthdaySelects({ birthday, onChange }: { birthday: Date | undefined; onChange: (d: Date | undefined) => void }) {
+  const { t } = useTranslation();
+  const [day, setDay] = useState<number | ''>(birthday ? birthday.getDate() : '');
+  const [month, setMonth] = useState<number | ''>(birthday ? birthday.getMonth() + 1 : '');
+  const [year, setYear] = useState<number | ''>(birthday ? birthday.getFullYear() : '');
+
+  const daysInMonth = useMemo(() => {
+    if (month && year) return getDaysInMonth(new Date(Number(year), Number(month) - 1));
+    return 31;
+  }, [month, year]);
+
+  const days = useMemo(() => Array.from({ length: daysInMonth }, (_, i) => i + 1), [daysInMonth]);
+
+  useEffect(() => {
+    if (day && month && year) {
+      const clampedDay = Math.min(Number(day), daysInMonth);
+      if (clampedDay !== day) setDay(clampedDay);
+      onChange(new Date(Number(year), Number(month) - 1, clampedDay));
+    } else {
+      onChange(undefined);
+    }
+  }, [day, month, year, daysInMonth]);
+
+  const selectClass = "h-12 rounded-xl border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
+
+  return (
+    <div className="flex gap-2">
+      <select
+        value={day}
+        onChange={(e) => setDay(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "w-[28%]", !day && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.day', 'Day')}</option>
+        {days.map((d) => <option key={d} value={d}>{d}</option>)}
+      </select>
+      <select
+        value={month}
+        onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "flex-1", !month && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.month', 'Month')}</option>
+        {months.map((m) => (
+          <option key={m} value={m}>
+            {new Date(2000, m - 1).toLocaleString(undefined, { month: 'long' })}
+          </option>
+        ))}
+      </select>
+      <select
+        value={year}
+        onChange={(e) => setYear(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "w-[30%]", !year && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.year', 'Year')}</option>
+        {years.map((y) => <option key={y} value={y}>{y}</option>)}
+      </select>
+    </div>
+  );
+}
+
 const DEFAULT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
 
 export default function Onboarding() {
