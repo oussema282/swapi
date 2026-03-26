@@ -9,6 +9,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Item } from '@/types/database';
 import { useTranslation } from 'react-i18next';
+import { useGiftRequests } from '@/hooks/useGiftRequests';
+import { Gift } from 'lucide-react';
 
 interface DealInviteRaw {
   id: string;
