@@ -280,11 +280,38 @@ export function ItemDetailsSheet({
                 {t('itemDetails.viewOnMap')}
               </Button>
             )}
-            {item.is_gift && onRequestGift && (
-              <Button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white" onClick={onRequestGift}>
-                <Gift className="w-4 h-4 mr-2" />
-                {t('gift.requestGift')}
-              </Button>
+            {item.is_gift && user && item.user_id !== user.id && (
+              <div className="space-y-2">
+                <Button
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                  disabled={giftRequestLoading || sendRequest.isPending}
+                  onClick={async () => {
+                    setGiftRequestLoading(true);
+                    try {
+                      const status = await checkRequestStatus(item.id);
+                      if (status === 'blocked') {
+                        const { toast } = await import('@/hooks/use-toast');
+                        toast({ variant: 'destructive', title: t('gift.blocked', 'You are blocked from requesting this gift') });
+                        return;
+                      }
+                      if (status === 'pending') {
+                        const { toast } = await import('@/hooks/use-toast');
+                        toast({ variant: 'destructive', title: t('gift.alreadyPending', 'You already have a pending request') });
+                        return;
+                      }
+                      sendRequest.mutate({ giftItemId: item.id });
+                    } finally {
+                      setGiftRequestLoading(false);
+                    }
+                  }}
+                >
+                  <Gift className="w-4 h-4 mr-2" />
+                  {t('gift.requestGift')}
+                </Button>
+                <p className="text-xs text-center text-muted-foreground">
+                  {t('gift.declineWarning', '2 declines = blocked')}
+                </p>
+              </div>
             )}
             {!item.is_gift && onInviteDeal && (
               <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
