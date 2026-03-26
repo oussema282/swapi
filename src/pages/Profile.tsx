@@ -108,7 +108,7 @@ export default function Profile() {
             <div className="flex flex-col items-center gap-2 mb-4 px-1">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-3.5 h-3.5" />
-                <span>{profile.phone_number}</span>
+                <span className="font-bold">{profile.phone_number}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">{t('editProfile.phoneVisible')}</span>
