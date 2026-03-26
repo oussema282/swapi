@@ -263,36 +263,7 @@ export default function Onboarding() {
                 {/* Birthday */}
                 <div className="space-y-2">
                   <Label>{t('onboarding.birthday')}</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full h-12 justify-start text-left font-normal",
-                          !birthday && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {birthday ? format(birthday, 'PPP') : t('onboarding.selectBirthday')}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={birthday}
-                        onSelect={setBirthday}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date('1920-01-01')
-                        }
-                        defaultMonth={birthday || new Date(2000, 0)}
-                        initialFocus
-                        className={cn("p-3 pointer-events-auto")}
-                        captionLayout="dropdown-buttons"
-                        fromYear={1920}
-                        toYear={new Date().getFullYear() - 13}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <BirthdaySelects birthday={birthday} onChange={setBirthday} />
                   {birthday && !birthdayValid && (
                     <p className="text-xs text-destructive">{t('onboarding.minAge')}</p>
                   )}
