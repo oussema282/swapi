@@ -263,7 +263,7 @@ export default function MapView() {
     filteredItems.forEach(item => {
       if (!item.latitude || !item.longitude) return;
 
-      const isGift = (item as any).is_gift === true;
+      const isGift = item.is_gift === true;
 
       // Create custom marker element
       const el = document.createElement('div');
@@ -289,7 +289,7 @@ export default function MapView() {
           align-items: center;
           justify-content: center;
           box-shadow: 0 8px 20px rgba(250, 204, 21, 0.35), 0 4px 8px rgba(0,0,0,0.15);
-          overflow: hidden;
+          overflow: visible;
           position: relative;
           animation: float-marker 3s ease-in-out infinite;
         `;
