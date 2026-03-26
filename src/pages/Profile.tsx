@@ -72,7 +72,7 @@ export default function Profile() {
           {/* Profile Header */}
           <div className="flex items-center gap-4 mb-4">
             <Avatar className="w-20 h-20 border-4 border-primary/20">
-              <AvatarImage src={profile?.avatar_url || (user ? getDefaultAvatar(user.id) : undefined)} alt="Avatar" />
+              <AvatarImage src={profile?.avatar_url || (user ? getDefaultAvatar(user.id, profile?.gender) : undefined)} alt="Avatar" />
               <AvatarFallback className="gradient-primary text-primary-foreground text-xl">
                 <User className="w-8 h-8" />
               </AvatarFallback>

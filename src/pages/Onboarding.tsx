@@ -16,12 +16,7 @@ import { Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-reac
 import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { Confetti } from '@/components/discover/Confetti';
 
-import avatar1 from '@/assets/avatars/avatar1.png';
-import avatar2 from '@/assets/avatars/avatar2.png';
-import avatar3 from '@/assets/avatars/avatar3.png';
-import avatar4 from '@/assets/avatars/avatar4.png';
-import avatar5 from '@/assets/avatars/avatar5.png';
-import avatar6 from '@/assets/avatars/avatar6.png';
+import { MALE_AVATARS, FEMALE_AVATARS } from '@/lib/defaultAvatars';
 
 const currentYear = new Date().getFullYear();
 const maxYear = currentYear - 13;
@@ -87,7 +82,7 @@ function BirthdaySelects({ birthday, onChange }: { birthday: Date | undefined; o
   );
 }
 
-const DEFAULT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
+
 
 export default function Onboarding() {
   const { user, profile, loading, refreshProfile } = useAuth();
@@ -421,7 +416,7 @@ export default function Onboarding() {
 
               {/* Default avatars grid */}
               <div className="grid grid-cols-3 gap-3 mb-6">
-                {DEFAULT_AVATARS.map((avatar, i) => (
+                {(gender === 'female' ? FEMALE_AVATARS : MALE_AVATARS).map((avatar, i) => (
                   <button
                     key={i}
                     onClick={() => handleSelectAvatar(avatar)}

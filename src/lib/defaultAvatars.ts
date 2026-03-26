@@ -1,13 +1,17 @@
-import avatar1 from '@/assets/avatars/avatar1.png';
-import avatar2 from '@/assets/avatars/avatar2.png';
-import avatar3 from '@/assets/avatars/avatar3.png';
-import avatar4 from '@/assets/avatars/avatar4.png';
-import avatar5 from '@/assets/avatars/avatar5.png';
-import avatar6 from '@/assets/avatars/avatar6.png';
+import male1 from '@/assets/avatars/male1.png';
+import male2 from '@/assets/avatars/male2.png';
+import male3 from '@/assets/avatars/male3.png';
+import female1 from '@/assets/avatars/female1.png';
+import female2 from '@/assets/avatars/female2.png';
+import female3 from '@/assets/avatars/female3.png';
 
-const DEFAULT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
+const MALE_AVATARS = [male1, male2, male3];
+const FEMALE_AVATARS = [female1, female2, female3];
 
-export function getDefaultAvatar(userId: string): string {
+export { MALE_AVATARS, FEMALE_AVATARS };
+
+export function getDefaultAvatar(userId: string, gender?: string | null): string {
   const hash = userId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return DEFAULT_AVATARS[hash % DEFAULT_AVATARS.length];
+  const pool = gender === 'female' ? FEMALE_AVATARS : MALE_AVATARS;
+  return pool[hash % pool.length];
 }
