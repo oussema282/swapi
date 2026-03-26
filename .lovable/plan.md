@@ -1,37 +1,48 @@
 
 
-## Plan: Enhance Deal Invitation Pop-up UI
+## Plan: Add Confirmation Dialog Before Sending Deal Invite
 
-### Current state
-The dialog is plain — flat bordered item rows, basic text header, no visual hierarchy or polish. It looks generic and doesn't match the premium dark luxury identity.
+### What changes
+
+When a user taps an item in the deal invite list, instead of immediately sending, show a confirmation dialog displaying both items side-by-side (the user's item and the target item) with Confirm and Cancel buttons. All text uses `t()` for i18n.
 
 ### Changes — `src/components/deals/DealInviteButton.tsx`
 
-**1. Header upgrade**
-- Add a Send icon with a gradient primary circle background above the title
-- Make the target item title stand out with primary color styling
-- Add a subtle separator after the header
+1. **Add state for selected item**: `const [selectedItem, setSelectedItem] = useState<Item | null>(null)`
 
-**2. Item list cards upgrade**
-- Larger thumbnails: 14x14 (56px) with rounded-xl corners
-- Add subtle gradient border on hover for available items
-- Add a right-arrow chevron indicator for sendable items
-- Better spacing and padding (p-3.5)
-- Gift items in the list get a small gift badge overlay on their thumbnail
+2. **Change item click handler** (line 178): Instead of `sendInviteMutation.mutate(item.id)`, set `setSelectedItem(item)` to open the confirmation dialog
 
-**3. Status badges upgrade**
-- Use pill-shaped badges with more contrast (rounded-full, slightly larger padding)
-- Add subtle icon animations (pulse on pending, none on blocked)
+3. **Add confirmation Dialog** (nested inside the component):
+   - Small dialog (`max-w-xs rounded-2xl`)
+   - Shows both items side-by-side with a swap icon between them:
+     - Left: user's selected item (photo + title)
+     - Center: `ArrowLeftRight` icon
+     - Right: target item (photo + title)
+   - Two buttons at the bottom:
+     - Cancel button (outline) → `setSelectedItem(null)`
+     - Confirm button (primary) → `sendInviteMutation.mutate(selectedItem.id)` then `setSelectedItem(null)`
+   - Loading state on confirm button while mutation is pending
 
-**4. Footer warning upgrade**
-- Style the "2 refus = bloque" warning in a subtle destructive-tinted card instead of plain text
-- Add AlertTriangle icon
+4. **Need target item photo**: Add a `targetItemPhoto` prop to `DealInviteButtonProps` (optional string). Pass it from `ItemDetailsSheet` where item data is already available.
 
-**5. Dialog container**
-- Rounded-2xl corners
-- Max height for list bumped to 72 (max-h-72) for better scroll room
-- Smooth scrollbar styling
+### Changes — `src/components/discover/ItemDetailsSheet.tsx`
+
+Pass `targetItemPhoto={item.photos?.[0]}` to the `DealInviteButton`.
+
+### Translation keys to add — all 3 locale files (en, fr, ar)
+
+Add under a `dealInvite` section:
+- `confirmTitle`: "Confirm Deal" / "Confirmer l'échange" / "تأكيد الصفقة"
+- `confirmDescription`: "You are about to propose this exchange" / "Vous êtes sur le point de proposer cet échange" / "أنت على وشك اقتراح هذا التبادل"
+- `yourItem`: "Your item" / "Votre objet" / "غرضك"
+- `theirItem`: "Their item" / "Leur objet" / "غرضهم"
+
+Also add all the existing `dealInvite.*` keys that are currently missing from the translation files.
 
 ### Files Modified
 - `src/components/deals/DealInviteButton.tsx`
+- `src/components/discover/ItemDetailsSheet.tsx`
+- `src/locales/en/translation.json`
+- `src/locales/fr/translation.json`
+- `src/locales/ar/translation.json`
 
