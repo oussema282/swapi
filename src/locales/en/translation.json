@@ -932,6 +932,8 @@
     "dealInviteBody": "Someone wants to swap for your \"{{item}}\"",
     "newMessage": "New Message 💬",
     "dealExpired": "Invite Expired",
-    "dealExpiredBody": "Your deal invite for \"{{item}}\" has expired"
+    "dealExpiredBody": "Your deal invite for \"{{item}}\" has expired",
+    "enablePrompt": "Enable notifications to stay updated on matches and messages",
+    "enableButton": "Enable"
   }
 }

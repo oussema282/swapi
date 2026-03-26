@@ -797,6 +797,8 @@
     "dealInviteBody": "شخص ما يريد تبادل \"{{item}}\" الخاص بك",
     "newMessage": "رسالة جديدة 💬",
     "dealExpired": "انتهت صلاحية الدعوة",
-    "dealExpiredBody": "انتهت صلاحية دعوة الصفقة لـ \"{{item}}\""
+    "dealExpiredBody": "انتهت صلاحية دعوة الصفقة لـ \"{{item}}\"",
+    "enablePrompt": "فعّل الإشعارات لتبقى على اطلاع بالمطابقات والرسائل",
+    "enableButton": "تفعيل"
   }
 }
