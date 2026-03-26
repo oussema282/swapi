@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item } from '@/types/database';
-import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -93,6 +93,9 @@ export function ItemDetailsSheet({
                 className="w-full h-full object-cover cursor-pointer"
                 onClick={() => setFullscreenPhotoOpen(true)}
               />
+              <div className="absolute bottom-3 left-3 z-10 w-8 h-8 rounded-full bg-foreground/40 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                <ZoomIn className="w-4 h-4 text-white" />
+              </div>
               
               {hasMultiplePhotos && (
                 <div className="absolute top-3 left-3 right-3 flex gap-1.5 z-10">
