@@ -1,4 +1,4 @@
-import { SlidersHorizontal, Upload, Gift } from 'lucide-react';
+import { SlidersHorizontal, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
