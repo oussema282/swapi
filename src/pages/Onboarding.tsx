@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,11 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { format, differenceInYears } from 'date-fns';
-import { CalendarIcon, Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-react';
+import { format, differenceInYears, getDaysInMonth } from 'date-fns';
+import { Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-react';
 import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { Confetti } from '@/components/discover/Confetti';
 
@@ -24,6 +22,70 @@ import avatar3 from '@/assets/avatars/avatar3.png';
 import avatar4 from '@/assets/avatars/avatar4.png';
 import avatar5 from '@/assets/avatars/avatar5.png';
 import avatar6 from '@/assets/avatars/avatar6.png';
+
+const currentYear = new Date().getFullYear();
+const maxYear = currentYear - 13;
+const years = Array.from({ length: maxYear - 1920 + 1 }, (_, i) => maxYear - i);
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+function BirthdaySelects({ birthday, onChange }: { birthday: Date | undefined; onChange: (d: Date | undefined) => void }) {
+  const { t } = useTranslation();
+  const [day, setDay] = useState<number | ''>(birthday ? birthday.getDate() : '');
+  const [month, setMonth] = useState<number | ''>(birthday ? birthday.getMonth() + 1 : '');
+  const [year, setYear] = useState<number | ''>(birthday ? birthday.getFullYear() : '');
+
+  const daysInMonth = useMemo(() => {
+    if (month && year) return getDaysInMonth(new Date(Number(year), Number(month) - 1));
+    return 31;
+  }, [month, year]);
+
+  const days = useMemo(() => Array.from({ length: daysInMonth }, (_, i) => i + 1), [daysInMonth]);
+
+  useEffect(() => {
+    if (day && month && year) {
+      const clampedDay = Math.min(Number(day), daysInMonth);
+      if (clampedDay !== day) setDay(clampedDay);
+      onChange(new Date(Number(year), Number(month) - 1, clampedDay));
+    } else {
+      onChange(undefined);
+    }
+  }, [day, month, year, daysInMonth]);
+
+  const selectClass = "h-12 rounded-xl border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
+
+  return (
+    <div className="flex gap-2">
+      <select
+        value={day}
+        onChange={(e) => setDay(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "w-[28%]", !day && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.day', 'Day')}</option>
+        {days.map((d) => <option key={d} value={d}>{d}</option>)}
+      </select>
+      <select
+        value={month}
+        onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "flex-1", !month && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.month', 'Month')}</option>
+        {months.map((m) => (
+          <option key={m} value={m}>
+            {new Date(2000, m - 1).toLocaleString(undefined, { month: 'long' })}
+          </option>
+        ))}
+      </select>
+      <select
+        value={year}
+        onChange={(e) => setYear(e.target.value ? Number(e.target.value) : '')}
+        className={cn(selectClass, "w-[30%]", !year && "text-muted-foreground")}
+      >
+        <option value="">{t('onboarding.year', 'Year')}</option>
+        {years.map((y) => <option key={y} value={y}>{y}</option>)}
+      </select>
+    </div>
+  );
+}
 
 const DEFAULT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
 
@@ -265,36 +327,7 @@ export default function Onboarding() {
                 {/* Birthday */}
                 <div className="space-y-2">
                   <Label>{t('onboarding.birthday')}</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full h-12 justify-start text-left font-normal",
-                          !birthday && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {birthday ? format(birthday, 'PPP') : t('onboarding.selectBirthday')}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={birthday}
-                        onSelect={setBirthday}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date('1920-01-01')
-                        }
-                        defaultMonth={birthday || new Date(2000, 0)}
-                        initialFocus
-                        className={cn("p-3 pointer-events-auto")}
-                        captionLayout="dropdown-buttons"
-                        fromYear={1920}
-                        toYear={new Date().getFullYear() - 13}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <BirthdaySelects birthday={birthday} onChange={setBirthday} />
                   {birthday && !birthdayValid && (
                     <p className="text-xs text-destructive">{t('onboarding.minAge')}</p>
                   )}
