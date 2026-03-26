@@ -218,7 +218,7 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {showConfetti && <Confetti />}
+      {showConfetti && <Confetti show={showConfetti} />}
       
       {/* Progress */}
       <div className="px-4 pt-6 pb-2">
@@ -456,7 +456,7 @@ export default function Onboarding() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                className="w-24 h-24 rounded-full bg-green-500 flex items-center justify-center mb-6"
+                className="w-24 h-24 rounded-full bg-primary flex items-center justify-center mb-6"
               >
                 <Check className="w-12 h-12 text-white" strokeWidth={3} />
               </motion.div>
