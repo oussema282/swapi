@@ -1,71 +1,35 @@
 
 
-## Plan: Add 6 Default Cartoon Animal Avatars for Users Without Profile Pictures
+## Plan: Replace Animal Avatars with Human Pixel Art Avatars
 
-### Approach
+### Changes
 
-Use 6 cartoon male animal avatar illustrations hosted as static SVGs in `src/assets/avatars/`. Each user without an `avatar_url` gets a deterministic avatar based on a hash of their `user_id`, ensuring the same user always sees the same default avatar.
+**1. Replace 6 avatar images** (`src/assets/avatars/`)
 
-### 1. Create 6 SVG avatar files
+Delete the animal JPGs and create 6 new human pixel art avatar SVGs — simple 64×64 pixel art style male characters with distinct features:
 
-Create `src/assets/avatars/` with 6 inline SVG files — simple cartoon male animals:
-- `lion.svg` — golden lion with mane
-- `bear.svg` — brown bear
-- `wolf.svg` — grey wolf
-- `fox.svg` — orange fox
-- `eagle.svg` — brown eagle
-- `bull.svg` — dark bull
+- `avatar1.svg` — guy with brown hair, blue shirt
+- `avatar2.svg` — guy with black hair, red cap
+- `avatar3.svg` — guy with blonde hair, green hoodie
+- `avatar4.svg` — guy with dark skin, orange shirt
+- `avatar5.svg` — guy with red hair, purple shirt
+- `avatar6.svg` — guy with grey hair, teal shirt
 
-Each SVG will be a simple, clean cartoon head (64×64 viewBox), flat-color style matching the app's aesthetic.
+Each will be a clean 32×32 or 64×64 pixel art head/shoulders portrait rendered as SVG rects for crisp scaling.
 
-### 2. Create avatar utility (`src/lib/defaultAvatars.ts`)
+**2. Update `src/lib/defaultAvatars.ts`**
+
+Change imports from `.jpg` animal files to the new `.svg` human pixel art files:
 
 ```tsx
-import lion from '@/assets/avatars/lion.svg';
-import bear from '@/assets/avatars/bear.svg';
+import avatar1 from '@/assets/avatars/avatar1.svg';
+import avatar2 from '@/assets/avatars/avatar2.svg';
 // ... etc
-
-const DEFAULT_AVATARS = [lion, bear, wolf, fox, eagle, bull];
-
-export function getDefaultAvatar(userId: string): string {
-  // Simple hash: sum char codes mod 6
-  const hash = userId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  return DEFAULT_AVATARS[hash % DEFAULT_AVATARS.length];
-}
 ```
-
-### 3. Update all AvatarFallback usages
-
-Replace the generic `<User />` icon fallback with the deterministic animal avatar image. Key files:
-
-- **`src/pages/Profile.tsx`** — own profile header
-- **`src/pages/UserProfile.tsx`** — other user's profile
-- **`src/pages/Settings.tsx`** — settings avatar
-- **`src/components/discover/SwipeCard.tsx`** — item owner avatar on cards
-- **`src/components/chat/ChatHeader.tsx`** — chat partner avatar
-- **`src/components/matches/ConversationCard.tsx`**, **`MatchCard.tsx`**, etc.
-
-Pattern change in each file:
-```tsx
-// Before
-<AvatarFallback><User className="w-8 h-8" /></AvatarFallback>
-
-// After
-<AvatarImage src={profile?.avatar_url || getDefaultAvatar(userId)} alt="Avatar" />
-<AvatarFallback><User className="w-8 h-8" /></AvatarFallback>
-```
-
-The fallback only shows during image load. The `AvatarImage` always has a source — either the user's photo or the deterministic animal avatar.
 
 ### Files Modified
-- `src/assets/avatars/` — 6 new SVG files
-- `src/lib/defaultAvatars.ts` — new utility
-- `src/pages/Profile.tsx`
-- `src/pages/UserProfile.tsx`
-- `src/pages/Settings.tsx`
-- `src/components/discover/SwipeCard.tsx`
-- `src/components/chat/ChatHeader.tsx`
-- `src/components/matches/ConversationCard.tsx`
-- `src/components/matches/MatchCard.tsx`
-- `src/components/matches/InstantMatchCard.tsx`
+- `src/assets/avatars/` — delete 6 animal JPGs, create 6 human pixel art SVGs
+- `src/lib/defaultAvatars.ts` — update imports
+
+No other files need changes — all components already use `getDefaultAvatar()`.
 
