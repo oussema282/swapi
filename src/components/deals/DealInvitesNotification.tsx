@@ -86,7 +86,7 @@ export function DealInvitesNotification() {
     },
   });
 
-  const pendingCount = pendingInvites.length;
+  const pendingCount = pendingInvites.length + giftRequests.length;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
