@@ -38,6 +38,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 const profileSchema = z.object({
   displayName: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name too long'),
@@ -292,12 +293,10 @@ export default function Settings() {
                       <div className="relative">
                         <Avatar className="w-24 h-24 border-4 border-primary/20">
                           {avatarUrl ? (
-                            <AvatarImage src={avatarUrl} alt="Avatar" />
-                          ) : (
+                            <AvatarImage src={avatarUrl || (user ? getDefaultAvatar(user.id) : undefined)} alt="Avatar" />
                             <AvatarFallback className="gradient-primary text-primary-foreground text-2xl">
                               <User className="w-10 h-10" />
                             </AvatarFallback>
-                          )}
                         </Avatar>
                         <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full gradient-primary flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform">
                           {uploading ? (

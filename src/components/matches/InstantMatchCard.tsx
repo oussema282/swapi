@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 interface InstantMatchCardProps {
   match: MatchWithItems;
@@ -60,7 +61,7 @@ export function InstantMatchCard({
             isHighlighted ? 'ring-2 ring-primary' : 'ring-2 ring-card'
           )}>
             <Avatar className="w-7 h-7">
-              <AvatarImage src={ownerAvatar || undefined} />
+              <AvatarImage src={ownerAvatar || getDefaultAvatar(match.other_user_id || match.id)} />
               <AvatarFallback className="text-[10px] bg-secondary text-secondary-foreground">
                 {ownerName.charAt(0).toUpperCase()}
               </AvatarFallback>

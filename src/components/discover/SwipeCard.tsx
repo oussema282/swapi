@@ -8,6 +8,7 @@ import { DescriptionModal } from './DescriptionModal';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 interface SwipeCardProps {
   item: Item & { 
@@ -252,7 +253,7 @@ export function SwipeCard({ item, isTop, onSwipeComplete, swipeDirection, userLo
           {/* Owner Info Row */}
           <div className="flex items-center gap-2 mb-3">
             <Avatar className="w-8 h-8 ring-2 ring-card">
-              <AvatarImage src={item.owner_avatar_url || undefined} />
+              <AvatarImage src={item.owner_avatar_url || getDefaultAvatar(item.user_id)} />
               <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
                 {item.owner_display_name?.charAt(0).toUpperCase() || '?'}
               </AvatarFallback>
