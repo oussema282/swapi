@@ -3,7 +3,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2 } from 'lucide-react';
 
 interface OnboardingGateProps {
   children: ReactNode;
@@ -30,11 +29,7 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
   });
 
   if (loading || itemsLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return null;
   }
 
   // Not logged in — don't gate
