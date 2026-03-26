@@ -161,6 +161,7 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
                 </button>
               </div>
             )}
+          </motion.button>
         ))}
 
         {/* Add item button for own profile */}
