@@ -12,15 +12,13 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { PhotoViewerModal } from './PhotoViewerModal';
 
-interface ItemWithOwner extends Omit<Item, 'is_gift'> {
-  is_gift?: boolean;
+interface ItemWithOwner extends Item {
   owner_display_name: string;
   owner_avatar_url: string | null;
   owner_is_pro?: boolean;
   user_id: string;
   community_rating?: number;
   total_interactions?: number;
-  is_gift?: boolean;
 }
 
 interface ItemDetailsSheetProps {
