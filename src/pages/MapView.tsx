@@ -280,21 +280,13 @@ export default function MapView() {
           `;
           document.head.appendChild(style);
         }
-        // Gift marker: large floating rectangular golden frame
+        // Outer element: only for Mapbox positioning, no animation
         el.style.cssText = `
           width: 72px;
           height: 56px;
-          border-radius: 8px;
-          background: linear-gradient(135deg, #facc15, #f59e0b);
-          padding: 4px;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           overflow: visible;
-          position: relative;
-          animation: float-marker 3s ease-in-out infinite, gift-glow 3s ease-in-out infinite;
-          z-index: 10;
+          background: transparent;
         `;
       } else {
         el.style.cssText = `
