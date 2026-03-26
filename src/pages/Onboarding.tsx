@@ -82,7 +82,7 @@ function BirthdaySelects({ birthday, onChange }: { birthday: Date | undefined; o
   );
 }
 
-const DEFAULT_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6];
+
 
 export default function Onboarding() {
   const { user, profile, loading, refreshProfile } = useAuth();
