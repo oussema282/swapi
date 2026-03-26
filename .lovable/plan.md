@@ -1,32 +1,27 @@
 
 
-## Plan: Upgrade Regular Item Markers to Rectangular Shape with Exchange Icon
+## Plan: Add Deal Invite Button to ItemDetailsSheet
 
-### Changes — `src/pages/MapView.tsx`
+### Problem
+The "Invite to Deal" button in ItemDetailsSheet only appears when an `onInviteDeal` prop is passed. Many callers don't pass it, so users see no way to send a deal invite from the sheet.
 
-**Regular markers (lines 292-304)**: Replace the circular 40×40 style with a rectangular shape matching the gift marker dimensions but with a neutral frame:
+### Fix — `src/components/discover/ItemDetailsSheet.tsx`
 
-- Size: 64×48px rectangular (slightly smaller than gift's 72×56)
-- Border-radius: 8px (rounded rectangle, not circle)
-- Border: 3px solid `hsl(var(--border))` — neutral frame instead of golden
-- No floating animation, no glow
-- `overflow: visible` on outer element to show corner badge
+1. Import `DealInviteButton` from `@/components/deals/DealInviteButton`
+2. Replace the current conditional `onInviteDeal` button (lines 275-279) with the `DealInviteButton` component rendered directly for non-gift items:
 
-**Regular marker image (lines 361-366)**: Wrap in the same inner structure as gifts:
-- Inner wrapper div with `overflow: hidden; border-radius: 4px` to clip the photo within the frame
-- Image fills the wrapper with `object-fit: cover`
+```tsx
+{!item.is_gift && user && item.user_id !== user.id && (
+  <DealInviteButton
+    targetItemId={item.id}
+    targetItemTitle={item.title}
+    className="w-full gradient-primary"
+  />
+)}
+```
 
-**Add exchange icon badge** at bottom-right corner (same position as gift badge):
-- 22×22px circle with `hsl(var(--primary))` background
-- White `repeat` (loop/exchange) SVG icon inside — the Lucide `Repeat2` icon path
-- Border: 2px solid `hsl(var(--background))`
-- Small box-shadow for depth
-
-### Result
-- Regular items: static rectangular photo with neutral border + exchange loop icon at corner
-- Gift items: floating rectangular photo with golden gradient border + gift icon at corner
-- Both use same structural pattern but are visually distinct
+3. Remove the `onInviteDeal` prop from the interface (no longer needed since the sheet handles it internally)
 
 ### Files Modified
-- `src/pages/MapView.tsx`
+- `src/components/discover/ItemDetailsSheet.tsx`
 
