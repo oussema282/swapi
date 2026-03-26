@@ -327,6 +327,44 @@ export type Database = {
         }
         Relationships: []
       }
+      gift_requests: {
+        Row: {
+          created_at: string
+          gift_item_id: string
+          id: string
+          message: string | null
+          requester_id: string
+          responded_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          gift_item_id: string
+          id?: string
+          message?: string | null
+          requester_id: string
+          responded_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          gift_item_id?: string
+          id?: string
+          message?: string | null
+          requester_id?: string
+          responded_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_requests_gift_item_id_fkey"
+            columns: ["gift_item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       item_ratings: {
         Row: {
           alpha: number
@@ -392,6 +430,7 @@ export type Database = {
           is_active: boolean
           is_archived: boolean
           is_flagged: boolean
+          is_gift: boolean
           latitude: number | null
           longitude: number | null
           photos: string[] | null
@@ -415,6 +454,7 @@ export type Database = {
           is_active?: boolean
           is_archived?: boolean
           is_flagged?: boolean
+          is_gift?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
@@ -438,6 +478,7 @@ export type Database = {
           is_active?: boolean
           is_archived?: boolean
           is_flagged?: boolean
+          is_gift?: boolean
           latitude?: number | null
           longitude?: number | null
           photos?: string[] | null
@@ -458,8 +499,10 @@ export type Database = {
           confirmed_by_user_a: boolean
           confirmed_by_user_b: boolean
           created_at: string
+          gift_requester_id: string | null
           id: string
           is_completed: boolean
+          is_gift_match: boolean | null
           item_a_id: string
           item_b_id: string
         }
@@ -468,8 +511,10 @@ export type Database = {
           confirmed_by_user_a?: boolean
           confirmed_by_user_b?: boolean
           created_at?: string
+          gift_requester_id?: string | null
           id?: string
           is_completed?: boolean
+          is_gift_match?: boolean | null
           item_a_id: string
           item_b_id: string
         }
@@ -478,8 +523,10 @@ export type Database = {
           confirmed_by_user_a?: boolean
           confirmed_by_user_b?: boolean
           created_at?: string
+          gift_requester_id?: string | null
           id?: string
           is_completed?: boolean
+          is_gift_match?: boolean | null
           item_a_id?: string
           item_b_id?: string
         }
