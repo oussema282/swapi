@@ -1,29 +1,32 @@
 
 
-## Plan: Merge Gift Requests into Deal Invites Notification Bell
+## Plan: Upgrade Gift Map Markers — Floating Rectangle with Corner Gift Icon
 
 ### Problem
-There are two separate notification bells in the top bar — one for deal invites and one for gift requests. The user wants a single bell that shows both.
+Current gift markers look like slightly larger squares sitting flat on the map. The user wants a more distinctive floating rectangular frame with the gift icon at the corner.
 
-### Changes
+### Changes — `src/pages/MapView.tsx`
 
-**1. `src/components/deals/DealInvitesNotification.tsx`**
-- Import `useGiftRequests` hook
-- Add gift requests data alongside deal invites
-- Badge count = deal invites count + gift requests count
-- In the sheet content, add two sections with headers:
-  - "Deal Invites" section (existing deal invite cards)
-  - "Gift Requests" section (gift request cards with accept/reject, reusing the UI from `GiftRequestsNotification`)
-- Show "no notifications" message only when both lists are empty
+**Lines 272-329**: Replace current gift marker styling and gift badge with:
 
-**2. `src/components/discover/SwipeTopBar.tsx`**
-- Remove `<GiftRequestsNotification />` render (line 80)
-- Remove the `GiftRequestsNotification` import (line 7)
+1. **Rectangular shape** — wider than tall (e.g. 56×44px) to look distinctly rectangular vs circular regular markers
+2. **Golden frame** — 3px solid `#facc15` border, rounded corners (6px)
+3. **Floating effect** — elevated shadow with golden tint + subtle CSS animation (`translateY` bounce) to appear floating over the map
+4. **Gift icon at bottom-right corner** — small golden circle with white gift SVG icon, positioned at the corner of the frame overlapping the border
+5. **Add a CSS `@keyframes float-marker` animation** to the marker element for a gentle up-down float
 
-### Result
-Single bell icon shows combined count of deal invites + gift requests. Tapping opens a sheet with both sections.
+### Marker structure
+```text
+┌──────────────────┐  ← golden border (3px #facc15)
+│                  │
+│   item photo     │  ← 56×44px, border-radius: 6px
+│                  │
+└──────────────────┘
+              🎁      ← gift icon badge at bottom-right corner
+```
+
+The floating animation uses inline CSS `animation: float-marker 3s ease-in-out infinite` with keyframes injected once via a style tag.
 
 ### Files Modified
-- `src/components/deals/DealInvitesNotification.tsx`
-- `src/components/discover/SwipeTopBar.tsx`
+- `src/pages/MapView.tsx`
 
