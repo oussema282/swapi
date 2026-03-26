@@ -36,6 +36,7 @@ export function DealInvitesNotification() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { incomingRequests: giftRequests, acceptRequest, rejectRequest, isLoading: giftLoading } = useGiftRequests();
 
   const { data: pendingInvites = [], isLoading } = useQuery({
     queryKey: ['pending-deal-invites', user?.id],
