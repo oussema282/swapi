@@ -329,7 +329,9 @@ export type Database = {
       }
       gift_requests: {
         Row: {
+          attempt: number
           created_at: string
+          expires_at: string | null
           gift_item_id: string
           id: string
           message: string | null
@@ -338,7 +340,9 @@ export type Database = {
           status: string
         }
         Insert: {
+          attempt?: number
           created_at?: string
+          expires_at?: string | null
           gift_item_id: string
           id?: string
           message?: string | null
@@ -347,7 +351,9 @@ export type Database = {
           status?: string
         }
         Update: {
+          attempt?: number
           created_at?: string
+          expires_at?: string | null
           gift_item_id?: string
           id?: string
           message?: string | null

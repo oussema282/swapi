@@ -16,7 +16,6 @@ export function useGiftRequests() {
     queryFn: async () => {
       if (!user) return [];
       
-      // Get all gift items owned by user
       const { data: myGiftItems } = await supabase
         .from('items')
         .select('id')
@@ -35,8 +34,6 @@ export function useGiftRequests() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
-      // Enrich with requester profile and item info
       if (!data?.length) return [];
 
       const requesterIds = [...new Set(data.map(r => r.requester_id))];
@@ -62,6 +59,27 @@ export function useGiftRequests() {
     enabled: !!user,
   });
 
+  // Check request status for a specific gift item
+  const checkRequestStatus = async (giftItemId: string): Promise<'available' | 'pending' | 'blocked'> => {
+    if (!user) return 'available';
+
+    const { data } = await supabase
+      .from('gift_requests')
+      .select('status')
+      .eq('gift_item_id', giftItemId)
+      .eq('requester_id', user.id);
+
+    if (!data?.length) return 'available';
+
+    const rejectionCount = data.filter(r => r.status === 'rejected').length;
+    if (rejectionCount >= 2) return 'blocked';
+
+    const hasPending = data.some(r => r.status === 'pending');
+    if (hasPending) return 'pending';
+
+    return 'available';
+  };
+
   // Send a gift request
   const sendRequest = useMutation({
     mutationFn: async ({ giftItemId, message }: { giftItemId: string; message?: string }) => {
@@ -75,23 +93,36 @@ export function useGiftRequests() {
           message: message || null,
         });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('pending gift request already exists')) {
+          throw new Error('pending');
+        }
+        if (error.message.includes('Maximum attempts reached')) {
+          throw new Error('blocked');
+        }
+        throw error;
+      }
     },
     onSuccess: () => {
       toast({ title: t('gift.requestSent') });
       queryClient.invalidateQueries({ queryKey: ['gift-requests'] });
     },
-    onError: () => {
-      toast({ variant: 'destructive', title: t('gift.requestFailed') });
+    onError: (error: Error) => {
+      if (error.message === 'pending') {
+        toast({ variant: 'destructive', title: t('gift.alreadyPending', 'You already have a pending request') });
+      } else if (error.message === 'blocked') {
+        toast({ variant: 'destructive', title: t('gift.blocked', 'You are blocked from requesting this gift') });
+      } else {
+        toast({ variant: 'destructive', title: t('gift.requestFailed') });
+      }
     },
   });
 
-  // Accept a gift request (creates a match for chat)
+  // Accept a gift request
   const acceptRequest = useMutation({
     mutationFn: async (requestId: string) => {
       if (!user) throw new Error('Not authenticated');
 
-      // Get the request
       const { data: request, error: reqError } = await supabase
         .from('gift_requests')
         .select('*')
@@ -100,7 +131,6 @@ export function useGiftRequests() {
 
       if (reqError || !request) throw new Error('Request not found');
 
-      // Update request status
       const { error: updateError } = await supabase
         .from('gift_requests')
         .update({ status: 'accepted', responded_at: new Date().toISOString() })
@@ -108,7 +138,6 @@ export function useGiftRequests() {
 
       if (updateError) throw updateError;
 
-      // Create a gift match for chat
       const { error: matchError } = await supabase
         .from('matches')
         .insert({
@@ -153,5 +182,6 @@ export function useGiftRequests() {
     sendRequest,
     acceptRequest,
     rejectRequest,
+    checkRequestStatus,
   };
 }
