@@ -81,10 +81,6 @@ export function AuthSection() {
         description: error.message,
       });
     } else {
-      toast({
-        title: t('auth.welcomeBack'),
-        description: t('auth.signInSuccess'),
-      });
       navigate('/discover');
     }
 
