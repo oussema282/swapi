@@ -1,5 +1,5 @@
 import { useState, forwardRef } from 'react';
-import { Send, Loader2, Lock, RotateCcw } from 'lucide-react';
+import { Send, Loader2, Lock, RotateCcw, ChevronRight, AlertTriangle, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,6 +12,7 @@ import {
 import { UpgradePrompt } from '@/components/subscription/UpgradePrompt';
 import { Item, CATEGORY_LABELS } from '@/types/database';
 import { useTranslation } from 'react-i18next';
+import { Separator } from '@/components/ui/separator';
 
 interface ExistingInvite {
   sender_item_id: string;
@@ -119,13 +120,13 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
     const getStatusBadge = (status: InviteStatus) => {
       switch (status) {
         case 'pending':
-          return (<span className="flex items-center gap-1 text-xs text-warning bg-warning/10 px-2 py-1 rounded"><Lock className="w-3 h-3" />{t('dealInvite.pending')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-warning bg-warning/15 px-3 py-1.5 rounded-full animate-pulse"><Lock className="w-3 h-3" />{t('dealInvite.pending')}</span>);
         case 'can_resend':
-          return (<span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-600/10 px-2 py-1 rounded"><RotateCcw className="w-3 h-3" />{t('dealInvite.resendOneLeft')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-orange-500 bg-orange-500/15 px-3 py-1.5 rounded-full"><RotateCcw className="w-3 h-3" />{t('dealInvite.resendOneLeft')}</span>);
         case 'blocked':
-          return (<span className="flex items-center gap-1 text-xs text-destructive bg-destructive/10 px-2 py-1 rounded"><Lock className="w-3 h-3" />{t('dealInvite.blocked')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-destructive bg-destructive/15 px-3 py-1.5 rounded-full"><Lock className="w-3 h-3" />{t('dealInvite.blocked')}</span>);
         case 'matched':
-          return (<span className="text-xs text-tinder-green bg-tinder-green/10 px-2 py-1 rounded">{t('dealInvite.matched')}</span>);
+          return (<span className="text-xs font-medium text-tinder-green bg-tinder-green/15 px-3 py-1.5 rounded-full">{t('dealInvite.matched')}</span>);
         default:
           return null;
       }
@@ -143,49 +144,75 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
         )}
 
         <Dialog open={showModal} onOpenChange={setShowModal}>
-          <DialogContent className="max-w-sm">
-            <DialogHeader>
-              <DialogTitle>{t('dealInvite.title')}</DialogTitle>
+          <DialogContent className="max-w-sm rounded-2xl">
+            <DialogHeader className="flex flex-col items-center gap-3 pb-2">
+              <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center">
+                <Send className="w-5 h-5 text-primary" />
+              </div>
+              <DialogTitle className="text-center">{t('dealInvite.title')}</DialogTitle>
               <DialogDescription className="text-center">
                 {t('dealInvite.selectItemToOffer')}
-                <span className="block font-bold text-foreground mt-1">{targetItemTitle}</span>
+                <span className="block font-bold text-primary mt-1.5 text-sm">{targetItemTitle}</span>
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-2 max-h-60 overflow-y-auto">
+            <Separator className="opacity-50" />
+
+            <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
               {itemsLoading ? (
-                <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin" /></div>
+                <div className="flex justify-center py-6"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
               ) : myItems.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">{t('dealInvite.noItemsToOffer')}</p>
+                <p className="text-sm text-muted-foreground text-center py-6">{t('dealInvite.noItemsToOffer')}</p>
               ) : (
                 myItems.map((item) => {
                   const status = getInviteStatus(item.id);
                   const canSend = canSendInvite(status);
                   return (
-                    <div key={item.id} className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${canSend ? 'hover:bg-muted/50 cursor-pointer' : 'opacity-60 cursor-not-allowed'}`} onClick={() => { if (canSend) sendInviteMutation.mutate(item.id); }}>
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                    <div
+                      key={item.id}
+                      className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-200 ${
+                        canSend
+                          ? 'hover:bg-primary/5 hover:border-primary/30 cursor-pointer active:scale-[0.98]'
+                          : 'opacity-50 cursor-not-allowed'
+                      }`}
+                      onClick={() => { if (canSend) sendInviteMutation.mutate(item.id); }}
+                    >
+                      <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-muted flex-shrink-0 ring-1 ring-border">
                         {item.photos?.[0] ? (
                           <img src={item.photos[0]} alt={item.title} className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-muted-foreground">📦</div>
+                          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-lg">📦</div>
+                        )}
+                        {item.is_gift && (
+                          <div className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                            <Gift className="w-3 h-3 text-primary-foreground" />
+                          </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{item.title}</p>
-                        <p className="text-xs text-muted-foreground">{CATEGORY_LABELS[item.category]}</p>
+                        <p className="font-semibold text-sm truncate">{item.title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{CATEGORY_LABELS[item.category]}</p>
                       </div>
-                      {getStatusBadge(status)}
-                      {canSend && sendInviteMutation.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {getStatusBadge(status)}
+                        {canSend && !sendInviteMutation.isPending && (
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        )}
+                        {canSend && sendInviteMutation.isPending && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+                      </div>
                     </div>
                   );
                 })
               )}
             </div>
 
-            <p className="text-xs text-muted-foreground text-center">
-              {t('dealInvite.resendInfo')}
-              <span className="block font-bold text-foreground mt-0.5">{t('dealInvite.resendInfoBlocked')}</span>
-            </p>
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-destructive/10 border border-destructive/20">
+              <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+              <div className="text-xs text-muted-foreground">
+                {t('dealInvite.resendInfo')}
+                <span className="block font-bold text-destructive mt-0.5">{t('dealInvite.resendInfoBlocked')}</span>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
 
