@@ -35,48 +35,12 @@ export default function Profile() {
     enabled: !!user?.id,
   });
   const navigate = useNavigate();
-  
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneVisible, setPhoneVisible] = useState(false);
-  const [savingPhone, setSavingPhone] = useState(false);
-
-  useEffect(() => {
-    if (profile) {
-      setPhoneNumber(profile.phone_number || '');
-      setPhoneVisible(profile.phone_visible || false);
-    }
-  }, [profile]);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/');
     }
   }, [user, loading, navigate]);
-
-  const handleSavePhone = async () => {
-    if (!user) return;
-    if (phoneNumber.length > 0 && phoneNumber.length !== 8) {
-      toast.error(t('editProfile.phoneNumberInvalid'));
-      return;
-    }
-    setSavingPhone(true);
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          phone_number: phoneNumber.trim() || null,
-          phone_visible: phoneVisible,
-        })
-        .eq('user_id', user.id);
-      if (error) throw error;
-      toast.success(t('editProfile.phoneSaved'));
-    } catch (error) {
-      console.error(error);
-      toast.error(t('editProfile.failedSaveProfile'));
-    } finally {
-      setSavingPhone(false);
-    }
-  };
 
   const handleSignOut = async () => {
     await signOut();
