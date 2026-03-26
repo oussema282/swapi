@@ -1,81 +1,33 @@
-## Plan: Watermark Photos with Admin-Configured Fingerprint Text
 
-### Overview
 
-Add a watermark system where the admin sets a text phrase (e.g. "SWAPI") in system settings, and every photo uploaded to the platform gets that text stamped transparently across it before being stored — protecting images from theft.
+## Plan: Fix Broken Watermark Images
 
-### How It Works
+### Root Cause
 
-```text
-User uploads photo
-       ↓
-Photo passes moderation check
-       ↓
-Edge function applies watermark text
-(diagonal, semi-transparent, repeated)
-       ↓
-Watermarked photo replaces original in storage
-       ↓
-Public URL serves watermarked version
-```
+The watermark edge function imports `deno.land/x/canvas` which requires **native FFI binaries** that are not available in Supabase Edge Functions. The function crashes silently, corrupting the uploaded image or replacing it with garbage data.
 
-### Changes
+### Solution
 
-**1. Database — Store watermark text in `system_settings**`
+Rewrite the edge function using **`imagescript`** (`https://deno.land/x/imagescript`), a pure TypeScript image library that works in the Deno edge runtime without native dependencies. It supports PNG and JPEG decoding/encoding and pixel-level drawing.
 
-- No migration needed — `system_settings` table already exists with `key`/`value` columns
-- Insert a row: `key = 'watermark_text'`, `value = '"SWAPI"'` (or whatever the admin sets)
-- Admin can update this from the System section in the dashboard
+### Changes — `supabase/functions/watermark-image/index.ts`
 
-**2. New edge function: `supabase/functions/watermark-image/index.ts**`
+Complete rewrite:
 
-- Accepts: `{ bucket: string, filePath: string }` (the just-uploaded file)
-- Reads the `watermark_text` from `system_settings`
-- Downloads the original image from storage
-- Uses Canvas API (via `jsr:@nicolo/canvas` or pure image manipulation) to draw the watermark text diagonally across the image, repeated in a grid pattern, semi-transparent (opacity ~15-20%), rotated ~-30°
-- Uploads the watermarked version back to the same path, replacing the original
-- Returns the public URL
+1. Replace `deno.land/x/canvas` with `deno.land/x/imagescript`
+2. Decode the image using `Image.decode()` (supports PNG and JPEG)
+3. Draw watermark text by rendering each character as pixels onto the image at diagonal intervals with low opacity (~25 alpha out of 255)
+4. Since `imagescript` has limited text rendering, use a simpler approach: create a small watermark pattern image with the text rendered as pixel blocks, then composite it repeatedly across the main image with transparency
+5. Alternative simpler approach: use `imagescript`'s built-in `composite` method to overlay a semi-transparent pattern
 
-**3. Update upload flows to call watermark after moderation**
+**Practical approach**: Since `imagescript` doesn't have full font/text rendering, the function will:
+- Create a small PNG "stamp" by drawing the watermark text character-by-character using a basic bitmap font (built into the function as a small pixel map for A-Z, 0-9)
+- Tile this stamp diagonally across the image with ~15% opacity
+- Encode back to the original format (PNG or JPEG)
+- Upload back to storage, replacing the original
 
-Files with upload logic:
-
-- `src/pages/NewItem.tsx` — item photo upload
-- `src/pages/EditItem.tsx` — item photo upload
-- `src/pages/EditProfile.tsx` — avatar upload
-- `src/pages/Settings.tsx` — avatar upload
-
-After moderation passes, call `supabase.functions.invoke('watermark-image', { body: { bucket: 'item-photos', filePath: fileName } })` before adding the URL to state. This keeps the flow: upload → moderate → watermark → use URL.
-
-**4. Admin UI — Watermark settings in System section**
-
-In `src/components/admin/sections/SystemSection.tsx`:
-
-- Add a "Watermark Text" input field that reads/writes the `watermark_text` key in `system_settings`
-- Simple text input + save button
-- Show current watermark text with a preview indicator
-
-**5. Translation keys (EN/FR/AR)**
-
-- `admin.watermarkText`: "Watermark Text"
-- `admin.watermarkDescription`: "This text will appear as a transparent overlay on all uploaded photos"
-- `admin.watermarkSaved`: "Watermark text updated"
-
-### Technical Notes
-
-- The edge function will use the Deno `Canvas` API or a lightweight image library to draw text on images server-side
-- Watermark is applied at upload time, so existing photos won't be affected (could add a batch job later)
-- The watermark is burned into the image pixels — it cannot be removed by downloading
-- Avatar uploads not including watermarking 
+6. Add proper error handling so that if watermarking fails, the **original image is preserved** (don't corrupt it)
 
 ### Files Modified
+- `supabase/functions/watermark-image/index.ts` (rewrite)
 
-- `supabase/functions/watermark-image/index.ts` (new)
-- `src/pages/NewItem.tsx`
-- `src/pages/EditItem.tsx`
-- `src/pages/EditProfile.tsx`
-- `src/pages/Settings.tsx`
-- `src/components/admin/sections/SystemSection.tsx`
-- `src/locales/en/translation.json`
-- `src/locales/fr/translation.json`
-- `src/locales/ar/translation.json`
