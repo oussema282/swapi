@@ -4,7 +4,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item } from '@/types/database';
-import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn, Gift } from 'lucide-react';
+import { MapPin, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn, Gift } from 'lucide-react';
+import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -29,7 +30,6 @@ interface ItemDetailsSheetProps {
   onOpenChange: (open: boolean) => void;
   item: ItemWithOwner | null;
   userLocation?: { latitude: number | null; longitude: number | null };
-  onInviteDeal?: () => void;
   onRequestGift?: () => void;
   onViewOnMap?: () => void;
   hideMapButton?: boolean;
@@ -40,7 +40,6 @@ export function ItemDetailsSheet({
   onOpenChange,
   item,
   userLocation,
-  onInviteDeal,
   onRequestGift,
   onViewOnMap,
   hideMapButton,
@@ -272,11 +271,12 @@ export function ItemDetailsSheet({
                 {t('itemDetails.viewOnMap')}
               </Button>
             )}
-            {!item.is_gift && onInviteDeal && (
-              <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
-                <Send className="w-4 h-4 mr-2" />
-                {t('itemDetails.inviteToDeal')}
-              </Button>
+            {!item.is_gift && user && item.user_id !== user.id && (
+              <DealInviteButton
+                targetItemId={item.id}
+                targetItemTitle={item.title}
+                className="w-full gradient-primary"
+              />
             )}
             <ReportButton reportType="item" targetId={item.id} variant="icon" />
 
