@@ -1,32 +1,26 @@
 
 
-## Plan: Upgrade Gift Map Markers — Floating Rectangle with Corner Gift Icon
+## Plan: Fix Gift Markers Not Visually Distinct on Map
 
-### Problem
-Current gift markers look like slightly larger squares sitting flat on the map. The user wants a more distinctive floating rectangular frame with the gift icon at the corner.
+### Root Cause
 
-### Changes — `src/pages/MapView.tsx`
+Two issues preventing gift markers from looking different:
 
-**Lines 272-329**: Replace current gift marker styling and gift badge with:
+1. **Type definition missing `is_gift`** — The `Item` interface in `src/types/database.ts` doesn't include `is_gift`. While `(item as any).is_gift` is used, this is fragile and the real problem is that the `ItemWithOwner` type (which extends `Item`) also lacks it. The data does arrive from the DB (confirmed in `supabase/types.ts`), so the cast works — but let's make it explicit.
 
-1. **Rectangular shape** — wider than tall (e.g. 56×44px) to look distinctly rectangular vs circular regular markers
-2. **Golden frame** — 3px solid `#facc15` border, rounded corners (6px)
-3. **Floating effect** — elevated shadow with golden tint + subtle CSS animation (`translateY` bounce) to appear floating over the map
-4. **Gift icon at bottom-right corner** — small golden circle with white gift SVG icon, positioned at the corner of the frame overlapping the border
-5. **Add a CSS `@keyframes float-marker` animation** to the marker element for a gentle up-down float
+2. **`overflow: hidden` clips the gift badge** — The gift marker element has `overflow: hidden` which cuts off the gift badge positioned at `bottom: -4px; right: -4px`. The badge is invisible because it's clipped.
 
-### Marker structure
-```text
-┌──────────────────┐  ← golden border (3px #facc15)
-│                  │
-│   item photo     │  ← 56×44px, border-radius: 6px
-│                  │
-└──────────────────┘
-              🎁      ← gift icon badge at bottom-right corner
-```
+### Changes
 
-The floating animation uses inline CSS `animation: float-marker 3s ease-in-out infinite` with keyframes injected once via a style tag.
+**1. `src/types/database.ts`** — Add `is_gift` to `Item` interface
+- Add `is_gift: boolean;` field
+
+**2. `src/pages/MapView.tsx`** — Fix gift marker rendering
+- Remove `overflow: hidden` from the gift marker style (keep it for regular markers)
+- Remove `(item as any)` cast — use `item.is_gift` directly since the type now includes it
+- Ensure the gift badge `z-index` is above the image
 
 ### Files Modified
+- `src/types/database.ts`
 - `src/pages/MapView.tsx`
 
