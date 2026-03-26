@@ -227,16 +227,6 @@ export function ItemDetailsSheet({
             </div>
           )}
 
-          {/* Gift Badge */}
-          {item.is_gift && (
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Gift className="w-5 h-5 text-amber-500" />
-              <div>
-                <p className="font-medium text-sm">{t('gift.freeGift')}</p>
-                <p className="text-xs text-muted-foreground">{t('gift.freeGiftDescription')}</p>
-              </div>
-            </div>
-          )}
 
           {/* Owner Info */}
           <div className="space-y-2">
@@ -282,37 +272,6 @@ export function ItemDetailsSheet({
                 {t('itemDetails.viewOnMap')}
               </Button>
             )}
-            {item.is_gift && user && item.user_id !== user.id && (
-              <div className="space-y-2">
-                <Button
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-white"
-                  disabled={giftRequestLoading || sendRequest.isPending}
-                  onClick={async () => {
-                    setGiftRequestLoading(true);
-                     try {
-                      const status = await checkRequestStatus(item.id);
-                      if (status === 'blocked') {
-                        toast({ variant: 'destructive', title: t('gift.blocked', 'You are blocked from requesting this gift') });
-                        return;
-                      }
-                      if (status === 'pending') {
-                        toast({ variant: 'destructive', title: t('gift.alreadyPending', 'You already have a pending request') });
-                        return;
-                      }
-                      sendRequest.mutate({ giftItemId: item.id });
-                    } finally {
-                      setGiftRequestLoading(false);
-                    }
-                  }}
-                >
-                  <Gift className="w-4 h-4 mr-2" />
-                  {t('gift.requestGift')}
-                </Button>
-                <p className="text-xs text-center text-muted-foreground">
-                  {t('gift.declineWarning', '2 declines = blocked')}
-                </p>
-              </div>
-            )}
             {!item.is_gift && onInviteDeal && (
               <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
                 <Send className="w-4 h-4 mr-2" />
@@ -320,6 +279,50 @@ export function ItemDetailsSheet({
               </Button>
             )}
             <ReportButton reportType="item" targetId={item.id} variant="icon" />
+
+            {/* Gift section — badge + request button stacked at bottom */}
+            {item.is_gift && (
+              <div className="space-y-3 pt-3 border-t border-border/50">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                  <Gift className="w-5 h-5 text-amber-500" />
+                  <div>
+                    <p className="font-medium text-sm">{t('gift.freeGift')}</p>
+                    <p className="text-xs text-muted-foreground">{t('gift.freeGiftDescription')}</p>
+                  </div>
+                </div>
+                {user && item.user_id !== user.id && (
+                  <div className="space-y-2">
+                    <Button
+                      className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                      disabled={giftRequestLoading || sendRequest.isPending}
+                      onClick={async () => {
+                        setGiftRequestLoading(true);
+                        try {
+                          const status = await checkRequestStatus(item.id);
+                          if (status === 'blocked') {
+                            toast({ variant: 'destructive', title: t('gift.blocked', 'You are blocked from requesting this gift') });
+                            return;
+                          }
+                          if (status === 'pending') {
+                            toast({ variant: 'destructive', title: t('gift.alreadyPending', 'You already have a pending request') });
+                            return;
+                          }
+                          sendRequest.mutate({ giftItemId: item.id });
+                        } finally {
+                          setGiftRequestLoading(false);
+                        }
+                      }}
+                    >
+                      <Gift className="w-4 h-4 mr-2" />
+                      {t('gift.requestGift')}
+                    </Button>
+                    <p className="text-xs text-center text-muted-foreground">
+                      {t('gift.declineWarning', '2 declines = blocked')}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </SheetContent>
