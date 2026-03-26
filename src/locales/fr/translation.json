@@ -604,7 +604,8 @@
     "yourItem": "Votre article",
     "dealAccepted": "Invitation acceptée ! Vous pouvez maintenant discuter.",
     "dealDeclined": "Invitation refusée.",
-    "failedRespond": "Échec de la réponse à l'invitation"
+    "failedRespond": "Échec de la réponse à l'invitation",
+    "expired": "Expiré"
   },
   "unmatch": {
     "button": "Dématcher",

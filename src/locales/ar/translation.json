@@ -311,7 +311,8 @@
     "yourItem": "عنصرك",
     "dealAccepted": "تم قبول الدعوة! يمكنك الآن الدردشة.",
     "dealDeclined": "تم رفض الدعوة.",
-    "failedRespond": "فشل الرد على الدعوة"
+    "failedRespond": "فشل الرد على الدعوة",
+    "expired": "منتهي الصلاحية"
   },
   "unmatch": {
     "button": "إلغاء التطابق",
