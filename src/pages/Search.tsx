@@ -18,6 +18,7 @@ import { CATEGORIES } from '@/config/categories';
 import { useDeviceLocation, calculateDistance, formatDistance } from '@/hooks/useLocation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { ExpandableDescription } from '@/components/search/ExpandableDescription';
 import { useTranslation } from 'react-i18next';
@@ -545,10 +546,7 @@ export default function Search() {
                         {/* Thumbnail or Icon - Fixed 40x40 */}
                         {suggestion.type === 'user' ? (
                           <Avatar className="w-10 h-10 flex-shrink-0">
-                            <AvatarImage src={suggestion.userData?.avatarUrl || undefined} />
-                            <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
-                              {suggestion.text.charAt(0).toUpperCase()}
-                            </AvatarFallback>
+                            <AvatarImage src={suggestion.userData?.avatarUrl || getDefaultAvatar(suggestion.userData?.userId || suggestion.text)} />
                           </Avatar>
                         ) : (
                           <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-muted">
@@ -796,10 +794,7 @@ export default function Search() {
                     >
                       <div className="flex items-center gap-3 p-3">
                         <Avatar className="w-12 h-12 flex-shrink-0">
-                          <AvatarImage src={profile.avatar_url || undefined} />
-                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                            {profile.display_name.charAt(0).toUpperCase()}
-                          </AvatarFallback>
+                          <AvatarImage src={profile.avatar_url || getDefaultAvatar(profile.user_id)} />
                         </Avatar>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-foreground truncate">{profile.display_name}</p>
@@ -880,11 +875,7 @@ export default function Search() {
                         className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-[10px] font-bold ring-1 ring-border hover:ring-primary transition-all"
                         title={`View ${item.owner_display_name}'s profile`}
                       >
-                        {item.owner_avatar_url ? (
-                          <img src={item.owner_avatar_url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-muted-foreground">{item.owner_display_name.charAt(0).toUpperCase()}</span>
-                        )}
+                        <img src={item.owner_avatar_url || getDefaultAvatar(item.user_id)} alt="" className="w-full h-full object-cover" />
                       </button>
                       <DealInviteButton 
                         targetItemId={item.id} 

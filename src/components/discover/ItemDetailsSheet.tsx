@@ -8,6 +8,7 @@ import { MapPin, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, C
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -236,16 +237,12 @@ export function ItemDetailsSheet({
               onClick={handleViewProfile}
               className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors w-full text-left"
             >
-              <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold ring-2 ring-border/50">
-                {item.owner_avatar_url ? (
-                  <img
-                    src={item.owner_avatar_url}
-                    alt={item.owner_display_name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  item.owner_display_name.charAt(0).toUpperCase()
-                )}
+              <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-border/50">
+                <img
+                  src={item.owner_avatar_url || getDefaultAvatar(item.user_id)}
+                  alt={item.owner_display_name}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex-1">
                 <VerifiedName
