@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
@@ -12,7 +12,7 @@ import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
+
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
