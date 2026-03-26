@@ -1,5 +1,5 @@
 import { useState, forwardRef } from 'react';
-import { Send, Loader2, Lock, RotateCcw, ChevronRight, AlertTriangle, Gift } from 'lucide-react';
+import { Send, Loader2, Lock, RotateCcw, ChevronRight, AlertTriangle, Gift, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,6 +24,7 @@ interface ExistingInvite {
 interface DealInviteButtonProps {
   targetItemId: string;
   targetItemTitle: string;
+  targetItemPhoto?: string;
   className?: string;
   iconOnly?: boolean;
   open?: boolean;
@@ -34,12 +35,13 @@ interface DealInviteButtonProps {
 type InviteStatus = 'available' | 'pending' | 'can_resend' | 'blocked' | 'matched';
 
 export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps>(
-  function DealInviteButton({ targetItemId, targetItemTitle, className, iconOnly, open, onOpenChange, hideButton }, ref) {
+  function DealInviteButton({ targetItemId, targetItemTitle, targetItemPhoto, className, iconOnly, open, onOpenChange, hideButton }, ref) {
     const { user } = useAuth();
     const queryClient = useQueryClient();
     const { t } = useTranslation();
     const [internalShowModal, setInternalShowModal] = useState(false);
     const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const { canUse, usage, incrementUsage, isPro } = useEntitlements();
 
     const showModal = open !== undefined ? open : internalShowModal;
@@ -175,7 +177,7 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
                           ? 'hover:bg-primary/5 hover:border-primary/30 cursor-pointer active:scale-[0.98]'
                           : 'opacity-50 cursor-not-allowed'
                       }`}
-                      onClick={() => { if (canSend) sendInviteMutation.mutate(item.id); }}
+                      onClick={() => { if (canSend) setSelectedItem(item); }}
                     >
                       <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-muted flex-shrink-0 ring-1 ring-border">
                         {item.photos?.[0] ? (
@@ -212,6 +214,80 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
                 {t('dealInvite.resendInfo')}
                 <span className="block font-bold text-destructive mt-0.5">{t('dealInvite.resendInfoBlocked')}</span>
               </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Confirmation Dialog */}
+        <Dialog open={!!selectedItem} onOpenChange={(open) => { if (!open) setSelectedItem(null); }}>
+          <DialogContent className="max-w-xs rounded-2xl p-5" hideCloseButton>
+            <DialogHeader className="pb-2">
+              <DialogTitle className="text-center text-base">{t('dealInvite.confirmTitle')}</DialogTitle>
+              <DialogDescription className="text-center text-xs">
+                {t('dealInvite.confirmDescription')}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="flex items-center justify-between gap-3 py-4">
+              {/* Your item */}
+              <div className="flex-1 flex flex-col items-center gap-2">
+                <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted ring-2 ring-primary/30">
+                  {selectedItem?.photos?.[0] ? (
+                    <img src={selectedItem.photos[0]} alt={selectedItem.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xl">📦</div>
+                  )}
+                </div>
+                <p className="text-xs font-medium text-center truncate w-full">{selectedItem?.title}</p>
+                <span className="text-[10px] text-muted-foreground">{t('dealInvite.yourItem')}</span>
+              </div>
+
+              {/* Swap icon */}
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <ArrowLeftRight className="w-5 h-5 text-primary" />
+              </div>
+
+              {/* Their item */}
+              <div className="flex-1 flex flex-col items-center gap-2">
+                <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted ring-2 ring-accent/30">
+                  {targetItemPhoto ? (
+                    <img src={targetItemPhoto} alt={targetItemTitle} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xl">📦</div>
+                  )}
+                </div>
+                <p className="text-xs font-medium text-center truncate w-full">{targetItemTitle}</p>
+                <span className="text-[10px] text-muted-foreground">{t('dealInvite.theirItem')}</span>
+              </div>
+            </div>
+
+            <Separator className="opacity-50" />
+
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setSelectedItem(null)}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                className="flex-1 gradient-primary"
+                disabled={sendInviteMutation.isPending}
+                onClick={() => {
+                  if (selectedItem) {
+                    sendInviteMutation.mutate(selectedItem.id, {
+                      onSuccess: () => setSelectedItem(null),
+                    });
+                  }
+                }}
+              >
+                {sendInviteMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  t('common.confirm')
+                )}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

@@ -275,6 +275,7 @@ export function ItemDetailsSheet({
               <DealInviteButton
                 targetItemId={item.id}
                 targetItemTitle={item.title}
+                targetItemPhoto={item.photos?.[0]}
                 className="w-full gradient-primary"
               />
             )}

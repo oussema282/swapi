@@ -912,5 +912,26 @@
     "noRequests": "Aucune demande de cadeau en attente",
     "unknownUser": "Utilisateur inconnu",
     "wantsYourGift": "Veut votre cadeau : {{item}}"
+  },
+  "dealInvite": {
+    "title": "Envoyer une invitation",
+    "selectItemToOffer": "Sélectionnez votre article à offrir en échange de",
+    "noItemsToOffer": "Vous n'avez aucun article à proposer",
+    "inviteDeal": "Envoyer une invitation",
+    "sent": "Invitation envoyée !",
+    "pendingExists": "Vous avez déjà une invitation en attente pour cet article",
+    "maxAttempts": "Nombre maximum de tentatives atteint",
+    "alreadySent": "Invitation déjà envoyée",
+    "failedSend": "Échec de l'envoi de l'invitation",
+    "pending": "En attente",
+    "resendOneLeft": "1 renvoi restant",
+    "blocked": "Bloqué",
+    "matched": "Matché",
+    "resendInfo": "Les invitations expirent après 48 heures si non acceptées.",
+    "resendInfoBlocked": "2 refus = bloqué définitivement",
+    "confirmTitle": "Confirmer l'échange",
+    "confirmDescription": "Vous êtes sur le point de proposer cet échange",
+    "yourItem": "Votre objet",
+    "theirItem": "Leur objet"
   }
 }

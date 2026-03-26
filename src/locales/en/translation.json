@@ -961,5 +961,26 @@
     "noRequests": "No pending gift requests",
     "unknownUser": "Unknown user",
     "wantsYourGift": "Wants your gift: {{item}}"
+  },
+  "dealInvite": {
+    "title": "Send Deal Invitation",
+    "selectItemToOffer": "Select your item to offer in exchange for",
+    "noItemsToOffer": "You have no items to offer",
+    "inviteDeal": "Send Deal Invitation",
+    "sent": "Deal invitation sent!",
+    "pendingExists": "You already have a pending invite for this item",
+    "maxAttempts": "Maximum attempts reached for this item pair",
+    "alreadySent": "Invitation already sent",
+    "failedSend": "Failed to send invitation",
+    "pending": "Pending",
+    "resendOneLeft": "1 resend left",
+    "blocked": "Blocked",
+    "matched": "Matched",
+    "resendInfo": "Invitations expire after 48 hours if not accepted.",
+    "resendInfoBlocked": "2 rejections = permanently blocked",
+    "confirmTitle": "Confirm Deal",
+    "confirmDescription": "You are about to propose this exchange",
+    "yourItem": "Your item",
+    "theirItem": "Their item"
   }
 }
