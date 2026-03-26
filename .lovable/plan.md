@@ -1,28 +1,28 @@
 
 
-## Plan: Add Moderation Toast in EditItem Upload
+## Plan: Add Blur Overlay with View/Edit Options on Own Profile Items
 
-### Problem
-In `EditItem.tsx`, when a photo fails moderation (line 128-130), it silently removes the file and `continue`s — no toast is shown. The `NewItem.tsx` page correctly shows a destructive toast with `t('newItem.imageBlocked')`.
+### Current Behavior
+When tapping an item on your own profile, it navigates directly to the edit page (`/items/${item.id}/edit`).
 
-### Changes — `src/pages/EditItem.tsx`
+### New Behavior
+Tapping an item on your own profile will:
+1. Blur the tapped item photo
+2. Show two icon buttons overlaid on top: **Eye** (view full photo in PhotoViewerModal) and **Pencil** (navigate to edit page)
+3. Tapping outside or tapping the same item again dismisses the overlay
 
-Add a destructive toast after the moderation check fails (line 128-130), matching the NewItem pattern:
+### Changes — `src/components/profile/ProfileItemsGrid.tsx`
 
-```typescript
-if (!moderationResult.is_safe) {
-  await supabase.storage.from('item-photos').remove([fileName]);
-  toast({ 
-    variant: 'destructive', 
-    title: t('newItem.imageBlocked'),
-    description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
-  });
-  continue;
-}
-```
-
-This reuses the existing `t('newItem.imageBlocked')` and `t('newItem.policyViolation')` translation keys which are already defined in en, fr, and ar locale files — so the toast automatically follows the user's language.
+1. Add `activeItemId` state to track which item is "selected" (showing the blur + options)
+2. Change `handleItemClick` for own profile:
+   - If item is already active → deselect it
+   - If item is not active → set it as active (show blur + icons)
+3. Add a blur overlay with two centered icon buttons when `activeItemId === item.id`:
+   - **Eye icon** → opens `PhotoViewerModal` with that item's photos
+   - **Pencil icon** → navigates to `/items/${item.id}/edit`
+4. Import `PhotoViewerModal` and add state for controlling it (`viewerOpen`, `viewerPhotos`)
+5. Import `Eye` and `Pencil` icons from lucide-react
 
 ### Files Modified
-- `src/pages/EditItem.tsx`
+- `src/components/profile/ProfileItemsGrid.tsx`
 
