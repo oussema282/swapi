@@ -934,6 +934,9 @@
     "dealExpired": "Invite Expired",
     "dealExpiredBody": "Your deal invite for \"{{item}}\" has expired",
     "enablePrompt": "Enable notifications to stay updated on matches and messages",
-    "enableButton": "Enable"
+    "enableButton": "Enable",
+    "enabled": "Notifications enabled!",
+    "blocked": "Notifications are blocked. Tap the lock icon in your browser's address bar, then allow notifications.",
+    "notSupported": "Notifications are not supported in this context. Try opening the site directly in your browser."
   }
 }

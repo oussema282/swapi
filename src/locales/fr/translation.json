@@ -885,6 +885,9 @@
     "dealExpired": "Invitation expirée",
     "dealExpiredBody": "Votre invitation pour \"{{item}}\" a expiré",
     "enablePrompt": "Activez les notifications pour rester informé des matchs et messages",
-    "enableButton": "Activer"
+    "enableButton": "Activer",
+    "enabled": "Notifications activées !",
+    "blocked": "Les notifications sont bloquées. Appuyez sur l'icône du cadenas dans la barre d'adresse, puis autorisez les notifications.",
+    "notSupported": "Les notifications ne sont pas prises en charge dans ce contexte. Essayez d'ouvrir le site directement dans votre navigateur."
   }
 }
