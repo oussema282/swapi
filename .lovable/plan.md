@@ -1,40 +1,75 @@
 
-Fix the gift marker positioning bug in `src/pages/MapView.tsx`.
 
-### What’s wrong
-The gift marker is using `animation: float-marker ...` on the same element passed to `new mapboxgl.Marker(el)`. Mapbox positions markers with `transform` on that element too, so the animation overrides Mapbox’s transform and the marker appears stuck to the page instead of the map.
+## Plan: Gift Request System — Always Visible, with Attempt Tracking and Auto-Expiry
 
-### Implementation plan
-1. Keep the outer marker element purely for Mapbox positioning
-- Remove the floating animation from the outer `el`
-- Keep only size/cursor/basic layout there
+### What changes
 
-2. Add an inner visual wrapper for the gift UI
-- Create a child `giftCard` inside `el`
-- Move the golden frame, glow, border radius, and floating animation onto `giftCard`
-- Keep the photo wrapper and gift badge inside `giftCard`
+The "Request Gift" button must always appear in the ItemDetailsSheet for gift items, and the gift request system needs the same rules as deal invites: 2 rejections = blocked, auto-expire after 48 hours.
 
-3. Preserve coordinate anchoring
-- Continue calling `.setLngLat([item.longitude, item.latitude])` on the marker
-- Let Mapbox own the outer element transform
-- Let the inner child animate independently with its own transform
+### Database Migration
 
-4. Keep regular markers unchanged
-- Only refactor the `isGift` branch
-- Normal circular item markers stay as they are
+Add `attempt` and `expires_at` columns to `gift_requests`, plus a validation trigger (mirroring `deal_invites` logic):
 
-5. Verify badge/layout structure
-- Ensure the corner gift badge remains absolutely positioned relative to the animated inner wrapper
-- Keep `overflow: visible` only where needed so the badge is visible without affecting anchor positioning
+```sql
+ALTER TABLE public.gift_requests
+  ADD COLUMN attempt integer NOT NULL DEFAULT 1,
+  ADD COLUMN expires_at timestamptz DEFAULT (now() + interval '2 days');
 
-### Expected result
-Gift markers will:
-- stay attached to their real map coordinates
-- float visually without drifting
-- remain clearly different with the golden rectangular frame and corner gift icon
+-- Validation trigger: block after 2 rejections, set attempt number, set expiry
+CREATE OR REPLACE FUNCTION public.validate_gift_request_attempt()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public' AS $$
+DECLARE
+  rejection_count integer;
+  pending_exists boolean;
+BEGIN
+  SELECT EXISTS(
+    SELECT 1 FROM public.gift_requests
+    WHERE gift_item_id = NEW.gift_item_id
+      AND requester_id = NEW.requester_id
+      AND status = 'pending'
+      AND expires_at > now()
+      AND id != COALESCE(NEW.id, '00000000-0000-0000-0000-000000000000'::uuid)
+  ) INTO pending_exists;
+  IF pending_exists THEN
+    RAISE EXCEPTION 'A pending gift request already exists';
+  END IF;
+  SELECT COUNT(*) INTO rejection_count
+  FROM public.gift_requests
+  WHERE gift_item_id = NEW.gift_item_id
+    AND requester_id = NEW.requester_id
+    AND status = 'rejected';
+  IF rejection_count >= 2 THEN
+    RAISE EXCEPTION 'Maximum attempts reached (2 rejections)';
+  END IF;
+  NEW.attempt := rejection_count + 1;
+  NEW.expires_at := now() + interval '2 days';
+  RETURN NEW;
+END;
+$$;
 
-### Files to update
-- `src/pages/MapView.tsx`
+CREATE TRIGGER validate_gift_request_before_insert
+  BEFORE INSERT ON public.gift_requests
+  FOR EACH ROW EXECUTE FUNCTION public.validate_gift_request_attempt();
+```
 
-### Technical note
-This is a classic transform conflict: Mapbox uses `transform` for marker placement, and CSS animation also uses `transform`. The fix is to animate a nested child, not the marker root.
+### Code Changes
+
+**1. `src/components/discover/ItemDetailsSheet.tsx`**
+- Remove the `onRequestGift` prop dependency for showing the button
+- Import `useGiftRequests` and `useAuth` directly
+- Always show the "Request Gift" button for gift items (when the viewer is not the owner)
+- Before sending, check if blocked (2 rejections) or already pending — show appropriate toast
+- Add a warning line: "2 declines = blocked"
+
+**2. `src/hooks/useGiftRequests.tsx`**
+- Add a `checkRequestStatus` query/function that returns whether the current user can request a specific gift item (pending, blocked, or available)
+- Update `sendRequest` to handle the new error messages from the trigger
+
+**3. All callers (`Index.tsx`, `MapView.tsx`, `ProfileItemsGrid.tsx`, `Matches.tsx`)**
+- No changes needed — the sheet now handles gift requests internally, no `onRequestGift` prop required
+
+### Files Modified
+- Database migration (new columns + trigger on `gift_requests`)
+- `src/components/discover/ItemDetailsSheet.tsx`
+- `src/hooks/useGiftRequests.tsx`
+
