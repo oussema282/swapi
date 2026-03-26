@@ -416,7 +416,7 @@ export default function Onboarding() {
 
               {/* Default avatars grid */}
               <div className="grid grid-cols-3 gap-3 mb-6">
-                {DEFAULT_AVATARS.map((avatar, i) => (
+                {(gender === 'female' ? FEMALE_AVATARS : MALE_AVATARS).map((avatar, i) => (
                   <button
                     key={i}
                     onClick={() => handleSelectAvatar(avatar)}
