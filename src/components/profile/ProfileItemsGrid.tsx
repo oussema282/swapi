@@ -190,10 +190,6 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
             }}
             item={sheetItem}
             userLocation={userLocation}
-            onInviteDeal={selectedItem ? () => {
-              setSheetOpen(false);
-              setDealInviteOpen(true);
-            } : undefined}
           />
           {selectedItem && (
             <DealInviteButton
