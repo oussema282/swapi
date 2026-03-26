@@ -39,7 +39,8 @@ export function PhotoViewerModal({ open, onOpenChange, photos, initialIndex }: P
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 flex flex-col items-center justify-center [&>button]:hidden"
+        hideCloseButton
+        className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 flex flex-col items-center justify-center"
         aria-describedby={undefined}
         onPointerDownOutside={() => onOpenChange(false)}
         onEscapeKeyDown={() => onOpenChange(false)}
