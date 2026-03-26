@@ -63,7 +63,45 @@ export function SystemSection() {
     fetchWatermarkText();
   }, []);
 
-  const fetchAllUsersProSetting = async () => {
+  const fetchWatermarkText = async () => {
+    const { data } = await supabase
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'watermark_text')
+      .maybeSingle();
+    if (data?.value) {
+      const val = typeof data.value === 'string' ? data.value : String(data.value);
+      setWatermarkText(val.replace(/^"|"$/g, ''));
+    }
+  };
+
+  const saveWatermarkText = async () => {
+    setWatermarkSaving(true);
+    try {
+      const { data: existing } = await supabase
+        .from('system_settings')
+        .select('id')
+        .eq('key', 'watermark_text')
+        .maybeSingle();
+
+      if (existing) {
+        await supabase
+          .from('system_settings')
+          .update({ value: watermarkText as any, updated_at: new Date().toISOString() })
+          .eq('key', 'watermark_text');
+      } else {
+        await supabase
+          .from('system_settings')
+          .insert({ key: 'watermark_text', value: watermarkText as any });
+      }
+      toast.success(t('admin.watermarkSaved'));
+    } catch {
+      toast.error('Error saving watermark text');
+    } finally {
+      setWatermarkSaving(false);
+    }
+  };
+
     setProToggleLoading(true);
     const { data } = await supabase
       .from('system_settings')
