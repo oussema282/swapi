@@ -1,55 +1,45 @@
 
 
-## Plan: Add Segmented Toggle (Swap / Gift) to NewItem Page Header
+## Plan: Fix Auto-Selection of Exchange Item on Discover Page
 
-### What changes
+### Root Cause
 
-Replace the simple Gift icon indicator in the NewItem page header with a segmented pill toggle — identical in style to the "For You / Nearby" toggle in the discover page — letting users switch between "Swap" and "Gift" modes.
+The `selectedItemId` state initializes from `sessionStorage` (line 30). If the stored ID is stale (deleted item, archived, or inactive), the value is non-null, so the auto-select effect on line 75 (`if (!selectedItemId)`) never runs. The user sees no item selected and cannot swipe.
 
-### Changes — `src/components/discover/SwipeTopBar.tsx`
+Additionally, when auto-select does run, it picks `myItems[0]` without filtering for active, non-archived items.
 
-- Remove the standalone Gift button (lines 79-87) — no longer needed since mode selection moves to NewItem page
+### Fix — `src/pages/Index.tsx`
 
-### Changes — `src/pages/NewItem.tsx`
-
-**In the header section (lines 312-326)**, add a segmented toggle between the back button and the step counter:
-
+**1. Filter available items once** (reusable constant):
 ```tsx
-<div className="flex items-center gap-1 p-1 bg-muted rounded-full">
-  <button
-    onClick={() => navigate('/items/new', { replace: true })}
-    className={cn(
-      "px-4 py-1.5 rounded-full text-sm font-medium transition-all",
-      !isGiftMode ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
-    )}
-  >
-    {t('items.swapMode')}
-  </button>
-  <button
-    onClick={() => navigate('/items/new?gift=true', { replace: true })}
-    className={cn(
-      "px-4 py-1.5 rounded-full text-sm font-medium transition-all",
-      isGiftMode ? "bg-amber-500 text-white shadow-sm" : "text-muted-foreground"
-    )}
-  >
-    {t('items.giftMode')}
-  </button>
-</div>
+const availableItems = (myItems || []).filter(i => !i.is_archived && i.is_active);
 ```
 
-- The Gift mode pill uses amber styling to match the gift branding
-- Uses `navigate(..., { replace: true })` so toggling doesn't pollute browser history
-- Step title and description move below the toggle
+**2. Rewrite the auto-select effect** (lines 74-81) to always validate:
+```tsx
+useEffect(() => {
+  if (!myItems || myItems.length === 0) return;
+  
+  const available = myItems.filter(i => !i.is_archived && i.is_active);
+  if (available.length === 0) return;
+  
+  // If current selection is valid, keep it
+  if (selectedItemId && available.some(i => i.id === selectedItemId)) return;
+  
+  // Otherwise, try sessionStorage, then fall back to first available
+  const persisted = sessionStorage.getItem('discover_selected_item');
+  const validPersisted = persisted && available.some(i => i.id === persisted);
+  setSelectedItemId(validPersisted ? persisted : available[0].id);
+}, [myItems, selectedItemId]);
+```
 
-### Translation keys to add (en, fr, ar)
+**3. Use `availableItems` in ItemSelector** (line 320) — already filtered, just use the constant.
 
-- `items.swapMode`: "Swap" / "Échange" / "تبادل"
-- `items.giftMode`: "Gift" / "Cadeau" / "هدية"
+### What this fixes
+- Stale sessionStorage IDs are detected and replaced with the first valid item
+- Archived/inactive items are never auto-selected
+- Users always land on a valid item and can swipe immediately
 
 ### Files Modified
-- `src/components/discover/SwipeTopBar.tsx`
-- `src/pages/NewItem.tsx`
-- `src/locales/en/translation.json`
-- `src/locales/fr/translation.json`
-- `src/locales/ar/translation.json`
+- `src/pages/Index.tsx`
 
