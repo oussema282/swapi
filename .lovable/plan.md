@@ -1,17 +1,40 @@
 
+## Plan: Restore the fullscreen image exit button
 
-## Plan: Make Fullscreen Photo Close Button Always Visible
+### Root cause
+The fullscreen photo modal currently uses this class on `DialogContent`:
 
-### Problem
-The close (X) button in the fullscreen photo viewer is not visible on mobile. It sits at `top-4 right-4` but may be clipped by safe area insets or lost against the image background on the 407px viewport.
+```text
+[&>button]:hidden
+```
 
-### Changes
+That hides every direct button inside the modal, including:
+- the custom exit (X) button
+- the left/right photo arrows
 
-**`src/components/discover/PhotoViewerModal.tsx`**
-- Move the close button to use `top-6 right-4` with `safe-area-inset` padding to avoid notch/status bar overlap
-- Make the button more prominent: larger size (`w-14 h-14`), stronger background (`bg-black/80`), and a visible white border (`border-2 border-white/30`) so it stands out against any image
-- Increase icon size to `w-7 h-7` for better tap target visibility
+So the exit button is in the code, but CSS is hiding it.
 
-### Files Modified
+### Implementation
+**1. Update `src/components/ui/dialog.tsx`**
+- Add an optional prop like `hideCloseButton?: boolean` to `DialogContent`
+- Only render the default Radix close button when that prop is not set
+
+**2. Update `src/components/discover/PhotoViewerModal.tsx`**
+- Remove the broad `[&>button]:hidden` class
+- Pass `hideCloseButton` to `DialogContent` so only the built-in close button is removed
+- Keep the custom large close button visible in the top-right safe area
+- Keep the left/right arrows visible for multi-photo items
+
+### Result
+After this fix, users will be able to:
+- clearly see the exit icon in fullscreen
+- close the image with the X button
+- see the photo navigation arrows again
+- still close by tapping outside / Escape
+
+### Files to modify
+- `src/components/ui/dialog.tsx`
 - `src/components/discover/PhotoViewerModal.tsx`
 
+### Technical note
+This is better than using CSS to hide all buttons, because it fixes the current bug without risking other modal controls being hidden again.
