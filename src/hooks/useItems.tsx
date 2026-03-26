@@ -13,6 +13,7 @@ interface CreateItemData {
   swap_preferences: string[];
   value_min: number;
   value_max: number | null;
+  is_gift?: boolean;
 }
 
 export function useMyItems() {

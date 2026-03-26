@@ -102,6 +102,7 @@ export interface CreateItemInput {
   value_max?: number | null;
   latitude?: number | null;
   longitude?: number | null;
+  is_gift?: boolean;
 }
 
 // Swipe service interface
