@@ -849,5 +849,26 @@
     "confirmDescription": "أنت على وشك اقتراح هذا التبادل",
     "yourItem": "غرضك",
     "theirItem": "غرضهم"
+  },
+  "onboarding": {
+    "step": "الخطوة {{current}} من {{total}}",
+    "personalInfoTitle": "أكمل ملفك الشخصي",
+    "personalInfoDescription": "أخبرنا قليلاً عن نفسك للبدء",
+    "birthday": "تاريخ الميلاد",
+    "selectBirthday": "اختر تاريخ ميلادك",
+    "minAge": "يجب أن يكون عمرك 13 عامًا على الأقل",
+    "gender": "الجنس",
+    "male": "ذكر",
+    "female": "أنثى",
+    "other": "آخر",
+    "avatarTitle": "اختر صورتك الرمزية",
+    "avatarDescription": "ارفع صورة أو اختر صورة رمزية افتراضية",
+    "uploadPhoto": "رفع",
+    "orChooseAvatar": "أو اختر صورة رمزية افتراضية",
+    "uploadItemTitle": "أضف عنصرك الأول",
+    "uploadItemDescription": "أضف عنصرًا واحدًا على الأقل للبدء في التبادل!",
+    "uploadFirstItem": "إضافة عنصر",
+    "completeTitle": "أنت جاهز!",
+    "completeDescription": "مرحبًا! جاري إعادة التوجيه..."
   }
 }

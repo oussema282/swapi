@@ -935,5 +935,26 @@
     "confirmDescription": "Vous êtes sur le point de proposer cet échange",
     "yourItem": "Votre objet",
     "theirItem": "Leur objet"
+  },
+  "onboarding": {
+    "step": "Étape {{current}} sur {{total}}",
+    "personalInfoTitle": "Complétez votre profil",
+    "personalInfoDescription": "Dites-nous un peu plus sur vous pour commencer",
+    "birthday": "Date de naissance",
+    "selectBirthday": "Sélectionnez votre date de naissance",
+    "minAge": "Vous devez avoir au moins 13 ans",
+    "gender": "Genre",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "avatarTitle": "Choisissez votre avatar",
+    "avatarDescription": "Téléchargez une photo ou choisissez un avatar par défaut",
+    "uploadPhoto": "Télécharger",
+    "orChooseAvatar": "Ou choisissez un avatar par défaut",
+    "uploadItemTitle": "Ajoutez votre premier article",
+    "uploadItemDescription": "Ajoutez au moins un article pour commencer à échanger !",
+    "uploadFirstItem": "Ajouter un article",
+    "completeTitle": "Vous êtes prêt !",
+    "completeDescription": "Bienvenue ! Redirection vers la découverte..."
   }
 }

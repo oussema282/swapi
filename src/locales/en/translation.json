@@ -984,5 +984,26 @@
     "confirmDescription": "You are about to propose this exchange",
     "yourItem": "Your item",
     "theirItem": "Their item"
+  },
+  "onboarding": {
+    "step": "Step {{current}} of {{total}}",
+    "personalInfoTitle": "Complete Your Profile",
+    "personalInfoDescription": "Tell us a bit about yourself to get started",
+    "birthday": "Birthday",
+    "selectBirthday": "Select your birthday",
+    "minAge": "You must be at least 13 years old",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "avatarTitle": "Choose Your Avatar",
+    "avatarDescription": "Upload a photo or pick a default avatar",
+    "uploadPhoto": "Upload",
+    "orChooseAvatar": "Or choose a default avatar",
+    "uploadItemTitle": "Upload Your First Item",
+    "uploadItemDescription": "Add at least one item to start swapping with others!",
+    "uploadFirstItem": "Upload Item",
+    "completeTitle": "You're All Set!",
+    "completeDescription": "Welcome! Redirecting you to discover..."
   }
 }
