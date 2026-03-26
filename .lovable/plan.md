@@ -1,75 +1,47 @@
 
 
-## Plan: Browser Push Notifications for Key Events
+## Plan: In-App Notification Permission Banner + Localized Message Times
 
-### Overview
-Implement Web Push Notifications using the browser's built-in Notification API and Service Worker. When the app is open (or in the background tab), users receive native OS-level push notifications for: new matches, missed matches, deal invitations received, new messages, and deal invite expiration.
-
-### Architecture
-
-```text
-┌─────────────────────────────────────────────┐
-│  Browser (foreground or background tab)     │
-│                                             │
-│  useNotificationPermission() hook           │
-│    → Notification.requestPermission()       │
-│                                             │
-│  usePushNotifications() hook                │
-│    → Supabase Realtime listeners            │
-│    → new Notification(title, { body, icon })│
-└─────────────────────────────────────────────┘
-```
-
-This uses the **browser Notification API** (no service worker needed for basic in-browser push). Notifications fire when the user has the tab open or in background. This does NOT require a push server — it listens to Supabase Realtime events and triggers native browser notifications.
-
-### Notification Events
-
-| Event | Trigger | Title | Body |
-|-------|---------|-------|------|
-| New Match | `INSERT` on `matches` table | "New Match!" | "You matched with {item_title}" |
-| Missed Match | Detected in swipe flow | "Missed Match" | "Someone liked your item" |
-| Deal Invite Received | `INSERT` on `deal_invites` where receiver is me | "Deal Invitation" | "{user} wants to swap for your {item}" |
-| New Message | `INSERT` on `messages` where sender ≠ me | "New Message" | "{sender}: {content preview}" |
-| Deal Invite Expired | Checked on realtime or polling | "Invite Expired" | "Your deal invite for {item} has expired" |
+### Problem
+1. Browser auto-blocks `Notification.requestPermission()` if not triggered by a user gesture — the current auto-prompt silently fails
+2. If the user denies, there's no reminder mechanism
+3. Message bubble timestamps show "Yesterday" in English regardless of language
 
 ### Changes
 
-**1. `src/hooks/useNotificationPermission.tsx`** — New hook
-- Request `Notification.requestPermission()` on mount (if not already granted)
-- Return `{ permission, requestPermission }` state
-- Only prompt once per session (store in sessionStorage)
+**1. `src/hooks/useNotificationPermission.tsx`** — Improve logic
+- Remove the auto-prompt on mount (browsers block it without user gesture)
+- Track denial with a localStorage key `notif-last-prompted` storing the timestamp
+- Export a `shouldShowBanner` boolean: true when permission is `default`, OR when permission is `denied` and last prompt was >24h ago
 
-**2. `src/hooks/usePushNotifications.tsx`** — New hook (core logic)
-- Subscribe to Supabase Realtime channels for:
-  - `matches` table INSERT → fetch match details → show notification
-  - `deal_invites` table INSERT → check if receiver is current user → show notification
-  - `messages` table INSERT → check sender ≠ current user and tab not focused → show notification
-- Use `document.hidden` check — only show browser notification when tab is not focused (avoid double-alerting)
-- On notification click → `window.focus()` and navigate to relevant page
-- Deal expiration: check on each `deal_invites` refetch if any invite just crossed the 2-day threshold
+**2. New component: `src/components/NotificationBanner.tsx`** — In-app banner
+- A dismissible banner (Bell icon + message + "Enable" button + X close)
+- On "Enable" click → call `requestPermission()` (this is a user gesture, so browser allows it)
+- On dismiss → store `notif-last-prompted` = now in localStorage, hide banner for 24h
+- Translated text using `t('notifications.enablePrompt')` and `t('notifications.enableButton')`
+- Styled as a subtle top banner (primary accent background, white text)
 
-**3. `src/components/layout/AppLayout.tsx`** — Integrate hooks
-- Call `useNotificationPermission()` and `usePushNotifications()` at the app layout level so they run on all authenticated pages
+**3. `src/components/layout/AppLayout.tsx`** — Render the banner
+- Import and render `<NotificationBanner />` above `{children}` when `shouldShowBanner` is true
 
-**4. `src/pages/Settings.tsx`** — Add notification toggle
-- Add a "Notifications" row in settings to enable/disable browser notifications
-- Store preference in localStorage
-- Show current permission status (granted/denied/default)
+**4. `src/components/chat/MessageBubble.tsx`** — Localize timestamps
+- Import `getDateLocale` from `@/lib/dateLocale` (or inline the locale lookup)
+- Import `useTranslation` to get the current language
+- Replace hardcoded `"Yesterday"` with `t('chat.yesterday')` (already exists in translations)
+- Pass locale to `format()` calls so month names are localized: `format(date, 'MMM d, HH:mm', { locale })`
 
-**5. Translation keys (EN/FR/AR)** — Add `notifications` namespace:
-- `notifications.newMatch`, `notifications.missedMatch`, `notifications.dealInvite`, `notifications.newMessage`, `notifications.dealExpired`
-- `settings.notifications`, `settings.notificationsDescription`, `settings.enableNotifications`
+**5. `src/lib/dateLocale.ts`** — Export `getDateLocale` (already exported, no change needed)
 
-### Limitations (documented in WhitePaper)
-- Only works when the browser tab is open (foreground or background)
-- Does NOT work when browser is fully closed — that would require a push server (Web Push API with VAPID keys), which is a future enhancement
-- iOS Safari has limited Notification API support
+**6. Translation keys (EN/FR/AR)** — Add notification banner keys:
+- EN: `"notifications.enablePrompt": "Enable notifications to stay updated on matches and messages"`, `"notifications.enableButton": "Enable"`
+- FR: `"notifications.enablePrompt": "Activez les notifications pour rester informé des matchs et messages"`, `"notifications.enableButton": "Activer"`
+- AR: `"notifications.enablePrompt": "فعّل الإشعارات لتبقى على اطلاع بالمطابقات والرسائل"`, `"notifications.enableButton": "تفعيل"`
 
 ### Files Modified
-- `src/hooks/useNotificationPermission.tsx` (new)
-- `src/hooks/usePushNotifications.tsx` (new)
+- `src/hooks/useNotificationPermission.tsx`
+- `src/components/NotificationBanner.tsx` (new)
 - `src/components/layout/AppLayout.tsx`
-- `src/pages/Settings.tsx`
+- `src/components/chat/MessageBubble.tsx`
 - `src/locales/en/translation.json`
 - `src/locales/fr/translation.json`
 - `src/locales/ar/translation.json`
