@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Item } from '@/types/database';
-import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { MapPin, Send, Package, Star, DollarSign, ArrowLeftRight, User, ChevronLeft, ChevronRight, ZoomIn, Gift } from 'lucide-react';
 import { formatDistance, calculateDistance } from '@/hooks/useLocation';
 import { ReportButton } from '@/components/report/ReportButton';
 import { VerifiedName } from '@/components/ui/verified-name';
@@ -19,6 +19,7 @@ interface ItemWithOwner extends Item {
   user_id: string;
   community_rating?: number;
   total_interactions?: number;
+  is_gift?: boolean;
 }
 
 interface ItemDetailsSheetProps {
@@ -27,6 +28,7 @@ interface ItemDetailsSheetProps {
   item: ItemWithOwner | null;
   userLocation?: { latitude: number | null; longitude: number | null };
   onInviteDeal?: () => void;
+  onRequestGift?: () => void;
   onViewOnMap?: () => void;
   hideMapButton?: boolean;
 }
@@ -37,6 +39,7 @@ export function ItemDetailsSheet({
   item,
   userLocation,
   onInviteDeal,
+  onRequestGift,
   onViewOnMap,
   hideMapButton,
 }: ItemDetailsSheetProps) {
@@ -80,7 +83,10 @@ export function ItemDetailsSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="rounded-t-3xl h-[80vh] overflow-y-auto">
         <SheetHeader className="text-left pb-4 border-b border-border/50">
-          <SheetTitle className="text-2xl font-display font-bold">{item.title}</SheetTitle>
+          <SheetTitle className="text-2xl font-display font-bold flex items-center gap-2">
+            {(item as any).is_gift && <Gift className="w-6 h-6 text-amber-500" />}
+            {item.title}
+          </SheetTitle>
         </SheetHeader>
 
         <div className="space-y-6 py-6">
@@ -198,8 +204,8 @@ export function ItemDetailsSheet({
             </div>
           )}
 
-          {/* Swap Preferences */}
-          {item.swap_preferences && item.swap_preferences.length > 0 && (
+          {/* Swap Preferences (hidden for gifts) */}
+          {!(item as any).is_gift && item.swap_preferences && item.swap_preferences.length > 0 && (
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
                 <ArrowLeftRight className="w-4 h-4" />
@@ -211,6 +217,17 @@ export function ItemDetailsSheet({
                     {t(`categories.${pref}`)}
                   </Badge>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Gift Badge */}
+          {(item as any).is_gift && (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <Gift className="w-5 h-5 text-amber-500" />
+              <div>
+                <p className="font-medium text-sm">{t('gift.freeGift')}</p>
+                <p className="text-xs text-muted-foreground">{t('gift.freeGiftDescription')}</p>
               </div>
             </div>
           )}
@@ -259,7 +276,13 @@ export function ItemDetailsSheet({
                 {t('itemDetails.viewOnMap')}
               </Button>
             )}
-            {onInviteDeal && (
+            {(item as any).is_gift && onRequestGift && (
+              <Button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white" onClick={onRequestGift}>
+                <Gift className="w-4 h-4 mr-2" />
+                {t('gift.requestGift')}
+              </Button>
+            )}
+            {!(item as any).is_gift && onInviteDeal && (
               <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
                 <Send className="w-4 h-4 mr-2" />
                 {t('itemDetails.inviteToDeal')}

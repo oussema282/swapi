@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Loader2, Sun, Moon, Filter, AlertTriangle, MapPin } from 'lucide-react';
+import { ArrowLeft, Loader2, Sun, Moon, Filter, AlertTriangle, MapPin, Gift } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useDeviceLocation } from '@/hooks/useLocation';
@@ -263,28 +263,69 @@ export default function MapView() {
     filteredItems.forEach(item => {
       if (!item.latitude || !item.longitude) return;
 
+      const isGift = (item as any).is_gift === true;
+
       // Create custom marker element
       const el = document.createElement('div');
       el.className = 'item-marker';
-      el.style.cssText = `
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: hsl(var(--primary));
-        border: 3px solid hsl(var(--background));
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        overflow: hidden;
-      `;
+      
+      if (isGift) {
+        // Gift marker: rectangular golden frame
+        el.style.cssText = `
+          width: 46px;
+          height: 46px;
+          border-radius: 8px;
+          background: hsl(var(--background));
+          border: 3px solid #facc15;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+          overflow: hidden;
+          position: relative;
+        `;
+      } else {
+        el.style.cssText = `
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: hsl(var(--primary));
+          border: 3px solid hsl(var(--background));
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          overflow: hidden;
+        `;
+      }
 
       if (item.photos && item.photos.length > 0) {
         const img = document.createElement('img');
         img.src = item.photos[0];
         img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
         el.appendChild(img);
+      }
+
+      // Add gift icon overlay for gift items
+      if (isGift) {
+        const giftBadge = document.createElement('div');
+        giftBadge.style.cssText = `
+          position: absolute;
+          bottom: -2px;
+          left: -2px;
+          width: 18px;
+          height: 18px;
+          background: #facc15;
+          border-radius: 0 6px 0 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+        `;
+        giftBadge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>';
+        el.appendChild(giftBadge);
       }
 
       el.addEventListener('click', () => {
