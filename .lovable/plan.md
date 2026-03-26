@@ -1,25 +1,40 @@
 
+Fix the gift marker positioning bug in `src/pages/MapView.tsx`.
 
-## Plan: Fix Gift Items Not Saving to Database
+### What’s wrong
+The gift marker is using `animation: float-marker ...` on the same element passed to `new mapboxgl.Marker(el)`. Mapbox positions markers with `transform` on that element too, so the animation overrides Mapbox’s transform and the marker appears stuck to the page instead of the map.
 
-### Root Cause
+### Implementation plan
+1. Keep the outer marker element purely for Mapbox positioning
+- Remove the floating animation from the outer `el`
+- Keep only size/cursor/basic layout there
 
-The `CreateItemInput` interface in `src/lib/services/types.ts` does not include `is_gift`. When the NewItem page passes `is_gift: isGiftMode` in the input object, TypeScript silently strips it during the spread into the insert call. The database column `is_gift` defaults to `false`, so all items — including gifts — are stored as regular items.
+2. Add an inner visual wrapper for the gift UI
+- Create a child `giftCard` inside `el`
+- Move the golden frame, glow, border radius, and floating animation onto `giftCard`
+- Keep the photo wrapper and gift badge inside `giftCard`
 
-This is why the gift marker code works correctly but never triggers: no item in the database has `is_gift = true`.
+3. Preserve coordinate anchoring
+- Continue calling `.setLngLat([item.longitude, item.latitude])` on the marker
+- Let Mapbox own the outer element transform
+- Let the inner child animate independently with its own transform
 
-### Fix
+4. Keep regular markers unchanged
+- Only refactor the `isGift` branch
+- Normal circular item markers stay as they are
 
-**`src/lib/services/types.ts`** — Add `is_gift` to the `CreateItemInput` interface:
-```typescript
-export interface CreateItemInput {
-  // ...existing fields...
-  is_gift?: boolean;
-}
-```
+5. Verify badge/layout structure
+- Ensure the corner gift badge remains absolutely positioned relative to the animated inner wrapper
+- Keep `overflow: visible` only where needed so the badge is visible without affecting anchor positioning
 
-That single change allows the existing NewItem page code (`is_gift: isGiftMode`) to flow through to the database insert. No other files need changes — the map marker rendering logic is already correct and will activate once items actually have `is_gift = true`.
+### Expected result
+Gift markers will:
+- stay attached to their real map coordinates
+- float visually without drifting
+- remain clearly different with the golden rectangular frame and corner gift icon
 
-### Files Modified
-- `src/lib/services/types.ts`
+### Files to update
+- `src/pages/MapView.tsx`
 
+### Technical note
+This is a classic transform conflict: Mapbox uses `transform` for marker placement, and CSS animation also uses `transform`. The fix is to animate a nested child, not the marker root.
