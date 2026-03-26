@@ -19,7 +19,6 @@ interface ItemWithOwner extends Item {
   user_id: string;
   community_rating?: number;
   total_interactions?: number;
-  is_gift?: boolean;
 }
 
 interface ItemDetailsSheetProps {

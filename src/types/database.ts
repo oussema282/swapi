@@ -36,6 +36,7 @@ export interface Item {
   value_max: number | null;
   is_active: boolean;
   is_archived: boolean;
+  is_gift: boolean;
   latitude: number | null;
   longitude: number | null;
   created_at: string;
