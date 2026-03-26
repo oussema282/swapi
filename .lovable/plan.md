@@ -1,28 +1,27 @@
 
 
-## Plan: Open ItemDetailsSheet When Clicking Map Markers
+## Plan: Fullscreen Photo Viewer on Tap in ItemDetailsSheet
 
-### Problem
-Currently, clicking a map marker shows a small inline Card with minimal info. The user wants the full `ItemDetailsSheet` (same as swipe cards) with all details — photos, description, stats, owner info, deal invite — except "View on Map" since they're already on the map.
+### Overview
+When the user taps a photo in the ItemDetailsSheet gallery, open a fullscreen modal overlay showing the image at its real size with pinch-to-zoom support and swipe navigation between photos.
 
 ### Changes
 
-**1. `src/pages/MapView.tsx`**
-- Import `ItemDetailsSheet` from `@/components/discover/ItemDetailsSheet`
-- Add `owner_is_pro` to the `ItemWithOwner` interface (fetch from profiles query)
-- Update the profiles query to also fetch `is_pro` from profiles
-- Add a `showDetailsSheet` boolean state
-- When a marker is clicked → set `selectedItem` AND open the details sheet
-- Replace the inline `<Card>` popup with `<ItemDetailsSheet>` component
-- Pass `onViewOnMap={undefined}` (or omit the prop) so the "View on Map" button doesn't render — user is already on the map
-- Keep the `DealInviteButton` functionality via `onInviteDeal` prop
-- Pass `userLocation` for distance calculation
+**1. New component: `src/components/discover/PhotoViewerModal.tsx`**
+- A fullscreen Dialog overlay (dark backdrop) showing the tapped photo
+- `object-contain` so the full image is visible without cropping
+- Left/right navigation arrows if multiple photos
+- Photo counter indicator (1/4)
+- Tap backdrop or X button to close
+- Props: `open`, `onOpenChange`, `photos: string[]`, `initialIndex: number`
 
 **2. `src/components/discover/ItemDetailsSheet.tsx`**
-- The "View on Map" button already conditionally renders only when `item.latitude && item.longitude` exist — add an additional check: hide the button when `hideMapButton` prop is true
-- Add optional `hideMapButton?: boolean` prop to `ItemDetailsSheetProps`
+- Add `fullscreenPhotoOpen` state and `fullscreenStartIndex` state
+- Make the gallery image clickable — wrap with a button/div with `onClick` that opens the fullscreen viewer at `currentPhotoIndex`
+- Render `<PhotoViewerModal>` at the bottom of the component
+- Add `cursor-pointer` to the image for visual affordance
 
 ### Files Modified
-- `src/pages/MapView.tsx`
+- `src/components/discover/PhotoViewerModal.tsx` (new)
 - `src/components/discover/ItemDetailsSheet.tsx`
 
