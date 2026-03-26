@@ -889,5 +889,11 @@
     "enabled": "Notifications activées !",
     "blocked": "Les notifications sont bloquées. Appuyez sur l'icône du cadenas dans la barre d'adresse, puis autorisez les notifications.",
     "notSupported": "Les notifications ne sont pas prises en charge dans ce contexte. Essayez d'ouvrir le site directement dans votre navigateur."
+  },
+  "admin": {
+    "watermarkText": "Texte du filigrane",
+    "watermarkDescription": "Ce texte apparaîtra en filigrane transparent sur toutes les photos téléchargées",
+    "watermarkSaved": "Texte du filigrane mis à jour",
+    "watermarkPlaceholder": "ex. SWAPI"
   }
 }

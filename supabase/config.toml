@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.fraud-detector]
 verify_jwt = false
+
+[functions.watermark-image]
+verify_jwt = false

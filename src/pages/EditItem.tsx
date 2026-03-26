@@ -130,6 +130,15 @@ export default function EditItem() {
           continue;
         }
 
+        // Apply watermark
+        try {
+          await supabase.functions.invoke('watermark-image', {
+            body: { bucket: 'item-photos', filePath: fileName }
+          });
+        } catch (wmErr) {
+          console.warn('Watermark failed, using original:', wmErr);
+        }
+
         newPhotos.push(urlData.publicUrl);
       }
       setPhotos(prev => [...prev, ...newPhotos]);
