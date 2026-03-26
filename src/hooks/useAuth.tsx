@@ -41,36 +41,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const validateSession = async (session: Session | null) => {
-      if (!session?.access_token) return true;
-
-      const { data, error } = await supabase.auth.getUser(session.access_token);
-
-      // If the token refers to a session that no longer exists, treat as signed out.
-      if (error || !data?.user) {
-        await supabase.auth.signOut();
-        setUser(null);
-        setSession(null);
-        setProfile(null);
-        return false;
-      }
-
-      return true;
-    };
+    let authListenerFired = false;
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        authListenerFired = true;
+
+        if (event === 'SIGNED_OUT') {
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
           setTimeout(() => {
             fetchProfile(session.user.id);
-          }, 0);
-
-          // Validate asynchronously (avoid Supabase calls directly in callback)
-          setTimeout(() => {
-            void validateSession(session);
           }, 0);
         } else {
           setProfile(null);
@@ -81,16 +71,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const ok = await validateSession(session);
+      // If onAuthStateChange already fired with a valid session, skip validation
+      if (authListenerFired) {
+        setLoading(false);
+        return;
+      }
 
-      // validateSession will clear state on failure
-      if (ok) {
-        setSession(session);
-        setUser(session?.user ?? null);
+      if (session?.access_token) {
+        const { error } = await supabase.auth.getUser(session.access_token);
 
-        if (session?.user) {
-          fetchProfile(session.user.id);
+        // Only sign out for definitive session/user not found errors
+        const errorCode = (error as any)?.code || '';
+        const errorMsg = error?.message?.toLowerCase() || '';
+        const isDefinitiveError =
+          errorCode === 'session_not_found' ||
+          errorCode === 'user_not_found' ||
+          errorMsg.includes('session not found') ||
+          errorMsg.includes('user not found');
+
+        if (error && isDefinitiveError) {
+          await supabase.auth.signOut();
+          setUser(null);
+          setSession(null);
+          setProfile(null);
+          setLoading(false);
+          return;
         }
+      }
+
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        fetchProfile(session.user.id);
       }
 
       setLoading(false);
