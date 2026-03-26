@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Package, Plus } from 'lucide-react';
+import { Package, Plus, Eye, Pencil } from 'lucide-react';
 import { Item } from '@/types/database';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
+import { PhotoViewerModal } from '@/components/discover/PhotoViewerModal';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { useDeviceLocation } from '@/hooks/useLocation';
 
