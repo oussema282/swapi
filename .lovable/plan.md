@@ -1,58 +1,75 @@
 
 
-## Plan: Auto-Expire Deal Invites After 2 Days
+## Plan: Browser Push Notifications for Key Events
 
-### Problem
-Currently, pending deal invites stay in "pending" status forever, blocking the sender from sending new invites for that item pair.
+### Overview
+Implement Web Push Notifications using the browser's built-in Notification API and Service Worker. When the app is open (or in the background tab), users receive native OS-level push notifications for: new matches, missed matches, deal invitations received, new messages, and deal invite expiration.
 
-### Solution
-Add a 2-day expiration mechanism. After 48 hours without a response, the invite is treated as expired, releasing the item pair.
+### Architecture
+
+```text
+┌─────────────────────────────────────────────┐
+│  Browser (foreground or background tab)     │
+│                                             │
+│  useNotificationPermission() hook           │
+│    → Notification.requestPermission()       │
+│                                             │
+│  usePushNotifications() hook                │
+│    → Supabase Realtime listeners            │
+│    → new Notification(title, { body, icon })│
+└─────────────────────────────────────────────┘
+```
+
+This uses the **browser Notification API** (no service worker needed for basic in-browser push). Notifications fire when the user has the tab open or in background. This does NOT require a push server — it listens to Supabase Realtime events and triggers native browser notifications.
+
+### Notification Events
+
+| Event | Trigger | Title | Body |
+|-------|---------|-------|------|
+| New Match | `INSERT` on `matches` table | "New Match!" | "You matched with {item_title}" |
+| Missed Match | Detected in swipe flow | "Missed Match" | "Someone liked your item" |
+| Deal Invite Received | `INSERT` on `deal_invites` where receiver is me | "Deal Invitation" | "{user} wants to swap for your {item}" |
+| New Message | `INSERT` on `messages` where sender ≠ me | "New Message" | "{sender}: {content preview}" |
+| Deal Invite Expired | Checked on realtime or polling | "Invite Expired" | "Your deal invite for {item} has expired" |
 
 ### Changes
 
-**1. Database Migration — Add `expires_at` column to `deal_invites`**
-```sql
-ALTER TABLE public.deal_invites 
-ADD COLUMN expires_at timestamptz DEFAULT (now() + interval '2 days');
+**1. `src/hooks/useNotificationPermission.tsx`** — New hook
+- Request `Notification.requestPermission()` on mount (if not already granted)
+- Return `{ permission, requestPermission }` state
+- Only prompt once per session (store in sessionStorage)
 
--- Update existing pending invites to expire 2 days from now
-UPDATE public.deal_invites 
-SET expires_at = now() + interval '2 days' 
-WHERE status = 'pending' AND expires_at IS NULL;
-```
+**2. `src/hooks/usePushNotifications.tsx`** — New hook (core logic)
+- Subscribe to Supabase Realtime channels for:
+  - `matches` table INSERT → fetch match details → show notification
+  - `deal_invites` table INSERT → check if receiver is current user → show notification
+  - `messages` table INSERT → check sender ≠ current user and tab not focused → show notification
+- Use `document.hidden` check — only show browser notification when tab is not focused (avoid double-alerting)
+- On notification click → `window.focus()` and navigate to relevant page
+- Deal expiration: check on each `deal_invites` refetch if any invite just crossed the 2-day threshold
 
-**2. Update validation trigger `validate_deal_invite_attempt()`**
-- Modify the pending-check to exclude expired invites: only block if a pending invite exists AND `expires_at > now()`
+**3. `src/components/layout/AppLayout.tsx`** — Integrate hooks
+- Call `useNotificationPermission()` and `usePushNotifications()` at the app layout level so they run on all authenticated pages
 
-```sql
--- Check pending invites that haven't expired
-SELECT EXISTS(
-  SELECT 1 FROM public.deal_invites
-  WHERE sender_item_id = NEW.sender_item_id
-    AND receiver_item_id = NEW.receiver_item_id
-    AND status = 'pending'
-    AND expires_at > now()
-    AND id != COALESCE(NEW.id, '00000000-...'::uuid)
-) INTO pending_exists;
-```
+**4. `src/pages/Settings.tsx`** — Add notification toggle
+- Add a "Notifications" row in settings to enable/disable browser notifications
+- Store preference in localStorage
+- Show current permission status (granted/denied/default)
 
-**3. `src/components/deals/DealInviteButton.tsx`** — Treat expired pending invites as available
-- In `getInviteStatus()`: when checking for `pending`, also check if `created_at` is within 2 days. If older than 2 days, treat as expired (available/can_resend).
-- Add `created_at` to the `ExistingInvite` interface and query.
+**5. Translation keys (EN/FR/AR)** — Add `notifications` namespace:
+- `notifications.newMatch`, `notifications.missedMatch`, `notifications.dealInvite`, `notifications.newMessage`, `notifications.dealExpired`
+- `settings.notifications`, `settings.notificationsDescription`, `settings.enableNotifications`
 
-**4. `src/components/deals/DealInvitesNotification.tsx`** — Filter out expired invites
-- Add `.gt('expires_at', new Date().toISOString())` to the pending invites query so expired ones don't show up.
-
-**5. Translation keys (EN/FR/AR)** — Add `dealInvite.expired` key:
-- EN: `"expired": "Expired"`
-- FR: `"expired": "Expiré"`
-- AR: `"expired": "منتهي الصلاحية"`
+### Limitations (documented in WhitePaper)
+- Only works when the browser tab is open (foreground or background)
+- Does NOT work when browser is fully closed — that would require a push server (Web Push API with VAPID keys), which is a future enhancement
+- iOS Safari has limited Notification API support
 
 ### Files Modified
-- `deal_invites` table (migration)
-- `validate_deal_invite_attempt()` function (migration)
-- `src/components/deals/DealInviteButton.tsx`
-- `src/components/deals/DealInvitesNotification.tsx`
+- `src/hooks/useNotificationPermission.tsx` (new)
+- `src/hooks/usePushNotifications.tsx` (new)
+- `src/components/layout/AppLayout.tsx`
+- `src/pages/Settings.tsx`
 - `src/locales/en/translation.json`
 - `src/locales/fr/translation.json`
 - `src/locales/ar/translation.json`
