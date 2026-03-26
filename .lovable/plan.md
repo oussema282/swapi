@@ -1,33 +1,26 @@
 
 
-## Plan: Fix Broken Watermark Images
+## Plan: Fix Aggressive Session Invalidation Causing Random Logouts
 
 ### Root Cause
+The `validateSession` function in `useAuth.tsx` runs on **every** `onAuthStateChange` event. When it encounters a transient `getUser` error (like "Refresh Token Not Found" — common in preview iframes and during token rotation), it calls `supabase.auth.signOut()`, forcefully logging the user out. This then causes all in-flight mutations (swipes, etc.) to fail with "Not authenticated".
 
-The watermark edge function imports `deno.land/x/canvas` which requires **native FFI binaries** that are not available in Supabase Edge Functions. The function crashes silently, corrupting the uploaded image or replacing it with garbage data.
+### Changes — `src/hooks/useAuth.tsx`
 
-### Solution
+1. **Remove `validateSession` from `onAuthStateChange` callback** — The auth state change listener already receives valid session data from Supabase's internal token management. Validating inside the callback creates a race condition where a stale token triggers logout before auto-refresh completes.
 
-Rewrite the edge function using **`imagescript`** (`https://deno.land/x/imagescript`), a pure TypeScript image library that works in the Deno edge runtime without native dependencies. It supports PNG and JPEG decoding/encoding and pixel-level drawing.
+2. **Only validate on initial load** — Keep `validateSession` in the `getSession().then()` block for the initial bootstrap, but make it more lenient:
+   - Only sign out if the error is specifically `session_not_found` or `user_not_found`
+   - Ignore `refresh_token_not_found` errors — Supabase's auto-refresh handles these automatically
+   - Add a guard so that if `onAuthStateChange` has already fired with a valid session by the time `getSession` validates, skip the validation
 
-### Changes — `supabase/functions/watermark-image/index.ts`
+3. **Handle `TOKEN_REFRESHED` and `SIGNED_OUT` events properly** — Only clear state on explicit `SIGNED_OUT` events, not on transient errors
 
-Complete rewrite:
-
-1. Replace `deno.land/x/canvas` with `deno.land/x/imagescript`
-2. Decode the image using `Image.decode()` (supports PNG and JPEG)
-3. Draw watermark text by rendering each character as pixels onto the image at diagonal intervals with low opacity (~25 alpha out of 255)
-4. Since `imagescript` has limited text rendering, use a simpler approach: create a small watermark pattern image with the text rendered as pixel blocks, then composite it repeatedly across the main image with transparency
-5. Alternative simpler approach: use `imagescript`'s built-in `composite` method to overlay a semi-transparent pattern
-
-**Practical approach**: Since `imagescript` doesn't have full font/text rendering, the function will:
-- Create a small PNG "stamp" by drawing the watermark text character-by-character using a basic bitmap font (built into the function as a small pixel map for A-Z, 0-9)
-- Tile this stamp diagonally across the image with ~15% opacity
-- Encode back to the original format (PNG or JPEG)
-- Upload back to storage, replacing the original
-
-6. Add proper error handling so that if watermarking fails, the **original image is preserved** (don't corrupt it)
+### Result
+- Users stay logged in through token rotations and preview iframe reloads
+- Swipe errors ("Not authenticated") stop occurring because the session persists
+- Explicit sign-outs (user clicks logout, admin bans) still work correctly
 
 ### Files Modified
-- `supabase/functions/watermark-image/index.ts` (rewrite)
+- `src/hooks/useAuth.tsx`
 
