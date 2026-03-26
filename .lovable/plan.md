@@ -1,26 +1,25 @@
 
 
-## Plan: Fix Gift Markers Not Visually Distinct on Map
+## Plan: Fix Gift Marker Image Bleeding Over Golden Frame
 
 ### Root Cause
 
-Two issues preventing gift markers from looking different:
+When `overflow: visible` was set on the gift marker (to show the corner badge), the full-bleed image (`width: 100%; height: 100%`) now overflows the container's rounded corners and covers the golden border. The golden frame is there but invisible — buried under the photo.
 
-1. **Type definition missing `is_gift`** — The `Item` interface in `src/types/database.ts` doesn't include `is_gift`. While `(item as any).is_gift` is used, this is fragile and the real problem is that the `ItemWithOwner` type (which extends `Item`) also lacks it. The data does arrive from the DB (confirmed in `supabase/types.ts`), so the cast works — but let's make it explicit.
+### Fix — `src/pages/MapView.tsx`
 
-2. **`overflow: hidden` clips the gift badge** — The gift marker element has `overflow: hidden` which cuts off the gift badge positioned at `bottom: -4px; right: -4px`. The badge is invisible because it's clipped.
+In the image creation block (lines 312-317), when the item is a gift, apply `border-radius` to the image to match the container's inner radius, and add slight inset sizing so the golden border remains visible:
 
-### Changes
+- For gift markers: set the image style to `border-radius: 3px` (inner radius of the 6px container minus the 3px border) so corners match
+- Wrap the image in a div with `overflow: hidden; border-radius: 3px; width: 100%; height: 100%` to clip the image within the golden frame
+- Keep the outer container `overflow: visible` so the gift badge at the corner remains visible
 
-**1. `src/types/database.ts`** — Add `is_gift` to `Item` interface
-- Add `is_gift: boolean;` field
-
-**2. `src/pages/MapView.tsx`** — Fix gift marker rendering
-- Remove `overflow: hidden` from the gift marker style (keep it for regular markers)
-- Remove `(item as any)` cast — use `item.is_gift` directly since the type now includes it
-- Ensure the gift badge `z-index` is above the image
+### Result
+- Golden 3px border fully visible around the rectangular photo
+- Rounded corners on the image match the frame
+- Gift badge at bottom-right corner still visible (not clipped)
+- Floating animation still works
 
 ### Files Modified
-- `src/types/database.ts`
 - `src/pages/MapView.tsx`
 
