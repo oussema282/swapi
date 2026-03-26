@@ -1,23 +1,32 @@
 
 
-## Plan: Reorder Gift Badge and Request Button in ItemDetailsSheet
+## Plan: Upgrade Regular Item Markers to Rectangular Shape with Exchange Icon
 
-### What the user wants
-The "This is a free gift" label and the "Request Gift" button should be stacked together at the bottom of the sheet, not scattered across different sections.
+### Changes — `src/pages/MapView.tsx`
 
-### Changes — `src/components/discover/ItemDetailsSheet.tsx`
+**Regular markers (lines 292-304)**: Replace the circular 40×40 style with a rectangular shape matching the gift marker dimensions but with a neutral frame:
 
-1. **Remove the Gift Badge from its current position** (lines 230-239) — the amber banner currently sits between swap preferences and owner info
+- Size: 64×48px rectangular (slightly smaller than gift's 72×56)
+- Border-radius: 8px (rounded rectangle, not circle)
+- Border: 3px solid `hsl(var(--border))` — neutral frame instead of golden
+- No floating animation, no glow
+- `overflow: visible` on outer element to show corner badge
 
-2. **Move both the Gift Badge and Request Gift button together to the very end of the Actions section** (after the Report button, lines 273-323), reordered as:
-   - View on Map button (existing)
-   - Invite to Deal button (for non-gifts, existing)
-   - Report button (existing)
-   - Gift badge label ("This is a free gift") — moved here
-   - Request Gift button + "2 declines = blocked" warning — moved here, right below the badge
+**Regular marker image (lines 361-366)**: Wrap in the same inner structure as gifts:
+- Inner wrapper div with `overflow: hidden; border-radius: 4px` to clip the photo within the frame
+- Image fills the wrapper with `object-fit: cover`
 
-This places the gift-specific content stacked together at the bottom of the sheet.
+**Add exchange icon badge** at bottom-right corner (same position as gift badge):
+- 22×22px circle with `hsl(var(--primary))` background
+- White `repeat` (loop/exchange) SVG icon inside — the Lucide `Repeat2` icon path
+- Border: 2px solid `hsl(var(--background))`
+- Small box-shadow for depth
+
+### Result
+- Regular items: static rectangular photo with neutral border + exchange loop icon at corner
+- Gift items: floating rectangular photo with golden gradient border + gift icon at corner
+- Both use same structural pattern but are visually distinct
 
 ### Files Modified
-- `src/components/discover/ItemDetailsSheet.tsx`
+- `src/pages/MapView.tsx`
 
