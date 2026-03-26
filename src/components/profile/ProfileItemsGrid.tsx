@@ -65,11 +65,17 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
 
   const handleItemClick = (item: Item) => {
     if (isOwnProfile) {
-      navigate(`/items/${item.id}/edit`);
+      setActiveItemId(activeItemId === item.id ? null : item.id);
     } else {
       setSelectedItem(item);
       setSheetOpen(true);
     }
+  };
+
+  const handleViewPhotos = (item: Item) => {
+    setViewerPhotos(item.photos || []);
+    setViewerOpen(true);
+    setActiveItemId(null);
   };
 
   const sheetItem = selectedItem && ownerInfo ? {
