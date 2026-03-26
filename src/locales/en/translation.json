@@ -653,7 +653,8 @@
     "yourItem": "Your item",
     "dealAccepted": "Deal accepted! You can now message each other.",
     "dealDeclined": "Deal invite declined.",
-    "failedRespond": "Failed to respond to invite"
+    "failedRespond": "Failed to respond to invite",
+    "expired": "Expired"
   },
   "unmatch": {
     "button": "Unmatch",

@@ -17,6 +17,7 @@ interface ExistingInvite {
   sender_item_id: string;
   status: string;
   attempt: number;
+  created_at: string;
 }
 
 interface DealInviteButtonProps {
@@ -59,7 +60,7 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
       queryFn: async (): Promise<ExistingInvite[]> => {
         if (!user || myItems.length === 0) return [];
         const myItemIds = myItems.map(i => i.id);
-        const { data, error } = await supabase.from('deal_invites' as any).select('sender_item_id, status, attempt').eq('receiver_item_id', targetItemId).in('sender_item_id', myItemIds);
+        const { data, error } = await supabase.from('deal_invites' as any).select('sender_item_id, status, attempt, created_at').eq('receiver_item_id', targetItemId).in('sender_item_id', myItemIds);
         if (error) { console.error('Error fetching invites:', error); return []; }
         return (data as unknown as ExistingInvite[]) || [];
       },
@@ -97,16 +98,21 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
       },
     });
 
+    const isExpired = (createdAt: string) => {
+      const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+      return Date.now() - new Date(createdAt).getTime() > twoDaysMs;
+    };
+
     const getInviteStatus = (itemId: string): InviteStatus => {
       const invites = existingInvites.filter(i => i.sender_item_id === itemId);
       if (invites.length === 0) return 'available';
       const pendingInvite = invites.find(i => i.status === 'pending');
-      if (pendingInvite) return 'pending';
+      if (pendingInvite && !isExpired(pendingInvite.created_at)) return 'pending';
       const acceptedInvite = invites.find(i => i.status === 'accepted');
       if (acceptedInvite) return 'matched';
       const rejectedInvites = invites.filter(i => i.status === 'rejected');
       if (rejectedInvites.length >= 2) return 'blocked';
-      if (rejectedInvites.length === 1) return 'can_resend';
+      if (rejectedInvites.length === 1 || (pendingInvite && isExpired(pendingInvite.created_at))) return 'can_resend';
       return 'available';
     };
 

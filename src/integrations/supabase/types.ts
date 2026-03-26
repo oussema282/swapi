@@ -220,6 +220,7 @@ export type Database = {
         Row: {
           attempt: number
           created_at: string
+          expires_at: string | null
           id: string
           receiver_item_id: string
           responded_at: string | null
@@ -229,6 +230,7 @@ export type Database = {
         Insert: {
           attempt?: number
           created_at?: string
+          expires_at?: string | null
           id?: string
           receiver_item_id: string
           responded_at?: string | null
@@ -238,6 +240,7 @@ export type Database = {
         Update: {
           attempt?: number
           created_at?: string
+          expires_at?: string | null
           id?: string
           receiver_item_id?: string
           responded_at?: string | null

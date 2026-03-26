@@ -42,7 +42,7 @@ export function DealInvitesNotification() {
       const { data: myItems } = await supabase.from('items').select('id').eq('user_id', user.id);
       if (!myItems?.length) return [];
       const myItemIds = myItems.map(i => i.id);
-      const { data: invites, error } = await supabase.from('deal_invites' as any).select('*').in('receiver_item_id', myItemIds).eq('status', 'pending').order('created_at', { ascending: false });
+      const { data: invites, error } = await supabase.from('deal_invites' as any).select('*').in('receiver_item_id', myItemIds).eq('status', 'pending').gt('created_at', new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()).order('created_at', { ascending: false });
       if (error) { console.error('Error fetching deal invites:', error); return []; }
       if (!invites?.length) return [];
       const typedInvites = invites as unknown as DealInviteRaw[];
