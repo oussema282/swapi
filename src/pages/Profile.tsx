@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -71,13 +72,10 @@ export default function Profile() {
           {/* Profile Header */}
           <div className="flex items-center gap-4 mb-4">
             <Avatar className="w-20 h-20 border-4 border-primary/20">
-              {profile?.avatar_url ? (
-                <AvatarImage src={profile.avatar_url} alt="Avatar" />
-              ) : (
-                <AvatarFallback className="gradient-primary text-primary-foreground text-xl">
-                  <User className="w-8 h-8" />
-                </AvatarFallback>
-              )}
+              <AvatarImage src={profile?.avatar_url || (user ? getDefaultAvatar(user.id) : undefined)} alt="Avatar" />
+              <AvatarFallback className="gradient-primary text-primary-foreground text-xl">
+                <User className="w-8 h-8" />
+              </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">

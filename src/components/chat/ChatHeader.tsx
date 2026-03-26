@@ -10,6 +10,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { VerifiedName } from '@/components/ui/verified-name';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 interface ChatHeaderProps {
   avatarUrl?: string | null;
@@ -105,7 +106,7 @@ export function ChatHeader({
       
       <div className="relative flex-shrink-0">
         <Avatar className="w-9 h-9">
-          <AvatarImage src={avatarUrl || undefined} alt={displayName} />
+          <AvatarImage src={avatarUrl || (matchId ? getDefaultAvatar(matchId) : undefined)} alt={displayName} />
           <AvatarFallback className="bg-muted"><User className="w-4 h-4 text-muted-foreground" /></AvatarFallback>
         </Avatar>
         <OnlineIndicator isOnline={isOnline} className="bottom-0 right-0 translate-x-0.5 translate-y-0.5" size="sm" />

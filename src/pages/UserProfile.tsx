@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 export default function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
@@ -128,13 +129,10 @@ export default function UserProfile() {
 
           <div className="flex items-center gap-4 mb-6">
             <Avatar className="w-20 h-20 border-4 border-primary/20">
-              {profile.avatar_url ? (
-                <AvatarImage src={profile.avatar_url} alt="Avatar" />
-              ) : (
-                <AvatarFallback className="gradient-primary text-primary-foreground text-xl">
-                  <User className="w-8 h-8" />
-                </AvatarFallback>
-              )}
+              <AvatarImage src={profile.avatar_url || (userId ? getDefaultAvatar(userId) : undefined)} alt="Avatar" />
+              <AvatarFallback className="gradient-primary text-primary-foreground text-xl">
+                <User className="w-8 h-8" />
+              </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-semibold">

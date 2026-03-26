@@ -7,6 +7,7 @@ import { formatTimeAgo } from '@/lib/dateLocale';
 import { cn } from '@/lib/utils';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 interface MatchCardProps {
   match: MatchWithItems;
@@ -90,7 +91,7 @@ export function MatchCard({ match, index, onClick, hasUnread, onMyItemTap, onThe
             <div className="flex items-center justify-between gap-2 mb-0.5">
               <div className="flex items-center gap-1.5 min-w-0">
                 <Avatar className="w-4 h-4">
-                  <AvatarImage src={match.other_user_profile?.avatar_url || undefined} />
+                  <AvatarImage src={match.other_user_profile?.avatar_url || getDefaultAvatar(match.other_user_id || match.id)} />
                   <AvatarFallback className="text-[8px]">
                     {match.other_user_profile?.display_name?.charAt(0) || '?'}
                   </AvatarFallback>

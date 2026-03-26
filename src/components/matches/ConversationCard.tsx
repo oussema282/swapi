@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { formatTimeAgo } from '@/lib/dateLocale';
 import { MatchWithItems } from '@/hooks/useMatches';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 interface ConversationCardProps {
   match: MatchWithItems;
@@ -96,7 +97,7 @@ export function ConversationCard({
           </div>
           <div className="absolute -bottom-1 -right-1 rounded-full ring-2 ring-primary/30 bg-card">
             <Avatar className="w-7 h-7">
-              <AvatarImage src={ownerAvatar || undefined} />
+              <AvatarImage src={ownerAvatar || getDefaultAvatar(match.other_user_id || match.id)} />
               <AvatarFallback className="text-[10px] bg-secondary text-secondary-foreground font-medium">
                 {ownerName.charAt(0).toUpperCase()}
               </AvatarFallback>
