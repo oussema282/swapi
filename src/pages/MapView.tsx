@@ -270,20 +270,28 @@ export default function MapView() {
       el.className = 'item-marker';
       
       if (isGift) {
-        // Gift marker: rectangular golden frame
+        // Inject float-marker keyframes once
+        if (!document.getElementById('gift-marker-style')) {
+          const style = document.createElement('style');
+          style.id = 'gift-marker-style';
+          style.textContent = `@keyframes float-marker { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }`;
+          document.head.appendChild(style);
+        }
+        // Gift marker: floating rectangular golden frame
         el.style.cssText = `
-          width: 46px;
-          height: 46px;
-          border-radius: 8px;
+          width: 56px;
+          height: 44px;
+          border-radius: 6px;
           background: hsl(var(--background));
           border: 3px solid #facc15;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+          box-shadow: 0 8px 20px rgba(250, 204, 21, 0.35), 0 4px 8px rgba(0,0,0,0.15);
           overflow: hidden;
           position: relative;
+          animation: float-marker 3s ease-in-out infinite;
         `;
       } else {
         el.style.cssText = `
