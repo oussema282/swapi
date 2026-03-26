@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateItem } from '@/hooks/useItems';
@@ -27,7 +27,8 @@ import {
   Zap,
   Crown,
   ShieldAlert,
-  ChevronRight
+  ChevronRight,
+  Gift
 } from 'lucide-react';
 import { ItemCondition } from '@/types/database';
 import { CATEGORIES, getCategoryIcon, type Category, type Subcategory } from '@/config/categories';
@@ -48,6 +49,8 @@ const CONDITION_ICONS: Record<ItemCondition, React.ReactNode> = {
 export default function NewItem() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isGiftMode = searchParams.get('gift') === 'true';
   const { toast } = useToast();
   const { t } = useTranslation();
   const createItem = useCreateItem();
@@ -55,7 +58,13 @@ export default function NewItem() {
   const { checkImage, isChecking: isModerating } = useContentModeration();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const STEPS = [
+  // Gift mode: skip swap preferences step (step 4)
+  const STEPS = isGiftMode ? [
+    { id: 1, title: t('newItem.steps.photosTitle'), description: t('newItem.steps.photosDescription') },
+    { id: 2, title: t('newItem.steps.categoryCondition'), description: t('newItem.steps.categoryConditionDescription') },
+    { id: 3, title: t('newItem.steps.valueRange'), description: t('newItem.steps.valueRangeDescription') },
+    { id: 4, title: t('newItem.steps.locationTitle'), description: t('newItem.steps.locationDescription') },
+  ] : [
     { id: 1, title: t('newItem.steps.photosTitle'), description: t('newItem.steps.photosDescription') },
     { id: 2, title: t('newItem.steps.categoryCondition'), description: t('newItem.steps.categoryConditionDescription') },
     { id: 3, title: t('newItem.steps.valueRange'), description: t('newItem.steps.valueRangeDescription') },
@@ -177,19 +186,24 @@ export default function NewItem() {
     setPhotos(prev => prev.filter((_, i) => i !== index));
   };
 
+  const totalSteps = STEPS.length;
+  const lastStep = totalSteps;
+
   const canProceed = () => {
     switch (step) {
       case 1: return title.trim().length > 0;
       case 2: return category !== null && subcategory !== null && condition !== null;
       case 3: return true;
-      case 4: return swapPreferences.length > 0;
+      case 4: 
+        if (isGiftMode) return itemLatitude !== null && itemLongitude !== null;
+        return swapPreferences.length > 0;
       case 5: return itemLatitude !== null && itemLongitude !== null;
       default: return false;
     }
   };
 
   const handleNext = () => {
-    if (step < 5) {
+    if (step < lastStep) {
       setStep(step + 1);
     } else {
       handleSubmit();
@@ -208,19 +222,22 @@ export default function NewItem() {
     if (!category || !condition) return;
 
     try {
-      await createItem.mutateAsync({
+      const itemData: any = {
         title: title.trim(),
         description: description.trim() || null,
         category,
         subcategory: subcategory || null,
         condition,
         photos,
-        swap_preferences: swapPreferences,
+        swap_preferences: isGiftMode ? [] : swapPreferences,
         value_min: parseInt(valueMin) || 0,
         value_max: valueMax ? parseInt(valueMax) : null,
         latitude: itemLatitude ?? undefined,
         longitude: itemLongitude ?? undefined,
-      });
+        is_gift: isGiftMode,
+      };
+
+      await createItem.mutateAsync(itemData);
 
       setIsComplete(true);
       
@@ -261,7 +278,7 @@ export default function NewItem() {
             transition={{ delay: 0.4 }}
             className="text-2xl font-display font-bold text-foreground mb-2"
           >
-            {t('newItem.itemCreated')}
+            {isGiftMode ? t('gift.giftCreated') : t('newItem.itemCreated')}
           </motion.h2>
           
           <motion.p
@@ -270,7 +287,7 @@ export default function NewItem() {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground text-center"
           >
-            {t('newItem.itemLive')}
+            {isGiftMode ? t('gift.giftLive') : t('newItem.itemLive')}
           </motion.p>
           
           <motion.div
@@ -297,7 +314,10 @@ export default function NewItem() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-lg font-display font-bold">{STEPS[step - 1].title}</h1>
+            <div className="flex items-center gap-2">
+              {isGiftMode && <Gift className="w-5 h-5 text-amber-500" />}
+              <h1 className="text-lg font-display font-bold">{STEPS[step - 1].title}</h1>
+            </div>
             <p className="text-sm text-muted-foreground">{STEPS[step - 1].description}</p>
           </div>
           <span className="text-sm font-medium text-muted-foreground">
@@ -560,8 +580,8 @@ export default function NewItem() {
               </Card>
             )}
 
-            {/* Step 4: Swap Preferences */}
-            {step === 4 && (
+            {/* Step 4: Swap Preferences (skipped in gift mode) */}
+            {step === 4 && !isGiftMode && (
               <Card className="p-6">
                 <Label className="text-base font-semibold mb-2 block">{t('newItem.whatLookingFor')}</Label>
                 <p className="text-sm text-muted-foreground mb-6">
@@ -609,8 +629,8 @@ export default function NewItem() {
               </Card>
             )}
 
-            {/* Step 5: Location */}
-            {step === 5 && (
+            {/* Location Step - step 5 for normal, step 4 for gift */}
+            {((step === 5 && !isGiftMode) || (step === 4 && isGiftMode)) && (
               <Card className="p-6">
                 <Label className="text-base font-semibold mb-2 block">{t('newItem.itemLocation')}</Label>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -647,12 +667,15 @@ export default function NewItem() {
             >
               {createItem.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : step === 5 ? (
+              ) : step === lastStep ? (
                 <Check className="w-4 h-4 mr-2" />
               ) : (
                 <ArrowRight className="w-4 h-4 mr-2" />
               )}
-              {step === 5 ? t('newItem.createItem') : t('common.continue')}
+              {step === lastStep 
+                ? (isGiftMode ? t('gift.createGift') : t('newItem.createItem'))
+                : t('common.continue')
+              }
             </Button>
           </div>
         </div>
