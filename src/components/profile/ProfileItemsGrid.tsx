@@ -143,7 +143,24 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
                 <span className="text-xs text-muted-foreground font-medium">Swapped</span>
               </div>
             )}
-          </motion.button>
+
+            {/* View/Edit overlay for own profile */}
+            {isOwnProfile && activeItemId === item.id && (
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center gap-6 z-10">
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleViewPhotos(item); }}
+                  className="w-10 h-10 rounded-full bg-background/90 flex items-center justify-center hover:bg-background transition-colors"
+                >
+                  <Eye className="w-5 h-5 text-foreground" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate(`/items/${item.id}/edit`); }}
+                  className="w-10 h-10 rounded-full bg-background/90 flex items-center justify-center hover:bg-background transition-colors"
+                >
+                  <Pencil className="w-5 h-5 text-foreground" />
+                </button>
+              </div>
+            )}
         ))}
 
         {/* Add item button for own profile */}
