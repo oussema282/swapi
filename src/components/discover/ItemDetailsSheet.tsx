@@ -266,6 +266,15 @@ export function ItemDetailsSheet({
           </div>
         </div>
       </SheetContent>
+
+      {photos.length > 0 && (
+        <PhotoViewerModal
+          open={fullscreenPhotoOpen}
+          onOpenChange={setFullscreenPhotoOpen}
+          photos={photos}
+          initialIndex={currentPhotoIndex}
+        />
+      )}
     </Sheet>
   );
 }
