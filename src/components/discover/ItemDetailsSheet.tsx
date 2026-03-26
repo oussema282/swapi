@@ -83,7 +83,7 @@ export function ItemDetailsSheet({
       <SheetContent side="bottom" className="rounded-t-3xl h-[80vh] overflow-y-auto">
         <SheetHeader className="text-left pb-4 border-b border-border/50">
           <SheetTitle className="text-2xl font-display font-bold flex items-center gap-2">
-            {(item as any).is_gift && <Gift className="w-6 h-6 text-amber-500" />}
+            {item.is_gift && <Gift className="w-6 h-6 text-amber-500" />}
             {item.title}
           </SheetTitle>
         </SheetHeader>
@@ -204,7 +204,7 @@ export function ItemDetailsSheet({
           )}
 
           {/* Swap Preferences (hidden for gifts) */}
-          {!(item as any).is_gift && item.swap_preferences && item.swap_preferences.length > 0 && (
+          {!item.is_gift && item.swap_preferences && item.swap_preferences.length > 0 && (
             <div className="space-y-2">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">
                 <ArrowLeftRight className="w-4 h-4" />
@@ -221,7 +221,7 @@ export function ItemDetailsSheet({
           )}
 
           {/* Gift Badge */}
-          {(item as any).is_gift && (
+          {item.is_gift && (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <Gift className="w-5 h-5 text-amber-500" />
               <div>
@@ -275,13 +275,13 @@ export function ItemDetailsSheet({
                 {t('itemDetails.viewOnMap')}
               </Button>
             )}
-            {(item as any).is_gift && onRequestGift && (
+            {item.is_gift && onRequestGift && (
               <Button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white" onClick={onRequestGift}>
                 <Gift className="w-4 h-4 mr-2" />
                 {t('gift.requestGift')}
               </Button>
             )}
-            {!(item as any).is_gift && onInviteDeal && (
+            {!item.is_gift && onInviteDeal && (
               <Button className="flex-1 gradient-primary" onClick={onInviteDeal}>
                 <Send className="w-4 h-4 mr-2" />
                 {t('itemDetails.inviteToDeal')}
