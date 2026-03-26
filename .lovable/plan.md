@@ -1,26 +1,17 @@
 
 
-## Plan: Fix Aggressive Session Invalidation Causing Random Logouts
+## Plan: Remove Login Success Toast
 
-### Root Cause
-The `validateSession` function in `useAuth.tsx` runs on **every** `onAuthStateChange` event. When it encounters a transient `getUser` error (like "Refresh Token Not Found" — common in preview iframes and during token rotation), it calls `supabase.auth.signOut()`, forcefully logging the user out. This then causes all in-flight mutations (swipes, etc.) to fail with "Not authenticated".
+### Problem
+When signing in, a toast banner appears saying "Welcome back! You have successfully signed in." — the user wants this removed.
 
-### Changes — `src/hooks/useAuth.tsx`
+### Changes — `src/pages/Auth.tsx`
 
-1. **Remove `validateSession` from `onAuthStateChange` callback** — The auth state change listener already receives valid session data from Supabase's internal token management. Validating inside the callback creates a race condition where a stale token triggers logout before auto-refresh completes.
+Remove the toast notification block at lines ~68-73 that fires after successful sign-in. Keep the `navigate('/discover')` call so the user still gets redirected.
 
-2. **Only validate on initial load** — Keep `validateSession` in the `getSession().then()` block for the initial bootstrap, but make it more lenient:
-   - Only sign out if the error is specifically `session_not_found` or `user_not_found`
-   - Ignore `refresh_token_not_found` errors — Supabase's auto-refresh handles these automatically
-   - Add a guard so that if `onAuthStateChange` has already fired with a valid session by the time `getSession` validates, skip the validation
-
-3. **Handle `TOKEN_REFRESHED` and `SIGNED_OUT` events properly** — Only clear state on explicit `SIGNED_OUT` events, not on transient errors
-
-### Result
-- Users stay logged in through token rotations and preview iframe reloads
-- Swipe errors ("Not authenticated") stop occurring because the session persists
-- Explicit sign-outs (user clicks logout, admin bans) still work correctly
+Also check `src/components/landing/AuthSection.tsx` lines ~83-88 which has the same "Welcome back" toast for sign-in from the landing page — remove that too.
 
 ### Files Modified
-- `src/hooks/useAuth.tsx`
+- `src/pages/Auth.tsx`
+- `src/components/landing/AuthSection.tsx`
 
