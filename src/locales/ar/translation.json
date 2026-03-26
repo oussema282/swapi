@@ -355,7 +355,9 @@
     "itemDeleted": "تم حذف العنصر بنجاح",
     "itemRestored": "تمت استعادة العنصر للتبادل!",
     "failedToDelete": "فشل حذف العنصر",
-    "failedToRestore": "فشل استعادة العنصر"
+    "failedToRestore": "فشل استعادة العنصر",
+    "swapMode": "تبادل",
+    "giftMode": "هدية"
   },
   "newItem": {
     "steps": {

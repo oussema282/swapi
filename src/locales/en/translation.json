@@ -287,7 +287,9 @@
     "itemDeleted": "Item deleted successfully",
     "itemRestored": "Item restored for trading!",
     "failedToDelete": "Failed to delete item",
-    "failedToRestore": "Failed to restore item"
+    "failedToRestore": "Failed to restore item",
+    "swapMode": "Swap",
+    "giftMode": "Gift"
   },
   "newItem": {
     "steps": {

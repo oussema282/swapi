@@ -239,7 +239,9 @@
     "itemDeleted": "Article supprimé avec succès",
     "itemRestored": "Article restauré pour l'échange !",
     "failedToDelete": "Échec de la suppression",
-    "failedToRestore": "Échec de la restauration"
+    "failedToRestore": "Échec de la restauration",
+    "swapMode": "Échange",
+    "giftMode": "Cadeau"
   },
   "newItem": {
     "steps": {
