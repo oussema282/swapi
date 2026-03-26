@@ -1,54 +1,38 @@
 
 
-## Plan: Gender-Specific Default Avatars
+## Plan: Hide Onboarding Check Behind Bootstrapping Screen
 
-### Approach
+### Problem
+The `OnboardingGate` shows its own loading spinner while checking profile completeness and item count. Users see a brief flash of the loading/onboarding screen before being redirected to `/discover`. The check should happen invisibly behind the existing system bootstrapping screen.
 
-Update the avatar system to maintain two pools: 3 male avatars and 3 female avatars. The `getDefaultAvatar` function gets an optional `gender` parameter. Male users pick from male pool, female from female pool, unspecified defaults to male pool.
+### Root Cause
+In `OnboardingGate`, when `loading` or `itemsLoading` is true, it renders its own full-screen `Loader2` spinner (lines 32-38). This is a separate visual state from the `SystemPhaseRenderer` bootstrapping screen. Users see the bootstrapping screen → OnboardingGate spinner → final destination, causing a visible flash.
 
-### 1. Generate 6 new avatar images
+### Solution
+Remove the OnboardingGate's own loading spinner. Instead, return `null` while data is loading — this keeps the parent `SystemPhaseRenderer` bootstrapping screen visible until OnboardingGate has made its decision. The user sees one seamless loading screen, then lands directly on either `/onboarding` or `/discover`.
 
-Use the AI image model to generate 3 distinctly male and 3 distinctly female pixel art portrait avatars (same style as current ones). Save as:
-- `src/assets/avatars/male1.png`, `male2.png`, `male3.png`
-- `src/assets/avatars/female1.png`, `female2.png`, `female3.png`
+### Changes — `src/components/OnboardingGate.tsx`
 
-Delete the old `avatar1.png` through `avatar6.png`.
+Replace the loading spinner block (lines 32-38):
 
-### 2. Update `src/lib/defaultAvatars.ts`
+```tsx
+// Before:
+if (loading || itemsLoading) {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+    </div>
+  );
+}
 
-```ts
-import male1 from '@/assets/avatars/male1.png';
-// ... etc
-const MALE_AVATARS = [male1, male2, male3];
-const FEMALE_AVATARS = [female1, female2, female3];
-
-export function getDefaultAvatar(userId: string, gender?: string | null): string {
-  const hash = userId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const pool = gender === 'female' ? FEMALE_AVATARS : MALE_AVATARS;
-  return pool[hash % pool.length];
+// After:
+if (loading || itemsLoading) {
+  return null;  // Stay invisible — parent bootstrapping screen remains visible
 }
 ```
 
-### 3. Update call sites to pass gender
-
-Key files where profile/gender data is available:
-
-- **`src/pages/Profile.tsx`** — has `profile.gender` → pass it
-- **`src/pages/UserProfile.tsx`** — has `profile.gender` → pass it
-- **`src/pages/Settings.tsx`** — has profile data → pass gender
-- **`src/pages/EditProfile.tsx`** — has profile data → pass gender
-- **`src/components/discover/SwipeCard.tsx`** — has item owner data, need to check if gender is available
-- **`src/components/discover/ItemDetailsSheet.tsx`** — has owner data
-- **`src/components/chat/ChatHeader.tsx`** — may not have gender, will default to male
-- **`src/components/matches/MatchCard.tsx`** — has `other_user_profile`, check for gender
-- **`src/components/matches/ConversationCard.tsx`** — similar
-- **`src/pages/Search.tsx`** — profile objects have gender field
-- **`src/pages/Onboarding.tsx`** — has gender state
-
-Where gender is not available (e.g. ChatHeader with only matchId), the function defaults to male pool — acceptable fallback.
+Remove the `Loader2` import since it's no longer used.
 
 ### Files Modified
-- `src/assets/avatars/` — delete 6 old PNGs, create 6 new gender-specific PNGs
-- `src/lib/defaultAvatars.ts` — gender-aware selection
-- ~10 component/page files — add gender param to `getDefaultAvatar()` calls where profile data is accessible
+- `src/components/OnboardingGate.tsx`
 
