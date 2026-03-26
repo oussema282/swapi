@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DealInvitesNotification } from '@/components/deals/DealInvitesNotification';
-import { GiftRequestsNotification } from '@/components/gifts/GiftRequestsNotification';
 
 interface SwipeTopBarProps {
   activeTab: 'foryou' | 'nearby';
@@ -76,8 +75,6 @@ export function SwipeTopBar({
         {/* Deal Invites Notification Bell */}
         <DealInvitesNotification />
         
-      {/* Gift Requests Notification */}
-        <GiftRequestsNotification />
 
         {/* Gift Create Button */}
         <Button

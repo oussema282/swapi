@@ -9,6 +9,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Item } from '@/types/database';
 import { useTranslation } from 'react-i18next';
+import { useGiftRequests } from '@/hooks/useGiftRequests';
+import { Gift } from 'lucide-react';
 
 interface DealInviteRaw {
   id: string;
@@ -34,6 +36,7 @@ export function DealInvitesNotification() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { incomingRequests: giftRequests, acceptRequest, rejectRequest, isLoading: giftLoading } = useGiftRequests();
 
   const { data: pendingInvites = [], isLoading } = useQuery({
     queryKey: ['pending-deal-invites', user?.id],
@@ -83,7 +86,7 @@ export function DealInvitesNotification() {
     },
   });
 
-  const pendingCount = pendingInvites.length;
+  const pendingCount = pendingInvites.length + giftRequests.length;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -101,53 +104,94 @@ export function DealInvitesNotification() {
         </SheetHeader>
 
         <div className="mt-4 space-y-4">
-          {isLoading ? (
+          {(isLoading || giftLoading) ? (
             <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin" /></div>
-          ) : pendingInvites.length === 0 ? (
+          ) : (pendingInvites.length === 0 && giftRequests.length === 0) ? (
             <p className="text-sm text-muted-foreground text-center py-8">{t('dealInvite.noPending')}</p>
           ) : (
-            pendingInvites.map((invite) => (
-              <div key={invite.id} className="border rounded-lg p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
-                    {invite.sender_item?.photos?.[0] ? (
-                      <img src={invite.sender_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">📦</div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
-                    <p className="text-xs text-muted-foreground">{t('matches.from')} {invite.sender_item?.owner_display_name}</p>
-                  </div>
-                </div>
+            <>
+              {pendingInvites.length > 0 && (
+                <>
+                  <h3 className="text-sm font-semibold text-foreground">{t('matches.dealInvites')}</h3>
+                  {pendingInvites.map((invite) => (
+                    <div key={invite.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                          {invite.sender_item?.photos?.[0] ? (
+                            <img src={invite.sender_item.photos[0]} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">📦</div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{invite.sender_item?.title}</p>
+                          <p className="text-xs text-muted-foreground">{t('matches.from')} {invite.sender_item?.owner_display_name}</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-muted-foreground text-center">{t('dealInvite.wantsToSwapFor')}</div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                          {invite.receiver_item?.photos?.[0] ? (
+                            <img src={invite.receiver_item.photos[0]} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">📦</div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
+                          <p className="text-xs text-muted-foreground">{t('dealInvite.yourItem')}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        <Button variant="default" size="sm" className="flex-1" disabled={respondMutation.isPending} onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: true })}>
+                          <Check className="w-4 h-4 mr-1" />{t('matches.accept')}
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1" disabled={respondMutation.isPending} onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: false })}>
+                          <X className="w-4 h-4 mr-1" />{t('matches.decline')}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
 
-                <div className="text-xs text-muted-foreground text-center">{t('dealInvite.wantsToSwapFor')}</div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
-                    {invite.receiver_item?.photos?.[0] ? (
-                      <img src={invite.receiver_item.photos[0]} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">📦</div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{invite.receiver_item?.title}</p>
-                    <p className="text-xs text-muted-foreground">{t('dealInvite.yourItem')}</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Button variant="default" size="sm" className="flex-1" disabled={respondMutation.isPending} onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: true })}>
-                    <Check className="w-4 h-4 mr-1" />{t('matches.accept')}
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1" disabled={respondMutation.isPending} onClick={() => respondMutation.mutate({ inviteId: invite.id, accept: false })}>
-                    <X className="w-4 h-4 mr-1" />{t('matches.decline')}
-                  </Button>
-                </div>
-              </div>
-            ))
+              {giftRequests.length > 0 && (
+                <>
+                  <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                    <Gift className="w-4 h-4 text-amber-500" />
+                    {t('gift.requests', 'Gift Requests')}
+                  </h3>
+                  {giftRequests.map((req: any) => (
+                    <div key={req.id} className="border border-amber-200 dark:border-amber-800 rounded-lg p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted">
+                          {req.gift_item?.photos?.[0] ? (
+                            <img src={req.gift_item.photos[0]} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">🎁</div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{req.gift_item?.title}</p>
+                          <p className="text-xs text-muted-foreground">{t('matches.from')} {req.requester_profile?.display_name || 'User'}</p>
+                        </div>
+                      </div>
+                      {req.message && (
+                        <p className="text-xs text-muted-foreground italic">"{req.message}"</p>
+                      )}
+                      <div className="flex gap-2 pt-2">
+                        <Button variant="default" size="sm" className="flex-1" disabled={acceptRequest.isPending} onClick={() => acceptRequest.mutate(req.id)}>
+                          <Check className="w-4 h-4 mr-1" />{t('matches.accept')}
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1" disabled={rejectRequest.isPending} onClick={() => rejectRequest.mutate(req.id)}>
+                          <X className="w-4 h-4 mr-1" />{t('matches.decline')}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </>
           )}
         </div>
       </SheetContent>
