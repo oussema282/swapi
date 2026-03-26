@@ -290,17 +290,11 @@ export default function MapView() {
         `;
       } else {
         el.style.cssText = `
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: hsl(var(--primary));
-          border: 3px solid hsl(var(--background));
+          width: 64px;
+          height: 48px;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-          overflow: hidden;
+          overflow: visible;
+          background: transparent;
         `;
       }
 
@@ -359,10 +353,56 @@ export default function MapView() {
 
           el.appendChild(giftCard);
         } else {
+          // Regular item: rectangular frame with exchange icon
+          const card = document.createElement('div');
+          card.style.cssText = `
+            width: 64px;
+            height: 48px;
+            border-radius: 8px;
+            background: hsl(var(--border));
+            padding: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          `;
+
+          const imgWrapper = document.createElement('div');
+          imgWrapper.style.cssText = `
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 4px;
+          `;
           const img = document.createElement('img');
           img.src = item.photos[0];
-          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-          el.appendChild(img);
+          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
+          imgWrapper.appendChild(img);
+          card.appendChild(imgWrapper);
+
+          // Exchange badge at bottom-right corner
+          const exchangeBadge = document.createElement('div');
+          exchangeBadge.style.cssText = `
+            position: absolute;
+            bottom: -7px;
+            right: -7px;
+            width: 22px;
+            height: 22px;
+            background: hsl(var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 12;
+            border: 2px solid hsl(var(--background));
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          `;
+          exchangeBadge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>';
+          card.appendChild(exchangeBadge);
+
+          el.appendChild(card);
         }
       }
 
