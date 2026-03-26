@@ -2,11 +2,22 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { MessageStatus, MessageStatusType } from './MessageStatus';
 import { format, isToday, isYesterday } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+import { fr } from 'date-fns/locale/fr';
+import { ar } from 'date-fns/locale/ar';
 
-function formatMessageTime(date: Date) {
+const dateFnsLocales: Record<string, typeof fr> = { fr, ar };
+
+function getLocale() {
+  const lng = typeof window !== 'undefined' ? localStorage.getItem('i18n-language') || 'en' : 'en';
+  return dateFnsLocales[lng];
+}
+
+function formatMessageTime(date: Date, yesterdayLabel: string) {
+  const locale = getLocale();
   if (isToday(date)) return format(date, 'HH:mm');
-  if (isYesterday(date)) return `Yesterday ${format(date, 'HH:mm')}`;
-  return format(date, 'MMM d, HH:mm');
+  if (isYesterday(date)) return `${yesterdayLabel} ${format(date, 'HH:mm')}`;
+  return format(date, 'MMM d, HH:mm', { locale });
 }
 
 interface MessageBubbleProps {
@@ -28,6 +39,7 @@ export function MessageBubble({
   position,
   animationDelay = 0,
 }: MessageBubbleProps) {
+  const { t } = useTranslation();
   // Determine border radius based on position and direction
   const getBorderRadius = () => {
     const base = 'rounded-2xl';
@@ -84,7 +96,7 @@ export function MessageBubble({
               isOutgoing ? 'text-primary-foreground/70' : 'text-muted-foreground'
             )}
           >
-            {formatMessageTime(timestamp)}
+            {formatMessageTime(timestamp, t('chat.yesterday'))}
           </span>
           {isOutgoing && showStatus && status && (
             <MessageStatus status={status} />

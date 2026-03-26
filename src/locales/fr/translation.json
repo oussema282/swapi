@@ -883,6 +883,8 @@
     "dealInviteBody": "Quelqu'un veut échanger votre \"{{item}}\"",
     "newMessage": "Nouveau Message 💬",
     "dealExpired": "Invitation expirée",
-    "dealExpiredBody": "Votre invitation pour \"{{item}}\" a expiré"
+    "dealExpiredBody": "Votre invitation pour \"{{item}}\" a expiré",
+    "enablePrompt": "Activez les notifications pour rester informé des matchs et messages",
+    "enableButton": "Activer"
   }
 }

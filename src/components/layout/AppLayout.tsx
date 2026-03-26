@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { BottomNav } from './BottomNav';
 import { useNotificationPermission } from '@/hooks/useNotificationPermission';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { NotificationBanner } from '@/components/NotificationBanner';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ export function AppLayout({ children, showNav = true }: AppLayoutProps) {
 
   return (
     <div className="h-[100dvh] flex flex-col bg-background overflow-hidden">
+      <NotificationBanner />
       <main className={`flex-1 flex flex-col overflow-hidden ${showNav ? 'pb-20' : ''}`}>
         {children}
       </main>
