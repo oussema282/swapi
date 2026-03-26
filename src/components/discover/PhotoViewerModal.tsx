@@ -49,9 +49,10 @@ export function PhotoViewerModal({ open, onOpenChange, photos, initialIndex }: P
         </VisuallyHidden>
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute top-4 right-4 z-[60] w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 transition-colors active:scale-95"
+          className="absolute top-6 right-4 z-[60] w-14 h-14 rounded-full bg-black/80 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center hover:bg-black/90 transition-colors active:scale-95"
+          style={{ marginTop: 'env(safe-area-inset-top, 0px)' }}
         >
-          <X className="w-6 h-6 text-white" />
+          <X className="w-7 h-7 text-white" />
         </button>
 
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-3 py-1 bg-foreground/20 backdrop-blur-sm rounded-full">
