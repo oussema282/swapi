@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Package, Plus } from 'lucide-react';
+import { Package, Plus, Eye, Pencil } from 'lucide-react';
 import { Item } from '@/types/database';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ItemDetailsSheet } from '@/components/discover/ItemDetailsSheet';
+import { PhotoViewerModal } from '@/components/discover/PhotoViewerModal';
 import { DealInviteButton } from '@/components/deals/DealInviteButton';
 import { useDeviceLocation } from '@/hooks/useLocation';
 
@@ -32,6 +33,9 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dealInviteOpen, setDealInviteOpen] = useState(false);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerPhotos, setViewerPhotos] = useState<string[]>([]);
 
   if (items.length === 0 && isOwnProfile) {
     return (
@@ -61,11 +65,17 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
 
   const handleItemClick = (item: Item) => {
     if (isOwnProfile) {
-      navigate(`/items/${item.id}/edit`);
+      setActiveItemId(activeItemId === item.id ? null : item.id);
     } else {
       setSelectedItem(item);
       setSheetOpen(true);
     }
+  };
+
+  const handleViewPhotos = (item: Item) => {
+    setViewerPhotos(item.photos || []);
+    setViewerOpen(true);
+    setActiveItemId(null);
   };
 
   const sheetItem = selectedItem && ownerInfo ? {
@@ -133,6 +143,24 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
                 <span className="text-xs text-muted-foreground font-medium">Swapped</span>
               </div>
             )}
+
+            {/* View/Edit overlay for own profile */}
+            {isOwnProfile && activeItemId === item.id && (
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center gap-6 z-10">
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleViewPhotos(item); }}
+                  className="w-10 h-10 rounded-full bg-background/90 flex items-center justify-center hover:bg-background transition-colors"
+                >
+                  <Eye className="w-5 h-5 text-foreground" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate(`/items/${item.id}/edit`); }}
+                  className="w-10 h-10 rounded-full bg-background/90 flex items-center justify-center hover:bg-background transition-colors"
+                >
+                  <Pencil className="w-5 h-5 text-foreground" />
+                </button>
+              </div>
+            )}
           </motion.button>
         ))}
 
@@ -178,6 +206,14 @@ export function ProfileItemsGrid({ items, isOwnProfile = true, ownerInfo }: Prof
           )}
         </>
       )}
+
+      {/* Photo viewer for own profile items */}
+      <PhotoViewerModal
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        photos={viewerPhotos}
+        initialIndex={0}
+      />
     </>
   );
 }
