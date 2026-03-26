@@ -46,8 +46,11 @@ export function ItemDetailsSheet({
 }: ItemDetailsSheetProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const { sendRequest, checkRequestStatus } = useGiftRequests();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [fullscreenPhotoOpen, setFullscreenPhotoOpen] = useState(false);
+  const [giftRequestLoading, setGiftRequestLoading] = useState(false);
 
   if (!item) return null;
 
