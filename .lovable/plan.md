@@ -1,18 +1,17 @@
 
 
-## Plan: Enhance Photo Viewer UX with Zoom Icon, Exit Button, and Swipe Dots
+## Plan: Make Fullscreen Photo Close Button Always Visible
+
+### Problem
+The close (X) button in the fullscreen photo viewer is not visible on mobile. It sits at `top-4 right-4` but may be clipped by safe area insets or lost against the image background on the 407px viewport.
 
 ### Changes
 
-**1. `src/components/discover/ItemDetailsSheet.tsx`**
-- Add a small `ZoomIn` icon overlay on the bottom-right of the gallery image to signal tap-to-enlarge
-
-**2. `src/components/discover/PhotoViewerModal.tsx`**
-- The X close button already exists — no change needed there
-- Add dot indicators (small circles) below the image showing which photo is active, allowing tap-to-jump navigation
-- Add touch swipe support: track `touchstart`/`touchend` X positions, swipe left = next, swipe right = prev
+**`src/components/discover/PhotoViewerModal.tsx`**
+- Move the close button to use `top-6 right-4` with `safe-area-inset` padding to avoid notch/status bar overlap
+- Make the button more prominent: larger size (`w-14 h-14`), stronger background (`bg-black/80`), and a visible white border (`border-2 border-white/30`) so it stands out against any image
+- Increase icon size to `w-7 h-7` for better tap target visibility
 
 ### Files Modified
-- `src/components/discover/ItemDetailsSheet.tsx`
 - `src/components/discover/PhotoViewerModal.tsx`
 
