@@ -1,4 +1,4 @@
-import { SlidersHorizontal, Plus } from 'lucide-react';
+import { SlidersHorizontal, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -83,7 +83,7 @@ export function SwipeTopBar({
             onClick={() => navigate('/items/new')}
             className="w-10 h-10 rounded-full hover:bg-muted"
           >
-            <Plus className="w-5 h-5 text-primary" />
+            <Upload className="w-5 h-5 text-primary" />
           </Button>
           {hasNotifications && (
             <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-destructive rounded-full border-2 border-background" />
