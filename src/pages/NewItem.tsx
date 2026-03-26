@@ -309,20 +309,43 @@ export default function NewItem() {
     <AppLayout showNav={false}>
       <div className="max-w-lg mx-auto px-4 py-4 pb-24 min-h-[calc(100vh-2rem)] flex flex-col">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 mb-4">
           <Button variant="ghost" size="icon" onClick={handleBack}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              {isGiftMode && <Gift className="w-5 h-5 text-amber-500" />}
-              <h1 className="text-lg font-display font-bold">{STEPS[step - 1].title}</h1>
+          <div className="flex-1 flex justify-center">
+            <div className="flex items-center gap-1 p-1 bg-muted rounded-full">
+              <button
+                onClick={() => navigate('/items/new', { replace: true })}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                  !isGiftMode
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {t('items.swapMode')}
+              </button>
+              <button
+                onClick={() => navigate('/items/new?gift=true', { replace: true })}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                  isGiftMode
+                    ? "bg-amber-500 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {t('items.giftMode')}
+              </button>
             </div>
-            <p className="text-sm text-muted-foreground">{STEPS[step - 1].description}</p>
           </div>
           <span className="text-sm font-medium text-muted-foreground">
             {step}/{STEPS.length}
           </span>
+        </div>
+        <div className="mb-4">
+          <h1 className="text-lg font-display font-bold">{STEPS[step - 1].title}</h1>
+          <p className="text-sm text-muted-foreground">{STEPS[step - 1].description}</p>
         </div>
 
         {/* Progress Bar */}
