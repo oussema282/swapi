@@ -120,13 +120,13 @@ export const DealInviteButton = forwardRef<HTMLDivElement, DealInviteButtonProps
     const getStatusBadge = (status: InviteStatus) => {
       switch (status) {
         case 'pending':
-          return (<span className="flex items-center gap-1 text-xs text-warning bg-warning/10 px-2 py-1 rounded"><Lock className="w-3 h-3" />{t('dealInvite.pending')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-warning bg-warning/15 px-3 py-1.5 rounded-full animate-pulse"><Lock className="w-3 h-3" />{t('dealInvite.pending')}</span>);
         case 'can_resend':
-          return (<span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-600/10 px-2 py-1 rounded"><RotateCcw className="w-3 h-3" />{t('dealInvite.resendOneLeft')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-orange-500 bg-orange-500/15 px-3 py-1.5 rounded-full"><RotateCcw className="w-3 h-3" />{t('dealInvite.resendOneLeft')}</span>);
         case 'blocked':
-          return (<span className="flex items-center gap-1 text-xs text-destructive bg-destructive/10 px-2 py-1 rounded"><Lock className="w-3 h-3" />{t('dealInvite.blocked')}</span>);
+          return (<span className="flex items-center gap-1.5 text-xs font-medium text-destructive bg-destructive/15 px-3 py-1.5 rounded-full"><Lock className="w-3 h-3" />{t('dealInvite.blocked')}</span>);
         case 'matched':
-          return (<span className="text-xs text-tinder-green bg-tinder-green/10 px-2 py-1 rounded">{t('dealInvite.matched')}</span>);
+          return (<span className="text-xs font-medium text-tinder-green bg-tinder-green/15 px-3 py-1.5 rounded-full">{t('dealInvite.matched')}</span>);
         default:
           return null;
       }
