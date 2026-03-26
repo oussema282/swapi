@@ -289,15 +289,13 @@ export function ItemDetailsSheet({
                   disabled={giftRequestLoading || sendRequest.isPending}
                   onClick={async () => {
                     setGiftRequestLoading(true);
-                    try {
+                     try {
                       const status = await checkRequestStatus(item.id);
                       if (status === 'blocked') {
-                        const { toast } = await import('@/hooks/use-toast');
                         toast({ variant: 'destructive', title: t('gift.blocked', 'You are blocked from requesting this gift') });
                         return;
                       }
                       if (status === 'pending') {
-                        const { toast } = await import('@/hooks/use-toast');
                         toast({ variant: 'destructive', title: t('gift.alreadyPending', 'You already have a pending request') });
                         return;
                       }
