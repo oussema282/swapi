@@ -13,6 +13,7 @@ interface CreateItemData {
   swap_preferences: string[];
   value_min: number;
   value_max: number | null;
+  is_gift?: boolean;
 }
 
 export function useMyItems() {
@@ -82,6 +83,7 @@ export function useCreateItem() {
           user_id: user.id,
           latitude: data.latitude ?? profile?.latitude ?? null,
           longitude: data.longitude ?? profile?.longitude ?? null,
+          is_gift: data.is_gift ?? false,
         } as any)
         .select()
         .single();
