@@ -60,6 +60,7 @@ export function SystemSection() {
   useEffect(() => {
     fetchStats();
     fetchAllUsersProSetting();
+    fetchWatermarkText();
   }, []);
 
   const fetchAllUsersProSetting = async () => {
