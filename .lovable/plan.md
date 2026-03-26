@@ -1,42 +1,58 @@
 
 
-## Plan: Restrict Map and Item Placement to Tunisia Only
+## Plan: Auto-Expire Deal Invites After 2 Days
 
-### Overview
-Lock both the MapView (discovery map) and LocationPickerMap (item creation/editing) to Tunisia's geographic boundaries. Users cannot zoom out beyond Tunisia, pan outside it, or place items outside it.
+### Problem
+Currently, pending deal invites stay in "pending" status forever, blocking the sender from sending new invites for that item pair.
 
-### Tunisia Bounds
-```text
-Southwest: [7.5, 30.2]  (lng, lat)
-Northeast: [11.6, 37.5]  (lng, lat)
-Center:    [9.55, 33.85]
-```
+### Solution
+Add a 2-day expiration mechanism. After 48 hours without a response, the invite is treated as expired, releasing the item pair.
 
 ### Changes
 
-**1. `src/pages/MapView.tsx`** — Restrict discovery map to Tunisia
-- Add `maxBounds` to the Map constructor: `[[7.5, 30.2], [11.6, 37.5]]`
-- Set `minZoom: 6` to prevent zooming out too far beyond Tunisia
-- Keep existing zoom/center logic but clamp initial center within bounds
+**1. Database Migration — Add `expires_at` column to `deal_invites`**
+```sql
+ALTER TABLE public.deal_invites 
+ADD COLUMN expires_at timestamptz DEFAULT (now() + interval '2 days');
 
-**2. `src/components/items/LocationPickerMap.tsx`** — Restrict item placement to Tunisia
-- Add `maxBounds: [[7.5, 30.2], [11.6, 37.5]]` and `minZoom: 6` to the Map constructor
-- On marker drag end and map click, validate that the new position is within Tunisia bounds before calling `onChange`
-- If outside bounds, snap marker back to previous valid position and show a toast warning
-- Clamp the geolocation starting position to Tunisia bounds (if user is outside Tunisia, default to Tunisia center)
+-- Update existing pending invites to expire 2 days from now
+UPDATE public.deal_invites 
+SET expires_at = now() + interval '2 days' 
+WHERE status = 'pending' AND expires_at IS NULL;
+```
 
-**3. `src/locales/en/translation.json`** — Add translation key
-- `"map.outsideTunisia": "Items can only be placed within Tunisia"`
+**2. Update validation trigger `validate_deal_invite_attempt()`**
+- Modify the pending-check to exclude expired invites: only block if a pending invite exists AND `expires_at > now()`
 
-**4. `src/locales/fr/translation.json`** — Add French translation
-- `"map.outsideTunisia": "Les articles ne peuvent être placés qu'en Tunisie"`
+```sql
+-- Check pending invites that haven't expired
+SELECT EXISTS(
+  SELECT 1 FROM public.deal_invites
+  WHERE sender_item_id = NEW.sender_item_id
+    AND receiver_item_id = NEW.receiver_item_id
+    AND status = 'pending'
+    AND expires_at > now()
+    AND id != COALESCE(NEW.id, '00000000-...'::uuid)
+) INTO pending_exists;
+```
 
-**5. `src/locales/ar/translation.json`** — Add Arabic translation
-- `"map.outsideTunisia": "يمكن وضع العناصر في تونس فقط"`
+**3. `src/components/deals/DealInviteButton.tsx`** — Treat expired pending invites as available
+- In `getInviteStatus()`: when checking for `pending`, also check if `created_at` is within 2 days. If older than 2 days, treat as expired (available/can_resend).
+- Add `created_at` to the `ExistingInvite` interface and query.
+
+**4. `src/components/deals/DealInvitesNotification.tsx`** — Filter out expired invites
+- Add `.gt('expires_at', new Date().toISOString())` to the pending invites query so expired ones don't show up.
+
+**5. Translation keys (EN/FR/AR)** — Add `dealInvite.expired` key:
+- EN: `"expired": "Expired"`
+- FR: `"expired": "Expiré"`
+- AR: `"expired": "منتهي الصلاحية"`
 
 ### Files Modified
-- `src/pages/MapView.tsx`
-- `src/components/items/LocationPickerMap.tsx`
+- `deal_invites` table (migration)
+- `validate_deal_invite_attempt()` function (migration)
+- `src/components/deals/DealInviteButton.tsx`
+- `src/components/deals/DealInvitesNotification.tsx`
 - `src/locales/en/translation.json`
 - `src/locales/fr/translation.json`
 - `src/locales/ar/translation.json`
