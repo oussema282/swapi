@@ -104,19 +104,21 @@ export default function Profile() {
 
           {/* Phone - compact inline display */}
           {profile?.phone_number && (
-            <div className="flex items-center justify-between mb-4 px-1">
+            <div className="flex flex-col items-center gap-2 mb-4 px-1">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-3.5 h-3.5" />
                 <span>{profile.phone_number}</span>
-                {profile.phone_visible && (
-                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                    {t('editProfile.phoneVisible')}
-                  </Badge>
-                )}
               </div>
-              <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => navigate('/profile/edit')}>
-                <Edit className="w-3 h-3" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">{t('editProfile.phoneVisible')}</span>
+                <Switch
+                  checked={!!profile.phone_visible}
+                  onCheckedChange={async (checked) => {
+                    await supabase.from('profiles').update({ phone_visible: checked }).eq('user_id', user!.id);
+                    refreshProfile();
+                  }}
+                />
+              </div>
             </div>
           )}
 
