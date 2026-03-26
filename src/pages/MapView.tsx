@@ -274,24 +274,27 @@ export default function MapView() {
         if (!document.getElementById('gift-marker-style')) {
           const style = document.createElement('style');
           style.id = 'gift-marker-style';
-          style.textContent = `@keyframes float-marker { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }`;
+          style.textContent = `
+            @keyframes float-marker { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+            @keyframes gift-glow { 0%, 100% { box-shadow: 0 8px 24px rgba(250, 204, 21, 0.5), 0 4px 8px rgba(0,0,0,0.2); } 50% { box-shadow: 0 12px 32px rgba(250, 204, 21, 0.7), 0 6px 12px rgba(0,0,0,0.25); } }
+          `;
           document.head.appendChild(style);
         }
-        // Gift marker: floating rectangular golden frame
+        // Gift marker: large floating rectangular golden frame
         el.style.cssText = `
-          width: 56px;
-          height: 44px;
-          border-radius: 6px;
-          background: hsl(var(--background));
-          border: 3px solid #facc15;
+          width: 72px;
+          height: 56px;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #facc15, #f59e0b);
+          padding: 4px;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 8px 20px rgba(250, 204, 21, 0.35), 0 4px 8px rgba(0,0,0,0.15);
           overflow: visible;
           position: relative;
-          animation: float-marker 3s ease-in-out infinite;
+          animation: float-marker 3s ease-in-out infinite, gift-glow 3s ease-in-out infinite;
+          z-index: 10;
         `;
       } else {
         el.style.cssText = `
@@ -311,11 +314,18 @@ export default function MapView() {
 
       if (item.photos && item.photos.length > 0) {
         if (isGift) {
+          // Inner clipped photo area — inset inside the golden padding
           const imgWrapper = document.createElement('div');
-          imgWrapper.style.cssText = 'width: 100%; height: 100%; overflow: hidden; border-radius: 3px;';
+          imgWrapper.style.cssText = `
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 4px;
+            position: relative;
+          `;
           const img = document.createElement('img');
           img.src = item.photos[0];
-          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
           imgWrapper.appendChild(img);
           el.appendChild(imgWrapper);
         } else {
@@ -326,24 +336,25 @@ export default function MapView() {
         }
       }
 
-      // Add gift icon overlay for gift items
+      // Add gift icon badge at bottom-right corner
       if (isGift) {
         const giftBadge = document.createElement('div');
         giftBadge.style.cssText = `
           position: absolute;
-          bottom: -4px;
-          right: -4px;
-          width: 20px;
-          height: 20px;
-          background: #facc15;
+          bottom: -8px;
+          right: -8px;
+          width: 26px;
+          height: 26px;
+          background: linear-gradient(135deg, #facc15, #eab308);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 2;
-          border: 2px solid hsl(var(--background));
+          z-index: 12;
+          border: 3px solid hsl(var(--background));
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         `;
-        giftBadge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>';
+        giftBadge.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>';
         el.appendChild(giftBadge);
       }
 
