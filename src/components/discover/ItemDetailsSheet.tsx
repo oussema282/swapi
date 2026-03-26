@@ -93,6 +93,9 @@ export function ItemDetailsSheet({
                 className="w-full h-full object-cover cursor-pointer"
                 onClick={() => setFullscreenPhotoOpen(true)}
               />
+              <div className="absolute bottom-3 left-3 z-10 w-8 h-8 rounded-full bg-foreground/40 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                <ZoomIn className="w-4 h-4 text-white" />
+              </div>
               
               {hasMultiplePhotos && (
                 <div className="absolute top-3 left-3 right-3 flex gap-1.5 z-10">
