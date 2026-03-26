@@ -90,7 +90,8 @@ export function ItemDetailsSheet({
               <img
                 src={photos[currentPhotoIndex]}
                 alt={`${item.title} - Photo ${currentPhotoIndex + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => setFullscreenPhotoOpen(true)}
               />
               
               {hasMultiplePhotos && (
