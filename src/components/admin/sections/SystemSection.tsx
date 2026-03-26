@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import {
   Server,
   Database,
@@ -19,6 +21,8 @@ import {
   Zap,
   Cloud,
   Crown,
+  Stamp,
+  Save,
 } from 'lucide-react';
 
 interface TableStats {
