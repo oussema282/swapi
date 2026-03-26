@@ -789,5 +789,14 @@
     "books": "كتب",
     "home_garden": "المنزل والحديقة",
     "other": "أخرى"
+  },
+  "notifications": {
+    "newMatch": "تطابق جديد! 🎉",
+    "newMatchBody": "تطابقت مع \"{{item}}\"",
+    "dealInvite": "دعوة صفقة 🤝",
+    "dealInviteBody": "شخص ما يريد تبادل \"{{item}}\" الخاص بك",
+    "newMessage": "رسالة جديدة 💬",
+    "dealExpired": "انتهت صلاحية الدعوة",
+    "dealExpiredBody": "انتهت صلاحية دعوة الصفقة لـ \"{{item}}\""
   }
 }
