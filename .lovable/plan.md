@@ -1,32 +1,28 @@
 
 
-## Plan: Replace SVG Avatars with AI-Generated Pixel Art Portraits
+## Plan: Ensure Default Avatar Appears Everywhere
 
-### Approach
+### Problem
+The `ItemDetailsSheet` and `Search` page use raw `<img>` tags with letter-initial fallbacks instead of `getDefaultAvatar()`. The `EditProfile` page also lacks the default avatar fallback.
 
-Use the Nano banana 2 (google/gemini-3.1-flash-image-preview) model to generate 6 individual pixel art character portraits inspired by the reference image style — detailed pixel art with colorful backgrounds, diverse characters, portrait framing.
+### Changes
 
-### Steps
+**1. `src/components/discover/ItemDetailsSheet.tsx` (lines 239-248)**
+- Import `getDefaultAvatar` from `@/lib/defaultAvatars`
+- Replace the manual `<img>` + letter fallback with an `<img>` that always has a src — either `owner_avatar_url` or `getDefaultAvatar(item.user_id)`
 
-**1. Generate 6 avatar images** via AI image generation script
+**2. `src/pages/Search.tsx`**
+- Import `getDefaultAvatar`
+- Line ~548: Add default avatar to user suggestion: `src={suggestion.userData?.avatarUrl || getDefaultAvatar(suggestion.userData?.userId || '')}`
+- Line ~799: Add default avatar to profile list: `src={profile.avatar_url || getDefaultAvatar(profile.user_id)}`
+- Line ~883: Replace the manual `<img>` + letter fallback for item owner with: `src={item.owner_avatar_url || getDefaultAvatar(item.user_id)}`
 
-Generate each avatar individually with prompts like:
-- Avatar 1: Young woman with curly brown hair, green t-shirt, cozy room background
-- Avatar 2: Young man with dark hair, green flannel jacket, cafe background
-- Avatar 3: Woman with ponytail, pink jacket, park/nature background
-- Avatar 4: Man with glasses, blue shirt and tie, library background
-- Avatar 5: Woman with purple hair and glasses, hoodie, art studio background
-- Avatar 6: Young man with long wavy hair, colorful jacket, urban background
-
-Save as PNG files to `src/assets/avatars/avatar1.png` through `avatar6.png`.
-
-**2. Delete old SVG avatars** (`avatar1.svg` through `avatar6.svg`)
-
-**3. Update `src/lib/defaultAvatars.ts`** — change imports from `.svg` to `.png`
-
-No other files need changes — all components already use `getDefaultAvatar()`.
+**3. `src/pages/EditProfile.tsx`**
+- Import `getDefaultAvatar`
+- Use `avatarUrl || getDefaultAvatar(user.id)` as the AvatarImage src
 
 ### Files Modified
-- `src/assets/avatars/` — delete 6 SVGs, create 6 PNGs
-- `src/lib/defaultAvatars.ts` — update imports
+- `src/components/discover/ItemDetailsSheet.tsx`
+- `src/pages/Search.tsx`
+- `src/pages/EditProfile.tsx`
 
