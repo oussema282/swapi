@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DealInvitesNotification } from '@/components/deals/DealInvitesNotification';
+import { GiftRequestsNotification } from '@/components/gifts/GiftRequestsNotification';
 
 interface SwipeTopBarProps {
   activeTab: 'foryou' | 'nearby';
@@ -70,11 +71,13 @@ export function SwipeTopBar({
         </button>
       </div>
 
-      {/* Right - Deal Invites Notification + Add Item */}
-      <div className="flex items-center gap-1">
+      {/* Right - Deal Invites Notification + Gift + Add Item */}
+      <div className="flex items-center gap-0.5">
         {/* Deal Invites Notification Bell */}
         <DealInvitesNotification />
         
+        {/* Gift Requests Notification */}
+
         {/* Upload Item Button */}
         <div className="relative">
           <Button
