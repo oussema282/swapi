@@ -15,6 +15,7 @@ import { ArrowLeft, Camera, Loader2, Check, User, MapPin, ShieldAlert, Phone } f
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { getDefaultAvatar } from '@/lib/defaultAvatars';
 
 export default function EditProfile() {
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
@@ -190,13 +191,7 @@ export default function EditProfile() {
                 <div className="flex flex-col items-center gap-4">
                   <div className="relative">
                     <Avatar className="w-24 h-24 border-4 border-primary/20">
-                      {avatarUrl ? (
-                        <AvatarImage src={avatarUrl} alt="Avatar" />
-                      ) : (
-                        <AvatarFallback className="gradient-primary text-primary-foreground text-2xl">
-                          <User className="w-10 h-10" />
-                        </AvatarFallback>
-                      )}
+                      <AvatarImage src={avatarUrl || (user ? getDefaultAvatar(user.id) : undefined)} alt="Avatar" />
                     </Avatar>
                     <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full gradient-primary flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform">
                       {uploading || isModerating ? (
