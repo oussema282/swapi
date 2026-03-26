@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
@@ -6,16 +6,13 @@ import { useEntitlements } from '@/hooks/useEntitlements';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
-import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone, Save } from 'lucide-react';
+import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
+
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
@@ -38,48 +35,12 @@ export default function Profile() {
     enabled: !!user?.id,
   });
   const navigate = useNavigate();
-  
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneVisible, setPhoneVisible] = useState(false);
-  const [savingPhone, setSavingPhone] = useState(false);
-
-  useEffect(() => {
-    if (profile) {
-      setPhoneNumber(profile.phone_number || '');
-      setPhoneVisible(profile.phone_visible || false);
-    }
-  }, [profile]);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/');
     }
   }, [user, loading, navigate]);
-
-  const handleSavePhone = async () => {
-    if (!user) return;
-    if (phoneNumber.length > 0 && phoneNumber.length !== 8) {
-      toast.error(t('editProfile.phoneNumberInvalid'));
-      return;
-    }
-    setSavingPhone(true);
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          phone_number: phoneNumber.trim() || null,
-          phone_visible: phoneVisible,
-        })
-        .eq('user_id', user.id);
-      if (error) throw error;
-      toast.success(t('editProfile.phoneSaved'));
-    } catch (error) {
-      console.error(error);
-      toast.error(t('editProfile.failedSaveProfile'));
-    } finally {
-      setSavingPhone(false);
-    }
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -141,49 +102,23 @@ export default function Profile() {
             </Button>
           </div>
 
-          {/* Phone Number Section */}
-          <Card className="p-4 mb-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">{t('editProfile.phoneNumber')}</Label>
-            </div>
-            <Input
-              value={phoneNumber}
-              onChange={(e) => {
-                const val = e.target.value.replace(/\D/g, '').slice(0, 8);
-                setPhoneNumber(val);
-              }}
-              maxLength={8}
-              inputMode="numeric"
-              placeholder={t('editProfile.phoneNumberPlaceholder')}
-              className="text-base"
-            />
-            {phoneNumber.length > 0 && phoneNumber.length < 8 && (
-              <p className="text-xs text-destructive">{t('editProfile.phoneNumberInvalid')}</p>
-            )}
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm">{t('editProfile.phoneVisible')}</Label>
-                <p className="text-xs text-muted-foreground">{t('editProfile.phoneVisibleDescription')}</p>
+          {/* Phone - compact inline display */}
+          {profile?.phone_number && (
+            <div className="flex items-center justify-between mb-4 px-1">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Phone className="w-3.5 h-3.5" />
+                <span>{profile.phone_number}</span>
+                {profile.phone_visible && (
+                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                    {t('editProfile.phoneVisible')}
+                  </Badge>
+                )}
               </div>
-              <Switch checked={phoneVisible} onCheckedChange={setPhoneVisible} />
+              <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => navigate('/profile/edit')}>
+                <Edit className="w-3 h-3" />
+              </Button>
             </div>
-            <Button
-              size="sm"
-              onClick={handleSavePhone}
-              disabled={savingPhone}
-              className="w-full"
-            >
-              {savingPhone ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-1" />
-                  {t('common.save')}
-                </>
-              )}
-            </Button>
-          </Card>
+          )}
 
           {/* Pro Status Card */}
           {isPro ? (

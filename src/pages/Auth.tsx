@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeftRight, Mail, Lock, User, Loader2, Shield, Zap, Globe } from 'lucide-react';
+import { ArrowLeftRight, Mail, Lock, User, Loader2, Shield, Zap, Globe, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { APP_NAME, APP_DESCRIPTION } from '@/config/branding';
@@ -40,6 +40,7 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
@@ -86,7 +87,17 @@ export default function Auth() {
       return;
     }
 
-    const { error } = await signUp(email, password, displayName);
+    if (phoneNumber.length !== 8) {
+      toast({
+        variant: 'destructive',
+        title: 'Phone number required',
+        description: 'Please enter a valid 8-digit phone number.',
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    const { error } = await signUp(email, password, displayName, phoneNumber);
 
     if (error) {
       if (error.message.includes('already registered')) {
@@ -398,6 +409,30 @@ export default function Auth() {
                               required
                             />
                           </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="signup-phone" className="text-sm font-medium">Phone Number</Label>
+                          <div className="relative group">
+                            <Phone className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                            <Input
+                              id="signup-phone"
+                              type="tel"
+                              inputMode="numeric"
+                              placeholder="12345678"
+                              value={phoneNumber}
+                              onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                                setPhoneNumber(val);
+                              }}
+                              maxLength={8}
+                              className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
+                              required
+                            />
+                          </div>
+                          {phoneNumber.length > 0 && phoneNumber.length < 8 && (
+                            <p className="text-xs text-destructive">Phone number must be 8 digits</p>
+                          )}
                         </div>
 
                         <div className="space-y-2">
