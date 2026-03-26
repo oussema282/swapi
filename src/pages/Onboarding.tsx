@@ -16,12 +16,7 @@ import { Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-reac
 import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { Confetti } from '@/components/discover/Confetti';
 
-import avatar1 from '@/assets/avatars/avatar1.png';
-import avatar2 from '@/assets/avatars/avatar2.png';
-import avatar3 from '@/assets/avatars/avatar3.png';
-import avatar4 from '@/assets/avatars/avatar4.png';
-import avatar5 from '@/assets/avatars/avatar5.png';
-import avatar6 from '@/assets/avatars/avatar6.png';
+import { MALE_AVATARS, FEMALE_AVATARS } from '@/lib/defaultAvatars';
 
 const currentYear = new Date().getFullYear();
 const maxYear = currentYear - 13;
