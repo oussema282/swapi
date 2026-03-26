@@ -924,5 +924,14 @@
     "poussettes": "Strollers",
     "vetements_bebe": "Baby Clothes",
     "autres": "Other"
+  },
+  "notifications": {
+    "newMatch": "New Match! 🎉",
+    "newMatchBody": "You matched with \"{{item}}\"",
+    "dealInvite": "Deal Invitation 🤝",
+    "dealInviteBody": "Someone wants to swap for your \"{{item}}\"",
+    "newMessage": "New Message 💬",
+    "dealExpired": "Invite Expired",
+    "dealExpiredBody": "Your deal invite for \"{{item}}\" has expired"
   }
 }
