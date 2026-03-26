@@ -84,9 +84,12 @@ export default function Settings() {
   
   // Notification preferences
   const [emailNotifications, setEmailNotifications] = useState(true);
-  const [pushNotifications, setPushNotifications] = useState(true);
+  const [browserNotifications, setBrowserNotifications] = useState(
+    localStorage.getItem('notifications-enabled') !== 'false'
+  );
   const [matchAlerts, setMatchAlerts] = useState(true);
   const [messageAlerts, setMessageAlerts] = useState(true);
+  const browserPermission = typeof Notification !== 'undefined' ? Notification.permission : 'default';
   
   // Privacy settings
   const [profileVisible, setProfileVisible] = useState(true);
@@ -553,11 +556,23 @@ export default function Settings() {
                         <Label>{t('settings.pushNotifications')}</Label>
                         <p className="text-sm text-muted-foreground">
                           {t('settings.pushNotificationsDescription')}
+                          {browserPermission === 'denied' && (
+                            <span className="block text-xs text-destructive mt-1">
+                              {t('settings.notificationsBlocked', 'Notifications are blocked in your browser settings')}
+                            </span>
+                          )}
                         </p>
                       </div>
                       <Switch
-                        checked={pushNotifications}
-                        onCheckedChange={setPushNotifications}
+                        checked={browserNotifications && browserPermission !== 'denied'}
+                        disabled={browserPermission === 'denied'}
+                        onCheckedChange={(checked) => {
+                          setBrowserNotifications(checked);
+                          localStorage.setItem('notifications-enabled', String(checked));
+                          if (checked && browserPermission === 'default') {
+                            Notification.requestPermission();
+                          }
+                        }}
                       />
                     </div>
                     
