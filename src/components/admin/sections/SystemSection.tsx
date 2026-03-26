@@ -102,6 +102,7 @@ export function SystemSection() {
     }
   };
 
+  const fetchAllUsersProSetting = async () => {
     setProToggleLoading(true);
     const { data } = await supabase
       .from('system_settings')
