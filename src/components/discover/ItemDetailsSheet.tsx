@@ -10,6 +10,7 @@ import { VerifiedName } from '@/components/ui/verified-name';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { PhotoViewerModal } from './PhotoViewerModal';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
@@ -42,6 +43,7 @@ export function ItemDetailsSheet({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [fullscreenPhotoOpen, setFullscreenPhotoOpen] = useState(false);
 
   if (!item) return null;
 
@@ -88,7 +90,8 @@ export function ItemDetailsSheet({
               <img
                 src={photos[currentPhotoIndex]}
                 alt={`${item.title} - Photo ${currentPhotoIndex + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => setFullscreenPhotoOpen(true)}
               />
               
               {hasMultiplePhotos && (
@@ -263,6 +266,15 @@ export function ItemDetailsSheet({
           </div>
         </div>
       </SheetContent>
+
+      {photos.length > 0 && (
+        <PhotoViewerModal
+          open={fullscreenPhotoOpen}
+          onOpenChange={setFullscreenPhotoOpen}
+          photos={photos}
+          initialIndex={currentPhotoIndex}
+        />
+      )}
     </Sheet>
   );
 }
