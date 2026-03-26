@@ -1,40 +1,12 @@
 
-## Plan: Restore the fullscreen image exit button
 
-### Root cause
-The fullscreen photo modal currently uses this class on `DialogContent`:
+## Plan: Reduce Exit Button Size & Move Photo Counter Down
 
-```text
-[&>button]:hidden
-```
+### Changes — `src/components/discover/PhotoViewerModal.tsx`
 
-That hides every direct button inside the modal, including:
-- the custom exit (X) button
-- the left/right photo arrows
+1. **Shrink exit button** — reduce from `w-10 h-10` to `w-8 h-8`, icon from `w-5 h-5` to `w-4 h-4`
+2. **Move photo counter down** — change from `top-4` to `top-14` so it sits below the exit button area with comfortable spacing from the top edge
 
-So the exit button is in the code, but CSS is hiding it.
-
-### Implementation
-**1. Update `src/components/ui/dialog.tsx`**
-- Add an optional prop like `hideCloseButton?: boolean` to `DialogContent`
-- Only render the default Radix close button when that prop is not set
-
-**2. Update `src/components/discover/PhotoViewerModal.tsx`**
-- Remove the broad `[&>button]:hidden` class
-- Pass `hideCloseButton` to `DialogContent` so only the built-in close button is removed
-- Keep the custom large close button visible in the top-right safe area
-- Keep the left/right arrows visible for multi-photo items
-
-### Result
-After this fix, users will be able to:
-- clearly see the exit icon in fullscreen
-- close the image with the X button
-- see the photo navigation arrows again
-- still close by tapping outside / Escape
-
-### Files to modify
-- `src/components/ui/dialog.tsx`
+### Files Modified
 - `src/components/discover/PhotoViewerModal.tsx`
 
-### Technical note
-This is better than using CSS to hide all buttons, because it fixes the current bug without risking other modal controls being hidden again.
