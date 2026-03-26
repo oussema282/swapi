@@ -127,6 +127,11 @@ export default function EditItem() {
         const moderationResult = await checkImage(urlData.publicUrl, 'item_photo');
         if (!moderationResult.is_safe) {
           await supabase.storage.from('item-photos').remove([fileName]);
+          toast({ 
+            variant: 'destructive', 
+            title: t('newItem.imageBlocked'),
+            description: `${moderationResult.violation_type || t('newItem.policyViolation')}`
+          });
           continue;
         }
 
