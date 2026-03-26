@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { PhotoViewerModal } from './PhotoViewerModal';
+import { useGiftRequests } from '@/hooks/useGiftRequests';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ItemWithOwner extends Item {
   owner_display_name: string;
