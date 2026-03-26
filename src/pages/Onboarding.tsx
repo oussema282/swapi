@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,11 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { format, differenceInYears } from 'date-fns';
-import { CalendarIcon, Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-react';
+import { format, differenceInYears, getDaysInMonth } from 'date-fns';
+import { Check, Camera, Upload, Loader2, ArrowRight, Package } from 'lucide-react';
 import { getDefaultAvatar } from '@/lib/defaultAvatars';
 import { Confetti } from '@/components/discover/Confetti';
 
