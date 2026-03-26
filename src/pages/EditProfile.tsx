@@ -191,7 +191,7 @@ export default function EditProfile() {
                 <div className="flex flex-col items-center gap-4">
                   <div className="relative">
                     <Avatar className="w-24 h-24 border-4 border-primary/20">
-                      <AvatarImage src={avatarUrl || (user ? getDefaultAvatar(user.id) : undefined)} alt="Avatar" />
+                      <AvatarImage src={avatarUrl || (user ? getDefaultAvatar(user.id, profile?.gender) : undefined)} alt="Avatar" />
                     </Avatar>
                     <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full gradient-primary flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform">
                       {uploading || isModerating ? (
