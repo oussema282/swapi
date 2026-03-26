@@ -10,16 +10,17 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProfileItemsGrid } from '@/components/profile/ProfileItemsGrid';
 import { VerifiedName } from '@/components/ui/verified-name';
+import { Switch } from '@/components/ui/switch';
 import { LogOut, User, Loader2, Edit, MapPin, ChevronRight, Settings, Grid3X3, Crown, Sparkles, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
-  const { user, profile, loading, signOut } = useAuth();
+  const { user, profile, loading, signOut, refreshProfile } = useAuth();
   const { data: items = [], isLoading: itemsLoading } = useMyItems();
   const { isPro, subscription } = useEntitlements();
   const { t } = useTranslation();
@@ -104,19 +105,21 @@ export default function Profile() {
 
           {/* Phone - compact inline display */}
           {profile?.phone_number && (
-            <div className="flex items-center justify-between mb-4 px-1">
+            <div className="flex flex-col items-center gap-2 mb-4 px-1">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-3.5 h-3.5" />
                 <span>{profile.phone_number}</span>
-                {profile.phone_visible && (
-                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                    {t('editProfile.phoneVisible')}
-                  </Badge>
-                )}
               </div>
-              <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => navigate('/profile/edit')}>
-                <Edit className="w-3 h-3" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">{t('editProfile.phoneVisible')}</span>
+                <Switch
+                  checked={!!profile.phone_visible}
+                  onCheckedChange={async (checked) => {
+                    await supabase.from('profiles').update({ phone_visible: checked }).eq('user_id', user!.id);
+                    refreshProfile();
+                  }}
+                />
+              </div>
             </div>
           )}
 
