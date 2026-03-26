@@ -261,7 +261,43 @@ export function SystemSection() {
         )}
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      {/* Watermark Settings */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full flex items-center justify-center bg-muted">
+              <Stamp className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <div>
+              <CardTitle className="text-base">{t('admin.watermarkText')}</CardTitle>
+              <CardDescription className="text-xs">
+                {t('admin.watermarkDescription')}
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <div className="flex gap-2">
+            <Input
+              value={watermarkText}
+              onChange={(e) => setWatermarkText(e.target.value)}
+              placeholder={t('admin.watermarkPlaceholder')}
+              className="flex-1"
+            />
+            <Button
+              onClick={saveWatermarkText}
+              disabled={watermarkSaving}
+              size="sm"
+            >
+              {watermarkSaving ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                <><Save className="h-4 w-4 mr-1" />{t('common.save')}</>
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Database Status</CardTitle>
