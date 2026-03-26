@@ -594,8 +594,10 @@ export type Database = {
           ban_reason: string | null
           banned_at: string | null
           bio: string | null
+          birthday: string | null
           created_at: string
           display_name: string
+          gender: string | null
           id: string
           is_banned: boolean | null
           is_suspended: boolean | null
@@ -616,8 +618,10 @@ export type Database = {
           ban_reason?: string | null
           banned_at?: string | null
           bio?: string | null
+          birthday?: string | null
           created_at?: string
           display_name: string
+          gender?: string | null
           id?: string
           is_banned?: boolean | null
           is_suspended?: boolean | null
@@ -638,8 +642,10 @@ export type Database = {
           ban_reason?: string | null
           banned_at?: string | null
           bio?: string | null
+          birthday?: string | null
           created_at?: string
           display_name?: string
+          gender?: string | null
           id?: string
           is_banned?: boolean | null
           is_suspended?: boolean | null
