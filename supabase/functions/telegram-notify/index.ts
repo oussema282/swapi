@@ -28,17 +28,28 @@ serve(async (req) => {
 
     if (event === 'new_user') {
       message = [
-        '👤 *New User Signed Up!*',
+        '🆕 <b>New User Signed Up!</b>',
+        '',
+        `📧 Email: ${data.email || 'N/A'}`,
+        `📛 Name: ${data.name || 'N/A'}`,
+        '',
+        `🕐 ${new Date().toLocaleString('en-US', { timeZone: 'UTC' })}`,
+      ].join('\n');
+    } else if (event === 'profile_complete') {
+      message = [
+        '✅ <b>Profile Completed!</b>',
         '',
         `📛 Name: ${data.name || 'N/A'}`,
+        `📧 Email: ${data.email || 'N/A'}`,
         `📱 Phone: ${data.phone || 'N/A'}`,
-        `⚧ Gender: ${data.gender || 'N/A'}`,
+        `🎂 Birthday: ${data.birthday || 'N/A'}`,
+        `👤 Gender: ${data.gender || 'N/A'}`,
         '',
         `🕐 ${new Date().toLocaleString('en-US', { timeZone: 'UTC' })}`,
       ].join('\n');
     } else if (event === 'new_item') {
       message = [
-        '📦 *New Item Listed!*',
+        '📦 <b>New Item Listed!</b>',
         '',
         `📝 Title: ${data.title || 'N/A'}`,
         `📂 Category: ${data.category || 'N/A'}`,
@@ -62,7 +73,7 @@ serve(async (req) => {
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: message,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
       }),
     });
 

@@ -196,6 +196,25 @@ export default function Onboarding() {
 
       if (error) throw error;
       await refreshProfile();
+      
+      // Send profile_complete notification to Telegram
+      try {
+        await supabase.functions.invoke('telegram-notify', {
+          body: {
+            event: 'profile_complete',
+            data: {
+              name: profile?.display_name || '',
+              email: user.email || '',
+              phone,
+              birthday: format(birthday!, 'yyyy-MM-dd'),
+              gender,
+            },
+          },
+        });
+      } catch (_) {
+        // Don't block onboarding if notification fails
+      }
+      
       setStep(2);
     } catch (err) {
       toast({ variant: 'destructive', title: t('common.error') });
