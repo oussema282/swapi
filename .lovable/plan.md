@@ -1,38 +1,59 @@
 
 
-## Plan: Hide Onboarding Check Behind Bootstrapping Screen
+## Plan: Telegram Bot Notifications for New Users and Items
 
-### Problem
-The `OnboardingGate` shows its own loading spinner while checking profile completeness and item count. Users see a brief flash of the loading/onboarding screen before being redirected to `/discover`. The check should happen invisibly behind the existing system bootstrapping screen.
+### Overview
+Create an edge function that sends Telegram messages when a new user signs up or a new item is listed. Use database triggers to call the function automatically.
 
-### Root Cause
-In `OnboardingGate`, when `loading` or `itemsLoading` is true, it renders its own full-screen `Loader2` spinner (lines 32-38). This is a separate visual state from the `SystemPhaseRenderer` bootstrapping screen. Users see the bootstrapping screen → OnboardingGate spinner → final destination, causing a visible flash.
+### 1. Store Secrets
+- Use `add_secret` to store `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`
 
-### Solution
-Remove the OnboardingGate's own loading spinner. Instead, return `null` while data is loading — this keeps the parent `SystemPhaseRenderer` bootstrapping screen visible until OnboardingGate has made its decision. The user sees one seamless loading screen, then lands directly on either `/onboarding` or `/discover`.
+### 2. Create Edge Function: `telegram-notify`
+- Accepts `{ event: 'new_user' | 'new_item', data: {...} }` 
+- Sends a formatted message to the Telegram chat via Bot API (`sendMessage`)
+- **New user** message: name, email, phone, gender
+- **New item** message: title, category, condition, owner name
+- Uses direct Telegram API (no connector needed — just bot token)
 
-### Changes — `src/components/OnboardingGate.tsx`
+### 3. Database: Call edge function via `pg_net`
+Create two triggers + functions using `pg_net.http_post`:
 
-Replace the loading spinner block (lines 32-38):
+**Trigger A — on `profiles` INSERT:**
+- Fires after a new profile row is created (new signup)
+- Sends notification with display_name, phone_number, gender
 
-```tsx
-// Before:
-if (loading || itemsLoading) {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Loader2 className="w-8 h-8 animate-spin text-primary" />
-    </div>
-  );
-}
+**Trigger B — on `items` INSERT:**
+- Fires after a new item is created
+- Sends notification with title, category, condition
+- Joins profiles to get the owner's display_name
 
-// After:
-if (loading || itemsLoading) {
-  return null;  // Stay invisible — parent bootstrapping screen remains visible
-}
+### Technical Details
+
+**Edge function** (`supabase/functions/telegram-notify/index.ts`):
+```ts
+// POST { event, data } → calls https://api.telegram.org/bot{TOKEN}/sendMessage
+// Formats message with emoji for readability
 ```
 
-Remove the `Loader2` import since it's no longer used.
+**Migration SQL:**
+```sql
+CREATE OR REPLACE FUNCTION notify_telegram_new_user()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  PERFORM net.http_post(
+    url := '...supabase.co/functions/v1/telegram-notify',
+    headers := '{"Content-Type":"application/json","Authorization":"Bearer ..."}'::jsonb,
+    body := jsonb_build_object('event','new_user','data', jsonb_build_object('name', NEW.display_name, 'phone', NEW.phone_number, 'gender', NEW.gender))
+  );
+  RETURN NEW;
+END; $$;
 
-### Files Modified
-- `src/components/OnboardingGate.tsx`
+CREATE TRIGGER on_new_profile AFTER INSERT ON profiles
+FOR EACH ROW EXECUTE FUNCTION notify_telegram_new_user();
+-- Similar for items
+```
+
+### Files Created/Modified
+- `supabase/functions/telegram-notify/index.ts` (new)
+- Database migration for triggers + pg_net calls
 
