@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Mail, Lock, User, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
