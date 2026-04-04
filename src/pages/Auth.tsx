@@ -9,8 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeftRight, Mail, Lock, User, Loader2, Shield, Zap, Globe, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/integrations/supabase/client';
 import { APP_NAME, APP_DESCRIPTION } from '@/config/branding';
+import { lovable } from '@/integrations/lovable/index';
 
 // Google Icon component
 function GoogleIcon({ className }: { className?: string }) {
