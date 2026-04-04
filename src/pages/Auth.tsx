@@ -9,8 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeftRight, Mail, Lock, User, Loader2, Shield, Zap, Globe, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/integrations/supabase/client';
 import { APP_NAME, APP_DESCRIPTION } from '@/config/branding';
+import { lovable } from '@/integrations/lovable/index';
 
 // Google Icon component
 function GoogleIcon({ className }: { className?: string }) {
@@ -127,23 +127,25 @@ export default function Auth() {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
-      const redirectTo = `${window.location.origin}/discover`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo,
-        },
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
 
-      if (error) {
+      if (result.error) {
         toast({
           variant: 'destructive',
           title: 'Google sign in failed',
-          description: error.message,
+          description: result.error.message,
         });
         setIsGoogleLoading(false);
+        return;
       }
-      // Don't set loading to false on success - we're redirecting
+
+      if (result.redirected) {
+        return;
+      }
+
+      navigate('/onboarding');
     } catch (err) {
       console.error('Google sign in error:', err);
       toast({

@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Mail, Lock, User, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
@@ -131,22 +132,25 @@ export function AuthSection() {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
-      const redirectTo = `${window.location.origin}/onboarding`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo,
-        },
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
 
-      if (error) {
+      if (result.error) {
         toast({
           variant: 'destructive',
           title: t('auth.googleSignInFailed'),
-          description: error.message,
+          description: result.error.message,
         });
         setIsGoogleLoading(false);
+        return;
       }
+
+      if (result.redirected) {
+        return;
+      }
+
+      navigate('/onboarding');
     } catch (err) {
       console.error('Google sign in error:', err);
       toast({
