@@ -41,6 +41,13 @@
         "countries": "Pays"
       }
     },
+    "slides": {
+      "smart": { "title": "Matching intelligent", "desc": "Notre IA trouve les meilleures opportunités d'échange selon vos préférences." },
+      "nearby": { "title": "Échanges à proximité", "desc": "Découvrez des articles près de chez vous. Rencontrez localement ou expédiez en Europe." },
+      "secure": { "title": "Échanges sécurisés", "desc": "Profils vérifiés, évaluations et messagerie sécurisée." },
+      "chat": { "title": "Chat en temps réel", "desc": "Négociez, planifiez et finalisez vos échanges instantanément." },
+      "notify": { "title": "Notifications instantanées", "desc": "Ne manquez jamais un match ou un message grâce aux alertes en temps réel." }
+    },
     "features": {
       "title": "Tout ce dont vous avez besoin pour échanger",
       "subtitle": "Des fonctionnalités puissantes pour rendre l'échange simple, sûr et agréable.",
