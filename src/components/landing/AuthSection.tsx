@@ -38,7 +38,7 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-export function AuthSection() {
+export function AuthSection({ embedded = false }: { embedded?: boolean }) {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -163,32 +163,136 @@ export function AuthSection() {
   };
 
   if (loading) {
-    return (
-      <section id="auth" className="py-20 px-4 bg-muted/30">
-        <div className="max-w-md mx-auto flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      </section>
+    const loader = (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
     );
+    if (embedded) return loader;
+    return <section id="auth" className="py-20 px-4 bg-muted/30"><div className="max-w-md mx-auto">{loader}</div></section>;
   }
 
   if (loginDisabled) {
-    return (
-      <section id="auth" className="py-20 px-4 bg-muted/30">
-        <div className="max-w-md mx-auto text-center py-12">
-          <div className="mx-auto h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
-            <Lock className="h-8 w-8 text-destructive" />
-          </div>
-          <h2 className="text-2xl font-bold mb-2">Inscription temporairement désactivée</h2>
-          <p className="text-muted-foreground">La connexion et l'inscription sont actuellement désactivées. Veuillez réessayer plus tard.</p>
+    const disabled = (
+      <div className="text-center py-12">
+        <div className="mx-auto h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+          <Lock className="h-8 w-8 text-destructive" />
         </div>
-      </section>
+        <h2 className="text-2xl font-bold mb-2">Inscription temporairement désactivée</h2>
+        <p className="text-muted-foreground">La connexion et l'inscription sont actuellement désactivées. Veuillez réessayer plus tard.</p>
+      </div>
     );
+    if (embedded) return disabled;
+    return <section id="auth" className="py-20 px-4 bg-muted/30"><div className="max-w-md mx-auto">{disabled}</div></section>;
   }
 
   if (user) {
     return null;
   }
+
+  const authCard = (
+    <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <CardHeader className="pb-4">
+          <TabsList className="grid w-full grid-cols-2 h-12 p-1 bg-muted/50">
+            <TabsTrigger 
+              value="signin" 
+              className="text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-300"
+            >
+              {t('auth.signIn')}
+            </TabsTrigger>
+            <TabsTrigger 
+              value="signup" 
+              className="text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-300"
+            >
+              {t('auth.signUp')}
+            </TabsTrigger>
+          </TabsList>
+        </CardHeader>
+
+        <CardContent className="pb-6">
+          {/* Google OAuth Button */}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full h-12 mb-4 font-medium"
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading || isLoading}
+          >
+            {isGoogleLoading ? (
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+            ) : (
+              <GoogleIcon className="w-5 h-5 mr-2" />
+            )}
+            {t('auth.continueWithGoogle')}
+          </Button>
+
+          {/* Divider */}
+          <div className="relative mb-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border/50" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">{t('auth.orContinueWithEmail')}</span>
+            </div>
+          </div>
+
+          <TabsContent value="signin" className="mt-0">
+            <form onSubmit={handleSignIn} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="signin-email" className="text-sm font-medium">{t('auth.email')}</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input id="signin-email" type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signin-password" className="text-sm font-medium">{t('auth.password')}</Label>
+                <div className="relative group">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input id="signin-password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300" required />
+                </div>
+              </div>
+              <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading || isGoogleLoading}>
+                {isLoading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />{t('auth.signingIn')}</>) : t('auth.signIn')}
+              </Button>
+            </form>
+          </TabsContent>
+
+          <TabsContent value="signup" className="mt-0">
+            <form onSubmit={handleSignUp} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="signup-name" className="text-sm font-medium">{t('auth.displayName')}</Label>
+                <div className="relative group">
+                  <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input id="signup-name" type="text" placeholder={t('auth.displayNamePlaceholder')} value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email" className="text-sm font-medium">{t('auth.email')}</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input id="signup-email" type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password" className="text-sm font-medium">{t('auth.password')}</Label>
+                <div className="relative group">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input id="signup-password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300" required />
+                </div>
+              </div>
+              <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading || isGoogleLoading}>
+                {isLoading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />{t('auth.creatingAccount')}</>) : t('auth.signUp')}
+              </Button>
+            </form>
+          </TabsContent>
+        </CardContent>
+      </Tabs>
+    </Card>
+  );
+
+  if (embedded) return authCard;
 
   return (
     <section id="auth" className="py-20 px-4 bg-muted/30">
@@ -213,178 +317,7 @@ export function AuthSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-md mx-auto"
         >
-          <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <CardHeader className="pb-4">
-                <TabsList className="grid w-full grid-cols-2 h-12 p-1 bg-muted/50">
-                  <TabsTrigger 
-                    value="signin" 
-                    className="text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-300"
-                  >
-                    {t('auth.signIn')}
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="signup" 
-                    className="text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-300"
-                  >
-                    {t('auth.signUp')}
-                  </TabsTrigger>
-                </TabsList>
-              </CardHeader>
-
-              <CardContent className="pb-6">
-                {/* Google OAuth Button */}
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-12 mb-4 font-medium"
-                  onClick={handleGoogleSignIn}
-                  disabled={isGoogleLoading || isLoading}
-                >
-                  {isGoogleLoading ? (
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  ) : (
-                    <GoogleIcon className="w-5 h-5 mr-2" />
-                  )}
-                  {t('auth.continueWithGoogle')}
-                </Button>
-
-                {/* Divider */}
-                <div className="relative mb-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border/50" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">{t('auth.orContinueWithEmail')}</span>
-                  </div>
-                </div>
-
-                <TabsContent value="signin" className="mt-0">
-                  <form
-                    onSubmit={handleSignIn}
-                    className="space-y-5"
-                  >
-                    <div className="space-y-2">
-                      <Label htmlFor="signin-email" className="text-sm font-medium">{t('auth.email')}</Label>
-                      <div className="relative group">
-                        <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                        <Input
-                          id="signin-email"
-                          type="email"
-                          placeholder={t('auth.emailPlaceholder')}
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="signin-password" className="text-sm font-medium">{t('auth.password')}</Label>
-                      <div className="relative group">
-                        <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                        <Input
-                          id="signin-password"
-                          type="password"
-                          placeholder="••••••••"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full h-12 text-base font-semibold"
-                      disabled={isLoading || isGoogleLoading}
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          {t('auth.signingIn')}
-                        </>
-                      ) : (
-                        t('auth.signIn')
-                      )}
-                    </Button>
-                  </form>
-                </TabsContent>
-
-                <TabsContent value="signup" className="mt-0">
-                  <form
-                    onSubmit={handleSignUp}
-                    className="space-y-5"
-                  >
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name" className="text-sm font-medium">{t('auth.displayName')}</Label>
-                      <div className="relative group">
-                        <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                        <Input
-                          id="signup-name"
-                          type="text"
-                          placeholder={t('auth.displayNamePlaceholder')}
-                          value={displayName}
-                          onChange={(e) => setDisplayName(e.target.value)}
-                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email" className="text-sm font-medium">{t('auth.email')}</Label>
-                      <div className="relative group">
-                        <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                        <Input
-                          id="signup-email"
-                          type="email"
-                          placeholder={t('auth.emailPlaceholder')}
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password" className="text-sm font-medium">{t('auth.password')}</Label>
-                      <div className="relative group">
-                        <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                        <Input
-                          id="signup-password"
-                          type="password"
-                          placeholder="••••••••"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="pl-11 h-12 bg-background/50 border-border/50 focus:border-primary transition-all duration-300"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full h-12 text-base font-semibold"
-                      disabled={isLoading || isGoogleLoading}
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          {t('auth.creatingAccount')}
-                        </>
-                      ) : (
-                        t('auth.signUp')
-                      )}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </CardContent>
-            </Tabs>
-          </Card>
+          {authCard}
         </motion.div>
       </div>
     </section>

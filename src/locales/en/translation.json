@@ -44,6 +44,13 @@
         "countries": "Countries"
       }
     },
+    "slides": {
+      "smart": { "title": "Smart Matching", "desc": "Our AI finds the best swap opportunities based on your preferences." },
+      "nearby": { "title": "Nearby Swaps", "desc": "Discover items close to you. Meet locally or ship across Europe." },
+      "secure": { "title": "Secure Trading", "desc": "Verified profiles, ratings, and secure messaging you can trust." },
+      "chat": { "title": "Real-Time Chat", "desc": "Negotiate, plan meetups, and finalize deals instantly." },
+      "notify": { "title": "Instant Notifications", "desc": "Never miss a match or message with real-time alerts." }
+    },
     "trust": {
       "platform1": "App Store",
       "platform2": "Google Play",
