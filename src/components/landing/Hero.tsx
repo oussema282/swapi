@@ -1,88 +1,95 @@
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
-import heroPhoneImage from '@/assets/landing/hero-phone.png';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { AuthSection } from '@/components/landing/AuthSection';
 
 export function Hero() {
   const { t } = useTranslation();
 
-  const scrollToAuth = () => {
-    const authSection = document.getElementById('auth');
-    if (authSection) {
-      authSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-  
   return (
-    <section className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
-      <div className="flex min-h-screen w-full items-center justify-center gap-6 p-[5%] max-xl:items-center max-lg:flex-col max-lg:p-4 max-md:mt-[50px]">
-        {/* Left Content */}
-        <div className="flex flex-col justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
+    <section className="relative min-h-screen w-full overflow-hidden bg-background">
+      {/* Animated background blobs */}
+      <motion.div
+        className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+        animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"
+        animate={{ x: [0, -40, 0], y: [0, -30, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Navbar */}
+      <nav className="relative z-20 flex items-center justify-between px-6 py-4">
+        <motion.span
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-2xl font-bold text-foreground"
+        >
+          {APP_NAME}
+        </motion.span>
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+          <LanguageSwitcher />
+        </motion.div>
+      </nav>
+
+      {/* Main content */}
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 pb-16 pt-8 lg:flex-row lg:items-start lg:gap-16 lg:px-8 lg:pt-16">
+        {/* Left — headline */}
+        <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-start">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex flex-wrap text-6xl font-semibold uppercase leading-[80px] max-lg:text-4xl max-md:leading-snug"
+            transition={{ duration: 0.7 }}
+            className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
           >
-            <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t('landing.hero.headline1')}
             </span>
             <br />
-            <span className="text-foreground">
-              {t('landing.hero.headline2')}
-            </span>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
+            <span className="text-foreground">{t('landing.hero.headline2')}</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="mt-4 max-w-[450px] p-2 text-justify text-muted-foreground max-lg:max-w-full"
+            transition={{ delay: 0.2, duration: 0.7 }}
+            className="mt-5 max-w-md text-base text-muted-foreground sm:text-lg"
           >
             {t('landing.hero.description')}
-          </motion.div>
+          </motion.p>
 
+          {/* Stats row */}
           <motion.div
-            initial={{ opacity: 0, y: 100 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="mt-6 flex items-center gap-4 overflow-hidden p-2"
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="mt-8 flex gap-8"
           >
-            <Button 
-              size="lg" 
-              className="h-12 gap-2 rounded-full pl-6 pr-2 text-lg font-semibold"
-              onClick={scrollToAuth}
-            >
-              <span>{t('landing.hero.getStarted')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/20">
-                <ArrowDown className="h-4 w-4" />
+            {[
+              { value: '50K+', label: t('landing.hero.stats.activeUsers') },
+              { value: '120K+', label: t('landing.hero.stats.itemsTraded') },
+              { value: '27', label: t('landing.hero.stats.countries') },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
               </div>
-            </Button>
+            ))}
           </motion.div>
         </div>
 
-        {/* Right Content - Phone Mockup */}
-        <div className="flex w-full max-w-[50%] items-center justify-center overflow-hidden max-lg:max-w-full">
-          <div className="relative flex max-h-[580px] min-h-[450px] min-w-[350px] max-w-[650px] overflow-hidden max-lg:h-fit max-lg:max-h-[400px] max-lg:min-h-[280px] max-lg:w-[350px] max-lg:min-w-[280px]">
-            <motion.img
-              src={heroPhoneImage}
-              alt={APP_NAME}
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="z-10 h-full w-full object-contain"
-            />
-
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="absolute bottom-0 left-1/2 h-[80%] w-[80%] -translate-x-1/2 rounded-full bg-secondary/30"
-            />
-          </div>
-        </div>
+        {/* Right — auth card */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+          className="w-full max-w-md flex-shrink-0"
+        >
+          <AuthSection embedded />
+        </motion.div>
       </div>
     </section>
   );

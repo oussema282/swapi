@@ -38,7 +38,7 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-export function AuthSection() {
+export function AuthSection({ embedded = false }: { embedded?: boolean }) {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
