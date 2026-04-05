@@ -118,6 +118,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "200% center" },
+          "100%": { backgroundPosition: "-200% center" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

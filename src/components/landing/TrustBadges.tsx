@@ -15,33 +15,40 @@ export function TrustBadges() {
   ];
 
   return (
-    <section className="relative flex w-full flex-col items-center justify-center overflow-hidden p-6">
+    <section className="py-8 px-4">
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="flex min-h-[200px] w-full max-w-[80%] items-center justify-around gap-8 rounded-xl bg-muted/50 p-8 max-lg:max-w-full max-md:flex-col"
+        transition={{ duration: 0.5 }}
+        className="mx-auto flex max-w-3xl items-center justify-center gap-6 rounded-xl bg-muted/30 px-6 py-5 max-md:flex-col max-md:gap-4"
       >
         {badges.map((badge, index) => (
-          <div key={index} className="flex flex-col items-center gap-4">
-            <div className="flex text-xl text-orange-500">
-              <Star className="h-5 w-5 fill-current" />
-              <Star className="h-5 w-5 fill-current" />
-              <Star className="h-5 w-5 fill-current" />
-              <Star className="h-5 w-5 fill-current" />
-              <StarHalf className="h-5 w-5 fill-current" />
-            </div>
-            <span className="text-lg">
-              <b>{badge.rating}/5</b>
-              <span className="text-muted-foreground"> {t('landing.trust.from')} {badge.reviews} {t('landing.trust.reviews')}</span>
-            </span>
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            className="flex items-center gap-3"
+          >
             <img 
               src={badge.logo} 
               alt={badge.name} 
-              className="h-8 w-auto object-contain"
+              className="h-6 w-auto object-contain"
             />
-          </div>
+            <div className="flex items-center gap-1.5">
+              <div className="flex text-orange-500">
+                <Star className="h-3.5 w-3.5 fill-current" />
+                <Star className="h-3.5 w-3.5 fill-current" />
+                <Star className="h-3.5 w-3.5 fill-current" />
+                <Star className="h-3.5 w-3.5 fill-current" />
+                <StarHalf className="h-3.5 w-3.5 fill-current" />
+              </div>
+              <span className="text-sm font-medium text-foreground">{badge.rating}</span>
+              <span className="text-xs text-muted-foreground">({badge.reviews})</span>
+            </div>
+          </motion.div>
         ))}
       </motion.div>
     </section>
