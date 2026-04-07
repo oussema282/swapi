@@ -1024,9 +1024,13 @@
     "uploadPhoto": "Upload",
     "orChooseAvatar": "Or choose a default avatar",
     "uploadItemTitle": "Upload Your First Item",
-    "uploadItemDescription": "Add at least one item to start swapping with others!",
+    "uploadItemDescription": "Add an item to start swapping — or skip for now!",
     "uploadFirstItem": "Upload Item",
+    "skipForNow": "Skip for now",
     "completeTitle": "You're All Set!",
-    "completeDescription": "Welcome! Redirecting you to discover..."
+    "completeDescription": "Welcome! Redirecting you to discover...",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year"
   }
 }

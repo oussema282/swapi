@@ -131,6 +131,23 @@
       "privacy": "Politique de confidentialité",
       "contact": "Contact",
       "copyright": "© {{year}} {{appName}}. Tous droits réservés. 🇪🇺 Fabriqué en Europe"
+    },
+    "stats": {
+      "users": "Utilisateurs actifs",
+      "traded": "Articles échangés",
+      "countries": "Pays",
+      "satisfaction": "Satisfaction"
+    },
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "description": "Rejoignez des milliers d'échangeurs en Europe. Créez votre compte gratuit en quelques secondes.",
+      "button": "Rejoindre maintenant"
+    },
+    "testimonials": {
+      "title": "Nos utilisateurs nous adorent",
+      "quote1": "Valexo a changé ma façon de penser les échanges. J'ai trouvé des swaps incroyables dans mon quartier !",
+      "quote2": "L'algorithme de matching est incroyable. J'ai complété plus de 20 échanges en deux mois.",
+      "quote3": "Enfin une appli d'échange qui fonctionne. Simple, sécurisée et ultra rapide. Je recommande !"
     }
   },
   "auth": {

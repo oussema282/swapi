@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 
 interface OnboardingGateProps {
   children: ReactNode;
@@ -10,25 +8,8 @@ interface OnboardingGateProps {
 
 export function OnboardingGate({ children }: OnboardingGateProps) {
   const { user, profile, loading } = useAuth();
-  const location = useLocation();
 
-  const { data: itemCount, isLoading: itemsLoading } = useQuery({
-    queryKey: ['onboarding-gate-items', user?.id],
-    queryFn: async () => {
-      if (!user) return 0;
-      const { count } = await supabase
-        .from('items')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .eq('is_archived', false);
-      return count || 0;
-    },
-    enabled: !!user,
-    staleTime: 30000,
-  });
-
-  if (loading || itemsLoading) {
+  if (loading) {
     return null;
   }
 
@@ -37,16 +18,14 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
     return <>{children}</>;
   }
 
-  // Check profile completeness
+  // Check profile completeness (no item requirement)
   const isProfileComplete = 
     profile.phone_number && 
     (profile as any).birthday && 
     (profile as any).gender &&
     profile.avatar_url;
 
-  const hasItems = (itemCount || 0) > 0;
-
-  if (!isProfileComplete || !hasItems) {
+  if (!isProfileComplete) {
     return <Navigate to="/onboarding" replace />;
   }
 
