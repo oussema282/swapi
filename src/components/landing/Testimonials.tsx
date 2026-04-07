@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -10,112 +10,96 @@ import testimonial3 from '@/assets/landing/testimonial-3.jpg';
 
 export function Testimonials() {
   const { t } = useTranslation();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
 
   const testimonials = [
-    {
-      name: 'Sarah M.',
-      text: t('landing.testimonials.quote1'),
-      initials: 'SM',
-      image: testimonial3,
-    },
-    {
-      name: 'Alex K.',
-      text: t('landing.testimonials.quote2'),
-      initials: 'AK',
-      image: testimonial1,
-    },
-    {
-      name: 'Maria L.',
-      text: t('landing.testimonials.quote3'),
-      initials: 'ML',
-      image: testimonial2,
-    },
+    { name: 'Sarah M.', text: t('landing.testimonials.quote1'), initials: 'SM', image: testimonial3, rating: 5 },
+    { name: 'Alex K.', text: t('landing.testimonials.quote2'), initials: 'AK', image: testimonial1, rating: 5 },
+    { name: 'Maria L.', text: t('landing.testimonials.quote3'), initials: 'ML', image: testimonial2, rating: 5 },
   ];
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  useEffect(() => {
+    const timer = setInterval(() => setCurrent((p) => (p + 1) % testimonials.length), 5000);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
 
   return (
-    <section className="mt-5 flex min-h-[60vh] w-full flex-col items-center justify-center bg-foreground p-[2%] text-background max-lg:min-h-[40vh]">
-      <motion.h3
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-5xl font-medium max-md:text-2xl"
-      >
-        {t('landing.testimonials.title')}
-      </motion.h3>
+    <section className="py-20 px-4">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl font-bold text-foreground sm:text-4xl">{t('landing.testimonials.title')}</h2>
+        </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mt-8 max-w-[750px] max-md:max-w-[100vw]"
-      >
-        <div className="flex flex-col gap-10">
-          <div className="flex items-center justify-center gap-10 rounded-lg p-4">
-            <div className="flex items-center">
-              <Avatar className="h-[150px] w-[150px] max-lg:h-[80px] max-lg:w-[80px]">
-                <AvatarImage 
-                  src={testimonials[currentIndex].image} 
-                  alt={testimonials[currentIndex].name}
-                  className="object-cover"
-                />
-                <AvatarFallback className="text-2xl text-foreground">
-                  {testimonials[currentIndex].initials}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            <div className="flex max-w-[450px] flex-col gap-4">
-              <p className="mt-4 italic text-background/80">
-                "{testimonials[currentIndex].text}"
+        <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card p-8 sm:p-12 shadow-sm">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current}
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center text-center"
+            >
+              {/* Stars */}
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: testimonials[current].rating }).map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-primary text-primary" />
+                ))}
+              </div>
+
+              <p className="text-lg italic text-foreground max-w-2xl leading-relaxed mb-6">
+                "{testimonials[current].text}"
               </p>
-              <b>- {testimonials[currentIndex].name}</b>
-            </div>
-          </div>
 
-          {/* Pagination dots */}
-          <div className="flex justify-center gap-2">
-            {testimonials.map((_, index) => (
+              <Avatar className="h-14 w-14 mb-2">
+                <AvatarImage src={testimonials[current].image} alt={testimonials[current].name} className="object-cover" />
+                <AvatarFallback className="text-foreground">{testimonials[current].initials}</AvatarFallback>
+              </Avatar>
+              <p className="font-semibold text-foreground">{testimonials[current].name}</p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, i) => (
               <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`h-3 w-3 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-primary' : 'bg-background/30'
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  i === current ? 'w-7 bg-primary' : 'w-2.5 bg-muted-foreground/25'
                 }`}
               />
             ))}
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-center gap-6">
+          {/* Nav arrows */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-4">
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              onClick={prevTestimonial}
-              className="h-10 w-10 rounded-full border-background/30 bg-transparent text-background hover:bg-background/10"
+              onClick={() => setCurrent((p) => (p - 1 + testimonials.length) % testimonials.length)}
+              className="h-9 w-9 rounded-full"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
+          </div>
+          <div className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-4">
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              onClick={nextTestimonial}
-              className="h-10 w-10 rounded-full border-background/30 bg-transparent text-background hover:bg-background/10"
+              onClick={() => setCurrent((p) => (p + 1) % testimonials.length)}
+              className="h-9 w-9 rounded-full"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

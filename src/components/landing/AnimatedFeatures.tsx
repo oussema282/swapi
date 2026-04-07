@@ -1,64 +1,54 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeftRight, MapPin, Shield, MessageCircle, Bell } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowLeftRight, MapPin, Shield, Zap, MessageCircle, Gift } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const icons = [ArrowLeftRight, MapPin, Shield, MessageCircle, Bell];
+const featureConfig = [
+  { icon: ArrowLeftRight, titleKey: 'landing.features.smartMatching.title', descKey: 'landing.features.smartMatching.description' },
+  { icon: MapPin, titleKey: 'landing.features.nearbySwaps.title', descKey: 'landing.features.nearbySwaps.description' },
+  { icon: Shield, titleKey: 'landing.features.secureTrading.title', descKey: 'landing.features.secureTrading.description' },
+  { icon: Zap, titleKey: 'landing.features.instantNotifications.title', descKey: 'landing.features.instantNotifications.description' },
+  { icon: MessageCircle, titleKey: 'landing.features.realTimeChat.title', descKey: 'landing.features.realTimeChat.description' },
+  { icon: Gift, titleKey: 'landing.features.proBoost.title', descKey: 'landing.features.proBoost.description' },
+];
 
 export function AnimatedFeatures() {
   const { t } = useTranslation();
-  const [current, setCurrent] = useState(0);
-
-  const features = [
-    { icon: icons[0], title: t('landing.slides.smart.title'), desc: t('landing.slides.smart.desc') },
-    { icon: icons[1], title: t('landing.slides.nearby.title'), desc: t('landing.slides.nearby.desc') },
-    { icon: icons[2], title: t('landing.slides.secure.title'), desc: t('landing.slides.secure.desc') },
-    { icon: icons[3], title: t('landing.slides.chat.title'), desc: t('landing.slides.chat.desc') },
-    { icon: icons[4], title: t('landing.slides.notify.title'), desc: t('landing.slides.notify.desc') },
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrent((p) => (p + 1) % features.length), 4000);
-    return () => clearInterval(timer);
-  }, [features.length]);
-
-  const Icon = features[current].icon;
 
   return (
-    <section className="py-12 px-4">
-      <div className="mx-auto max-w-2xl">
-        <div className="relative h-40 overflow-hidden rounded-2xl bg-muted/40 p-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -60 }}
-              transition={{ duration: 0.4 }}
-              className="flex h-full items-center gap-5"
-            >
-              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                <Icon className="h-7 w-7 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">{features[current].title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{features[current].desc}</p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+    <section className="py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14"
+        >
+          <h2 className="text-3xl font-bold text-foreground sm:text-4xl">{t('landing.features.title')}</h2>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">{t('landing.features.subtitle')}</p>
+        </motion.div>
 
-        {/* Dot indicators */}
-        <div className="mt-4 flex justify-center gap-2">
-          {features.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === current ? 'w-6 bg-primary' : 'w-2 bg-muted-foreground/30'
-              }`}
-            />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featureConfig.map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <motion.div
+                key={feature.titleKey}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                  <Icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t(feature.titleKey)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(feature.descKey)}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
