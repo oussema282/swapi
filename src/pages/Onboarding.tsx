@@ -133,15 +133,17 @@ export default function Onboarding() {
     const hasPersonalInfo = profile.phone_number && (profile as any).birthday && (profile as any).gender;
     const hasAvatar = profile.avatar_url;
     
-    if (hasPersonalInfo && hasAvatar && itemCount > 0) {
-      // All done, redirect
-      navigate('/discover', { replace: true });
+    if (hasPersonalInfo && hasAvatar) {
+      // Profile is complete — check if user has items
+      if (itemCount > 0) {
+        navigate('/discover', { replace: true });
+      } else {
+        setStep(3);
+      }
       return;
     }
     
-    if (hasPersonalInfo && hasAvatar && itemCount === 0) {
-      setStep(3);
-    } else if (hasPersonalInfo && !hasAvatar) {
+    if (hasPersonalInfo && !hasAvatar) {
       setStep(2);
     }
   }, [profile, itemCount, navigate]);
