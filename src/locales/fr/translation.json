@@ -976,9 +976,13 @@
     "uploadPhoto": "Télécharger",
     "orChooseAvatar": "Ou choisissez un avatar par défaut",
     "uploadItemTitle": "Ajoutez votre premier article",
-    "uploadItemDescription": "Ajoutez au moins un article pour commencer à échanger !",
+    "uploadItemDescription": "Ajoutez un article pour échanger — ou passez pour l'instant !",
     "uploadFirstItem": "Ajouter un article",
+    "skipForNow": "Passer pour l'instant",
     "completeTitle": "Vous êtes prêt !",
-    "completeDescription": "Bienvenue ! Redirection vers la découverte..."
+    "completeDescription": "Bienvenue ! Redirection vers la découverte...",
+    "day": "Jour",
+    "month": "Mois",
+    "year": "Année"
   }
 }

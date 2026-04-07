@@ -890,9 +890,13 @@
     "uploadPhoto": "رفع",
     "orChooseAvatar": "أو اختر صورة رمزية افتراضية",
     "uploadItemTitle": "أضف عنصرك الأول",
-    "uploadItemDescription": "أضف عنصرًا واحدًا على الأقل للبدء في التبادل!",
+    "uploadItemDescription": "أضف عنصرًا للبدء في التبادل — أو تخطَّ الآن!",
     "uploadFirstItem": "إضافة عنصر",
+    "skipForNow": "تخطّي الآن",
     "completeTitle": "أنت جاهز!",
-    "completeDescription": "مرحبًا! جاري إعادة التوجيه..."
+    "completeDescription": "مرحبًا! جاري إعادة التوجيه...",
+    "day": "يوم",
+    "month": "شهر",
+    "year": "سنة"
   }
 }
