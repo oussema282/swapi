@@ -485,10 +485,17 @@ export default function Onboarding() {
               </p>
               <Button
                 onClick={() => navigate('/items/new?onboarding=true')}
-                className="h-12 px-8"
+                className="h-12 px-8 mb-3"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 {t('onboarding.uploadFirstItem')}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/discover', { replace: true })}
+                className="text-muted-foreground"
+              >
+                {t('onboarding.skipForNow', 'Skip for now')}
               </Button>
             </motion.div>
           )}
