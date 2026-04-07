@@ -173,6 +173,23 @@
         "line3": "in the EU"
       },
       "copyright": "© {{year}} {{appName}}. All rights reserved. 🇪🇺 Made in Europe"
+    },
+    "stats": {
+      "users": "Active Users",
+      "traded": "Items Traded",
+      "countries": "Countries",
+      "satisfaction": "Satisfaction"
+    },
+    "cta": {
+      "title": "Ready to start trading?",
+      "description": "Join thousands of traders across Europe. Create your free account in seconds.",
+      "button": "Join Now"
+    },
+    "testimonials": {
+      "title": "Users Love Us",
+      "quote1": "Valexo changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
+      "quote2": "The matching algorithm is incredible. I've completed over 20 successful trades in just two months.",
+      "quote3": "Finally, a trading app that actually works. Simple, secure, and super fast. Highly recommend!"
     }
   },
   "auth": {
@@ -1008,9 +1025,13 @@
     "uploadPhoto": "Upload",
     "orChooseAvatar": "Or choose a default avatar",
     "uploadItemTitle": "Upload Your First Item",
-    "uploadItemDescription": "Add at least one item to start swapping with others!",
+    "uploadItemDescription": "Add an item to start swapping — or skip for now!",
     "uploadFirstItem": "Upload Item",
+    "skipForNow": "Skip for now",
     "completeTitle": "You're All Set!",
-    "completeDescription": "Welcome! Redirecting you to discover..."
+    "completeDescription": "Welcome! Redirecting you to discover...",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year"
   }
 }

@@ -133,15 +133,17 @@ export default function Onboarding() {
     const hasPersonalInfo = profile.phone_number && (profile as any).birthday && (profile as any).gender;
     const hasAvatar = profile.avatar_url;
     
-    if (hasPersonalInfo && hasAvatar && itemCount > 0) {
-      // All done, redirect
-      navigate('/discover', { replace: true });
+    if (hasPersonalInfo && hasAvatar) {
+      // Profile is complete — check if user has items
+      if (itemCount > 0) {
+        navigate('/discover', { replace: true });
+      } else {
+        setStep(3);
+      }
       return;
     }
     
-    if (hasPersonalInfo && hasAvatar && itemCount === 0) {
-      setStep(3);
-    } else if (hasPersonalInfo && !hasAvatar) {
+    if (hasPersonalInfo && !hasAvatar) {
       setStep(2);
     }
   }, [profile, itemCount, navigate]);
@@ -483,10 +485,17 @@ export default function Onboarding() {
               </p>
               <Button
                 onClick={() => navigate('/items/new?onboarding=true')}
-                className="h-12 px-8"
+                className="h-12 px-8 mb-3"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 {t('onboarding.uploadFirstItem')}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/discover', { replace: true })}
+                className="text-muted-foreground"
+              >
+                {t('onboarding.skipForNow', 'Skip for now')}
               </Button>
             </motion.div>
           )}
