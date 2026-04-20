@@ -62,12 +62,14 @@ export function Hero() {
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Floating particles */}
-      <FloatingDot className="absolute top-24 right-[12%] h-3 w-3 rounded-full bg-primary/25" delay={0} />
-      <FloatingDot className="absolute top-[45%] left-[8%] h-2 w-2 rounded-full bg-secondary-foreground/20" delay={1} />
-      <FloatingDot className="absolute bottom-[25%] right-[18%] h-4 w-4 rounded-sm bg-primary/12 rotate-45" delay={2} />
-      <FloatingDot className="absolute top-[15%] left-[30%] h-2.5 w-2.5 rounded-full bg-accent/20" delay={0.5} />
-      <FloatingDot className="absolute bottom-[40%] left-[15%] h-3 w-3 rounded-full bg-primary/15" delay={1.5} />
+      {/* Floating particles - medium parallax */}
+      <motion.div style={{ y: particlesY }} className="absolute inset-0 pointer-events-none">
+        <FloatingDot className="absolute top-24 right-[12%] h-3 w-3 rounded-full bg-primary/25" delay={0} />
+        <FloatingDot className="absolute top-[45%] left-[8%] h-2 w-2 rounded-full bg-secondary-foreground/20" delay={1} />
+        <FloatingDot className="absolute bottom-[25%] right-[18%] h-4 w-4 rounded-sm bg-primary/12 rotate-45" delay={2} />
+        <FloatingDot className="absolute top-[15%] left-[30%] h-2.5 w-2.5 rounded-full bg-accent/20" delay={0.5} />
+        <FloatingDot className="absolute bottom-[40%] left-[15%] h-3 w-3 rounded-full bg-primary/15" delay={1.5} />
+      </motion.div>
 
       {/* Sticky navbar */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4">
