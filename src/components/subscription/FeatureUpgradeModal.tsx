@@ -87,7 +87,7 @@ export function FeatureUpgradeModal({
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium flex items-center gap-2">
                 <Crown className="w-4 h-4 text-primary" />
-                Valexo Pro
+                echange.tn Pro
               </span>
               <span className="text-primary font-bold">$9.99/mo</span>
             </div>

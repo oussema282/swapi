@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, useScroll, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,9 +37,31 @@ export function StatsCounter() {
     { target: 98, suffix: '%', label: t('landing.stats.satisfaction', 'Satisfaction') },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-20%', '20%']);
+
   return (
-    <section className="py-16 px-4 gradient-primary">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section ref={sectionRef} className="relative py-16 px-4 overflow-hidden gradient-primary">
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute inset-0 opacity-20 pointer-events-none"
+        aria-hidden
+      >
+        <div
+          className="w-full h-[140%] -translate-y-[20%]"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
+            backgroundSize: '40px 40px',
+            color: 'hsl(var(--primary-foreground))',
+          }}
+        />
+      </motion.div>
+      <div className="relative max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
         {stats.map((s, i) => (
           <motion.div
             key={s.label}

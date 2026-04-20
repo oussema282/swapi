@@ -34,7 +34,7 @@
   "landing": {
     "hero": {
       "headline1": "Trade better",
-      "headline2": "with Valexo.",
+      "headline2": "with echange.tn.",
       "description": "The smart exchange platform that connects people across Europe. Swap your unused items for things you actually want.",
       "getStarted": "Get Started",
       "howItWorks": "How it Works",
@@ -96,7 +96,7 @@
     },
     "testimonials": {
       "title": "Users Love Us",
-      "quote1": "Valexo changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
+      "quote1": "echange.tn changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
       "quote2": "The matching algorithm is incredible. I've completed over 20 successful trades in just two months.",
       "quote3": "Finally, a trading app that actually works. Simple, secure, and super fast. Highly recommend!"
     },
@@ -187,7 +187,7 @@
     },
     "testimonials": {
       "title": "Users Love Us",
-      "quote1": "Valexo changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
+      "quote1": "echange.tn changed how I think about trading. Found amazing swaps in my neighborhood I never knew existed!",
       "quote2": "The matching algorithm is incredible. I've completed over 20 successful trades in just two months.",
       "quote3": "Finally, a trading app that actually works. Simple, secure, and super fast. Highly recommend!"
     }
@@ -649,7 +649,7 @@
     "submitComplete": "Submit & Complete",
     "completing": "Completing...",
     "swapComplete": "Swap Complete!",
-    "thankYou": "Thanks for using Valexo",
+    "thankYou": "Thanks for using echange.tn",
     "done": "Done"
   },
   "dealInvite": {

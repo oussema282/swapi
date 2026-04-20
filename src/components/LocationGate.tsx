@@ -51,7 +51,7 @@ export function LocationGate() {
         </h1>
         
         <p className="text-muted-foreground mb-6">
-          Valexo needs your location to show items near you and connect you with local traders.
+          echange.tn needs your location to show items near you and connect you with local traders.
         </p>
 
         {error && (

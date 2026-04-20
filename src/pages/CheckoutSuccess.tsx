@@ -141,7 +141,7 @@ const CheckoutSuccess = () => {
               Payment Successful!
             </CardTitle>
             <CardDescription className="text-base">
-              Welcome to Valexo Pro
+              Welcome to echange.tn Pro
             </CardDescription>
           </CardHeader>
           

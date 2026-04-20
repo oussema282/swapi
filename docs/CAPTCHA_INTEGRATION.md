@@ -1,6 +1,6 @@
 # CAPTCHA Integration Guide
 
-This document describes how to integrate CAPTCHA protection into the Valexo application to prevent bot abuse.
+This document describes how to integrate CAPTCHA protection into the echange.tn application to prevent bot abuse.
 
 ## Recommended Solutions
 

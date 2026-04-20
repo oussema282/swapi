@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { AuthSection } from '@/components/landing/AuthSection';
 import { ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
 
 function FloatingDot({ className, delay = 0 }: { className: string; delay?: number }) {
   return (
@@ -17,10 +18,34 @@ function FloatingDot({ className, delay = 0 }: { className: string; delay?: numb
 
 export function Hero() {
   const { t } = useTranslation();
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollY } = useScroll();
+  const blobsY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 150]);
+  const particlesY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 80]);
+  const contentY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : -40]);
+  const contentOpacity = useTransform(scrollY, [0, 500], [1, reduced ? 1 : 0.4]);
 
   return (
-    <section className="relative w-full overflow-hidden bg-background">
-      {/* Ambient blobs */}
+    <section ref={ref} className="relative w-full overflow-hidden bg-background">
+      {/* Ambient blobs - slow parallax */}
+      <motion.div style={{ y: blobsY }} className="absolute inset-0 pointer-events-none">
+        <motion.div
+          className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/8 blur-3xl"
+          animate={{ x: [0, 60, 0], y: [0, 50, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"
+          animate={{ x: [0, -60, 0], y: [0, -50, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/8 blur-3xl"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </motion.div>
       <motion.div
         className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/8 blur-3xl"
         animate={{ x: [0, 60, 0], y: [0, 50, 0] }}
@@ -37,12 +62,14 @@ export function Hero() {
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Floating particles */}
-      <FloatingDot className="absolute top-24 right-[12%] h-3 w-3 rounded-full bg-primary/25" delay={0} />
-      <FloatingDot className="absolute top-[45%] left-[8%] h-2 w-2 rounded-full bg-secondary-foreground/20" delay={1} />
-      <FloatingDot className="absolute bottom-[25%] right-[18%] h-4 w-4 rounded-sm bg-primary/12 rotate-45" delay={2} />
-      <FloatingDot className="absolute top-[15%] left-[30%] h-2.5 w-2.5 rounded-full bg-accent/20" delay={0.5} />
-      <FloatingDot className="absolute bottom-[40%] left-[15%] h-3 w-3 rounded-full bg-primary/15" delay={1.5} />
+      {/* Floating particles - medium parallax */}
+      <motion.div style={{ y: particlesY }} className="absolute inset-0 pointer-events-none">
+        <FloatingDot className="absolute top-24 right-[12%] h-3 w-3 rounded-full bg-primary/25" delay={0} />
+        <FloatingDot className="absolute top-[45%] left-[8%] h-2 w-2 rounded-full bg-secondary-foreground/20" delay={1} />
+        <FloatingDot className="absolute bottom-[25%] right-[18%] h-4 w-4 rounded-sm bg-primary/12 rotate-45" delay={2} />
+        <FloatingDot className="absolute top-[15%] left-[30%] h-2.5 w-2.5 rounded-full bg-accent/20" delay={0.5} />
+        <FloatingDot className="absolute bottom-[40%] left-[15%] h-3 w-3 rounded-full bg-primary/15" delay={1.5} />
+      </motion.div>
 
       {/* Sticky navbar */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4">
@@ -58,8 +85,8 @@ export function Hero() {
         </motion.div>
       </nav>
 
-      {/* Main content — 2 col desktop, stacked mobile */}
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 pt-4 pb-16 lg:flex-row lg:items-center lg:gap-16 lg:px-8 lg:pt-8 lg:pb-20">
+      {/* Main content — parallax foreground */}
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 pt-4 pb-16 lg:flex-row lg:items-center lg:gap-16 lg:px-8 lg:pt-8 lg:pb-20">
         {/* Left — headline + tagline */}
         <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-start">
           <motion.h1
@@ -126,7 +153,7 @@ export function Hero() {
         >
           <AuthSection embedded />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

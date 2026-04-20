@@ -243,7 +243,7 @@ async function callLovableAI(metrics: MetricSnapshot, currentPolicy: any): Promi
     throw new Error("LOVABLE_API_KEY is not configured");
   }
 
-  const systemPrompt = `You are an algorithm policy optimizer for Valexo, an item exchange platform.
+  const systemPrompt = `You are an algorithm policy optimizer for echange.tn, an item exchange platform.
 
 ROLE CONSTRAINTS:
 - You ONLY output numeric policy parameters
