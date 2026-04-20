@@ -1,78 +1,95 @@
 
 
-## Plan: Parallax Landing Page + Rebrand to "echange.tn"
+## Plan: Brand-new Visual Parallax Landing Page
 
-### Part A — Rebrand to `echange.tn`
+Replace the current landing page with a completely new, visual-first parallax experience. Minimal text, maximum motion and depth.
 
-Replace all "Valexo" occurrences with `echange.tn` across the codebase (single source of truth + remaining hardcoded strings).
-
-**Files updated:**
-- `src/config/branding.ts` — `APP_NAME = 'echange.tn'`, update tagline/description
-- `index.html` — `<title>`, og:title, twitter:title, og:description, meta description
-- `README.md` — title and description
-- `src/pages/CheckoutSuccess.tsx` — replace hardcoded "Valexo Pro" with `PRO_PLAN_NAME`
-- `src/pages/WhitePaper.tsx` — replace hardcoded "Valexo" mentions with `APP_NAME`
-- `src/components/LocationGate.tsx` — use `APP_NAME`
-- `src/locales/{en,fr,ar,de,es,hi,ja,ko,pt,ru,zh}/translation.json` — replace "Valexo" with `echange.tn` in testimonial quotes, swap-complete copy, and any other strings
-- `supabase/functions/fraud-detector/index.ts` & `ai-policy-optimizer/index.ts` — update system prompt brand name
-- `docs/CAPTCHA_INTEGRATION.md` — update title
-
-### Part B — Parallax Landing Page
-
-Add multi-layer parallax scrolling effects to the existing landing sections using `framer-motion`'s `useScroll` + `useTransform` hooks (already a project dependency — no new packages).
-
-**New structure (`src/pages/Landing.tsx`):**
+### New Page Structure
 
 ```text
-┌──────────────────────────────────────────┐
-│ Hero (fixed bg layers move at diff speeds)│
-│  - Layer 1: gradient blobs (slowest)      │
-│  - Layer 2: floating particles (medium)   │
-│  - Layer 3: headline + auth (fastest)     │
-├──────────────────────────────────────────┤
-│ Parallax divider (animated SVG wave)      │
-├──────────────────────────────────────────┤
-│ TrustBadges                               │
-├──────────────────────────────────────────┤
-│ AnimatedFeatures (cards parallax-tilt)    │
-├──────────────────────────────────────────┤
-│ Parallax image band (bg moves slower)     │
-├──────────────────────────────────────────┤
-│ HowItWorks (steps slide in on scroll)     │
-├──────────────────────────────────────────┤
-│ StatsCounter (full-width parallax bg)     │
-├──────────────────────────────────────────┤
-│ Testimonials                              │
-├──────────────────────────────────────────┤
-│ CTABanner (parallax gradient mesh)        │
-├──────────────────────────────────────────┤
-│ Footer                                    │
-└──────────────────────────────────────────┘
+┌────────────────────────────────────────────┐
+│ 1. Sticky transparent navbar               │
+│    (logo + lang + "Sign in" pill)          │
+├────────────────────────────────────────────┤
+│ 2. HERO — full viewport                    │
+│    • 5-layer parallax depth:               │
+│      - Animated mesh gradient (deepest)    │
+│      - Floating SVG shapes (slow)          │
+│      - Tilted product card stack (medium)  │
+│      - Big shimmer headline (fast)         │
+│      - Scroll-mouse indicator              │
+│    • Just 3 words + 1 short tagline        │
+│    • Single primary CTA → scrolls to auth  │
+├────────────────────────────────────────────┤
+│ 3. Marquee strip — infinite scrolling      │
+│    icons of swap categories (no text)      │
+├────────────────────────────────────────────┤
+│ 4. SHOWCASE — sticky scroll storytelling   │
+│    Left: sticky phone mockup that morphs   │
+│    Right: 3 short feature beats fade in    │
+│    as user scrolls (pin + parallax)        │
+├────────────────────────────────────────────┤
+│ 5. Number reveal band                      │
+│    Huge animated digits, parallax bg blob  │
+├────────────────────────────────────────────┤
+│ 6. Tilted image collage                    │
+│    6 floating item photos with mouse-tilt  │
+│    + scroll parallax (different speeds)    │
+├────────────────────────────────────────────┤
+│ 7. Auth panel — glass card on gradient     │
+│    Embedded AuthSection, no surrounding    │
+│    text, just "Start" headline             │
+├────────────────────────────────────────────┤
+│ 8. Minimal footer                          │
+│    Logo • lang • legal links               │
+└────────────────────────────────────────────┘
 ```
 
-**Implementation details:**
+### Visual System
 
-1. **`src/components/landing/Hero.tsx`** — Add 3 parallax layers:
-   - Background blobs: `useTransform(scrollY, [0, 500], [0, 150])` (slow)
-   - Particles: `[0, 500] → [0, 80]` (medium)
-   - Foreground content: `[0, 500] → [0, -50]` opacity fade (fast)
+- **Parallax layers**: every section has 2–4 layers moving at different `useTransform` speeds.
+- **Mouse parallax**: hero shapes + collage tilt subtly with cursor (`useMotionValue` on `mousemove`).
+- **Sticky scroll storytelling**: showcase section pins phone mockup while right column scrolls (CSS `position: sticky` + framer-motion `useScroll`).
+- **Marquee**: pure CSS infinite horizontal scroll, paused on hover.
+- **Glass morphism**: backdrop-blur cards over gradient backgrounds.
+- **Reduced motion**: all parallax disabled via `useReducedMotion()`.
+- **Mobile**: collage becomes single column, sticky storytelling becomes regular stack, intensities halved.
 
-2. **New: `src/components/landing/ParallaxSection.tsx`** — Reusable wrapper that takes a `speed` prop and applies `y` transforms based on element scroll progress (`useScroll({ target: ref, offset: ['start end', 'end start'] })`).
+### Files
 
-3. **New: `src/components/landing/ParallaxDivider.tsx`** — Animated SVG wave divider between sections, with subtle Y movement on scroll.
+**New components** (`src/components/landing/v2/`):
+- `HeroParallax.tsx` — 5-layer hero with mouse + scroll parallax
+- `CategoryMarquee.tsx` — infinite icon strip
+- `StickyShowcase.tsx` — pinned phone + scrolling beats
+- `NumberReveal.tsx` — huge counter band
+- `TiltCollage.tsx` — floating items with mouse tilt
+- `AuthPanel.tsx` — glass auth wrapper
+- `MinimalFooter.tsx` — slim footer
+- `MouseParallax.tsx` — reusable mouse-tracking wrapper hook
 
-4. **`src/components/landing/StatsCounter.tsx`** — Wrap background layer in parallax transform so the gradient/pattern moves slower than foreground numbers.
+**Rewritten**:
+- `src/pages/Landing.tsx` — imports only the new v2 components
 
-5. **`src/components/landing/AnimatedFeatures.tsx`** — Add scroll-linked tilt/Y offset on each card so they enter staggered with parallax depth.
+**Kept** (still used by AuthPanel):
+- `src/components/landing/AuthSection.tsx`
 
-6. **`src/components/landing/CTABanner.tsx`** — Parallax mesh gradient background.
+**Deprecated** (no longer imported, left in repo):
+- Hero.tsx, AnimatedFeatures.tsx, HowItWorks.tsx, StatsCounter.tsx, Testimonials.tsx, CTABanner.tsx, TrustBadges.tsx, Footer.tsx, ParallaxSection.tsx, ParallaxDivider.tsx
 
-7. **Mobile**: Reduce parallax intensity (or disable on `prefers-reduced-motion`) for performance — use `useReducedMotion()` from framer-motion.
+### Text Content (intentionally minimal)
 
-### Files Modified/Created
-- `src/config/branding.ts`, `index.html`, `README.md`, `src/pages/CheckoutSuccess.tsx`, `src/pages/WhitePaper.tsx`, `src/components/LocationGate.tsx`
-- All 11 locale files (`src/locales/*/translation.json`)
-- `supabase/functions/fraud-detector/index.ts`, `supabase/functions/ai-policy-optimizer/index.ts`
-- `src/components/landing/Hero.tsx`, `StatsCounter.tsx`, `AnimatedFeatures.tsx`, `CTABanner.tsx`
-- New: `src/components/landing/ParallaxSection.tsx`, `ParallaxDivider.tsx`
+- Hero headline: 3 words (e.g. "Swap. Match. Smile.")
+- Hero subline: 1 short sentence
+- Showcase: 3 × (2-word title + 6-word description)
+- Number band: 3 stats, no labels longer than 1 word
+- Auth panel: "Start" + AuthSection
+- All copy via `t()`, added to `en` / `fr` / `ar`
+
+### Tech Notes
+
+- Uses existing `framer-motion` (no new deps)
+- Uses existing design tokens from `index.css` / `tailwind.config.ts`
+- `useReducedMotion()` everywhere
+- Lazy-loaded images with `loading="lazy"` on collage
+- Section-scoped `useScroll({ target, offset })` to avoid global scroll jank
 
