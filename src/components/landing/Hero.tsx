@@ -85,8 +85,8 @@ export function Hero() {
         </motion.div>
       </nav>
 
-      {/* Main content — 2 col desktop, stacked mobile */}
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 pt-4 pb-16 lg:flex-row lg:items-center lg:gap-16 lg:px-8 lg:pt-8 lg:pb-20">
+      {/* Main content — parallax foreground */}
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 pt-4 pb-16 lg:flex-row lg:items-center lg:gap-16 lg:px-8 lg:pt-8 lg:pb-20">
         {/* Left — headline + tagline */}
         <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-start">
           <motion.h1
