@@ -153,7 +153,7 @@ export function Hero() {
         >
           <AuthSection embedded />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
