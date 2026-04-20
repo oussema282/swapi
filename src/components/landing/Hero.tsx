@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { APP_NAME } from '@/config/branding';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { AuthSection } from '@/components/landing/AuthSection';
 import { ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
 
 function FloatingDot({ className, delay = 0 }: { className: string; delay?: number }) {
   return (
