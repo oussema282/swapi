@@ -12,14 +12,14 @@ export default function WhitePaper() {
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Valexo Technical Audit</h1>
+          <h1 className="text-lg font-semibold">echange.tn Technical Audit</h1>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         <article className="prose prose-slate dark:prose-invert max-w-none">
           
-          <h1>Valexo – AI-Powered Barter Exchange Platform</h1>
+          <h1>echange.tn – AI-Powered Barter Exchange Platform</h1>
           <p className="text-muted-foreground">Technical Audit Document • Last Updated: January 30, 2026</p>
           
           <hr />
@@ -29,12 +29,12 @@ export default function WhitePaper() {
           
           <h3>What the System Does</h3>
           <p>
-            Valexo is a location-first barter exchange platform where users list physical items for swap and discover compatible trade partners through a Tinder-style swipe interface. The system matches items (not users) based on mutual "like" swipes AND compatible swap preferences. It supports real-time chat between matched parties, geolocation-based discovery, and a freemium subscription model.
+            echange.tn is a location-first barter exchange platform where users list physical items for swap and discover compatible trade partners through a Tinder-style swipe interface. The system matches items (not users) based on mutual "like" swipes AND compatible swap preferences. It supports real-time chat between matched parties, geolocation-based discovery, and a freemium subscription model.
           </p>
           
           <h3>What the System Does NOT Do</h3>
           <ul>
-            <li><strong>No monetary transactions between users</strong> – Valexo is a pure barter platform. The only payment flow is for Pro subscriptions (Dodo Payments).</li>
+            <li><strong>No monetary transactions between users</strong> – echange.tn is a pure barter platform. The only payment flow is for Pro subscriptions (Dodo Payments).</li>
             <li><strong>No multi-way swap execution</strong> – The reciprocal-optimizer identifies 2-way and 3-way opportunities but does NOT execute them. These are surfaced as "reciprocal_boost" scores only.</li>
             <li><strong>No push notifications</strong> – Real-time updates use Supabase Realtime. Native push is NOT IMPLEMENTED.</li>
             <li><strong>No identity verification</strong> – Users register with email/password or Google OAuth. KYC/ID verification is NOT IMPLEMENTED.</li>
@@ -311,7 +311,7 @@ time_weight = exp(-days_old / tau_days)
           <h2>5. AI & Machine Intelligence</h2>
 
           <p>
-            Valexo operates on a <strong>hybrid intelligence architecture</strong> combining deterministic rule-based algorithms with 
+            echange.tn operates on a <strong>hybrid intelligence architecture</strong> combining deterministic rule-based algorithms with 
             AI-powered oversight systems. The core recommendation engine uses weighted scoring with pre-computed embeddings, while 
             three Lovable AI (Gemini) powered edge functions provide policy optimization, content moderation, and fraud detection.
           </p>
@@ -560,7 +560,7 @@ const TOOLS = [{
           </table>
 
           <h4>AI System Prompt</h4>
-          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`You are a content moderation AI for Valexo, an item exchange platform.
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`You are a content moderation AI for echange.tn, an item exchange platform.
 
 Analyze images for prohibited content. Users should only upload photos of 
 items they want to swap.
@@ -753,7 +753,7 @@ INSERT INTO content_moderation_logs (
           </table>
 
           <h4>AI System Prompt</h4>
-          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`You are a fraud detection AI for Valexo, an item exchange platform.
+          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">{`You are a fraud detection AI for echange.tn, an item exchange platform.
 
 Analyze user behavior patterns to detect scam attempts and fake listings.
 You receive AGGREGATED behavioral signals, not personal data.
@@ -941,7 +941,7 @@ INSERT INTO fraud_detection_runs (
           </ul>
 
           <p>
-            <strong>The AI systems in Valexo are oversight and optimization layers. The core matching algorithm 
+            <strong>The AI systems in echange.tn are oversight and optimization layers. The core matching algorithm 
             remains deterministic and rule-based, ensuring predictable and auditable behavior.</strong>
           </p>
 

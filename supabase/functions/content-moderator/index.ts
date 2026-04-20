@@ -14,7 +14,7 @@ interface ModerationResult {
   reason: string;
 }
 
-const SYSTEM_PROMPT = `You are a content moderation AI for Valexo, an item exchange platform.
+const SYSTEM_PROMPT = `You are a content moderation AI for echange.tn, an item exchange platform.
 
 Analyze images for prohibited content. Users should only upload photos of items they want to swap.
 

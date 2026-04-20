@@ -34,7 +34,7 @@ interface RiskAssessment {
   reasoning: string;
 }
 
-const SYSTEM_PROMPT = `You are a fraud detection AI for Valexo, an item exchange platform.
+const SYSTEM_PROMPT = `You are a fraud detection AI for echange.tn, an item exchange platform.
 
 Analyze user behavior patterns to detect scam attempts and fake listings.
 You receive AGGREGATED behavioral signals, not personal data.

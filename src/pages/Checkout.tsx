@@ -200,7 +200,7 @@ const Checkout = () => {
           <CardHeader className="text-center pb-2">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Crown className="w-6 h-6 text-primary" />
-              <CardTitle className="text-2xl font-bold">Valexo Pro</CardTitle>
+              <CardTitle className="text-2xl font-bold">echange.tn Pro</CardTitle>
               <Badge variant="secondary" className="bg-primary/10 text-primary">
                 <Sparkles className="w-3 h-3 mr-1" />
                 Best Value

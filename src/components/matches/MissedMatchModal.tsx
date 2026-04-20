@@ -221,7 +221,7 @@ export function MissedMatchModal({
                     className="text-center mb-6"
                   >
                     <p className="text-muted-foreground text-sm mb-4">
-                      Upgrade to Valexo Pro to see who wanted to match with you and accept the match.
+                      Upgrade to echange.tn Pro to see who wanted to match with you and accept the match.
                     </p>
                   </motion.div>
 
