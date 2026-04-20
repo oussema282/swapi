@@ -18,10 +18,34 @@ function FloatingDot({ className, delay = 0 }: { className: string; delay?: numb
 
 export function Hero() {
   const { t } = useTranslation();
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollY } = useScroll();
+  const blobsY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 150]);
+  const particlesY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 80]);
+  const contentY = useTransform(scrollY, [0, 600], [0, reduced ? 0 : -40]);
+  const contentOpacity = useTransform(scrollY, [0, 500], [1, reduced ? 1 : 0.4]);
 
   return (
-    <section className="relative w-full overflow-hidden bg-background">
-      {/* Ambient blobs */}
+    <section ref={ref} className="relative w-full overflow-hidden bg-background">
+      {/* Ambient blobs - slow parallax */}
+      <motion.div style={{ y: blobsY }} className="absolute inset-0 pointer-events-none">
+        <motion.div
+          className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/8 blur-3xl"
+          animate={{ x: [0, 60, 0], y: [0, 50, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"
+          animate={{ x: [0, -60, 0], y: [0, -50, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/8 blur-3xl"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </motion.div>
       <motion.div
         className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/8 blur-3xl"
         animate={{ x: [0, 60, 0], y: [0, 50, 0] }}
