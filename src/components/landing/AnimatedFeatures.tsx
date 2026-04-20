@@ -34,12 +34,13 @@ export function AnimatedFeatures() {
             return (
               <motion.div
                 key={feature.titleKey}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm hover:shadow-md transition-shadow"
+                initial={{ opacity: 0, y: 50, rotateX: -8 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
+                whileHover={{ y: -6, rotateX: 2, transition: { duration: 0.2 } }}
+                style={{ transformPerspective: 1000 }}
+                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm hover:shadow-lg transition-shadow"
               >
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-primary" />
