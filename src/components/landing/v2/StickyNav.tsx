@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { APP_NAME } from '@/config/branding';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 
 export function StickyNav() {
