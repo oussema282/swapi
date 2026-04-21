@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
@@ -9,7 +9,7 @@ import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { useSystemState } from '@/hooks/useSystemState';
-import { useMissedMatches, MissedMatch } from '@/hooks/useMissedMatches';
+import { useMissedMatches, useRecoverMissedMatch, MissedMatch } from '@/hooks/useMissedMatches';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { SwipeTopBar } from '@/components/discover/SwipeTopBar';
@@ -44,6 +44,8 @@ export default function Index() {
   // Fetch missed matches count for notification indicator and popup detection
   const { data: missedMatches, refetch: refetchMissedMatches } = useMissedMatches();
   const hasMissedMatches = (missedMatches?.length ?? 0) > 0;
+  const recoverMutation = useRecoverMissedMatch();
+  const shownMissedMatchPairsRef = useRef<Set<string>>(new Set());
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
   const { 
