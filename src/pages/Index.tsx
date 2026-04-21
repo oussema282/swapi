@@ -238,8 +238,12 @@ export default function Index() {
               );
               
               if (newMissedMatch) {
-                setCurrentMissedMatch(newMissedMatch);
-                setShowMissedMatchModal(true);
+                const pairKey = `${newMissedMatch.my_item_id}:${newMissedMatch.their_item_id}`;
+                if (!shownMissedMatchPairsRef.current.has(pairKey)) {
+                  shownMissedMatchPairsRef.current.add(pairKey);
+                  setCurrentMissedMatch(newMissedMatch);
+                  setShowMissedMatchModal(true);
+                }
               }
             });
           };
@@ -289,6 +293,26 @@ export default function Index() {
     // Focus the item selector - scroll to top where selector is
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  // Accept a missed match (Pro): recover, close popup, then show celebratory MatchModal
+  const handleAcceptMissedMatch = useCallback(async () => {
+    if (!currentMissedMatch) return;
+    try {
+      await recoverMutation.mutateAsync({
+        myItemId: currentMissedMatch.my_item_id,
+        theirItemId: currentMissedMatch.their_item_id,
+      });
+      const theirItem = currentMissedMatch.their_item;
+      setShowMissedMatchModal(false);
+      setCurrentMissedMatch(null);
+      toast.success("It's a match!");
+      // Trigger celebration modal
+      actions.setMatch(theirItem as any);
+    } catch (err) {
+      console.error('[MISSED MATCH] recover failed:', err);
+      toast.error('Could not accept match. Please try again.');
+    }
+  }, [currentMissedMatch, recoverMutation, actions]);
 
   if (authLoading) {
     return (
@@ -421,6 +445,8 @@ export default function Index() {
         }}
         missedMatch={currentMissedMatch}
         isPro={isPro}
+        onAccept={handleAcceptMissedMatch}
+        isAccepting={recoverMutation.isPending}
       />
 
       {/* Deal Invite Button (renders modal) */}
