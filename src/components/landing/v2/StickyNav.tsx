@@ -26,6 +26,7 @@ export function StickyNav() {
         <Link to="/" className="text-xl font-bold text-foreground">{APP_NAME}</Link>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
+          <ThemeToggle />
           <Button size="sm" onClick={scrollToAuth} className="rounded-full px-5">
             {t('landing.v2.nav.signIn', 'Sign in')}
           </Button>
