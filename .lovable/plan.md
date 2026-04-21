@@ -1,95 +1,60 @@
 
 
-## Plan: Brand-new Visual Parallax Landing Page
+## Plan: Polish v2 landing — speed, mobile parity, translations
 
-Replace the current landing page with a completely new, visual-first parallax experience. Minimal text, maximum motion and depth.
+### 1. Speed up the category icon marquee
+`src/components/landing/v2/CategoryMarquee.tsx`
+- Change animation from `30s` → `15s` (2× faster)
+- Reduce gap slightly (`gap-12` → `gap-8`) so more icons stay in motion at once
 
-### New Page Structure
+### 2. Make desktop-only sections visible on mobile
 
-```text
-┌────────────────────────────────────────────┐
-│ 1. Sticky transparent navbar               │
-│    (logo + lang + "Sign in" pill)          │
-├────────────────────────────────────────────┤
-│ 2. HERO — full viewport                    │
-│    • 5-layer parallax depth:               │
-│      - Animated mesh gradient (deepest)    │
-│      - Floating SVG shapes (slow)          │
-│      - Tilted product card stack (medium)  │
-│      - Big shimmer headline (fast)         │
-│      - Scroll-mouse indicator              │
-│    • Just 3 words + 1 short tagline        │
-│    • Single primary CTA → scrolls to auth  │
-├────────────────────────────────────────────┤
-│ 3. Marquee strip — infinite scrolling      │
-│    icons of swap categories (no text)      │
-├────────────────────────────────────────────┤
-│ 4. SHOWCASE — sticky scroll storytelling   │
-│    Left: sticky phone mockup that morphs   │
-│    Right: 3 short feature beats fade in    │
-│    as user scrolls (pin + parallax)        │
-├────────────────────────────────────────────┤
-│ 5. Number reveal band                      │
-│    Huge animated digits, parallax bg blob  │
-├────────────────────────────────────────────┤
-│ 6. Tilted image collage                    │
-│    6 floating item photos with mouse-tilt  │
-│    + scroll parallax (different speeds)    │
-├────────────────────────────────────────────┤
-│ 7. Auth panel — glass card on gradient     │
-│    Embedded AuthSection, no surrounding    │
-│    text, just "Start" headline             │
-├────────────────────────────────────────────┤
-│ 8. Minimal footer                          │
-│    Logo • lang • legal links               │
-└────────────────────────────────────────────┘
+**`src/components/landing/v2/TiltCollage.tsx`**
+- Remove `hidden md:block` so the floating image collage appears on mobile too
+- Reduce section height on mobile (`h-[120vh]` → `h-[90vh] md:h-[120vh]`)
+- Halve image sizes on mobile (multiply `pos.size` by `0.55` when viewport < 768) using `useIsMobile()` hook
+- Tighten parallax intensity on mobile (multiply `pos.speed` by `0.5`)
+
+**`src/components/landing/v2/HeroParallax.tsx`**
+- The decorative tilted card stack is `hidden lg:block`. Add a smaller mobile variant: show a single centered tilted card under the headline on screens `< lg` (or simply switch the stack to `hidden md:block` and shrink it for tablets). Keep it purely decorative and `pointer-events-none`.
+
+### 3. Add full translations for every v2 key
+
+Currently every v2 string falls back to its English default because no `landing.v2.*` keys exist in any locale. Add a complete `landing.v2` block to **`en`, `fr`, `ar`**:
+
+```json
+"v2": {
+  "nav": { "signIn": "..." },
+  "hero": {
+    "badge": "echange.tn",
+    "word1": "...", "word2": "...", "word3": "...",
+    "tagline": "...", "cta": "...", "scroll": "..."
+  },
+  "showcase": {
+    "b1": { "title": "...", "desc": "..." },
+    "b2": { "title": "...", "desc": "..." },
+    "b3": { "title": "...", "desc": "..." }
+  },
+  "numbers": { "users": "...", "swaps": "...", "cities": "..." },
+  "auth": { "title": "..." },
+  "footer": { "rights": "...", "privacy": "...", "terms": "..." }
+}
 ```
 
-### Visual System
+Translations:
+- **EN**: keep current English defaults
+- **FR**: e.g. "Échange.", "Match.", "Sourire.", "Échangez ce que vous avez.", "Commencer", "défiler", "Match intelligent", "L'IA trouve l'échange parfait", "Restez local", "Échangez avec vos voisins", "Échanges sûrs", "Utilisateurs vérifiés", "Utilisateurs", "Échanges", "Villes", "Commencer"
+- **AR** (RTL): "بدّل.", "طابق.", "ابتسم.", "بدّل ما لديك. احصل على ما تريد.", "ابدأ", "مرر", "مطابقة ذكية", "الذكاء الاصطناعي يجد المبادلة المثالية", "ابق محلياً", "بادل مع جيرانك", "صفقات آمنة", "مستخدمون موثقون ودردشة آمنة", "مستخدم", "تبادل", "مدينة", "ابدأ"
 
-- **Parallax layers**: every section has 2–4 layers moving at different `useTransform` speeds.
-- **Mouse parallax**: hero shapes + collage tilt subtly with cursor (`useMotionValue` on `mousemove`).
-- **Sticky scroll storytelling**: showcase section pins phone mockup while right column scrolls (CSS `position: sticky` + framer-motion `useScroll`).
-- **Marquee**: pure CSS infinite horizontal scroll, paused on hover.
-- **Glass morphism**: backdrop-blur cards over gradient backgrounds.
-- **Reduced motion**: all parallax disabled via `useReducedMotion()`.
-- **Mobile**: collage becomes single column, sticky storytelling becomes regular stack, intensities halved.
+### 4. Verify MinimalFooter uses translation keys
+Audit `src/components/landing/v2/MinimalFooter.tsx` and ensure all displayed text uses `t()` with keys included in step 3.
 
-### Files
-
-**New components** (`src/components/landing/v2/`):
-- `HeroParallax.tsx` — 5-layer hero with mouse + scroll parallax
-- `CategoryMarquee.tsx` — infinite icon strip
-- `StickyShowcase.tsx` — pinned phone + scrolling beats
-- `NumberReveal.tsx` — huge counter band
-- `TiltCollage.tsx` — floating items with mouse tilt
-- `AuthPanel.tsx` — glass auth wrapper
-- `MinimalFooter.tsx` — slim footer
-- `MouseParallax.tsx` — reusable mouse-tracking wrapper hook
-
-**Rewritten**:
-- `src/pages/Landing.tsx` — imports only the new v2 components
-
-**Kept** (still used by AuthPanel):
-- `src/components/landing/AuthSection.tsx`
-
-**Deprecated** (no longer imported, left in repo):
-- Hero.tsx, AnimatedFeatures.tsx, HowItWorks.tsx, StatsCounter.tsx, Testimonials.tsx, CTABanner.tsx, TrustBadges.tsx, Footer.tsx, ParallaxSection.tsx, ParallaxDivider.tsx
-
-### Text Content (intentionally minimal)
-
-- Hero headline: 3 words (e.g. "Swap. Match. Smile.")
-- Hero subline: 1 short sentence
-- Showcase: 3 × (2-word title + 6-word description)
-- Number band: 3 stats, no labels longer than 1 word
-- Auth panel: "Start" + AuthSection
-- All copy via `t()`, added to `en` / `fr` / `ar`
-
-### Tech Notes
-
-- Uses existing `framer-motion` (no new deps)
-- Uses existing design tokens from `index.css` / `tailwind.config.ts`
-- `useReducedMotion()` everywhere
-- Lazy-loaded images with `loading="lazy"` on collage
-- Section-scoped `useScroll({ target, offset })` to avoid global scroll jank
+### Files Modified
+- `src/components/landing/v2/CategoryMarquee.tsx`
+- `src/components/landing/v2/TiltCollage.tsx`
+- `src/components/landing/v2/HeroParallax.tsx`
+- `src/components/landing/v2/MinimalFooter.tsx` (if needed)
+- `src/locales/en/translation.json`
+- `src/locales/fr/translation.json`
+- `src/locales/ar/translation.json`
 
