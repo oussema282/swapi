@@ -10,7 +10,7 @@ export function CategoryMarquee() {
     <section className="relative py-12 border-y border-border/30 bg-muted/20 overflow-hidden">
       <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-      <div className="flex gap-12 animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused]">
+      <div className="flex gap-8 animate-[marquee_15s_linear_infinite] hover:[animation-play-state:paused]">
         {list.map((Icon, i) => (
           <div
             key={i}

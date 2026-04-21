@@ -82,7 +82,7 @@ export function HeroParallax() {
       {/* Layer 3: Tilted product card stack (medium + mouse) */}
       <motion.div
         style={{ y: cardsY, rotate: cardsRot, x: useTransform(mx, (v) => v * 1.5), translateY: my }}
-        className="absolute right-[5%] top-1/2 -translate-y-1/2 hidden lg:block pointer-events-none"
+        className="absolute right-[5%] top-1/2 -translate-y-1/2 hidden md:block pointer-events-none scale-75 lg:scale-100"
         aria-hidden
       >
         <div className="relative h-[420px] w-[300px]">

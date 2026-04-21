@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useReducedMotion, MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 import { useMouseParallax } from './MouseParallax';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const items = [
   { src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=70', alt: 'Sneakers' },
@@ -38,6 +39,7 @@ function FloatingItem({
   mx,
   my,
   reduced,
+  isMobile,
 }: {
   item: { src: string; alt: string };
   pos: PosCfg;
@@ -46,12 +48,15 @@ function FloatingItem({
   mx: MotionValue<number>;
   my: MotionValue<number>;
   reduced: boolean | null;
+  isMobile: boolean;
 }) {
-  const y = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [200 * pos.speed, -200 * pos.speed]);
+  const speedFactor = isMobile ? 0.5 : 1;
+  const y = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [200 * pos.speed * speedFactor, -200 * pos.speed * speedFactor]);
   const offsetX = useTransform(mx, (v) => v * (index % 2 === 0 ? 1 : -1) * 0.8);
   const offsetY = useTransform(my, (v) => v * 0.5);
 
   const { size, speed, rot, ...placement } = pos;
+  const renderSize = isMobile ? Math.round(size * 0.55) : size;
 
   return (
     <motion.div
@@ -60,8 +65,8 @@ function FloatingItem({
         x: offsetX,
         translateY: offsetY,
         rotate: rot,
-        width: size,
-        height: size,
+        width: renderSize,
+        height: renderSize,
         ...placement,
       }}
       initial={{ opacity: 0, scale: 0.8 }}
@@ -80,11 +85,12 @@ function FloatingItem({
 export function TiltCollage() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+  const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const { x: mx, y: my } = useMouseParallax(20);
 
   return (
-    <section ref={ref} className="relative h-[120vh] overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background hidden md:block">
+    <section ref={ref} className="relative h-[90vh] md:h-[120vh] overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background">
       {positions.map((pos, i) => (
         <FloatingItem
           key={i}
@@ -95,6 +101,7 @@ export function TiltCollage() {
           mx={mx}
           my={my}
           reduced={reduced}
+          isMobile={isMobile}
         />
       ))}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
