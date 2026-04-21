@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useMyItems } from '@/hooks/useItems';
@@ -9,7 +9,7 @@ import { useSwipeState } from '@/hooks/useSwipeState';
 import { useDeviceLocation } from '@/hooks/useLocation';
 import { useEntitlements, FREE_LIMITS } from '@/hooks/useEntitlements';
 import { useSystemState } from '@/hooks/useSystemState';
-import { useMissedMatches, MissedMatch } from '@/hooks/useMissedMatches';
+import { useMissedMatches, useRecoverMissedMatch, MissedMatch } from '@/hooks/useMissedMatches';
 import { ItemSelector } from '@/components/discover/ItemSelector';
 import { SwipeCard } from '@/components/discover/SwipeCard';
 import { SwipeTopBar } from '@/components/discover/SwipeTopBar';
@@ -44,6 +44,8 @@ export default function Index() {
   // Fetch missed matches count for notification indicator and popup detection
   const { data: missedMatches, refetch: refetchMissedMatches } = useMissedMatches();
   const hasMissedMatches = (missedMatches?.length ?? 0) > 0;
+  const recoverMutation = useRecoverMissedMatch();
+  const shownMissedMatchPairsRef = useRef<Set<string>>(new Set());
   
   // Use the new swipe state machine with strict SWIPE_PHASE control
   const { 
@@ -236,8 +238,12 @@ export default function Index() {
               );
               
               if (newMissedMatch) {
-                setCurrentMissedMatch(newMissedMatch);
-                setShowMissedMatchModal(true);
+                const pairKey = `${newMissedMatch.my_item_id}:${newMissedMatch.their_item_id}`;
+                if (!shownMissedMatchPairsRef.current.has(pairKey)) {
+                  shownMissedMatchPairsRef.current.add(pairKey);
+                  setCurrentMissedMatch(newMissedMatch);
+                  setShowMissedMatchModal(true);
+                }
               }
             });
           };
@@ -287,6 +293,26 @@ export default function Index() {
     // Focus the item selector - scroll to top where selector is
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  // Accept a missed match (Pro): recover, close popup, then show celebratory MatchModal
+  const handleAcceptMissedMatch = useCallback(async () => {
+    if (!currentMissedMatch) return;
+    try {
+      await recoverMutation.mutateAsync({
+        myItemId: currentMissedMatch.my_item_id,
+        theirItemId: currentMissedMatch.their_item_id,
+      });
+      const theirItem = currentMissedMatch.their_item;
+      setShowMissedMatchModal(false);
+      setCurrentMissedMatch(null);
+      toast.success("It's a match!");
+      // Trigger celebration modal
+      actions.setMatch(theirItem as any);
+    } catch (err) {
+      console.error('[MISSED MATCH] recover failed:', err);
+      toast.error('Could not accept match. Please try again.');
+    }
+  }, [currentMissedMatch, recoverMutation, actions]);
 
   if (authLoading) {
     return (
@@ -419,6 +445,8 @@ export default function Index() {
         }}
         missedMatch={currentMissedMatch}
         isPro={isPro}
+        onAccept={handleAcceptMissedMatch}
+        isAccepting={recoverMutation.isPending}
       />
 
       {/* Deal Invite Button (renders modal) */}
