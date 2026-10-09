@@ -2,6 +2,10 @@
 
 A smart exchange platform connecting people across Europe. Trade what you have, get what you want.
 
+## Shop Simulator Telegram bot
+
+A separate Python + Playwright Telegram bot is available in [`bot/`](bot/README.md). Its secrets and runtime CSV files are intentionally isolated from the Vite frontend.
+
 ## Project info
 
 ## How can I edit this code?

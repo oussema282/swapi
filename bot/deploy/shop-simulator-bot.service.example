@@ -1,0 +1,24 @@
+[Unit]
+Description=Shop Simulator Telegram Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=shopbot
+Group=shopbot
+WorkingDirectory=/opt/shop-simulator-bot/bot
+Environment=PYTHONUNBUFFERED=1
+Environment=BOT_ENV_FILE=/opt/shop-simulator-bot/bot/.env
+ExecStart=/opt/shop-simulator-bot/bot/.venv/bin/python -m shop_bot
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/shop-simulator-bot/bot/data /opt/shop-simulator-bot/bot/artifacts
+
+[Install]
+WantedBy=multi-user.target

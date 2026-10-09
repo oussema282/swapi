@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Shop Simulator Telegram bot runtime files and secrets
+bot/.env
+bot/data/*
+!bot/data/.gitkeep
+bot/artifacts/*
+!bot/artifacts/.gitkeep
+bot/.venv/
+
+# Local downloadable archives (source is committed separately)
+/shop_bot.zip
+/shop-simulator-telegram-bot.zip
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
