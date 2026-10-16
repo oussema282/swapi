@@ -54,9 +54,11 @@ python -m app.main
 This project lives in the `telegram_payment_agent/` subfolder so the existing `swapi` web app's root run configuration is not replaced. In Replit:
 
 1. Import the GitHub repository.
-2. Install dependencies in the Shell:
+2. Create a project-local virtual environment and install dependencies in the Shell (Replit's Nix-managed system Python may reject global `pip install`):
    ```bash
    cd telegram_payment_agent
+   python -m venv .venv
+   source .venv/bin/activate
    python -m pip install -r requirements.txt
    python -m playwright install chromium
    ```
