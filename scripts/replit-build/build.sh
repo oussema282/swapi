@@ -200,6 +200,24 @@ class SqliteCompatProvider extends ServiceProvider
             'monthname' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : date('F', $t); },
             'quarter' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) (floor((date('n', $t) - 1) / 3) + 1); },
             'truncate' => function ($v, $d) { if ($v === null) { return null; } $f = pow(10, (int) $d); return floor(((float) $v) * $f) / $f; },
+            'sec_to_time' => function ($s) { if ($s === null) { return null; } $s = abs((int) $s); $sg = ((int) $s < 0) ? '-' : ''; return sprintf('%s%02d:%02d:%02d', $sg, floor($s / 3600), floor($s / 60) % 60, $s % 60); },
+            'time_to_sec' => function ($v) { if ($v === null) { return null; } sscanf(trim((string) $v), '%d:%d:%d', $h, $m, $x); return ((int) $h) * 3600 + ((int) $m) * 60 + (int) $x; },
+            'date_format' => function ($v, $fmt) use ($dt) {
+                $t = $dt($v);
+                if ($t === null || $fmt === null) { return null; }
+                $map = ['%Y'=>'%Y','%y'=>'%y','%m'=>'%m','%c'=>'%m','%d'=>'%d','%e'=>'%e','%H'=>'%H','%k'=>'%k','%h'=>'%I','%I'=>'%I','%l'=>'%l','%i'=>'%M','%s'=>'%S','%S'=>'%S','%p'=>'%p','%W'=>'%A','%a'=>'%a','%M'=>'%B','%b'=>'%b','%j'=>'%j','%u'=>'%W','%U'=>'%U','%w'=>'%w','%T'=>'%T'];
+                $sf = ''; $n = strlen($fmt);
+                for ($i = 0; $i < $n; $i++) {
+                    if ($fmt[$i] === '%' && $i + 1 < $n) {
+                        $two = '%' . $fmt[$i + 1];
+                        $sf .= isset($map[$two]) ? $map[$two] : $two;
+                        $i++;
+                    } else {
+                        $sf .= $fmt[$i];
+                    }
+                }
+                return @strftime($sf, $t);
+            },
             'greatest' => function (...$a) { $v = array_values(array_filter($a, function ($x) { return $x !== null; })); return empty($v) ? null : max($v); },
             'least' => function (...$a) { $v = array_values(array_filter($a, function ($x) { return $x !== null; })); return empty($v) ? null : min($v); },
         ];
@@ -327,8 +345,9 @@ echo "HTTP GET / -> $CODE"
 curl -s -o /dev/null -w 'HTTP GET /login -> %{http_code}\n' http://127.0.0.1:8099/login || true
 curl -s -o /dev/null -w 'HTTP GET /games -> %{http_code}\n' http://127.0.0.1:8099/games || true
 head -c 300 /tmp/build/logs/root.html || true
-echo "=== laravel.log tail ==="
-tail -30 /tmp/build/stage/storage/logs/laravel.log 2>/dev/null || echo "(no laravel.log)"
+LLOG=$(ls -t /tmp/build/stage/storage/logs/laravel*.log 2>/dev/null | head -1)
+echo "=== latest laravel log: ${LLOG:-none} ==="
+if [ -n "${LLOG:-}" ]; then tail -35 "$LLOG"; fi
 pkill -f "artisan serve" || true
 sleep 1
 
@@ -353,16 +372,36 @@ if [ "$SIZE" -ge 2000000000 ]; then
   ls -la part_*
 fi
 
+if ls part_* >/dev/null 2>&1; then
 cat > notes.md <<EOF
 **Goldsvet 8.5 (Vanguard) — final Replit-ready build** (auto-assembled \$(date -u +%F))
 
-- Full original d60 deployment + 102-game publish packs (85 Canada + 17 pack-v2)
-- DB: **database/database.sqlite** (all 71 w_ tables, 2,170 games, 102 pack games published, view=1, shop 1)
+The full build is ${SIZE} bytes (sha256 \`$SHA\`) — above the 2 GB single-asset cap, so it ships as **two parts**.
+Reassemble first, verify the sha256, then deploy:
+
+\`\`\`bash
+cat part_00 part_01 > goldsvet-replit-ready.zip
+sha256sum goldsvet-replit-ready.zip   # must equal $SHA
+\`\`\`
+
+- Full original d60 deployment + 102 pack game clients (85 Canada + 17 pack-v2) — engines & blades were already in the deployment and are included
+- DB: **database/database.sqlite** (all 71 w_ tables converted from the dump; canonical pack rows published: view=1, shop 1; lobby duplicates hidden)
 - MySQL path included: \`_mysql-legacy/d60.sql\` + import SQL
 - Replit config: \`.replit\`, \`replit.nix\` (php82 + node), \`run.sh\` (artisan serve :8080, 8 workers)
-- Deploy: import zip into a Repl -> Run. Steps in \`README-REPLIT.md\`.
+- Deploy steps in \`README-REPLIT.md\` inside the zip
+EOF
+else
+cat > notes.md <<EOF
+**Goldsvet 8.5 (Vanguard) — final Replit-ready build** (auto-assembled \$(date -u +%F))
+
+- Full original d60 deployment + 102 pack game clients (85 Canada + 17 pack-v2)
+- DB: **database/database.sqlite** (all 71 w_ tables converted from the dump; canonical pack rows published: view=1, shop 1)
+- MySQL path included: \`_mysql-legacy/d60.sql\` + import SQL
+- Replit config: \`.replit\`, \`replit.nix\` (php82 + node), \`run.sh\` (artisan serve :8080, 8 workers)
+- Deploy steps in \`README-REPLIT.md\` inside the zip
 - zip: $SIZE bytes — sha256 \`$SHA\`
 EOF
+fi
 
 if ls part_* >/dev/null 2>&1; then
   gh release view replit-ready -R "$REPO" >/dev/null 2>&1 \
@@ -375,5 +414,6 @@ else
     || gh release create replit-ready final.zip -R "$REPO" \
          --title "Goldsvet 8.5 — Replit-ready final build" --notes-file notes.md
 fi
+gh release edit replit-ready -R "$REPO" --notes-file notes.md >/dev/null
 gh release view replit-ready -R "$REPO" --json assets --jq '.assets[] | {name,size,state}'
 echo "BUILD OK"
