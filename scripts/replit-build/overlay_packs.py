@@ -39,6 +39,24 @@ def merge_children(src, dst):
         n+=1
     return n
 
+def merge_children_additive(src, dst, kind):
+    """Add-only: never overwrite what the original deployment already ships."""
+    if not src or not os.path.isdir(src): return
+    added=[]; skipped=[]
+    for child in os.listdir(src):
+        s=os.path.join(src, child); d=os.path.join(dst, child)
+        if os.path.exists(d):
+            skipped.append(child); continue
+        if os.path.isdir(s):
+            shutil.copytree(s, d, dirs_exist_ok=True)
+        else:
+            os.makedirs(os.path.dirname(d), exist_ok=True)
+            shutil.copy2(s, d)
+        added.append(child)
+    print(f'    {kind}: added={len(added)} already-in-site={len(skipped)}')
+    if skipped:
+        print(f'      existing: {" ".join(sorted(skipped)[:25])}{" ..." if len(skipped)>25 else ""}')
+
 def is_client_dir(d):
     if not os.path.isdir(d): return False
     for marker in ('index.html', 'index.htm', 'index.php'):
@@ -90,16 +108,13 @@ for z in sorted(os.listdir(PACKS)):
             print(f'    fallback games root: {best} ({best_n} clients)')
 
     for pg in pub_games:
-        a=merge_children(pg, GAMES)
+        merge_children_additive(pg, GAMES, 'clients')
         cl=[x for x in os.listdir(pg) if os.path.isdir(os.path.join(pg,x))]
         names.update(cl)
-        print(f'    merged {a} client entries from {pg}')
     for ag in app_games:
-        b=merge_children(ag, ENGINES)
-        print(f'    merged {b} engine entries from {ag}')
+        merge_children_additive(ag, ENGINES, 'engines')
     for bl in blades:
-        c=merge_children(bl, BLADES)
-        print(f'    merged {c} blade entries from {bl}')
+        merge_children_additive(bl, BLADES, 'blades')
     if not (pub_games or app_games or blades):
         print('    [no platform folders recognised in this zip]')
 

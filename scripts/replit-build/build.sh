@@ -131,6 +131,101 @@ open(p,'w').write(txt)
 print('.env written:', len(txt), 'bytes; APP_KEY present:', 'APP_KEY=base64:' in txt)
 PY
 
+# ---------- 5b. sqlite compatibility layer (MySQL-flavored raw SQL) ----------
+cat > stage/app/Providers/SqliteCompatProvider.php <<'EOF'
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\ServiceProvider;
+
+/**
+ * Registers MySQL-compatible SQL functions on the SQLite connection so the
+ * platform's MySQL-flavored queries keep working in the zero-config SQLite
+ * deployment. No-op when the default connection is not sqlite.
+ */
+class SqliteCompatProvider extends ServiceProvider
+{
+    public function register() {}
+
+    public function boot()
+    {
+        if (config('database.default') !== 'sqlite') {
+            return;
+        }
+        try {
+            $pdo = DB::connection()->getPdo();
+        } catch (\Throwable $e) {
+            return;
+        }
+        $str = function ($v) { return $v === null ? null : (string) $v; };
+        $dt  = function ($v) use ($str) {
+            $v = $str($v);
+            if ($v === null) { return null; }
+            $t = strtotime($v);
+            return $t === false ? null : $t;
+        };
+        $funcs = [
+            'rand' => function ($seed = null) {
+                mt_srand($seed === null ? mt_rand() : (int) $seed);
+                return mt_rand() / mt_getrandmax();
+            },
+            'now' => function () { return date('Y-m-d H:i:s'); },
+            'unix_timestamp' => function ($v = null) use ($dt) { return $v === null ? time() : ($dt($v) ?? time()); },
+            'from_unixtime' => function ($u) { return $u === null ? null : date('Y-m-d H:i:s', (int) $u); },
+            'month' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('n', $t); },
+            'year' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('Y', $t); },
+            'day' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('j', $t); },
+            'dayofmonth' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('j', $t); },
+            'hour' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('G', $t); },
+            'minute' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('i', $t); },
+            'second' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) date('s', $t); },
+            'date' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : date('Y-m-d', $t); },
+            'datediff' => function ($a, $b) use ($dt) { $x = $dt($a); $y = $dt($b); if ($x === null || $y === null) { return null; } return (int) round(($x - $y) / 86400); },
+            'concat' => function (...$a) { $p = array_map(function ($x) { return $x === null ? '' : (string) $x; }, $a); return implode('', $p); },
+            'concat_ws' => function ($sep = null, ...$a) { if ($sep === null) { return null; } $p = array_values(array_filter($a, function ($x) { return $x !== null; })); return implode((string) $sep, $p); },
+            'md5' => function ($v) { return md5((string) $v); },
+            'sha1' => function ($v) { return sha1((string) $v); },
+            'crc32' => function ($v) { return crc32((string) $v); },
+            'locate' => function ($needle, $haystack, $offset = 0) { if ($needle === null || $haystack === null) { return null; } $p = mb_stripos((string) $haystack, (string) $needle, (int) $offset); return $p === false ? 0 : $p + 1; },
+            'find_in_set' => function ($needle, $haystack) { if ($needle === null || $haystack === null) { return null; } foreach (explode(',', (string) $haystack) as $i => $part) { if (trim($part) === (string) $needle) { return $i + 1; } } return 0; },
+            'left' => function ($v, $n) { return $v === null ? null : mb_substr((string) $v, 0, (int) $n); },
+            'right' => function ($v, $n) { return $v === null ? null : mb_substr((string) $v, -abs((int) $n)); },
+            'repeat' => function ($v, $n) { return $v === null ? null : str_repeat((string) $v, max(0, (int) $n)); },
+            'reverse' => function ($v) { return $v === null ? null : strrev((string) $v); },
+            'lcase' => function ($v) { return $v === null ? null : mb_strtolower((string) $v); },
+            'ucase' => function ($v) { return $v === null ? null : mb_strtoupper((string) $v); },
+            'dayname' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : date('l', $t); },
+            'monthname' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : date('F', $t); },
+            'quarter' => function ($v) use ($dt) { $t = $dt($v); return $t === null ? null : (int) (floor((date('n', $t) - 1) / 3) + 1); },
+            'truncate' => function ($v, $d) { if ($v === null) { return null; } $f = pow(10, (int) $d); return floor(((float) $v) * $f) / $f; },
+            'greatest' => function (...$a) { $v = array_values(array_filter($a, function ($x) { return $x !== null; })); return empty($v) ? null : max($v); },
+            'least' => function (...$a) { $v = array_values(array_filter($a, function ($x) { return $x !== null; })); return empty($v) ? null : min($v); },
+        ];
+        foreach ($funcs as $name => $fn) {
+            $pdo->sqliteCreateFunction($name, $fn, -1);
+        }
+    }
+}
+EOF
+python3 - <<'PY'
+p='/tmp/build/stage/config/app.php'
+s=open(p).read()
+if 'SqliteCompatProvider' not in s:
+    needle="App\\Providers\\AppServiceProvider::class,"
+    if needle in s:
+        s=s.replace(needle, needle+"\n        App\\Providers\\SqliteCompatProvider::class,",1)
+    else:
+        i=s.find("'providers'")
+        j=s.find("];", i)
+        s=s[:j]+"        App\\Providers\\SqliteCompatProvider::class,\n"+s[j:]
+    open(p,'w').write(s)
+    print('SqliteCompatProvider registered in config/app.php')
+else:
+    print('SqliteCompatProvider already registered')
+PY
+
 # ---------- 6. replit config ----------
 mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache 2>/dev/null || true
 touch storage/logs/.keep
@@ -230,18 +325,33 @@ sleep 12
 CODE=$(curl -s -o /tmp/build/logs/root.html -w '%{http_code}' -L http://127.0.0.1:8099/ || echo curlfail)
 echo "HTTP GET / -> $CODE"
 curl -s -o /dev/null -w 'HTTP GET /login -> %{http_code}\n' http://127.0.0.1:8099/login || true
-head -c 400 /tmp/build/logs/root.html || true
+curl -s -o /dev/null -w 'HTTP GET /games -> %{http_code}\n' http://127.0.0.1:8099/games || true
+head -c 300 /tmp/build/logs/root.html || true
+echo "=== laravel.log tail ==="
+tail -30 /tmp/build/stage/storage/logs/laravel.log 2>/dev/null || echo "(no laravel.log)"
 pkill -f "artisan serve" || true
 sleep 1
 
 # ---------- 8. zip + release ----------
 cd /tmp/build/stage
+rm -f /tmp/build/final.zip /tmp/build/part_*
 zip -qr /tmp/build/final.zip . -x "node_modules/*" -x "storage/logs/*.log"
+SIZE=$(stat -c%s /tmp/build/final.zip)
+if [ "$SIZE" -ge 2000000000 ]; then
+  echo "default zip $SIZE — retrying with -9"
+  rm -f /tmp/build/final.zip
+  zip -9 -qr /tmp/build/final.zip . -x "node_modules/*" -x "storage/logs/*.log"
+  SIZE=$(stat -c%s /tmp/build/final.zip)
+fi
 cd /tmp/build
 python3 -m zipfile -t final.zip && echo "ZIP TEST OK"
 SIZE=$(stat -c%s final.zip); SHA=$(sha256sum final.zip | awk '{print $1}')
 echo "FINAL: $SIZE bytes  sha256=$SHA"
-[ "$SIZE" -lt 2000000000 ] || { echo "zip too big for a single release asset"; exit 1; }
+if [ "$SIZE" -ge 2000000000 ]; then
+  echo "still over the 2GB asset cap — splitting"
+  split -b 1900000000 -d final.zip part_
+  ls -la part_*
+fi
 
 cat > notes.md <<EOF
 **Goldsvet 8.5 (Vanguard) — final Replit-ready build** (auto-assembled \$(date -u +%F))
@@ -254,9 +364,16 @@ cat > notes.md <<EOF
 - zip: $SIZE bytes — sha256 \`$SHA\`
 EOF
 
-gh release view replit-ready -R "$REPO" >/dev/null 2>&1 \
-  && gh release upload replit-ready final.zip -R "$REPO" --clobber \
-  || gh release create replit-ready final.zip -R "$REPO" \
-       --title "Goldsvet 8.5 — Replit-ready final build" --notes-file notes.md
+if ls part_* >/dev/null 2>&1; then
+  gh release view replit-ready -R "$REPO" >/dev/null 2>&1 \
+    && gh release upload replit-ready part_* -R "$REPO" --clobber \
+    || gh release create replit-ready part_* -R "$REPO" \
+         --title "Goldsvet 8.5 — Replit-ready final build" --notes-file notes.md
+else
+  gh release view replit-ready -R "$REPO" >/dev/null 2>&1 \
+    && gh release upload replit-ready final.zip -R "$REPO" --clobber \
+    || gh release create replit-ready final.zip -R "$REPO" \
+         --title "Goldsvet 8.5 — Replit-ready final build" --notes-file notes.md
+fi
 gh release view replit-ready -R "$REPO" --json assets --jq '.assets[] | {name,size,state}'
 echo "BUILD OK"
