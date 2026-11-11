@@ -274,6 +274,7 @@ def main():
     wtxt=open(w17).read()
     hdr=re.search(r'INSERT INTO `w_games` \(([^)]*)\)', wtxt).group(1)
     cols=[c.strip().strip('`') for c in hdr.split(',')]
+    pin_ids=[]   # canonical ids of the 17 pack-v2 games
     n_upd=0
     for line in wtxt.splitlines():
         if not line.startswith('('): continue
@@ -293,6 +294,7 @@ def main():
                 v=row[c]
                 args.append(None if (isinstance(v,str) and v.upper()=='NULL') else v)
         args.append(row['id'])
+        pin_ids.append(int(row['id']))
         cur.execute(f'UPDATE w_games SET {", ".join(sets)} WHERE id = ?', args)
         if cur.rowcount==0:
             now=None
@@ -313,13 +315,20 @@ def main():
     con.commit()
     print(f'w_games17 upsert applied: {n_upd}')
 
+    # --- publish exactly ONE canonical row per pack name ---
     names=[n.strip() for n in open(names102).read().split() if n.strip()]
     qmarks=','.join('?'*len(names))
-    cur.execute(f'SELECT count(*) FROM w_games WHERE name IN ({qmarks}) AND shop_id IN (0,1)', names)
-    have=cur.fetchone()[0]
-    cur.execute(f'UPDATE w_games SET view=1, shop_id=1 WHERE name IN ({qmarks}) AND shop_id IN (0,1)', names)
+    canonical=set(pin_ids)
+    cur.execute(f'SELECT name, MIN(id) FROM w_games WHERE name IN ({qmarks}) GROUP BY name', names)
+    for nm, mid in cur.fetchall():
+        canonical.add(int(mid))
+    idl=','.join('?'*len(canonical))
+    cur.execute(f'UPDATE w_games SET view=1, shop_id=1 WHERE id IN ({idl})', list(canonical))
+    pub=cur.rowcount
+    cur.execute(f'UPDATE w_games SET view=0 WHERE name IN ({qmarks}) AND id NOT IN ({idl})', names+list(canonical))
+    hid=cur.rowcount
     con.commit()
-    print(f'published pack names: matched={have}/{len(names)} updated={cur.rowcount}')
+    print(f'published canonical rows: {pub}; hid duplicate rows: {hid}')
 
     cur.execute("SELECT count(*) FROM sqlite_master WHERE type='table'")
     print('sqlite tables:', cur.fetchone()[0])

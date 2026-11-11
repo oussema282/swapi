@@ -66,6 +66,27 @@ if [ -f "$HE" ]; then
 else
   echo "HandleExceptions.php not found — vendor layout unexpected"
 fi
+
+# old Carbon (<2.6x) fatals natively on PHP 8.2: DateTime::getLastErrors() returns
+# false now, but setLastErrors(array) has a native type. Make it defensive.
+python3 - <<'PY'
+import re
+p='/tmp/build/stage/vendor/nesbot/carbon/src/Carbon/Traits/Creator.php'
+try:
+    s=open(p).read()
+except FileNotFoundError:
+    print('CARBON: Creator.php not found'); raise SystemExit
+pat=re.compile(r'private static function setLastErrors\(array \$lastErrors\)\s*\{\s*static::\$lastErrors = \$lastErrors;\s*\}')
+rep=("private static function setLastErrors($lastErrors)\n    {\n"
+     "        static::$lastErrors = is_array($lastErrors) ? $lastErrors : ['warning_count' => 0, 'warnings' => [], 'error_count' => 0, 'errors' => []];\n    }")
+s2,n=pat.subn(rep, s)
+if n:
+    open(p,'w').write(s2); print(f'CARBON PATCH applied ({n})')
+else:
+    print('CARBON PATCH: pattern not found — dumping:')
+    for i,l in enumerate(s.splitlines()):
+        if 'setLastErrors' in l: print(i+1, l)
+PY
 df -h /tmp | tail -1
 
 # ---------- 3. release packs ----------
