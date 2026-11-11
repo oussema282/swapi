@@ -122,11 +122,14 @@ if 'APP_KEY=base64:' not in txt:
     txt=setk(txt,'APP_KEY','base64:'+base64.b64encode(secrets.token_bytes(32)).decode())
 for k,v in [('APP_ENV','production'),('APP_DEBUG','false'),
             ('APP_URL','http://localhost:8080'),
-            ('DB_CONNECTION','sqlite'),('DB_HOST','127.0.0.1'),('DB_PORT','3306'),
-            ('DB_DATABASE',''),('DB_USERNAME',''),('DB_PASSWORD',''),
+            ('DB_CONNECTION','sqlite'),
+            ('DB_USERNAME',''),('DB_PASSWORD',''),
             ('SESSION_DRIVER','file'),('CACHE_DRIVER','file'),
             ('QUEUE_CONNECTION','sync'),('LOG_CHANNEL','daily'),('LOG_LEVEL','error')]:
     txt=setk(txt,k,v)
+# DB_DATABASE must be ABSENT so Laravel falls back to the absolute
+# database_path('database.sqlite'); an empty-string env value breaks sqlite open.
+txt=re.sub(r'^DB_DATABASE=.*$\n?', '', txt, flags=re.M)
 open(p,'w').write(txt)
 print('.env written:', len(txt), 'bytes; APP_KEY present:', 'APP_KEY=base64:' in txt)
 PY
