@@ -41,10 +41,10 @@ U=/tmp/build/unrar-master/unrar
 [ -x "$U" ] || { echo "unrar build failed"; exit 1; }
 (cd ex && "$U" x -y ../payload.rar >/dev/null)
 echo "=== rar tree (top) ==="
-find ex -maxdepth 3 -type d | head -20
+find /tmp/build/ex -maxdepth 3 -type d | head -20
 
-SITE=$(find ex -path '*d60/d60/artisan' -type f | head -1 | xargs dirname 2>/dev/null)
-[ -z "${SITE:-}" ] && SITE=$(find ex -maxdepth 5 -type f -name artisan | head -1 | xargs dirname 2>/dev/null)
+SITE=$(find /tmp/build/ex -path '*d60/d60/artisan' -type f | head -1 | xargs dirname 2>/dev/null)
+[ -z "${SITE:-}" ] && SITE=$(find /tmp/build/ex -maxdepth 5 -type f -name artisan | head -1 | xargs dirname 2>/dev/null)
 [ -n "${SITE:-}" ] && [ -f "$SITE/artisan" ] || { echo "artisan not found"; exit 1; }
 echo "SITE=$SITE"
 ls "$SITE" | head -40
@@ -55,17 +55,18 @@ rm -f stage/d60.sql stage/appbk.zip stage/*.log
 find stage -maxdepth 1 -name "*.sql" -delete 2>/dev/null || true
 find stage -maxdepth 1 -name "appbk*" -delete 2>/dev/null || true
 
-# vendor compat: shipped vendor targets PHP 7.4 -> rebuild against 8.2
-cd /tmp/build/stage
-if [ -f composer.json ]; then
-  echo "=== composer.json ==="; head -30 composer.json
-  composer update --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-scripts 2>&1 | tail -8 || \
-    echo "COMPOSER UPDATE FAILED — will diagnose from log"
-  composer dump-autoload -o --no-scripts 2>&1 | tail -2 || true
-  php artisan --version 2>&1 | tail -2 || true
+# vendor compat: shipped vendor targets PHP 7.4. On PHP 8.1/8.2 the framework
+# converts deprecation notices to exceptions (HandleExceptions -> error_reporting(-1)),
+# which kills boot. Suppress deprecations globally instead of chasing each signature.
+HE=/tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
+if [ -f "$HE" ]; then
+  grep -n "error_reporting" "$HE" || echo "no error_reporting line found"
+  sed -i 's/error_reporting(-1)/error_reporting(E_ALL \& ~E_DEPRECATED \& ~E_USER_DEPRECATED)/' "$HE"
+  grep -n "error_reporting" "$HE"
 else
-  echo "NO composer.json in deployment — vendor stays as-is"
+  echo "HandleExceptions.php not found — vendor layout unexpected"
 fi
+df -h /tmp | tail -1
 
 # ---------- 3. release packs ----------
 gh release download games-client-pack-85 -R "$REPO" -D packs
@@ -75,8 +76,8 @@ python3 "$GITHUB_WORKSPACE/scripts/replit-build/overlay_packs.py" /tmp/build/sta
 wc -l /tmp/build/names102.txt
 
 # ---------- 4. database: MySQL dump -> sqlite ----------
-D60SQL=$(find ex -path '*d60/d60.sql' -type f | head -1)
-[ -z "${D60SQL:-}" ] && D60SQL=$(find ex -name "d60.sql" -type f | head -1)
+D60SQL=$(find /tmp/build/ex -path '*d60/d60.sql' -type f | head -1)
+[ -z "${D60SQL:-}" ] && D60SQL=$(find /tmp/build/ex -name "d60.sql" -type f | head -1)
 [ -n "${D60SQL:-}" ] && [ -s "$D60SQL" ] || { echo "d60.sql not found"; exit 1; }
 mkdir -p stage/database stage/_mysql-legacy
 cp "$D60SQL" stage/_mysql-legacy/d60.sql

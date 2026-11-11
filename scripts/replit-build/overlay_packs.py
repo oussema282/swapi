@@ -45,6 +45,15 @@ def is_client_dir(d):
         if os.path.exists(os.path.join(d, marker)): return True
     return os.path.isdir(os.path.join(d, 'js')) and not os.path.isfile(os.path.join(d, 'composer.json'))
 
+def find_all(root, predicate):
+    hits=[]
+    for dirpath, dirnames, _ in os.walk(root):
+        try:
+            if predicate(dirpath): hits.append(dirpath)
+        except Exception:
+            pass
+    return hits
+
 names=set()
 tmp='/tmp/packx'
 shutil.rmtree(tmp, ignore_errors=True); os.makedirs(tmp)
@@ -60,40 +69,39 @@ for z in sorted(os.listdir(PACKS)):
         d=os.path.join(tmp, re.sub(r'\W+','_',z)[:40])
         os.makedirs(d, exist_ok=True)
         zf.extractall(d)
-    is_slots = any(re.search(r'(^|/)app/Games/', x) for x in nl)
-    if is_slots:
-        print('    -> slots pack (clients + blades + engines)')
-        pubg = find_dir(d, ('public','games'))
-        appg = find_dir(d, ('app','Games'))
-        blad = find_dir(d, ('resources','views','frontend','games','list'))
-        print(f'    roots: games={pubg} engines={appg} blades={blad}')
-        a=merge_children(pubg, GAMES); b=merge_children(appg, ENGINES); c=merge_children(blad, BLADES)
-        print(f'    merged clients={a} engines={b} blades={c}')
-        if pubg:
-            for x in os.listdir(pubg):
-                if os.path.isdir(os.path.join(pubg, x)): names.add(x)
-        # keep the pack's mysql-era sql as legacy extras
-        sqldir = find_dir(d, ('sql',))
-        if sqldir:
-            leg=os.path.join(STAGE, '_mysql-legacy'); os.makedirs(leg, exist_ok=True)
-            merge_children(sqldir, leg)
-    else:
-        print('    -> clients pack')
-        # find the dir that contains the most client dirs directly
-        best=(None,0)
-        for dirpath, dirnames, _ in os.walk(d):
-            score=sum(1 for x in dirnames if is_client_dir(os.path.join(dirpath,x)))
-            if score>best[1]: best=(dirpath,score)
-        root=best[0]
-        print(f'    client root: {root} ({best[1]} clients)')
-        if root:
-            for x in sorted(os.listdir(root)):
-                p=os.path.join(root,x)
-                if os.path.isdir(p) and is_client_dir(p):
-                    shutil.copytree(p, os.path.join(GAMES,x), dirs_exist_ok=True)
-                    names.add(x)
-                elif os.path.isdir(p):
-                    print(f'    [skipped non-client dir] {x}')
+
+    # classification-free: merge every platform folder the pack contains
+    pub_games = find_all(d, lambda p: os.path.basename(p)=='games'
+                         and os.path.basename(os.path.dirname(p))=='public')
+    app_games = find_all(d, lambda p: os.path.basename(p)=='Games'
+                         and os.path.basename(os.path.dirname(p)).lower()=='app')
+    blades    = find_all(d, lambda p: os.path.basename(p)=='list'
+                         and p.replace(os.sep,'/').endswith('resources/views/frontend/games/list'))
+
+    if not pub_games:
+        # fallback: a lone games/ dir with the most client subdirs
+        cand=[p for p in find_all(d, lambda p: os.path.basename(p).lower()=='games')]
+        best=None; best_n=0
+        for p in cand:
+            n=sum(1 for x in os.listdir(p) if is_client_dir(os.path.join(p,x)))
+            if n>best_n: best, best_n = p, n
+        if best and best_n>0:
+            pub_games=[best]
+            print(f'    fallback games root: {best} ({best_n} clients)')
+
+    for pg in pub_games:
+        a=merge_children(pg, GAMES)
+        cl=[x for x in os.listdir(pg) if os.path.isdir(os.path.join(pg,x))]
+        names.update(cl)
+        print(f'    merged {a} client entries from {pg}')
+    for ag in app_games:
+        b=merge_children(ag, ENGINES)
+        print(f'    merged {b} engine entries from {ag}')
+    for bl in blades:
+        c=merge_children(bl, BLADES)
+        print(f'    merged {c} blade entries from {bl}')
+    if not (pub_games or app_games or blades):
+        print('    [no platform folders recognised in this zip]')
 
 for n in F17: names.add(n)
 with open(NAMES_OUT,'w') as f:
