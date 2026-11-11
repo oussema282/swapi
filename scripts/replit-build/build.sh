@@ -347,7 +347,17 @@ curl -s -o /dev/null -w 'HTTP GET /games -> %{http_code}\n' http://127.0.0.1:809
 head -c 300 /tmp/build/logs/root.html || true
 LLOG=$(ls -t /tmp/build/stage/storage/logs/laravel*.log 2>/dev/null | head -1)
 echo "=== latest laravel log: ${LLOG:-none} ==="
-if [ -n "${LLOG:-}" ]; then tail -35 "$LLOG"; fi
+if [ -n "${LLOG:-}" ]; then
+  python3 - "$LLOG" <<'PY'
+import sys
+txt=open(sys.argv[1],encoding='utf-8',errors='replace').read()
+idx=txt.rfind('.ERROR: ')
+print('--- exception headline ---')
+print(txt[idx:idx+700].replace('\n',' ') if idx!=-1 else '(no .ERROR entry found)')
+PY
+fi
+echo "=== app/Http/Middleware/VerifyInstallation.php ==="
+sed -n '1,55p' /tmp/build/stage/app/Http/Middleware/VerifyInstallation.php 2>/dev/null || true
 pkill -f "artisan serve" || true
 sleep 1
 
