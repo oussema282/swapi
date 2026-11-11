@@ -24,3 +24,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: bash scripts/replit-build/build.sh
+      - name: Push build log (debug relay)
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b buildlog
+          cp /tmp/build/logs/build.log . 2>/dev/null || echo "no build.log" > build.log
+          cp /tmp/build/logs/serve.log . 2>/dev/null || true
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "build log $(date -u +%FT%TZ)"
+          git push -qf origin buildlog
