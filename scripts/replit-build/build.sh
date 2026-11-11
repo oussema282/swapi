@@ -55,6 +55,18 @@ rm -f stage/d60.sql stage/appbk.zip stage/*.log
 find stage -maxdepth 1 -name "*.sql" -delete 2>/dev/null || true
 find stage -maxdepth 1 -name "appbk*" -delete 2>/dev/null || true
 
+# vendor compat: shipped vendor targets PHP 7.4 -> rebuild against 8.2
+cd /tmp/build/stage
+if [ -f composer.json ]; then
+  echo "=== composer.json ==="; head -30 composer.json
+  composer update --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-scripts 2>&1 | tail -8 || \
+    echo "COMPOSER UPDATE FAILED — will diagnose from log"
+  composer dump-autoload -o --no-scripts 2>&1 | tail -2 || true
+  php artisan --version 2>&1 | tail -2 || true
+else
+  echo "NO composer.json in deployment — vendor stays as-is"
+fi
+
 # ---------- 3. release packs ----------
 gh release download games-client-pack-85 -R "$REPO" -D packs
 gh release download slots-publish-ready  -R "$REPO" -D packs

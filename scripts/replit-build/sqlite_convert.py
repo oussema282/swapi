@@ -314,9 +314,10 @@ def main():
     print(f'w_games17 upsert applied: {n_upd}')
 
     names=[n.strip() for n in open(names102).read().split() if n.strip()]
-    cur.execute('SELECT count(*) FROM w_games WHERE name IN (%s)' % ','.join('?'*len(names)), names)
+    qmarks=','.join('?'*len(names))
+    cur.execute(f'SELECT count(*) FROM w_games WHERE name IN ({qmarks}) AND shop_id IN (0,1)', names)
     have=cur.fetchone()[0]
-    cur.execute('UPDATE w_games SET view=1, shop_id=1 WHERE name IN (%s)' % ','.join('?'*len(names)), names)
+    cur.execute(f'UPDATE w_games SET view=1, shop_id=1 WHERE name IN ({qmarks}) AND shop_id IN (0,1)', names)
     con.commit()
     print(f'published pack names: matched={have}/{len(names)} updated={cur.rowcount}')
 

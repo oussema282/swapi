@@ -92,6 +92,8 @@ for z in sorted(os.listdir(PACKS)):
                 if os.path.isdir(p) and is_client_dir(p):
                     shutil.copytree(p, os.path.join(GAMES,x), dirs_exist_ok=True)
                     names.add(x)
+                elif os.path.isdir(p):
+                    print(f'    [skipped non-client dir] {x}')
 
 for n in F17: names.add(n)
 with open(NAMES_OUT,'w') as f:
