@@ -5,11 +5,11 @@ demo4.scriptcasino.ru deployment (bounded BFS per game, stdlib only).
 Usage: mirror.py <am_names_file> <out_dir> [workers]
 Writes: out/<Name>/... plus out/_summary.txt
 """
-import os, re, sys, json, time, urllib.request, urllib.parse
+import os, re, sys, json, time, subprocess, urllib.parse
 from multiprocessing import Pool
 
 BASE = "https://demo4.scriptcasino.ru"
-UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0"}
+UA = "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0"
 TEXT_EXT = {'.html', '.js', '.css', '.json', '.xml', '.txt', '.atlas', '.fnt'}
 ASSET_RE = re.compile(
     r'[A-Za-z0-9_\-./@]+\.(?:png|jpe?g|gif|json|js|css|mp3|ogg|wav|html|woff2?|ttf|svg|atlas|fnt|xml|webp|webm|mp4|cur|ani)', re.I)
@@ -17,19 +17,26 @@ REF_RE = re.compile(r'(?:src|href)\s*=\s*["\']([^"\']+)["\']', re.I)
 MAX_FILES = 1200
 MAX_BYTES = 120 * 1024 * 1024
 
+TMPBIN = '/tmp/hf_%d.bin' % os.getpid()
+
 def fetch(url):
+    """curl-based fetch (urllib gets WAF-blocked). Returns (bytes|None, code)."""
     for attempt in range(3):
-        try:
-            req = urllib.request.Request(url, headers=UA)
-            with urllib.request.urlopen(req, timeout=25) as r:
-                return r.read(), (r.headers.get_content_type() or '')
-        except urllib.error.HTTPError as e:
-            if e.code in (404, 403, 410):
-                return None, str(e.code)
-            time.sleep(1 + attempt)
-        except Exception:
-            time.sleep(1 + attempt)
-    return None, 'ERR'
+        p = subprocess.run(
+            ['curl', '-sS', '--compressed', '-A', UA, '--max-time', '25',
+             '-o', TMPBIN, '-w', '%{http_code}', url],
+            capture_output=True, text=True)
+        code = (p.stdout or '').strip()
+        if code == '200':
+            try:
+                with open(TMPBIN, 'rb') as f:
+                    return f.read(), '200'
+            except Exception:
+                pass
+        elif code in ('404', '403', '410'):
+            return None, code
+        time.sleep(0.5 + attempt)
+    return None, code or 'ERR'
 
 def norm(base_dir, ref):
     """resolve ref relative to base_dir (a path under /games/<N>/), keep inside /games/<N>/"""
@@ -64,6 +71,7 @@ def hunt_game(game):
     saved = []
     total_bytes = 0
     rounds = 0
+    first_err = ''
     while queue and rounds < 6:
         rounds += 1
         batch = []
@@ -85,6 +93,8 @@ def hunt_game(game):
                 continue
             data, ct = fetch(BASE + urllib.parse.quote(u, safe='/'))
             if data is None:
+                if not first_err:
+                    first_err = f'{u} -> {ct}'
                 continue
             total_bytes += len(data)
             fp = os.path.join(gd, rel)
@@ -121,8 +131,8 @@ def hunt_game(game):
         if not queue:
             break
     with open(os.path.join(gd, '_done.txt'), 'w') as f:
-        f.write(f'files={len(saved)} bytes={total_bytes} rounds={rounds}\n')
-    return f'{game} files={len(saved)} bytes={total_bytes // 1024}KB rounds={rounds}'
+        f.write(f'files={len(saved)} bytes={total_bytes} rounds={rounds} err={first_err}\n')
+    return f'{game} files={len(saved)} bytes={total_bytes // 1024}KB rounds={rounds} err={first_err}'
 
 def init_args(a, b):
     global OUTDIR
