@@ -28,8 +28,11 @@ jobs:
           cp /tmp/hunt2/mirror.log . 2>/dev/null || echo "no mirror.log" > mirror.log
           cp /tmp/hunt2/mirror/_summary.txt . 2>/dev/null || true
           cp /tmp/hunt2/gl_*.txt . 2>/dev/null || true
+          if [ -d /tmp/hunt2/mirror ]; then
+            rsync -a --exclude='_done.txt' --max-size=2m /tmp/hunt2/mirror/ /tmp/logpush/mirror-sample/ 2>/dev/null || cp -r /tmp/hunt2/mirror /tmp/logpush/mirror-sample
+          fi
           git config user.email "log@bot" && git config user.name "logbot"
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
           git add -A
-          git commit -qm "mirror log $(date -u +%FT%TZ)"
+          git commit -qm "mirror log + sample tree $(date -u +%FT%TZ)"
           git push -qf origin mirror-log
