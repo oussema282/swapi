@@ -47,8 +47,6 @@ def norm(base_dir, ref):
         return None
     fake = 'https://x' + (base_dir if base_dir.endswith('/') else base_dir + '/')
     cand = urllib.parse.urljoin(fake, ref)
-    if not cand.startswith('/games/'):
-        return None
     path = urllib.parse.urlparse(cand).path
     return path if path.startswith('/games/') else None
 
