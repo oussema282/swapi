@@ -112,19 +112,21 @@ def hunt_game(game):
                     txt = None
                 if txt:
                     basedir = u.rsplit('/', 1)[0] + '/'
+                    # dynamic paths inside loader JS resolve against the PAGE base,
+                    # not the script dir -> try several bases
+                    bases = [basedir, basedir + '../', root]
                     refs = set()
                     for m in REF_RE.finditer(txt):
-                        r = norm(basedir, m.group(1))
-                        if r and r not in visited:
-                            refs.add(r)
+                        for b in bases:
+                            r = norm(b, m.group(1))
+                            if r and r not in visited:
+                                refs.add(r)
                     for m in ASSET_RE.finditer(txt):
                         token = m.group(0)
-                        r = norm(basedir, token)
-                        if r and r not in visited:
-                            refs.add(r)
-                        r2 = norm(root, token)
-                        if r2 and r2 not in visited:
-                            refs.add(r2)
+                        for b in bases:
+                            r = norm(b, token)
+                            if r and r not in visited:
+                                refs.add(r)
                     for r in refs:
                         if r.startswith(f'/games/{game}/') and r not in visited:
                             queue.append((r + 'index.html' if r.endswith('/') else r, 'ref'))
