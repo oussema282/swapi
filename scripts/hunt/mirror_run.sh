@@ -5,9 +5,22 @@ mkdir -p /tmp/hunt2 && cd /tmp/hunt2
 exec > >(tee mirror.log) 2>&1
 set -x
 
+# resume support: start from the previous mirror release if it exists
+mkdir -p /tmp/hunt2/prev
+if gh release download amatic-clients -R "$REPO" -D /tmp/hunt2/prev >/dev/null 2>&1; then
+  unzip -q -o /tmp/hunt2/prev/*.zip -d /tmp/hunt2/prev && \
+    rsync -a /tmp/hunt2/prev/mirror/ /tmp/hunt2/mirror/ 2>/dev/null && echo "resumed from previous release"
+fi
+
 python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror.py" \
   "$GITHUB_WORKSPACE/scripts/gapscan/am_hunt.txt" /tmp/hunt2/mirror 4
 tail -5 /tmp/hunt2/mirror/_summary.txt || true
+
+# second pass: canonical asset probing (images/sounds dirs the JS builds dynamically)
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror2.py" \
+  "$GITHUB_WORKSPACE/scripts/gapscan/am_hunt.txt" /tmp/hunt2/mirror \
+  "$GITHUB_WORKSPACE/scripts/hunt/canon" 8 || true
+grep -cE "canon=0/" /tmp/hunt2/mirror/_canon_summary.txt 2>/dev/null || true
 
 echo "=== gitlab candidate tree scans ==="
 scan_gitlab() {

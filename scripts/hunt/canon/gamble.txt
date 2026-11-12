@@ -1,0 +1,16 @@
+images/800_600/blue_orig.png
+images/800_600/gamble.json
+images/800_600/gamble.png
+images/800_600/red_orig.png
+sounds/deal_2.m4a
+sounds/deal_2.mp3
+sounds/deal_2.ogg
+sounds/win1.m4a
+sounds/win1.mp3
+sounds/win1.ogg
+sounds/win2.m4a
+sounds/win2.mp3
+sounds/win2.ogg
+sounds/win3.m4a
+sounds/win3.mp3
+sounds/win3.ogg
