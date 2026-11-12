@@ -43,6 +43,13 @@ def fetch(url):
         time.sleep(1.0*(attempt+1))
     return None
 
+def exists(url):
+    """HEAD-first existence check (fast 404s, no body download)."""
+    time.sleep(0.08)
+    p = subprocess.run(['curl','-sS','-I','-A',UA,'--max-time','20',
+                        '-o','/dev/null','-w','%{http_code}',url], capture_output=True, text=True)
+    return (p.stdout or '').strip() == '200'
+
 def text_files(gd):
     out=[]
     for dirpath,_,files in os.walk(gd):
@@ -100,9 +107,22 @@ def candidates_for(game, theme, tok):
 def rel_of(cand):
     return cand
 
+def res_hints(gd, theme):
+    """resolution dirs mentioned in the game's own corpus"""
+    hints=set()
+    for tp in text_files(gd):
+        try: txt=open(tp,encoding='utf-8',errors='replace').read()
+        except Exception: continue
+        for m in re.finditer(r'\b(\d{3}_\d{3})\b', txt):
+            if m.group(1) in RES_DIRS: hints.add(m.group(1))
+    hints.add('800_600')
+    return hints
+
 def fill_game(game, mirror_dir, canon):
     gd=os.path.join(mirror_dir, game)
     host='https://demo4.scriptcasino.ru'
+    if os.path.exists(os.path.join(gd,'_fill.txt')):
+        return f'{game} SKIP(fill already done)'
     if not os.path.isdir(gd):
         found_host=None
         for h in HOSTS:
@@ -149,11 +169,21 @@ def fill_game(game, mirror_dir, canon):
     for dirpath,_,files in os.walk(gd):
         for f in files: have.add(f.lower())
     missing=[t for t in toks if t not in have]
+    hints=res_hints(gd, theme)
     found=0; missing_paths=[]
     for tok in missing:
         got=False
-        for cand in candidates_for(game, theme, tok):
+        ext=os.path.splitext(tok)[1].lower()
+        cands=candidates_for(game, theme, tok)
+        if ext in IMG_EXT:
+            # narrow to the game's own resolution dirs first, then the rest
+            prim=[c for c in cands if any(f'/images/{r}/' in c for r in hints)]
+            rest=[c for c in cands if c not in prim]
+            cands=prim+rest
+        for cand in cands:
             url=f'{host}/games/{game}/' + urllib.parse.quote(cand, safe='/')
+            if not exists(url):
+                continue
             data=fetch(url)
             if data is not None:
                 dest=os.path.join(gd, rel_of(cand))
