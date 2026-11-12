@@ -4,6 +4,8 @@ on:
     branches: [arena/01a0cba2-swapi]
     paths:
       - 'scripts/hunt/mirror.py'
+      - 'scripts/hunt/mirror2.py'
+      - 'scripts/hunt/mirror3.py'
       - 'scripts/hunt/mirror_run.sh'
       - '.github/workflows/amatic-mirror.yml'
   workflow_dispatch: {}
@@ -12,7 +14,7 @@ permissions:
 jobs:
   mirror:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - name: mirror AM clients + gitlab probes + release

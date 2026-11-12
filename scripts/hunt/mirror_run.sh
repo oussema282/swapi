@@ -22,6 +22,24 @@ python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror2.py" \
   "$GITHUB_WORKSPACE/scripts/hunt/canon" 8 || true
 grep -cE "canon=0/" /tmp/hunt2/mirror/_canon_summary.txt 2>/dev/null || true
 
+# third pass: per-game deep fill (tokens from each game's own JS + loop-built
+# series + res-dir variants; alt demo hosts for games absent on demo4).
+# Priority = weakest canon coverage first.
+python3 - <<'PY'
+import re
+rows=[]
+for line in open('/tmp/hunt2/mirror/_canon_summary.txt'):
+    m=re.match(r'(\S+)\s+canon=(\d+)/', line)
+    if m: rows.append((int(m.group(2)), m.group(1)))
+rows.sort()
+open('/tmp/hunt2/priority.txt','w').write('\n'.join(n for _,n in rows)+'\n')
+print('priority list written (weakest first):', len(rows))
+PY
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" /tmp/hunt2/mirror 8 \
+  /tmp/hunt2/priority.txt "$GITHUB_WORKSPACE/scripts/hunt/canon" \
+  "$GITHUB_WORKSPACE/scripts/gapscan/am_hunt.txt" || true
+grep -oE "unresolved=[0-9]+" /tmp/hunt2/mirror/_fill_summary.txt | sort -t= -k2 -n | uniq -c | head -12 || true
+
 echo "=== gitlab candidate tree scans ==="
 scan_gitlab() {
   local repo="$1"

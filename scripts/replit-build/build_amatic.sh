@@ -58,7 +58,7 @@ if [ -d stage/public/games ]; then
 # 3a. mirror (102 games from the demo)
 gh release download amatic-clients -R "$REPO" -D packs
 unzip -q -o packs/amatic-clients*.zip -d amfill
-rsync -a amfill/mirror/ stage/public/games/ --exclude='_done.txt' --exclude='_summary.txt' --exclude='_canon_summary.txt'
+rsync -a amfill/mirror/ stage/public/games/ --exclude='_done.txt' --exclude='_summary.txt' --exclude='_canon_summary.txt' --exclude='_fill.txt' --exclude='_fill_summary.txt'
 rm -f stage/public/games/_*.txt
 
 # 3b. the 5 pack AM clients from slots-publish-ready
@@ -88,17 +88,30 @@ echo "clients now: $(ls stage/public/games | wc -l)"
 PACK_AM="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM"
 python3 - <<'PY'
 import re, os
-strong=[]; weak=[]
-s=open('/tmp/build/amfill/mirror/_canon_summary.txt').read()
-for line in s.splitlines():
+canon={}
+for line in open('/tmp/build/amfill/mirror/_canon_summary.txt'):
     m=re.match(r'(\S+)\s+canon=(\d+)/', line)
-    if m:
-        (strong if int(m.group(2))>=180 else weak).append(m.group(1))
+    if m: canon[m.group(1)]=int(m.group(2))
+fill={}
+fs='/tmp/build/amfill/mirror/_fill_summary.txt'
+if os.path.exists(fs):
+    for line in open(fs):
+        m=re.match(r'(\S+) fill found=\d+ unresolved=(\d+)', line)
+        if m: fill[m.group(1)]=int(m.group(2))
+strong=[]; weak=[]
+for g,c in canon.items():
+    unresolved=fill.get(g, 999)
+    # strong = solid canon coverage AND the per-game token fill found (nearly) everything
+    if c>=180 and unresolved<=10:
+        strong.append(g)
+    else:
+        weak.append(g)
 pack="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM".split()
 with open('/tmp/build/am_names.txt','w') as f:
     f.write('\n'.join(sorted(set(strong)|set(pack)))+'\n')
 print(f'AM list: {len(set(strong)|set(pack))} publish names ({len(strong)} mirror-strong + {len(pack)} pack); weak-hidden={len(weak)}')
 print('publish:', ' '.join(sorted(set(strong)|set(pack))))
+print('hidden:', ' '.join(sorted(set(weak)-set(pack))))
 PY
 wc -l /tmp/build/am_names.txt
 
