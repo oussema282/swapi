@@ -67,12 +67,21 @@ mkdir -p pack5
 unzip -q -o packs/slots-publish-ready.zip "pack/public/games/AdmiralNelsonAM/*" \
   "pack/public/games/AllAmericanPokerAM/*" "pack/public/games/AllWaysFruitsAM/*" \
   "pack/public/games/AllWaysJokerAM/*" "pack/public/games/BingoAM/*" -d pack5
-for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM; do
+for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM; do
   if [ -d "pack5/pack/public/games/$N" ]; then
     cp -a "pack5/pack/public/games/$N" stage/public/games/
   else
     echo "MISSING pack client $N"; fi
 done
+# BingoAM ships in the Canada pack, not slots-publish-ready -> sparse checkout from heidi
+if [ ! -d stage/public/games/BingoAM ]; then
+  rm -rf /tmp/bingo
+  git clone -q --depth 1 --filter=blob:none --sparse https://github.com/heidi-luong1109/game /tmp/bingo \
+    && (cd /tmp/bingo && git sparse-checkout set public/games/BingoAM) \
+    && cp -a /tmp/bingo/public/games/BingoAM stage/public/games/ \
+    && echo "BingoAM from heidi sparse checkout" \
+    || echo "BINGOAM SPARSE CHECKOUT FAILED"
+fi
 echo "clients now: $(ls stage/public/games | wc -l)"
 
 # ---------- 3c. AM publish list ----------
@@ -220,12 +229,17 @@ pat=re.compile(r'private static function setLastErrors\(array \$lastErrors\)\s*\
 rep=("private static function setLastErrors($lastErrors)\n    {\n"
      "        static::$lastErrors = is_array($lastErrors) ? $lastErrors : ['warning_count' => 0, 'warnings' => [], 'error_count' => 0, 'errors' => []];\n    }")
 s2,n=pat.subn(rep, s)
-if n: open(p,'w').write(s2); print('CARBON PATCH applied')
-else: print('CARBON PATCH: pattern not found'); exit 1
+if n:
+    open(p,'w').write(s2)
+    print('CARBON PATCH applied')
+else:
+    print('CARBON PATCH: pattern not found')
+    raise SystemExit(1)
 PY
 
 # ---------- 7b. sqlite compat provider ----------
-cat > stage/app/Providers/SqliteCompatProvider.php <<'EOF'
+mkdir -p /tmp/build/stage/app/Providers
+cat > /tmp/build/stage/app/Providers/SqliteCompatProvider.php <<'EOF'
 <?php
 
 namespace App\Providers;
