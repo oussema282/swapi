@@ -1,0 +1,28 @@
+name: amatic-diag
+on:
+  push:
+    branches: [arena/01a0cba2-swapi]
+    paths:
+      - 'scripts/hunt/diag.sh'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: trace demo asset chain
+        run: bash scripts/hunt/diag.sh
+      - name: push diag log
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b diag-log
+          cp /tmp/diag.log . 2>/dev/null || echo "no diag.log" > diag.log
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "diag log $(date -u +%FT%TZ)"
+          git push -qf origin diag-log
