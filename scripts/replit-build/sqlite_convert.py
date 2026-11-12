@@ -165,6 +165,7 @@ def conv_create(stmt):
 
 def main():
     src, outdb, w17, names102 = sys.argv[1:5]
+    exclusive = len(sys.argv) > 5 and sys.argv[5] == 'exclusive'
     text=open(src, encoding='utf-8', errors='replace').read()
     stmts=[strip_leading_comments(s) for s in split_statements(text)]
     creates={}; order=[]; pks={}; uniques={}; indexes={}; inserts=[]
@@ -275,6 +276,7 @@ def main():
     hdr=re.search(r'INSERT INTO `w_games` \(([^)]*)\)', wtxt).group(1)
     cols=[c.strip().strip('`') for c in hdr.split(',')]
     pin_ids=[]   # canonical ids of the 17 pack-v2 games
+    pin_names=[]
     n_upd=0
     for line in wtxt.splitlines():
         if not line.startswith('('): continue
@@ -295,6 +297,7 @@ def main():
                 args.append(None if (isinstance(v,str) and v.upper()=='NULL') else v)
         args.append(row['id'])
         pin_ids.append(int(row['id']))
+        pin_names.append(row['name'])
         cur.execute(f'UPDATE w_games SET {", ".join(sets)} WHERE id = ?', args)
         if cur.rowcount==0:
             now=None
@@ -318,7 +321,8 @@ def main():
     # --- publish exactly ONE canonical row per pack name ---
     names=[n.strip() for n in open(names102).read().split() if n.strip()]
     qmarks=','.join('?'*len(names))
-    canonical=set(pin_ids)
+    nameset=set(names)
+    canonical={pid for pid, pn in zip(pin_ids, pin_names) if pn in nameset}
     cur.execute(f'SELECT name, MIN(id) FROM w_games WHERE name IN ({qmarks}) GROUP BY name', names)
     for nm, mid in cur.fetchall():
         canonical.add(int(mid))
@@ -329,6 +333,11 @@ def main():
     hid=cur.rowcount
     con.commit()
     print(f'published canonical rows: {pub}; hid duplicate rows: {hid}')
+    if exclusive:
+        keep=list(canonical)
+        cur.execute(f'UPDATE w_games SET view=0 WHERE id NOT IN ({",".join("?"*len(keep))})', keep)
+        print(f'EXCLUSIVE lobby: hid all non-list games ({cur.rowcount} rows)')
+        con.commit()
 
     cur.execute("SELECT count(*) FROM sqlite_master WHERE type='table'")
     print('sqlite tables:', cur.fetchone()[0])

@@ -1,0 +1,38 @@
+name: amatic-replit
+on:
+  push:
+    branches: [arena/01a0cba2-swapi]
+    paths:
+      - 'scripts/replit-build/build_amatic.sh'
+      - 'scripts/replit-build/sqlite_convert.py'
+      - '.github/workflows/amatic-replit.yml'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, curl, dom, gd, zip, sqlite3, pdo_sqlite, bcmath, openssl, fileinfo, tokenizer
+          coverage: none
+      - name: Build & publish AM-only Replit zip
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: bash scripts/replit-build/build_amatic.sh
+      - name: Push build log (debug relay)
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b ambuild-log
+          cp /tmp/build/logs/build.log . 2>/dev/null || echo "no build.log" > build.log
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "amatic build log $(date -u +%FT%TZ)"
+          git push -qf origin ambuild-log
