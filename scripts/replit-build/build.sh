@@ -92,9 +92,46 @@ df -h /tmp | tail -1
 # ---------- 3. release packs ----------
 gh release download games-client-pack-85 -R "$REPO" -D packs
 gh release download slots-publish-ready  -R "$REPO" -D packs
+gh release download amatic-clients -R "$REPO" -D packs 2>/dev/null || echo "no amatic-clients release yet"
 ls -la packs
 python3 "$GITHUB_WORKSPACE/scripts/replit-build/overlay_packs.py" /tmp/build/stage /tmp/build/packs /tmp/build/names102.txt || exit 1
 wc -l /tmp/build/names102.txt
+
+# ---------- 3c. Amatic client fill (mirror from scriptcasino demo) ----------
+AMFILL=/tmp/build/amfill
+rm -rf "$AMFILL"; mkdir -p "$AMFILL"
+if ls packs/amatic-clients*.zip >/dev/null 2>&1; then
+  unzip -q -o packs/amatic-clients*.zip -d "$AMFILL"
+  python3 - <<'PY'
+import os, shutil, re
+src='/tmp/build/amfill/mirror'
+games_root='/tmp/build/stage/public/games'
+names_out='/tmp/build/names102.txt'
+strong=[]; weak=[]; absent=[]
+summary=os.path.join(src,'_canon_summary.txt')
+canon={}
+if os.path.exists(summary):
+    for line in open(summary):
+        m=re.match(r'(\S+)\s+canon=(\d+)/(\d+)', line)
+        if m: canon[m.group(1)]=(int(m.group(2)), int(m.group(3)))
+for g in sorted(os.listdir(src)) if os.path.isdir(src) else []:
+    p=os.path.join(src,g)
+    if not os.path.isdir(p) or g.startswith('_'): continue
+    dest=os.path.join(games_root,g)
+    shutil.copytree(p, dest, dirs_exist_ok=True)
+    c=canon.get(g,(0,0))[0]
+    (strong if c>=180 else weak).append(g)
+    if c==0 and not canon: absent.append(g)
+# publish the strong Amatic games (append to the pack names list)
+with open(names_out,'a') as f:
+    for g in strong: f.write(g+'\n')
+print(f'AM fill: merged {len(strong)+len(weak)} client dirs; strong(published)={len(strong)} weak(hidden)={len(weak)}')
+print('published:', ' '.join(sorted(strong)))
+print('hidden:', ' '.join(sorted(weak)))
+PY
+else
+  echo "AM fill skipped (no mirror zip in packs/)"
+fi
 
 # ---------- 4. database: MySQL dump -> sqlite ----------
 D60SQL=$(find /tmp/build/ex -path '*d60/d60.sql' -type f | head -1)
