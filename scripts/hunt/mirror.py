@@ -20,10 +20,12 @@ MAX_BYTES = 120 * 1024 * 1024
 TMPBIN = '/tmp/hf_%d.bin' % os.getpid()
 
 def fetch(url):
-    """curl-based fetch (urllib gets WAF-blocked). Returns (bytes|None, code)."""
-    for attempt in range(3):
+    """curl-based fetch (urllib gets WAF-blocked). Returns (bytes|None, code).
+    Polite pacing: the demo rate-limits concurrent/bursty fetches."""
+    for attempt in range(4):
+        time.sleep(0.15)
         p = subprocess.run(
-            ['curl', '-sS', '--compressed', '-A', UA, '--max-time', '25',
+            ['curl', '-sS', '--compressed', '-A', UA, '--max-time', '60',
              '-o', TMPBIN, '-w', '%{http_code}', url],
             capture_output=True, text=True)
         code = (p.stdout or '').strip()
@@ -35,7 +37,7 @@ def fetch(url):
                 pass
         elif code in ('404', '403', '410'):
             return None, code
-        time.sleep(0.5 + attempt)
+        time.sleep(1.5 * (attempt + 1))
     return None, code or 'ERR'
 
 def norm(base_dir, ref):

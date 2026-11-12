@@ -6,7 +6,7 @@ exec > >(tee mirror.log) 2>&1
 set -x
 
 python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror.py" \
-  "$GITHUB_WORKSPACE/scripts/gapscan/am_hunt.txt" /tmp/hunt2/mirror 10
+  "$GITHUB_WORKSPACE/scripts/gapscan/am_hunt.txt" /tmp/hunt2/mirror 4
 tail -5 /tmp/hunt2/mirror/_summary.txt || true
 
 echo "=== gitlab candidate tree scans ==="
