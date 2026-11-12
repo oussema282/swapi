@@ -67,7 +67,7 @@ def hunt_game(game):
         return f'{game} SKIP(already done)'
     root = f'/games/{game}/'
     visited = set()
-    queue = [(root + 'amarent/', 'page'), (root + 'index.html', 'page'), (root, 'page')]
+    queue = [(root + 'amarent/index.html', 'page'), (root + 'index.html', 'page')]
     saved = []
     total_bytes = 0
     rounds = 0
@@ -88,6 +88,8 @@ def hunt_game(game):
         for u, kind in batch:
             if len(saved) >= MAX_FILES or total_bytes > MAX_BYTES:
                 break
+            if u.endswith('/'):
+                u = u + 'index.html'
             rel = relpath_for(u, game)
             if rel is None or rel.endswith('/'):
                 continue
@@ -126,7 +128,7 @@ def hunt_game(game):
                             refs.add(r2)
                     for r in refs:
                         if r.startswith(f'/games/{game}/') and r not in visited:
-                            queue.append((r, 'ref'))
+                            queue.append((r + 'index.html' if r.endswith('/') else r, 'ref'))
         # queue drained -> next round (refs were appended during batch)
         if not queue:
             break
