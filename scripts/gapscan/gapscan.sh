@@ -6,9 +6,24 @@ exec > >(tee debug/gap.log) 2>&1
 set -x
 
 python3 -m pip install -q gdown
-FID=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov
-gdown --fuzzy "https://drive.google.com/file/d/${FID}/view" -O payload.rar || true
-head -c 7 payload.rar | xxd -p | grep -qi "^526172211a07" || { echo "RAR DOWNLOAD FAILED"; exit 1; }
+OK=0
+for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU; do
+  if gdown --fuzzy "https://drive.google.com/file/d/${FID}/view" -O payload.rar >/dev/null 2>&1 \
+     && head -c 7 payload.rar | xxd -p | grep -qi "^526172211a07"; then OK=1; break; fi
+done
+if [ "$OK" != 1 ]; then
+  echo "gdown failed on all mirrors — confirm-page fallback"
+  FID=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov
+  curl -sL -c ck.txt "https://drive.google.com/uc?export=download&id=${FID}" -o page.html
+  python3 - <<'PY'
+import re
+html=open('page.html',errors='ignore').read()
+m=re.search(r'action="([^"]+)"',html); f=re.findall(r'name="([^"]+)" value="([^"]*)"',html)
+open('dl_url.txt','w').write(m.group(1)+"?"+("&".join(f"{k}={v}" for k,v in f)) if m else "")
+PY
+  [ -s dl_url.txt ] && curl -sL -b ck.txt "$(cat dl_url.txt)" -o payload.rar
+  head -c 7 payload.rar | xxd -p | grep -qi "^526172211a07" || { echo "RAR DOWNLOAD FAILED (all routes)"; exit 1; }
+fi
 sha256sum payload.rar
 
 curl -sSL -o unrar.tar.gz "https://codeload.github.com/pmachapman/unrar/tar.gz/refs/heads/master"

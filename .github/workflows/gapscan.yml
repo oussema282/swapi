@@ -19,3 +19,15 @@ jobs:
           REPO_TOKEN: ${{ github.token }}
           REPO_NAME: ${{ github.repository }}
         run: bash scripts/gapscan/gapscan.sh
+      - name: push scan log (debug relay)
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b gapscan-log
+          cp /tmp/gap/debug/gap.log . 2>/dev/null || echo "no gap.log" > gap.log
+          cp -r /tmp/gap/out/*.txt /tmp/gap/out/*.tsv . 2>/dev/null || true
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "gapscan log $(date -u +%FT%TZ)"
+          git push -qf origin gapscan-log
