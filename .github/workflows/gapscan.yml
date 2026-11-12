@@ -1,0 +1,21 @@
+name: gapscan
+on:
+  push:
+    branches: [arena/01a0cba2-swapi]
+    paths:
+      - 'scripts/gapscan/**'
+      - '.github/workflows/gapscan.yml'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: gap scan (rar listing + matrix)
+        env:
+          REPO_TOKEN: ${{ github.token }}
+          REPO_NAME: ${{ github.repository }}
+        run: bash scripts/gapscan/gapscan.sh
