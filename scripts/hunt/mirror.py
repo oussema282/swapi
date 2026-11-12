@@ -17,21 +17,20 @@ REF_RE = re.compile(r'(?:src|href)\s*=\s*["\']([^"\']+)["\']', re.I)
 MAX_FILES = 1200
 MAX_BYTES = 120 * 1024 * 1024
 
-TMPBIN = '/tmp/hf_%d.bin' % os.getpid()
-
 def fetch(url):
     """curl-based fetch (urllib gets WAF-blocked). Returns (bytes|None, code).
     Polite pacing: the demo rate-limits concurrent/bursty fetches."""
+    tmpbin = '/tmp/hf_%d.bin' % os.getpid()   # must be per-PROCESS (Pool forks!)
     for attempt in range(4):
         time.sleep(0.15)
         p = subprocess.run(
             ['curl', '-sS', '--compressed', '-A', UA, '--max-time', '60',
-             '-o', TMPBIN, '-w', '%{http_code}', url],
+             '-o', tmpbin, '-w', '%{http_code}', url],
             capture_output=True, text=True)
         code = (p.stdout or '').strip()
         if code == '200':
             try:
-                with open(TMPBIN, 'rb') as f:
+                with open(tmpbin, 'rb') as f:
                     return f.read(), '200'
             except Exception:
                 pass
@@ -72,7 +71,7 @@ def hunt_game(game):
     total_bytes = 0
     rounds = 0
     first_err = ''
-    while queue and rounds < 6:
+    while queue and rounds < 10:
         rounds += 1
         batch = []
         while queue:
