@@ -13,9 +13,9 @@ RES_TYPES = ['800_600']
 # Generation/UI assets known to be absent even on the live demo (runtime falls
 # back to newer-version UIs). Missing files matching this set are tolerated.
 UI_TOLERATED = re.compile(
-    r'^(gui_(desktop|mobile)_v\d+\.(?:json|png)|buttonback\.png|jackpot\.png|load(_amatic)?\.jpg|'
-    r'mystery_jackpot\.json|reelanim\.png|smartphone\.png|tablet\.png|icon_out\.png|wl\.png|'
-    r'wlhelp\.jpg|wthelp\.jpg|wthelptop\.jpg|symbols_help\.jpg|symbols_small\.png|mobile_panels\.json|'
+    r'^(gui_(desktop|mobile)_v\d+\.(?:json|png)|buttonback\.png|jackpot\.png|load[a-z_]*\.(?:jpg|png)|'
+    r'splash[a-z_]*\.(?:jpg|png|json)|respin[a-z_]*\.(?:jpg|png)|mystery_jackpot\.json|reelanim\.png|'
+    r'smartphone\.png|tablet\.png|icon_out\.png|wl\.png|mobile_panels\.json|'
     r'info_[a-z_]+\.(?:png|jpg)|[a-z_]*help[a-z_]*\.(?:png|jpg))$', re.I)
 JS_ALL = re.compile(r'"([A-Za-z0-9_\-./ ]{2,80})"')
 DIRHINT = re.compile(r'[A-Za-z0-9_\-]*/(?:images|sounds)/')
