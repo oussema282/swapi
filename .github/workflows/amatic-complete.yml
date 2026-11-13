@@ -1,0 +1,36 @@
+name: amatic-complete
+on:
+  push:
+    branches: [arena/01a0cba2-swapi]
+    paths:
+      - 'scripts/hunt/amverify.py'
+      - 'scripts/hunt/mirror3.py'
+      - 'scripts/hunt/complete_run.sh'
+      - '.github/workflows/amatic-complete.yml'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  complete:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - name: verify + fill + release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: bash scripts/hunt/complete_run.sh
+      - name: push logs
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b complete-log
+          cp /tmp/comp/complete.log . 2>/dev/null || echo "no log" > complete.log
+          cp /tmp/comp/final_status.json . 2>/dev/null || true
+          cp /tmp/comp/verify_before.json /tmp/comp/verify_after.json . 2>/dev/null || true
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "completion log $(date -u +%FT%TZ)"
+          git push -qf origin complete-log
