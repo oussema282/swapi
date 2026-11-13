@@ -79,7 +79,7 @@ def init(m):
 
 def complete_game(info):
     game = info['game']
-    if info['complete']:
+    if info['status'] == 'complete':
         return f'{game} SKIP(complete)'
     gd = os.path.join(MIRROR, game)
     local = set()
@@ -129,10 +129,9 @@ if __name__ == '__main__':
     rep = json.load(open(report_path))
     todo = []
     for r in rep.values():
-        if not r['complete']:
-            # stash dotted refs in the info dict
-            import copy
-            r2 = dict(r); r2['_dotted'] = r['missing_hard']
+        if r['status'] != 'complete':
+            r2 = dict(r)
+            r2['_dotted'] = r.get('missing_gameplay', []) + r.get('missing_ui', [])
             todo.append(r2)
     print(f'completing {len(todo)} games with {workers} workers (budget {PROBE_BUDGET}/game)', flush=True)
     results = []

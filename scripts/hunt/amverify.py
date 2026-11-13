@@ -10,6 +10,13 @@ import os, re, sys, json
 EXTS_IMG = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
 EXTS_SND = ('.mp3', '.ogg', '.m4a')
 RES_TYPES = ['800_600']
+# Generation/UI assets known to be absent even on the live demo (runtime falls
+# back to newer-version UIs). Missing files matching this set are tolerated.
+UI_TOLERATED = re.compile(
+    r'^(gui_(desktop|mobile)_v\d+\.(?:json|png)|buttonback\.png|jackpot\.png|load(_amatic)?\.jpg|'
+    r'mystery_jackpot\.json|reelanim\.png|smartphone\.png|tablet\.png|icon_out\.png|wl\.png|'
+    r'wlhelp\.jpg|wthelp\.jpg|wthelptop\.jpg|symbols_help\.jpg|symbols_small\.png|mobile_panels\.json|'
+    r'info_[a-z_]+\.(?:png|jpg)|[a-z_]*help[a-z_]*\.(?:png|jpg))$', re.I)
 JS_ALL = re.compile(r'"([A-Za-z0-9_\-./ ]{2,80})"')
 DIRHINT = re.compile(r'[A-Za-z0-9_\-]*/(?:images|sounds)/')
 DOTTED = re.compile(r'^[A-Za-z0-9_\-]+\.(?:png|jpe?g|webp|gif|json|mp3|ogg|m4a|atlas|fnt|css)$', re.I)
@@ -73,7 +80,12 @@ def analyze(mirror, game):
     for dirpath, _, files in os.walk(gd):
         for f in files:
             local.add(f)
-    missing_hard = []; missing_soft = []
+    missing_all = []   # unsatisfied dotted refs after junk/version filtering
+    missing_soft = []  # unsatisfied bare names
+    local_json_bases = set()
+    for f in local:
+        fb, fe = os.path.splitext(f)
+        if fe.lower() == '.json': local_json_bases.add(fb)
     for dirs_, base, exts, orig in probes:
         if any((base + e) in local for e in exts):
             continue
@@ -86,13 +98,30 @@ def analyze(mirror, game):
                                (fe.lower() == '.json' and '.json' in exts)):
                 hit = True; break
         if hit: continue
-        if orig: missing_hard.append(orig)
-        else: missing_soft.append(base)
+        if orig is None:
+            missing_soft.append(base); continue
+        # ignore junk tokens with <=2-char basenames (parser artifacts like "1.jpg")
+        if len(os.path.splitext(orig)[0]) <= 2:
+            missing_soft.append(orig); continue
+        # version fallback: gui_desktop_vN missing but any gui_desktop_vM present
+        m = re.match(r'^gui_(desktop|mobile)_v\d+\.json$', orig)
+        if m and any(f.startswith(f'gui_{m.group(1)}_v') and f.endswith('.json') for f in local_json_bases):
+            missing_soft.append(orig); continue
+        missing_all.append(orig)
+    ui_missing = sorted({x for x in missing_all if UI_TOLERATED.match(x)})
+    gameplay_missing = sorted({x for x in missing_all if not UI_TOLERATED.match(x)})
+    if not missing_all:
+        status = 'complete'
+    elif not gameplay_missing:
+        status = 'playable_ui_partial'
+    else:
+        status = 'broken'
     return {'game': game, 'theme': theme, 'types': types,
             'modules': {k: sorted(v) for k, v in modules.items()},
             'dotted_count': len(dotted), 'bare_count': len(bare),
-            'missing_hard': sorted(set(missing_hard)), 'missing_soft': sorted(set(missing_soft))[:40],
-            'complete': len(missing_hard) == 0}
+            'missing_ui': ui_missing, 'missing_gameplay': gameplay_missing,
+            'missing_soft': missing_soft[:40],
+            'complete': status == 'complete', 'status': status}
 
 if __name__ == '__main__':
     mirror, out = sys.argv[1], sys.argv[2]
@@ -101,10 +130,12 @@ if __name__ == '__main__':
     for g in games:
         r = analyze(mirror, g)
         if r: report[g] = r
-    n_ok = sum(1 for r in report.values() if r['complete'])
+    n_ok = sum(1 for r in report.values() if r['status'] == 'complete')
+    n_ui = sum(1 for r in report.values() if r['status'] == 'playable_ui_partial')
+    n_br = sum(1 for r in report.values() if r['status'] == 'broken')
     with open(out, 'w') as f:
         json.dump(report, f, indent=1)
-    print(f'VERIFY: {n_ok}/{len(report)} complete')
+    print(f'VERIFY: complete={n_ok} playable_ui_partial={n_ui} broken={n_br} of {len(report)}')
     for g, r in report.items():
-        if not r['complete']:
-            print(f"  INCOMPLETE {g}: {len(r['missing_hard'])} missing, e.g. {r['missing_hard'][:6]}")
+        if r['status'] == 'broken':
+            print(f"  BROKEN {g}: gameplay art missing: {r['missing_gameplay'][:6]}")

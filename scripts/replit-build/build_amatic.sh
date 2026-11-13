@@ -87,26 +87,24 @@ echo "clients now: $(ls stage/public/games | wc -l)"
 # ---------- 3c. AM publish list (JS-manifest verification is authoritative) ----------
 python3 - <<'PY'
 import json, os, re
-complete=set()
+publish_from_verify=set(); broken=set()
 vpath='/tmp/build/amfill/mirror/_verify.json'
 if os.path.exists(vpath):
     rep=json.load(open(vpath))
-    complete={g for g,x in rep.items() if x.get('complete')}
+    publish_from_verify={g for g,x in rep.items() if x.get('status') in ('complete','playable_ui_partial')}
+    broken={g for g,x in rep.items() if x.get('status')=='broken'}
 else:
     print('WARNING: _verify.json missing — falling back to canon gate')
     s=open('/tmp/build/amfill/mirror/_canon_summary.txt').read()
     for line in s.splitlines():
         m=re.match(r'(\S+)\s+canon=(\d+)/', line)
-        if m and int(m.group(2))>=180: complete.add(m.group(1))
-incomplete=set()
-if os.path.exists(vpath):
-    incomplete={g for g,x in rep.items() if not x.get('complete')}
+        if m and int(m.group(2))>=180: publish_from_verify.add(m.group(1))
 pack="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM".split()
-publish=sorted(complete|set(pack))
+publish=sorted(publish_from_verify|set(pack))
 with open('/tmp/build/am_names.txt','w') as f:
     f.write('\n'.join(publish)+'\n')
-print(f'AM publish: {len(publish)} ({len(complete)} verified-complete + 5 pack)')
-print('hidden:', ' '.join(sorted(incomplete-set(pack))))
+print(f'AM publish: {len(publish)} (verified complete/ui-partial + 5 pack)')
+print('broken-hidden:', ' '.join(sorted(broken-set(pack))))
 PY
 wc -l /tmp/build/am_names.txt
 

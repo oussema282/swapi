@@ -25,11 +25,12 @@ cp /tmp/comp/verify_before.json mirror/_verify_before.json
 python3 - <<'PY'
 import json
 r=json.load(open('/tmp/comp/verify_after.json'))
-ok=[g for g,x in r.items() if x['complete']]
-bad={g:x['missing_hard'][:8] for g,x in r.items() if not x['complete']}
-json.dump({'complete': sorted(ok), 'incomplete': bad}, open('/tmp/comp/final_status.json','w'), indent=1)
-print('FINAL COMPLETE:', len(ok))
-for g,m in bad.items(): print('  still incomplete:', g, m)
+ok=[g for g,x in r.items() if x['status']=='complete']
+ui=[g for g,x in r.items() if x['status']=='playable_ui_partial']
+bad={g:(x.get('missing_gameplay') or x.get('missing_ui',[]))[:8] for g,x in r.items() if x['status']=='broken'}
+json.dump({'complete': sorted(ok), 'playable_ui_partial': sorted(ui), 'broken': bad}, open('/tmp/comp/final_status.json','w'), indent=1)
+print('FINAL: complete=%d ui_partial=%d broken=%d' % (len(ok), len(ui), len(bad)))
+for g,m in bad.items(): print('  broken:', g, m[:4])
 PY
 
 du -sh mirror
