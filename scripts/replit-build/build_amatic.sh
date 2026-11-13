@@ -86,31 +86,28 @@ echo "clients now: $(ls stage/public/games | wc -l)"
 
 # ---------- 3c. AM publish list (JS-manifest verification is authoritative) ----------
 python3 - <<'PY'
-import json, os, re
-publish_from_verify=set(); broken=set()
-UI_RE = re.compile(r'^(gui_|buttonback\.png$|bonusback\.(?:jpg|png)$|jackpot(\.json|\.png)$|load[a-z_]*\.(?:jpg|png)$|splash|respin|winpanel|mystery_jackpot\.json$|reelanim\.png$|smartphone\.png$|tablet\.png$|icon_out\.png$|wl\.png$|mobile_panels\.json$|info_|[a-z_]*help[a-z_]*\.(?:png|jpg)$)', re.I)
-vpath='/tmp/build/amfill/mirror/_verify.json'
+import json, os
+# Publish ONLY games whose every JS-referenced asset is either present or
+# proven absent on all live demo hosts (the reference deployment runs without
+# them). Critical boot refs (shell css/js, settings scripts) must be present.
+publish=set(); broken=set()
+vpath='/tmp/build/amfill/mirror/_verify_final.json'
 if os.path.exists(vpath):
     rep=json.load(open(vpath))
     for g,x in rep.items():
-        st=x.get('status')
-        mg=x.get('missing_gameplay') or []
-        if st in ('complete','playable_ui_partial') or (mg and all(UI_RE.match(f) for f in mg)):
-            publish_from_verify.add(g)
+        if x['status'] in ('complete','demo_equivalent'):
+            publish.add(g)
         else:
             broken.add(g)
+    print('gate: _verify_final.json ->', {s: sum(1 for v in rep.values() if v['status']==s) for s in ('complete','demo_equivalent','broken')})
 else:
-    print('WARNING: _verify.json missing — falling back to canon gate')
-    s=open('/tmp/build/amfill/mirror/_canon_summary.txt').read()
-    for line in s.splitlines():
-        m=re.match(r'(\S+)\s+canon=(\d+)/', line)
-        if m and int(m.group(2))>=180: publish_from_verify.add(m.group(1))
+    print('GATE INPUT MISSING — _verify_final.json not found; publishing nothing from mirror')
 pack="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM".split()
-publish=sorted(publish_from_verify|set(pack))
+publish_names=sorted(publish|set(pack))
 with open('/tmp/build/am_names.txt','w') as f:
-    f.write('\n'.join(publish)+'\n')
-print(f'AM publish: {len(publish)} (verified complete/ui-partial + 5 pack)')
-print('broken-hidden:', ' '.join(sorted(broken-set(pack))))
+    f.write('\n'.join(publish_names)+'\n')
+print(f'AM publish: {len(publish_names)} ({len(publish)} verified + 5 pack)')
+print('hidden-broken:', ' '.join(sorted(broken-set(pack))))
 PY
 wc -l /tmp/build/am_names.txt
 

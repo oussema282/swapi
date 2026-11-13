@@ -14,24 +14,21 @@ unzip -q prev/amatic-clients.zip -d .
 echo "=== verify (before) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_before.json
 
-echo "=== fill missing from demo ==="
-python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 8
-tail -8 mirror/_fill_summary.txt || true
+echo "=== fill missing from demo (v4: per-ref outcomes + demo404 proof) ==="
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 10
 
-echo "=== verify (after) ==="
-python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_after.json
-cp /tmp/comp/verify_after.json mirror/_verify.json
-cp /tmp/comp/verify_before.json mirror/_verify_before.json
+echo "=== final status ==="
 python3 - <<'PY'
 import json
-r=json.load(open('/tmp/comp/verify_after.json'))
-ok=[g for g,x in r.items() if x['status']=='complete']
-ui=[g for g,x in r.items() if x['status']=='playable_ui_partial']
-bad={g:(x.get('missing_gameplay') or x.get('missing_ui',[]))[:8] for g,x in r.items() if x['status']=='broken'}
-json.dump({'complete': sorted(ok), 'playable_ui_partial': sorted(ui), 'broken': bad}, open('/tmp/comp/final_status.json','w'), indent=1)
-print('FINAL: complete=%d ui_partial=%d broken=%d' % (len(ok), len(ui), len(bad)))
-for g,m in bad.items(): print('  broken:', g, m[:4])
+r=json.load(open('/tmp/comp/mirror/_verify_final.json'))
+from collections import Counter
+c=Counter(v['status'] for v in r.values())
+print('FINAL:', dict(c))
+for g,v in sorted(r.items()):
+    if v['status']=='broken':
+        print('  broken:', g, 'crit:', v.get('critical_missing'), 'budget:', len(v.get('budget',[])))
 PY
+cp /tmp/comp/verify_before.json mirror/_verify_before.json
 
 du -sh mirror
 rm -f amatic-clients.zip part_*
