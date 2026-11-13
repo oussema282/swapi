@@ -88,7 +88,7 @@ echo "clients now: $(ls stage/public/games | wc -l)"
 python3 - <<'PY'
 import json, os, re
 publish_from_verify=set(); broken=set()
-UI_RE = re.compile(r'^(gui_|buttonback\.png$|jackpot(\.json|\.png)$|load[a-z_]*\.(?:jpg|png)$|splash|respin|winpanel|mystery_jackpot\.json$|reelanim\.png$|smartphone\.png$|tablet\.png$|icon_out\.png$|wl\.png$|mobile_panels\.json$|info_|[a-z_]*help[a-z_]*\.(?:png|jpg)$)')
+UI_RE = re.compile(r'^(gui_|buttonback\.png$|bonusback\.(?:jpg|png)$|jackpot(\.json|\.png)$|load[a-z_]*\.(?:jpg|png)$|splash|respin|winpanel|mystery_jackpot\.json$|reelanim\.png$|smartphone\.png$|tablet\.png$|icon_out\.png$|wl\.png$|mobile_panels\.json$|info_|[a-z_]*help[a-z_]*\.(?:png|jpg)$)', re.I)
 vpath='/tmp/build/amfill/mirror/_verify.json'
 if os.path.exists(vpath):
     rep=json.load(open(vpath))
