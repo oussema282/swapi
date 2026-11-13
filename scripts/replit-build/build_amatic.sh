@@ -88,11 +88,17 @@ echo "clients now: $(ls stage/public/games | wc -l)"
 python3 - <<'PY'
 import json, os, re
 publish_from_verify=set(); broken=set()
+UI_RE = re.compile(r'^(gui_|buttonback\.png$|jackpot(\.json|\.png)$|load[a-z_]*\.(?:jpg|png)$|splash|respin|winpanel|mystery_jackpot\.json$|reelanim\.png$|smartphone\.png$|tablet\.png$|icon_out\.png$|wl\.png$|mobile_panels\.json$|info_|[a-z_]*help[a-z_]*\.(?:png|jpg)$)')
 vpath='/tmp/build/amfill/mirror/_verify.json'
 if os.path.exists(vpath):
     rep=json.load(open(vpath))
-    publish_from_verify={g for g,x in rep.items() if x.get('status') in ('complete','playable_ui_partial')}
-    broken={g for g,x in rep.items() if x.get('status')=='broken'}
+    for g,x in rep.items():
+        st=x.get('status')
+        mg=x.get('missing_gameplay') or []
+        if st in ('complete','playable_ui_partial') or (mg and all(UI_RE.match(f) for f in mg)):
+            publish_from_verify.add(g)
+        else:
+            broken.add(g)
 else:
     print('WARNING: _verify.json missing — falling back to canon gate')
     s=open('/tmp/build/amfill/mirror/_canon_summary.txt').read()
