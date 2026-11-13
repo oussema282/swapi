@@ -20,6 +20,8 @@ tail -8 mirror/_fill_summary.txt || true
 
 echo "=== verify (after) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_after.json
+cp /tmp/comp/verify_after.json mirror/_verify.json
+cp /tmp/comp/verify_before.json mirror/_verify_before.json
 python3 - <<'PY'
 import json
 r=json.load(open('/tmp/comp/verify_after.json'))

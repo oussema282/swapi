@@ -84,34 +84,29 @@ if [ ! -d stage/public/games/BingoAM ]; then
 fi
 echo "clients now: $(ls stage/public/games | wc -l)"
 
-# ---------- 3c. AM publish list ----------
-PACK_AM="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM"
+# ---------- 3c. AM publish list (JS-manifest verification is authoritative) ----------
 python3 - <<'PY'
-import re, os
-canon={}
-for line in open('/tmp/build/amfill/mirror/_canon_summary.txt'):
-    m=re.match(r'(\S+)\s+canon=(\d+)/', line)
-    if m: canon[m.group(1)]=int(m.group(2))
-fill={}
-fs='/tmp/build/amfill/mirror/_fill_summary.txt'
-if os.path.exists(fs):
-    for line in open(fs):
-        m=re.match(r'(\S+) fill found=\d+ unresolved=(\d+)', line)
-        if m: fill[m.group(1)]=int(m.group(2))
-strong=[]; weak=[]
-for g,c in canon.items():
-    unresolved=fill.get(g, 999)
-    # strong = solid canon coverage AND the per-game token fill found (nearly) everything
-    if c>=180 and unresolved<=10:
-        strong.append(g)
-    else:
-        weak.append(g)
+import json, os, re
+complete=set()
+vpath='/tmp/build/amfill/mirror/_verify.json'
+if os.path.exists(vpath):
+    rep=json.load(open(vpath))
+    complete={g for g,x in rep.items() if x.get('complete')}
+else:
+    print('WARNING: _verify.json missing — falling back to canon gate')
+    s=open('/tmp/build/amfill/mirror/_canon_summary.txt').read()
+    for line in s.splitlines():
+        m=re.match(r'(\S+)\s+canon=(\d+)/', line)
+        if m and int(m.group(2))>=180: complete.add(m.group(1))
+incomplete=set()
+if os.path.exists(vpath):
+    incomplete={g for g,x in rep.items() if not x.get('complete')}
 pack="AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM BingoAM".split()
+publish=sorted(complete|set(pack))
 with open('/tmp/build/am_names.txt','w') as f:
-    f.write('\n'.join(sorted(set(strong)|set(pack)))+'\n')
-print(f'AM list: {len(set(strong)|set(pack))} publish names ({len(strong)} mirror-strong + {len(pack)} pack); weak-hidden={len(weak)}')
-print('publish:', ' '.join(sorted(set(strong)|set(pack))))
-print('hidden:', ' '.join(sorted(set(weak)-set(pack))))
+    f.write('\n'.join(publish)+'\n')
+print(f'AM publish: {len(publish)} ({len(complete)} verified-complete + 5 pack)')
+print('hidden:', ' '.join(sorted(incomplete-set(pack))))
 PY
 wc -l /tmp/build/am_names.txt
 

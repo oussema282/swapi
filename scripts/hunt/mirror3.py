@@ -7,10 +7,14 @@ Usage: mirror3.py <mirror_dir> <only_failing_json> [workers]
 import os, re, sys, time, subprocess, json, urllib.parse
 from multiprocessing import Pool
 
-BASE = "https://demo4.scriptcasino.ru"
+BASES = ["https://demo4.scriptcasino.ru", "https://demo5.scriptcasino.ru",
+         "https://demo2.scriptcasino.ru", "https://demo3.scriptcasino.ru",
+         "https://demo6.scriptcasino.ru"]
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0"
 EXTS_IMG = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
 EXTS_SND = ('.mp3', '.ogg', '.m4a')
+SERIES = [('symbanim', 22), ('symbols', 10), ('freewheel', 12), ('firework', 4),
+          ('symgame', 12), ('loading', 8), ('jackpot', 6)]
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from amverify import analyze, EXTS_IMG as A_IMG, EXTS_SND as A_SND
 
@@ -66,6 +70,10 @@ def plan_for(info):
         plan.append((dirs, b, exts))
     for b in bare:
         plan.append((dirs, b, EXTS_IMG + EXTS_SND))
+    # loop-built series (JS does "symbanim" + counter): probe numbered variants
+    for base, n in SERIES:
+        for i in range(1, n + 1):
+            plan.append((dirs, f'{base}{i}', EXTS_IMG))
     return plan
 
 MIRROR = None
@@ -87,13 +95,15 @@ def complete_game(info):
         hit = False
         for d in dirs:
             for e in exts:
-                url = f'{BASE}/games/{game}/' + urllib.parse.quote(d + base + e, safe='/')
-                data = fetch(url)
-                if data is not None and len(data) > 60:
-                    fp = os.path.join(gd, d, base + e)
-                    os.makedirs(os.path.dirname(fp), exist_ok=True)
-                    with open(fp, 'wb') as f: f.write(data)
-                    got += 1; hit = True; break
+                for host in BASES:
+                    url = f'{host}/games/{game}/' + urllib.parse.quote(d + base + e, safe='/')
+                    data = fetch(url)
+                    if data is not None and len(data) > 60:
+                        fp = os.path.join(gd, d, base + e)
+                        os.makedirs(os.path.dirname(fp), exist_ok=True)
+                        with open(fp, 'wb') as f: f.write(data)
+                        got += 1; hit = True; break
+                if hit: break
             if hit: break
     return f'{game} filled={got}'
 
