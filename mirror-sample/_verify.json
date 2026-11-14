@@ -1,0 +1,7687 @@
+{
+ "AllWaysWinAM": {
+  "game": "AllWaysWinAM",
+  "theme": "allwayswin",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "allwayswin": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 41,
+  "bare_count": 841,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "reelanim.png",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "ArisingPhoenixAM": {
+  "game": "ArisingPhoenixAM",
+  "theme": "arisingphoenix",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "arisingphoenix": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 45,
+  "bare_count": 855,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_respin_help.jpg",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "respinInfo.jpg",
+   "respin_help.jpg",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "r_info",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "AztecSecretAM": {
+  "game": "AztecSecretAM",
+  "theme": "aztecsecret",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "aztecsecret": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 45,
+  "bare_count": 845,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BeautyFairyAM": {
+  "game": "BeautyFairyAM",
+  "theme": "beautyfairy",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "beautyfairy": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 1009,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "xfx",
+   "mat3",
+   "animations3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "BeautyFairyAM",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "ikf",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "amw",
+   "Twitter",
+   "mousemove",
+   "spe",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "twk",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "BeautyWarriorAM": {
+  "game": "BeautyWarriorAM",
+  "theme": "beautywarrior",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "beautywarrior": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 972,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "gep",
+   "mat3",
+   "animations3",
+   "obe",
+   "graphics",
+   "sans-serif",
+   "jty",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "chv",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "minFPS"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "BellsOnFireAM": {
+  "game": "BellsOnFireAM",
+  "theme": "bellsonfire",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "bellsonfire": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 36,
+  "bare_count": 817,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BellsOnFireHotAM": {
+  "game": "BellsOnFireHotAM",
+  "theme": "bellsonfirehot",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "bellsonfirehot": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 830,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "BellsOnFireHot",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BellsOnFireRomboAM": {
+  "game": "BellsOnFireRomboAM",
+  "theme": "bellsonfirerombo",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "bellsonfirerombo": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 45,
+  "bare_count": 834,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "winPanel.png"
+  ],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "BellsOnFireRombo",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "BigPandaAM": {
+  "game": "BigPandaAM",
+  "theme": "bigpanda",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "bigpanda": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 47,
+  "bare_count": 849,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BillyonaireAM": {
+  "game": "BillyonaireAM",
+  "theme": "billyonaire",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "billyonaire": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 57,
+  "bare_count": 859,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "symbols.json"
+  ],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "Pool",
+   "addfreespin7",
+   "stop_expanding",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "BillysGameAM": {
+  "game": "BillysGameAM",
+  "theme": "billysgame",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "billysgame": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 33,
+  "bare_count": 814,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "reelanim.png",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BlackJackAM": {
+  "game": "BlackJackAM",
+  "theme": "blackjack",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "blackjack": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 17,
+  "bare_count": 672,
+  "missing_ui": [
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "insyes",
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "h_c",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "PARTAGER",
+   "insurancepays",
+   "AUTOSTART",
+   "Son",
+   "webkitAudioContext",
+   "STANNA",
+   "ZVUKA",
+   "btn_c",
+   "place_bets",
+   "loading",
+   "dealer_wins",
+   "dummy",
+   "CARTA",
+   "LEFT",
+   "HRA",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "freeplay",
+   "ERREUR",
+   "chips",
+   "expires",
+   "Polovina",
+   "VEZMI"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BlueDolphinAM": {
+  "game": "BlueDolphinAM",
+  "theme": "bluedolphin",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "bluedolphin": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 40,
+  "bare_count": 832,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "BookOfAztecAM": {
+  "game": "BookOfAztecAM",
+  "theme": "bookofaztec",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "bookofaztec": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 53,
+  "bare_count": 860,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "symbols.json"
+  ],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "BookOfFortuneAM": {
+  "game": "BookOfFortuneAM",
+  "theme": "bookoffortune",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "bookoffortune": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 48,
+  "bare_count": 859,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "symbols.json"
+  ],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "BookOfLordsAM": {
+  "game": "BookOfLordsAM",
+  "theme": "bookoflords",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "bookoflords": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 1004,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "xpw",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "bol_win",
+   "help_bonus_basic",
+   "kte",
+   "minFPS"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "BookOfPharaoAM": {
+  "game": "BookOfPharaoAM",
+  "theme": "bookofpharao",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "bookofpharao": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "BookOfQueenAM": {
+  "game": "BookOfQueenAM",
+  "theme": "bookofqueen",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "bookofqueen": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 1005,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "asv",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "vbk",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "nwq",
+   "defaultVertexSrc",
+   "dummy",
+   "mpx",
+   "blurY",
+   "vls",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "ihi",
+   "yoffset"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "CasanovaAM": {
+  "game": "CasanovaAM",
+  "theme": "casanova",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "casanova": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 46,
+  "bare_count": 841,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "CasinovaAM": {
+  "game": "CasinovaAM",
+  "theme": "casinova",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "casinova": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 52,
+  "bare_count": 851,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "CoolDiamonds2AM": {
+  "game": "CoolDiamonds2AM",
+  "theme": "cooldiamondsii",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "cooldiamondsii": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 832,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DeucesWildAM": {
+  "game": "DeucesWildAM",
+  "theme": "deuceswild",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "deuceswild": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 16,
+  "bare_count": 739,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DiamondCatsAM": {
+  "game": "DiamondCatsAM",
+  "theme": "diamondcats",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "diamondcats": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 839,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DiamondMonkeyAM": {
+  "game": "DiamondMonkeyAM",
+  "theme": "diamondmonkey",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "diamondmonkey": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 51,
+  "bare_count": 852,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DiamondsOnFireAM": {
+  "game": "DiamondsOnFireAM",
+  "theme": "diamondsonfire",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "diamondsonfire": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 34,
+  "bare_count": 832,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DoubleDoubleBonusAM": {
+  "game": "DoubleDoubleBonusAM",
+  "theme": "doubledoublebonus",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "doubledoublebonus": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 65,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "expires",
+   "shadowOffsetX",
+   "slideElem1",
+   "btnsp",
+   "messageTitle",
+   "stylesheet",
+   "alphabetic",
+   "slideElem2",
+   "messagePanel",
+   "messageTopbutton",
+   "buttonTest",
+   "screen",
+   "lineJoin",
+   "canvas",
+   "strokeStyle",
+   "globalAlpha",
+   "buttonPause",
+   "notificationIcon",
+   "buttonLimit",
+   "notificationText",
+   "no-transform",
+   "transparent",
+   "miter",
+   "lineWidth",
+   "miterLimit",
+   "textBaseline",
+   "shadowOffsetY",
+   "webgl-2d",
+   "font",
+   "notificationCounter",
+   "btne",
+   "gameOverlay",
+   "btn1",
+   "messageButton",
+   "textAlign",
+   "canvas2",
+   "messageOverlay",
+   "experimental-webgl",
+   "btnst",
+   "rotateOverlay"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "DragonsGiftAM": {
+  "game": "DragonsGiftAM",
+  "theme": "dragonsgift",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "dragonsgift": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 987,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "animations3",
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "igr",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "wlx",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "dgi_help_wild_symb",
+   "pyg",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "wmu",
+   "dsp"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "DragonsKingdomAM": {
+  "game": "DragonsKingdomAM",
+  "theme": "dragonskingdom",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "dragonskingdom": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 53,
+  "bare_count": 854,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "FS.jpg",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "DragonsKingdomAM",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "DragonsPearlAM": {
+  "game": "DragonsPearlAM",
+  "theme": "dragonspearl",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "dragonspearl": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 44,
+  "bare_count": 835,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Dynamite7AM": {
+  "game": "Dynamite7AM",
+  "theme": "dynamite7",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "dynamite7": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 86,
+  "bare_count": 596,
+  "missing_ui": [
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "load_grandx.jpg",
+   "load_mwc.jpg",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "btn_i_autostart.png",
+   "btn_i_music.png",
+   "btn_ir_exit.png",
+   "btn_ir_menu.png",
+   "btn_ir_next.png",
+   "btn_ir_prev.png",
+   "btn_ir_return.png",
+   "btn_ir_spin.png",
+   "btn_music.png",
+   "btn_nav.png",
+   "btn_s2.png",
+   "btn_sound.png",
+   "btn_statistics.png",
+   "btn_turbo.png",
+   "clubsBtn.png",
+   "diamondBtn.png",
+   "display_effect.png",
+   "effect.png",
+   "hartBtn.png",
+   "icon_autostart.png",
+   "icon_fb.png",
+   "icon_fullscreen.png",
+   "icon_gamble.png",
+   "icon_languages.png",
+   "icon_music.png",
+   "icon_pctablet.png",
+   "icon_smartphone.png",
+   "icon_sound.png",
+   "icon_turbo.png",
+   "jack.png",
+   "king.png",
+   "p_cards.png",
+   "queen.png",
+   "redBtn.png",
+   "spadeBtn.png"
+  ],
+  "missing_soft": [
+   "h.png",
+   "d.png",
+   "c.png",
+   "s.png",
+   "STOPP",
+   "deposit",
+   "sans-serif",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "TASTENKOMBINATIONEN",
+   "SEMBOL",
+   "AUTOSTART",
+   "head",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "webkitAudioContext",
+   "linesd",
+   "btn_c",
+   "gamble2",
+   "real",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "EnchantedCleopatraAM": {
+  "game": "EnchantedCleopatraAM",
+  "theme": "enchantedcleopatra",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "enchantedcleopatra": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 1003,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "animations3",
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "tuw",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "hgz",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "ijq",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "ima",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "zga"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "EyeOfRaAM": {
+  "game": "EyeOfRaAM",
+  "theme": "eyeofra",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "eyeofra": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 837,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "winPanel.png"
+  ],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "Fantastico7AM": {
+  "game": "Fantastico7AM",
+  "theme": "fantastico7",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "fantastico": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "fantastico7": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 86,
+  "bare_count": 596,
+  "missing_ui": [
+   "icon_out.png",
+   "jackpot.png",
+   "load.jpg",
+   "load_amanet.png",
+   "load_amatic.png",
+   "load_grandx.jpg",
+   "load_mwc.jpg",
+   "smartphone.png",
+   "tablet.png",
+   "wlhelp.jpg",
+   "wthelp.jpg",
+   "wthelptop.jpg"
+  ],
+  "missing_gameplay": [
+   "btn_i_autostart.png",
+   "btn_i_music.png",
+   "btn_ir_exit.png",
+   "btn_ir_menu.png",
+   "btn_ir_next.png",
+   "btn_ir_prev.png",
+   "btn_ir_return.png",
+   "btn_ir_spin.png",
+   "btn_music.png",
+   "btn_nav.png",
+   "btn_s2.png",
+   "btn_sound.png",
+   "btn_statistics.png",
+   "btn_turbo.png",
+   "clubsBtn.png",
+   "diamondBtn.png",
+   "display_effect.png",
+   "effect.png",
+   "gamble.jpg",
+   "hartBtn.png",
+   "icon_autostart.png",
+   "icon_fb.png",
+   "icon_fullscreen.png",
+   "icon_gamble.png",
+   "icon_languages.png",
+   "icon_music.png",
+   "icon_pctablet.png",
+   "icon_smartphone.png",
+   "icon_sound.png",
+   "icon_turbo.png",
+   "jack.png",
+   "king.png",
+   "main.png",
+   "p_cards.png",
+   "queen.png",
+   "redBtn.png",
+   "spadeBtn.png",
+   "symbols_small.png",
+   "winPanel.png"
+  ],
+  "missing_soft": [
+   "h.png",
+   "d.png",
+   "c.png",
+   "s.png",
+   "wl.png",
+   "STOPP",
+   "deposit",
+   "sans-serif",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "TASTENKOMBINATIONEN",
+   "SEMBOL",
+   "AUTOSTART",
+   "head",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "webkitAudioContext",
+   "linesd",
+   "btn_c",
+   "gamble2",
+   "real",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "FireAndIceAM": {
+  "game": "FireAndIceAM",
+  "theme": "fireandice",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "fireandice": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 40,
+  "bare_count": 845,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "symbols.json"
+  ],
+  "missing_soft": [
+   "1.jpg",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "FireQueenAM": {
+  "game": "FireQueenAM",
+  "theme": "firequeen",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "firequeen": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "FlyingDutchmanAM": {
+  "game": "FlyingDutchmanAM",
+  "theme": "flyingdutchman",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "flyingdutchman": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 1004,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "animations3",
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "mdz",
+   "defaultVertexSrc",
+   "dummy",
+   "wyv",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "help_bonus_basic",
+   "minFPS",
+   "hlp_symbols"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "FortunasFruitsAM": {
+  "game": "FortunasFruitsAM",
+  "theme": "fortunasfruits",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "fortunasfruits": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 38,
+  "bare_count": 822,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "FruitExpressAM": {
+  "game": "FruitExpressAM",
+  "theme": "fruitexpress",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "fruitexpress": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 962,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "giu",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "xlq",
+   "minFPS",
+   "hlp_symbols",
+   "load_interface",
+   "ico_setting"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "FruitPokerAM": {
+  "game": "FruitPokerAM",
+  "theme": "fruitcardpoker",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "fruitcardpoker": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 28,
+  "bare_count": 756,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay",
+   "icon_as"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "GemStarAM": {
+  "game": "GemStarAM",
+  "theme": "gemstar",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "gemstar": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 44,
+  "bare_count": 835,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_respin_help.jpg",
+   "mystery_jackpot.json",
+   "respin.png",
+   "respin_help.jpg",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "impact",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "GoldenBookAM": {
+  "game": "GoldenBookAM",
+  "theme": "goldenbook",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "goldenbook": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 41,
+  "bare_count": 835,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "GoldenJokerAM": {
+  "game": "GoldenJokerAM",
+  "theme": "goldenjoker",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "goldenjoker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 989,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "animations3",
+   "mat3",
+   "ofd",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "fdt",
+   "info_ios_private_mode",
+   "ukd",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "wnb",
+   "blurY",
+   "info_restart",
+   "yol",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "gqh"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "GrandCasanovaAM": {
+  "game": "GrandCasanovaAM",
+  "theme": "grandcasanova",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "grandcasanova": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "GrandFruitsAM": {
+  "game": "GrandFruitsAM",
+  "theme": "grandfruits",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "grandfruits": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "GrandTigerAM": {
+  "game": "GrandTigerAM",
+  "theme": "grandtiger",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "grandtiger": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 38,
+  "bare_count": 849,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "GrandXAM": {
+  "game": "GrandXAM",
+  "theme": "grandx",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "grandx": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 38,
+  "bare_count": 841,
+  "missing_ui": [
+   "gui_desktop_v17.json",
+   "gui_mobile_v29.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Hot27AM": {
+  "game": "Hot27AM",
+  "theme": "twentyseven",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "twentyseven": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 30,
+  "bare_count": 809,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Hot40AM": {
+  "game": "Hot40AM",
+  "theme": "hot40",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hot40": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 943,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "obe",
+   "graphics",
+   "sans-serif",
+   "jya",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "hbc",
+   "gamble_btn",
+   "bonus_win",
+   "zcn",
+   "wak",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "yoffset",
+   "dsp",
+   "uyv"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "Hot7AM": {
+  "game": "Hot7AM",
+  "theme": "hot7",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "hot7": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 29,
+  "bare_count": 806,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Hot7DiceAM": {
+  "game": "Hot7DiceAM",
+  "theme": "hot7dice",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "hot7dice": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 26,
+  "bare_count": 822,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "load.jpg",
+   "mystery_jackpot.json"
+  ],
+  "missing_gameplay": [
+   "jackpot.json"
+  ],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "Hot7Dice",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "Hot81AM": {
+  "game": "Hot81AM",
+  "theme": "hot81",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hot81": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 36,
+  "bare_count": 815,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotChoiceAM": {
+  "game": "HotChoiceAM",
+  "theme": "hotchoice",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotchoice": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 39,
+  "bare_count": 843,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "bonuschance5",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotDiamondsAM": {
+  "game": "HotDiamondsAM",
+  "theme": "hotdiamonds",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "hotdiamonds": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 41,
+  "bare_count": 831,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotFruits100AM": {
+  "game": "HotFruits100AM",
+  "theme": "hotfruits100",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotfruits100": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 956,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "zgk",
+   "gamesetting_adjustment",
+   "rrd",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "lfo",
+   "defaultVertexSrc",
+   "spq",
+   "dummy",
+   "blurY",
+   "ast",
+   "info_restart",
+   "FPS",
+   "kkd",
+   "mini_diamond",
+   "yoffset"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "HotFruits20AM": {
+  "game": "HotFruits20AM",
+  "theme": "hotfruits20",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotfruits20": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 956,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "lrx",
+   "asv",
+   "count_up_end",
+   "cbx_selected",
+   "zou",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "zhs",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "lro",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "fck",
+   "yoffset"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "HotFruits40AM": {
+  "game": "HotFruits40AM",
+  "theme": "hotfruits40",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotfruits40": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 956,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "tbx",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "gamble_btn",
+   "bonus_win",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "qgt",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "ytt",
+   "reality_check_session",
+   "dig",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "agr",
+   "dummy",
+   "mkq",
+   "bbf",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "HotNeonAM": {
+  "game": "HotNeonAM",
+  "theme": "hotneon",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "hotneon": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 35,
+  "bare_count": 828,
+  "missing_ui": [
+   "gui_desktop_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotScatterAM": {
+  "game": "HotScatterAM",
+  "theme": "hotscatter",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotscatter": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 40,
+  "bare_count": 828,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotScatterDiceAM": {
+  "game": "HotScatterDiceAM",
+  "theme": "hotscatterdice",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hotscatterdice": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 37,
+  "bare_count": 845,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "load.jpg",
+   "mystery_jackpot.json"
+  ],
+  "missing_gameplay": [
+   "jackpot.json"
+  ],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "HotStarAM": {
+  "game": "HotStarAM",
+  "theme": "hotstar",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "hotstar": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 33,
+  "bare_count": 812,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HotTwentyAM": {
+  "game": "HotTwentyAM",
+  "theme": "hottwenty",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "hottwenty": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 36,
+  "bare_count": 807,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "HottestFruits20AM": {
+  "game": "HottestFruits20AM",
+  "theme": "hottestfruits20",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hottestfruits20": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "HottestFruits40AM": {
+  "game": "HottestFruits40AM",
+  "theme": "hottestfruits40",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "hottestfruits40": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "JacksOrBetterAM": {
+  "game": "JacksOrBetterAM",
+  "theme": "jacksorbetter",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "jacksorbetter": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 18,
+  "bare_count": 720,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "load.jpg",
+   "load_amatic.png",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "JokerCardAM": {
+  "game": "JokerCardAM",
+  "theme": "jokercardpoker",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "jokercardpoker": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 22,
+  "bare_count": 743,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "gui_desktop_v25.json",
+   "gui_mobile_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "win31",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "JokerPokerAM": {
+  "game": "JokerPokerAM",
+  "theme": "jokerpokerpoker",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "jokerpokerpoker": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 15,
+  "bare_count": 734,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "KingsCrownAM": {
+  "game": "KingsCrownAM",
+  "theme": "kingscrown",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "kingscrown": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 32,
+  "bare_count": 810,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png",
+   "wlhelp.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LaGranAventuraAM": {
+  "game": "LaGranAventuraAM",
+  "theme": "lagranaventura",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "lagranaventura": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 39,
+  "bare_count": 847,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "select_symb_",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LadyJokerAM": {
+  "game": "LadyJokerAM",
+  "theme": "ladyjoker",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "ladyjoker": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 41,
+  "bare_count": 823,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LightingHotAM": {
+  "game": "LightingHotAM",
+  "theme": "lightinghot",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "lightninghot": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "lightinghot": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 32,
+  "bare_count": 653,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v13.json",
+   "gui_mobile_v13.json",
+   "icon_out.png",
+   "load.jpg",
+   "load_amanet.png",
+   "load_amatic.png",
+   "mobile_panels.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png",
+   "wlhelp.jpg",
+   "wthelp.jpg",
+   "wthelptop.jpg"
+  ],
+  "missing_gameplay": [
+   "main.png",
+   "maskmultiplier.png",
+   "masks.json",
+   "mobile_gamble.jpg",
+   "symbols.json",
+   "symbols_small.png",
+   "winPanel.png",
+   "winmultiplier.png"
+  ],
+  "missing_soft": [
+   "wl.png",
+   "STOPP",
+   "sans-serif",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "EUR",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "LightningHot",
+   "SEMBOL",
+   "AUTOSTART",
+   "head",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "webkitAudioContext",
+   "linesd",
+   "btn_c",
+   "gamble2",
+   "real",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK",
+   "NYERT"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "LovelyLadyAM": {
+  "game": "LovelyLadyAM",
+  "theme": "ladyluck",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "ladyluck": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 44,
+  "bare_count": 833,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LuckyBellsAM": {
+  "game": "LuckyBellsAM",
+  "theme": "luckybells",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "luckybells": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 38,
+  "bare_count": 812,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LuckyCoinAM": {
+  "game": "LuckyCoinAM",
+  "theme": "luckycoin",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "luckycoin": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 43,
+  "bare_count": 844,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "LuckyCoinAM",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "LuckyJoker20AM": {
+  "game": "LuckyJoker20AM",
+  "theme": "luckyjoker20",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "luckyjoker20": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 963,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "dej",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "gamble_btn",
+   "bonus_win",
+   "ale",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "lj2_help_wild_symb_paytable",
+   "lj2_help_wild_symb2",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "hro",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "tyf",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "duq",
+   "mini_diamond"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "LuckyJoker5AM": {
+  "game": "LuckyJoker5AM",
+  "theme": "luckyjoker5",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "luckyjoker5": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 963,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "jwa",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "count_up_4",
+   "gamble_btn",
+   "bonus_win",
+   "kqc",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "fhp",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "dqd",
+   "ufe",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "fqm",
+   "info_restart",
+   "wjb",
+   "FPS",
+   "mini_diamond"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "LuckyZodiacAM": {
+  "game": "LuckyZodiacAM",
+  "theme": "luckyzodiac",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "luckyzodiac": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 44,
+  "bare_count": 873,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "replace",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MagicForestAM": {
+  "game": "MagicForestAM",
+  "theme": "magicforest",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "magicforest": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 47,
+  "bare_count": 842,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MagicIdolAM": {
+  "game": "MagicIdolAM",
+  "theme": "magicidol",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "magicidol": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 39,
+  "bare_count": 828,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MagicOwlAM": {
+  "game": "MagicOwlAM",
+  "theme": "magicowl",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "magicowl": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 38,
+  "bare_count": 843,
+  "missing_ui": [
+   "gui_desktop_v17.json",
+   "gui_mobile_v29.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MermaidsGoldAM": {
+  "game": "MermaidsGoldAM",
+  "theme": "mermaidsgold",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "mermaidsgold": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 843,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MerryFruitsAM": {
+  "game": "MerryFruitsAM",
+  "theme": "merryfruits",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "merryfruits": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 33,
+  "bare_count": 807,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MultiWinAM": {
+  "game": "MultiWinAM",
+  "theme": "multicardwin",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "multicardwin": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 20,
+  "bare_count": 745,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "gui_desktop_v25.json",
+   "gui_mobile_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay",
+   "icon_as"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "MultiWinTripleAM": {
+  "game": "MultiWinTripleAM",
+  "theme": "multicardwintriple",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "multicardwin": [
+    "images",
+    "sounds"
+   ],
+   "multicardwintriple": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "poker": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 20,
+  "bare_count": 746,
+  "missing_ui": [
+   "gui_desktop_v15.json",
+   "gui_desktop_v25.json",
+   "gui_mobile_v15.json",
+   "load.jpg"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "AUTOSTART",
+   "FLUSH",
+   "Son",
+   "lmincredit",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "BAJO",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT",
+   "NOIR",
+   "LOW",
+   "maxcreditd",
+   "freeplay",
+   "icon_as"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "PartyNightAM": {
+  "game": "PartyNightAM",
+  "theme": "partynight",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "partynight": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 990,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "wvt",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "beams_",
+   "gamble_btn",
+   "bonus_win",
+   "hes",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "PartyNightAM",
+   "Twitter",
+   "mousemove",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "gkf",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "mini_diamond",
+   "gzu",
+   "yoffset",
+   "dsp"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "PartyTimeAM": {
+  "game": "PartyTimeAM",
+  "theme": "partytime",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "partytime": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 35,
+  "bare_count": 836,
+  "missing_ui": [
+   "gui_desktop_v17.json",
+   "gui_mobile_v29.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "wl.png",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "RedChilliAM": {
+  "game": "RedChilliAM",
+  "theme": "redchilli",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "redchilli": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 48,
+  "bare_count": 834,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "addfreespin_",
+   "SEMBOL",
+   "RedChilli",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "RomanLegionAM": {
+  "game": "RomanLegionAM",
+  "theme": "romanlegion",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "romanlegion": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 95,
+  "bare_count": 652,
+  "missing_ui": [
+   "btn_i_help.png",
+   "buttonback.png",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "load_grandx.jpg",
+   "load_mwc.jpg",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [
+   "btn_i_autostart.png",
+   "btn_i_bet.png",
+   "btn_i_close.png",
+   "btn_i_deposit.png",
+   "btn_i_design.png",
+   "btn_i_exit.png",
+   "btn_i_fullscreen.png",
+   "btn_i_gamble.png",
+   "btn_i_history.png",
+   "btn_i_info.png",
+   "btn_i_menu.png",
+   "btn_i_music.png",
+   "btn_i_next.png",
+   "btn_i_prev.png",
+   "btn_i_return.png",
+   "btn_i_settings.png",
+   "btn_i_sound.png",
+   "btn_i_spin.png",
+   "btn_i_statistics.png",
+   "btn_i_turbo.png",
+   "btn_ir_exit.png",
+   "btn_ir_menu.png",
+   "btn_ir_next.png",
+   "btn_ir_prev.png",
+   "btn_ir_return.png",
+   "btn_ir_spin.png",
+   "btn_music.png",
+   "btn_nav.png",
+   "btn_s2.png",
+   "btn_sound.png",
+   "btn_statistics.png",
+   "btn_turbo.png",
+   "clubsBtn.png",
+   "diamondBtn.png",
+   "display_effect.png",
+   "effect.png",
+   "hartBtn.png",
+   "icon_autostart.png",
+   "icon_fb.png",
+   "icon_fullscreen.png",
+   "icon_gamble.png",
+   "icon_languages.png",
+   "icon_music.png",
+   "icon_pctablet.png",
+   "icon_smartphone.png",
+   "icon_sound.png",
+   "icon_turbo.png",
+   "jack.png",
+   "king.png",
+   "p_cards.png",
+   "queen.png",
+   "redBtn.png",
+   "spadeBtn.png"
+  ],
+  "missing_soft": [
+   "h.png",
+   "d.png",
+   "c.png",
+   "s.png",
+   "bonusstop2",
+   "STOPP",
+   "deposit",
+   "sans-serif",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "EUR",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "TASTENKOMBINATIONEN",
+   "SEMBOL",
+   "AUTOSTART",
+   "head",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "webkitAudioContext",
+   "linesd",
+   "btn_c",
+   "gamble2",
+   "real",
+   "loading",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "anim11",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "RouletteRoyalAM": {
+  "game": "RouletteRoyalAM",
+  "theme": "rouletteroyal",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "roulette": [
+    "images",
+    "sounds"
+   ],
+   "rouletteroyal": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 39,
+  "bare_count": 794,
+  "missing_ui": [
+   "load.jpg"
+  ],
+  "missing_gameplay": [
+   "ball.png",
+   "big_serie.png",
+   "numbers.png",
+   "orphelins_cheval.png",
+   "orphelins_plein.png",
+   "racebet.png",
+   "racebet_highlight.png",
+   "serie_5_8.png",
+   "series.png",
+   "table.png",
+   "table_highlight.png",
+   "wheel.png",
+   "wheel_shadow.png",
+   "wheel_spin.png",
+   "wheel_top.png",
+   "zero_game.png"
+  ],
+  "missing_soft": [
+   "j3.png",
+   "j1.png",
+   "j2.png",
+   "j5.png",
+   "j4.png",
+   "STOPP",
+   "deposit",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "settings",
+   "F11",
+   "MESA",
+   "Pool",
+   "Docena",
+   "RECHTS",
+   "POOLIK",
+   "btn_st",
+   "GUARDAR",
+   "SALVESTA",
+   "AUTOSTART",
+   "Son",
+   "odd",
+   "Ryzyka",
+   "webkitAudioContext",
+   "ZVUKA",
+   "Zebrano",
+   "loading",
+   "LEFT",
+   "SALVAR",
+   "HRA",
+   "Operatsioon",
+   "ISPLATA",
+   "sessionValue8",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VITESSE",
+   "NYERT"
+  ],
+  "complete": false,
+  "status": "broken"
+ },
+ "RoyalUnicornAM": {
+  "game": "RoyalUnicornAM",
+  "theme": "royalunicorn",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "royalunicorn": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 47,
+  "bare_count": 853,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "FS.jpg",
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "SakuraFruitsAM": {
+  "game": "SakuraFruitsAM",
+  "theme": "sakurafruits",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "sakurafruits": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 955,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "mat3",
+   "graphics",
+   "sans-serif",
+   "gamesetting_adjustment",
+   "slf",
+   "msImageSmoothingEnabled",
+   "big_1",
+   "count_up_end",
+   "cbx_selected",
+   "dre",
+   "ffr",
+   "CanvasSpriteRenderer",
+   "gamble_dsp_big",
+   "lineHeight",
+   "hew",
+   "kmw",
+   "avv",
+   "gamble_btn",
+   "bonus_win",
+   "afx",
+   "particle",
+   "autoplay_games",
+   "info_ios_private_mode",
+   "black_5",
+   "webkit-playsinline",
+   "webkitAudioContext",
+   "reality_check_session",
+   "Twitter",
+   "mousemove",
+   "kik",
+   "card_red",
+   "loading",
+   "hlp_btn_highlight",
+   "ico_statistic",
+   "defaultVertexSrc",
+   "dummy",
+   "blurY",
+   "info_restart",
+   "FPS",
+   "erd"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "SakuraSecretAM": {
+  "game": "SakuraSecretAM",
+  "theme": "sakurasecret",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "sakurasecret": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "TensOrBetterAM": {
+  "game": "TensOrBetterAM",
+  "theme": "tensorbetter",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "tensorbetter": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 1,
+  "bare_count": 65,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "expires",
+   "shadowOffsetX",
+   "slideElem1",
+   "btnsp",
+   "messageTitle",
+   "stylesheet",
+   "alphabetic",
+   "slideElem2",
+   "messagePanel",
+   "messageTopbutton",
+   "buttonTest",
+   "screen",
+   "lineJoin",
+   "canvas",
+   "strokeStyle",
+   "globalAlpha",
+   "buttonPause",
+   "notificationIcon",
+   "buttonLimit",
+   "notificationText",
+   "no-transform",
+   "transparent",
+   "miter",
+   "lineWidth",
+   "miterLimit",
+   "textBaseline",
+   "shadowOffsetY",
+   "webgl-2d",
+   "font",
+   "notificationCounter",
+   "btne",
+   "gameOverlay",
+   "btn1",
+   "messageButton",
+   "textAlign",
+   "canvas2",
+   "messageOverlay",
+   "experimental-webgl",
+   "btnst",
+   "rotateOverlay"
+  ],
+  "complete": true,
+  "status": "complete"
+ },
+ "TweetyBirdsAM": {
+  "game": "TweetyBirdsAM",
+  "theme": "tweetybirds",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "tweetybirds": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 45,
+  "bare_count": 832,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "reelanim.png",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Ultra7AM": {
+  "game": "Ultra7AM",
+  "theme": "ultraseven",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "ultraseven": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 30,
+  "bare_count": 805,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "VampiresAM": {
+  "game": "VampiresAM",
+  "theme": "vampires",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "vampires": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 41,
+  "bare_count": 853,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "addfreespin7",
+   "stop_expanding",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "freespinend",
+   "BACKSPACE"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "Wild7AM": {
+  "game": "Wild7AM",
+  "theme": "wild7",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "wild7": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 35,
+  "bare_count": 809,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "WildDiamondsAM": {
+  "game": "WildDiamondsAM",
+  "theme": "wilddiamonds",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "wilddiamonds": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 0,
+  "bare_count": 0,
+  "missing_ui": [],
+  "missing_gameplay": [],
+  "missing_soft": [],
+  "complete": true,
+  "status": "complete"
+ },
+ "WildDragonAM": {
+  "game": "WildDragonAM",
+  "theme": "wilddragon",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "wilddragon": [
+    "images",
+    "sounds"
+   ],
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 30,
+  "bare_count": 816,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "WildRespinAM": {
+  "game": "WildRespinAM",
+  "theme": "wildrespin",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "wildrespin": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 42,
+  "bare_count": 852,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_respin_help.jpg",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "respinInfo.jpg",
+   "respin_help.jpg",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "h_winlines40",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "r_info",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "WildSharkAM": {
+  "game": "WildSharkAM",
+  "theme": "wildshark",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ],
+   "wildshark": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 46,
+  "bare_count": 834,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "WildStarsAM": {
+  "game": "WildStarsAM",
+  "theme": "wildstars",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "wildstars": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 34,
+  "bare_count": 810,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mystery_jackpot.json",
+   "respin.png",
+   "respin_help.jpg",
+   "respininfo.png",
+   "smartphone.png",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "freespininit",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "BACKSPACE",
+   "Kogupanus",
+   "auto",
+   "btn_a",
+   "VONALAK"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ },
+ "WolfMoonAM": {
+  "game": "WolfMoonAM",
+  "theme": "wolfmoon",
+  "types": [
+   "800_600"
+  ],
+  "modules": {
+   "slot": [
+    "images",
+    "sounds"
+   ],
+   "basic": [
+    "images",
+    "sounds"
+   ],
+   "wolfmoon": [
+    "images",
+    "sounds"
+   ],
+   "gamble": [
+    "images",
+    "sounds"
+   ]
+  },
+  "dotted_count": 46,
+  "bare_count": 848,
+  "missing_ui": [
+   "buttonback.png",
+   "gui_desktop_v17.json",
+   "gui_mobile_v17.json",
+   "jackpot.png",
+   "load.jpg",
+   "load_amatic.png",
+   "mobile_symbol_help.jpg",
+   "mystery_jackpot.json",
+   "smartphone.png",
+   "symbol_help.jpg",
+   "tablet.png"
+  ],
+  "missing_gameplay": [],
+  "missing_soft": [
+   "bonusstop2",
+   "STOPP",
+   "MENY",
+   "sans-serif",
+   "Pokupljeno",
+   "mj_label",
+   "g_jake",
+   "settings",
+   "F11",
+   "Pool",
+   "RECHTS",
+   "POOLIK",
+   "SYMBOLS",
+   "btn_st",
+   "SEMBOL",
+   "AUTOSTART",
+   "Son",
+   "lmincredit",
+   "GEWINNHISTORIE",
+   "MODURI",
+   "webkitAudioContext",
+   "linesd",
+   "ZVUKA",
+   "btn_c",
+   "gamble2",
+   "bonusstop5",
+   "loading",
+   "VINSTHISTORIK",
+   "cmincredit",
+   "dummy",
+   "settingt",
+   "LEFT",
+   "mbuttons",
+   "autot",
+   "btn_asp",
+   "HRA",
+   "anim11",
+   "freespinend",
+   "BACKSPACE",
+   "Kogupanus"
+  ],
+  "complete": false,
+  "status": "playable_ui_partial"
+ }
+}

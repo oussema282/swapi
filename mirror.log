@@ -1,0 +1,582 @@
++ mkdir -p /tmp/hunt2/prev
++ gh release download amatic-clients -R oussema282/swapi -D /tmp/hunt2/prev
++ unzip -q -o /tmp/hunt2/prev/amatic-clients.zip -d /tmp/hunt2/prev
++ rsync -a /tmp/hunt2/prev/mirror/ /tmp/hunt2/mirror/
++ echo 'resumed from previous release'
+resumed from previous release
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror.py /home/runner/work/swapi/swapi/scripts/gapscan/am_hunt.txt /tmp/hunt2/mirror 4
+mirroring 102 AM games from https://demo4.scriptcasino.ru with 4 workers
+   AllWaysWinAM SKIP(already done)
+   ArisingPhoenixAM SKIP(already done)
+   AztecSecretAM SKIP(already done)
+   BeautyFairyAM SKIP(already done)
+   BeautyWarriorAM SKIP(already done)
+   BellsOnFireAM SKIP(already done)
+   BellsOnFireHotAM SKIP(already done)
+   BellsOnFireRomboAM SKIP(already done)
+   BigPandaAM SKIP(already done)
+   BillyonaireAM SKIP(already done)
+   BillysGameAM SKIP(already done)
+   BlackJackAM SKIP(already done)
+   BlueDolphinAM SKIP(already done)
+   BookOfAztecAM SKIP(already done)
+   BookOfFortuneAM SKIP(already done)
+   BookOfLordsAM SKIP(already done)
+   BookOfPharaoAM SKIP(already done)
+   BookOfQueenAM SKIP(already done)
+   CasanovaAM SKIP(already done)
+   CasinovaAM SKIP(already done)
+   CoolDiamonds2AM SKIP(already done)
+   DeucesWildAM SKIP(already done)
+   DiamondCatsAM SKIP(already done)
+   DiamondMonkeyAM SKIP(already done)
+   DiamondsOnFireAM SKIP(already done)
+   DoubleDoubleBonusAM SKIP(already done)
+   DragonsGiftAM SKIP(already done)
+   DragonsKingdomAM SKIP(already done)
+   DragonsPearlAM SKIP(already done)
+   Dynamite7AM SKIP(already done)
+   EnchantedCleopatraAM SKIP(already done)
+   EyeOfRaAM SKIP(already done)
+   Fantastico7AM SKIP(already done)
+   FireAndIceAM SKIP(already done)
+   FireQueenAM SKIP(already done)
+   FlyingDutchmanAM SKIP(already done)
+   FortunasFruitsAM SKIP(already done)
+   FruitExpressAM SKIP(already done)
+   FruitPokerAM SKIP(already done)
+   GemStarAM SKIP(already done)
+   GoldenBookAM SKIP(already done)
+   GoldenJokerAM SKIP(already done)
+   GrandCasanovaAM SKIP(already done)
+   GrandFruitsAM SKIP(already done)
+   GrandTigerAM SKIP(already done)
+   GrandXAM SKIP(already done)
+   Hot27AM SKIP(already done)
+   Hot40AM SKIP(already done)
+   Hot7AM SKIP(already done)
+   Hot7DiceAM SKIP(already done)
+   Hot81AM SKIP(already done)
+   HotChoiceAM SKIP(already done)
+   HotDiamondsAM SKIP(already done)
+   HotFruits100AM SKIP(already done)
+   HotFruits20AM SKIP(already done)
+   HotFruits40AM SKIP(already done)
+   HotNeonAM SKIP(already done)
+   HotScatterAM SKIP(already done)
+   HotScatterDiceAM SKIP(already done)
+   HotStarAM SKIP(already done)
+   HotTwentyAM SKIP(already done)
+   HottestFruits20AM SKIP(already done)
+   HottestFruits40AM SKIP(already done)
+   JacksOrBetterAM SKIP(already done)
+   JokerCardAM SKIP(already done)
+   JokerPokerAM SKIP(already done)
+   KingsCrownAM SKIP(already done)
+   LaGranAventuraAM SKIP(already done)
+   LadyJokerAM SKIP(already done)
+   LightingHotAM SKIP(already done)
+   LuckyBellsAM SKIP(already done)
+   LuckyCoinAM SKIP(already done)
+   LuckyJoker20AM SKIP(already done)
+   LovelyLadyAM SKIP(already done)
+   LuckyJoker5AM SKIP(already done)
+   MagicForestAM SKIP(already done)
+   LuckyZodiacAM SKIP(already done)
+   MagicIdolAM SKIP(already done)
+   MagicOwlAM SKIP(already done)
+   MermaidsGoldAM SKIP(already done)
+   MerryFruitsAM SKIP(already done)
+   MultiWinAM SKIP(already done)
+   MultiWinTripleAM SKIP(already done)
+   PartyNightAM SKIP(already done)
+   PartyTimeAM SKIP(already done)
+   RedChilliAM SKIP(already done)
+   RomanLegionAM SKIP(already done)
+   RouletteRoyalAM SKIP(already done)
+   RoyalUnicornAM SKIP(already done)
+   SakuraFruitsAM SKIP(already done)
+   SakuraSecretAM SKIP(already done)
+   TensOrBetterAM SKIP(already done)
+   TweetyBirdsAM SKIP(already done)
+   Ultra7AM SKIP(already done)
+   VampiresAM SKIP(already done)
+   Wild7AM SKIP(already done)
+   WildDiamondsAM SKIP(already done)
+   WildDragonAM SKIP(already done)
+   WildRespinAM SKIP(already done)
+   WildSharkAM SKIP(already done)
+   WildStarsAM SKIP(already done)
+   WolfMoonAM SKIP(already done)
+MIRROR OK: 0/102 games mirrored
++ tail -5 /tmp/hunt2/mirror/_summary.txt
+WildSharkAM SKIP(already done)
+WildStarsAM SKIP(already done)
+WolfMoonAM SKIP(already done)
+
+OK games: 0/102
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror2.py /home/runner/work/swapi/swapi/scripts/gapscan/am_hunt.txt /tmp/hunt2/mirror /home/runner/work/swapi/swapi/scripts/hunt/canon 8
+canon probe: 102 games, 8 workers
+   AllWaysWinAM canon=213/336 newbytes=0KB theme=allwayswin
+   ArisingPhoenixAM canon=186/336 newbytes=0KB theme=arisingphoenix
+   AztecSecretAM canon=217/336 newbytes=0KB theme=aztecsecret
+   BeautyFairyAM canon=18/336 newbytes=0KB theme=beautyfairy
+   BeautyWarriorAM canon=18/336 newbytes=0KB theme=beautywarrior
+   BellsOnFireAM canon=192/336 newbytes=0KB theme=bellsonfire
+   BellsOnFireHotAM canon=220/336 newbytes=0KB theme=bellsonfirehot
+   BellsOnFireRomboAM canon=219/336 newbytes=0KB theme=bellsonfirerombo
+   BigPandaAM canon=227/336 newbytes=0KB theme=bigpanda
+   BillyonaireAM canon=233/336 newbytes=0KB theme=billyonaire
+   BillysGameAM canon=171/336 newbytes=0KB theme=billysgame
+   BlackJackAM canon=13/336 newbytes=0KB theme=blackjack
+   BlueDolphinAM canon=229/336 newbytes=0KB theme=bluedolphin
+   BookOfAztecAM canon=231/336 newbytes=0KB theme=bookofaztec
+   BookOfFortuneAM canon=230/336 newbytes=0KB theme=bookoffortune
+   BookOfLordsAM canon=22/336 newbytes=0KB theme=bookoflords
+   BookOfPharaoAM SKIP(no shell on demo)
+   BookOfQueenAM canon=22/336 newbytes=0KB theme=bookofqueen
+   CasanovaAM canon=235/336 newbytes=0KB theme=casanova
+   CasinovaAM canon=239/336 newbytes=0KB theme=casinova
+   CoolDiamonds2AM canon=219/336 newbytes=0KB theme=cooldiamondsii
+   DeucesWildAM canon=99/355 newbytes=0KB theme=deuceswild
+   DiamondCatsAM canon=221/336 newbytes=0KB theme=diamondcats
+   DiamondMonkeyAM canon=233/336 newbytes=0KB theme=diamondmonkey
+   DiamondsOnFireAM canon=159/336 newbytes=0KB theme=diamondsonfire
+   DoubleDoubleBonusAM canon=81/336 newbytes=0KB theme=doubledoublebonus
+   DragonsGiftAM canon=22/336 newbytes=0KB theme=dragonsgift
+   DragonsKingdomAM canon=232/336 newbytes=0KB theme=dragonskingdom
+   DragonsPearlAM canon=208/336 newbytes=0KB theme=dragonspearl
+   Dynamite7AM canon=171/336 newbytes=0KB theme=dynamite7
+   EnchantedCleopatraAM canon=35/336 newbytes=0KB theme=enchantedcleopatra
+   EyeOfRaAM canon=227/336 newbytes=0KB theme=eyeofra
+   Fantastico7AM canon=130/336 newbytes=0KB theme=fantastico7
+   FireAndIceAM canon=220/336 newbytes=0KB theme=fireandice
+   FireQueenAM SKIP(no shell on demo)
+   FlyingDutchmanAM canon=30/336 newbytes=0KB theme=flyingdutchman
+   FortunasFruitsAM canon=177/336 newbytes=0KB theme=fortunasfruits
+   FruitExpressAM canon=24/336 newbytes=0KB theme=fruitexpress
+   FruitPokerAM canon=99/355 newbytes=0KB theme=fruitcardpoker
+   GemStarAM canon=140/336 newbytes=0KB theme=gemstar
+   GoldenBookAM canon=227/336 newbytes=0KB theme=goldenbook
+   GoldenJokerAM canon=30/336 newbytes=0KB theme=goldenjoker
+   GrandCasanovaAM SKIP(no shell on demo)
+   GrandFruitsAM SKIP(no shell on demo)
+   GrandTigerAM canon=213/336 newbytes=0KB theme=grandtiger
+   GrandXAM canon=201/336 newbytes=0KB theme=grandx
+   Hot27AM canon=170/336 newbytes=0KB theme=twentyseven
+   Hot40AM canon=26/336 newbytes=0KB theme=hot40
+   Hot7AM canon=185/336 newbytes=0KB theme=hot7
+   Hot7DiceAM canon=181/336 newbytes=0KB theme=hot7dice
+   Hot81AM canon=190/336 newbytes=0KB theme=hot81
+   HotChoiceAM canon=199/336 newbytes=0KB theme=hotchoice
+   HotDiamondsAM canon=222/336 newbytes=0KB theme=hotdiamonds
+   HotFruits100AM canon=14/336 newbytes=0KB theme=hotfruits100
+   HotFruits20AM canon=14/336 newbytes=0KB theme=hotfruits20
+   HotFruits40AM canon=14/336 newbytes=0KB theme=hotfruits40
+   HotNeonAM canon=214/336 newbytes=0KB theme=hotneon
+   HotScatterAM canon=217/336 newbytes=0KB theme=hotscatter
+   HotScatterDiceAM canon=213/336 newbytes=0KB theme=hotscatterdice
+   HotStarAM canon=184/336 newbytes=0KB theme=hotstar
+   HotTwentyAM canon=188/336 newbytes=0KB theme=hottwenty
+   HottestFruits20AM SKIP(no shell on demo)
+   HottestFruits40AM SKIP(no shell on demo)
+   JacksOrBetterAM canon=103/355 newbytes=0KB theme=jacksorbetter
+   JokerCardAM canon=80/336 newbytes=0KB theme=jokercardpoker
+   JokerPokerAM canon=99/355 newbytes=0KB theme=jokerpokerpoker
+   KingsCrownAM canon=181/336 newbytes=0KB theme=kingscrown
+   LaGranAventuraAM canon=212/336 newbytes=0KB theme=lagranaventura
+   LadyJokerAM canon=188/336 newbytes=0KB theme=ladyjoker
+   LightingHotAM canon=125/336 newbytes=0KB theme=lightinghot
+   LovelyLadyAM canon=207/336 newbytes=0KB theme=ladyluck
+   LuckyBellsAM canon=200/336 newbytes=0KB theme=luckybells
+   LuckyCoinAM canon=219/336 newbytes=0KB theme=luckycoin
+   LuckyJoker20AM canon=10/336 newbytes=0KB theme=luckyjoker20
+   LuckyJoker5AM canon=10/336 newbytes=0KB theme=luckyjoker5
+   LuckyZodiacAM canon=209/336 newbytes=0KB theme=luckyzodiac
+   MagicForestAM canon=219/336 newbytes=0KB theme=magicforest
+   MagicIdolAM canon=214/336 newbytes=0KB theme=magicidol
+   MagicOwlAM canon=209/336 newbytes=0KB theme=magicowl
+   MermaidsGoldAM canon=221/336 newbytes=0KB theme=mermaidsgold
+   MerryFruitsAM canon=185/336 newbytes=0KB theme=merryfruits
+   MultiWinAM canon=80/336 newbytes=0KB theme=multicardwin
+   MultiWinTripleAM canon=80/336 newbytes=0KB theme=multicardwintriple
+   PartyNightAM canon=25/336 newbytes=0KB theme=partynight
+   PartyTimeAM canon=224/336 newbytes=0KB theme=partytime
+   RedChilliAM canon=224/336 newbytes=0KB theme=redchilli
+   RomanLegionAM canon=191/336 newbytes=0KB theme=romanlegion
+   RouletteRoyalAM canon=12/336 newbytes=0KB theme=rouletteroyal
+   RoyalUnicornAM canon=228/336 newbytes=0KB theme=royalunicorn
+   SakuraFruitsAM canon=18/336 newbytes=0KB theme=sakurafruits
+   SakuraSecretAM SKIP(no shell on demo)
+   TensOrBetterAM canon=100/355 newbytes=0KB theme=tensorbetter
+   TweetyBirdsAM canon=201/336 newbytes=0KB theme=tweetybirds
+   Ultra7AM canon=172/336 newbytes=0KB theme=ultraseven
+   VampiresAM canon=225/336 newbytes=0KB theme=vampires
+   Wild7AM canon=192/336 newbytes=0KB theme=wild7
+   WildDiamondsAM SKIP(no shell on demo)
+   WildDragonAM canon=177/336 newbytes=0KB theme=wilddragon
+   WildRespinAM canon=184/336 newbytes=0KB theme=wildrespin
+   WildSharkAM canon=231/336 newbytes=0KB theme=wildshark
+   WildStarsAM canon=183/336 newbytes=0KB theme=wildstars
+   WolfMoonAM canon=213/336 newbytes=0KB theme=wolfmoon
+CANON PROBE DONE
++ grep -cE canon=0/ /tmp/hunt2/mirror/_canon_summary.txt
+0
++ true
++ python3 -
+priority list written (weakest first): 94
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror3.py /tmp/hunt2/mirror 8 /tmp/hunt2/priority.txt /home/runner/work/swapi/swapi/scripts/hunt/canon /home/runner/work/swapi/swapi/scripts/gapscan/am_hunt.txt
+Traceback (most recent call last):
+  File "/home/runner/work/swapi/swapi/scripts/hunt/mirror3.py", line 255, in <module>
+    workers = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+              ~~~^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '/tmp/hunt2/priority.txt'
++ true
++ grep -oE 'unresolved=[0-9]+' /tmp/hunt2/mirror/_fill_summary.txt
++ sort -t= -k2 -n
++ head -12
++ uniq -c
+sort: separator must be exactly one character long: ''
+Try 'sort --help' for more information.
++ true
++ echo '=== gitlab candidate tree scans ==='
+=== gitlab candidate tree scans ===
++ scan_gitlab casinoman/handman/oldgaymes
++ local repo=casinoman/handman/oldgaymes
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' casinoman/handman/oldgaymes
++ local enc=casinoman%2Fhandman%2Foldgaymes
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/casinoman%2Fhandman%2Foldgaymes
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=40556275
++ '[' -z 40556275 ']'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ sort -u
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=1'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ echo casinoman/handman/oldgaymes
+++ tr / _
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=7'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/40556275/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo casinoman/handman/oldgaymes
++++ tr / _
++ echo 'casinoman/handman/oldgaymes :: 0 game-ish paths'
+casinoman/handman/oldgaymes :: 0 game-ish paths
++ scan_gitlab pmatic1/lab04-amatic-imijak
++ local repo=pmatic1/lab04-amatic-imijak
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' pmatic1/lab04-amatic-imijak
++ local enc=pmatic1%2Flab04-amatic-imijak
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/pmatic1%2Flab04-amatic-imijak
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=87910087
++ '[' -z 87910087 ']'
++ sort -u
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=1'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ echo pmatic1/lab04-amatic-imijak
+++ tr / _
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=7'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/87910087/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo pmatic1/lab04-amatic-imijak
++++ tr / _
++ echo 'pmatic1/lab04-amatic-imijak :: 0 game-ish paths'
+pmatic1/lab04-amatic-imijak :: 0 game-ish paths
++ scan_gitlab skyline-labs/iamatic
++ local repo=skyline-labs/iamatic
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' skyline-labs/iamatic
++ local enc=skyline-labs%2Fiamatic
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/skyline-labs%2Fiamatic
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=79860473
++ '[' -z 79860473 ']'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ sort -u
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=1'
+++ echo skyline-labs/iamatic
+++ tr / _
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=7'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/79860473/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo skyline-labs/iamatic
++++ tr / _
++ echo 'skyline-labs/iamatic :: 0 game-ish paths'
+skyline-labs/iamatic :: 0 game-ish paths
++ scan_gitlab mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source
++ local repo=mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source
++ local enc=mintscripts%2Fgoldsvet-7-5-casino-script-php-html5-games-open-source
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/mintscripts%2Fgoldsvet-7-5-casino-script-php-html5-games-open-source
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=84893462
++ '[' -z 84893462 ']'
++ sort -u
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=1'
+++ echo mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source
+++ tr / _
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=7'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/84893462/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source
++++ tr / _
++ echo 'mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source :: 0 game-ish paths'
+mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source :: 0 game-ish paths
++ scan_gitlab mintscripts_studio/goldsvet-casino-open-source-engine-public
++ local repo=mintscripts_studio/goldsvet-casino-open-source-engine-public
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' mintscripts_studio/goldsvet-casino-open-source-engine-public
++ local enc=mintscripts_studio%2Fgoldsvet-casino-open-source-engine-public
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/mintscripts_studio%2Fgoldsvet-casino-open-source-engine-public
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=86771436
++ '[' -z 86771436 ']'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ sort -u
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=1'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ echo mintscripts_studio/goldsvet-casino-open-source-engine-public
+++ tr / _
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=7'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/86771436/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo mintscripts_studio/goldsvet-casino-open-source-engine-public
++++ tr / _
++ echo 'mintscripts_studio/goldsvet-casino-open-source-engine-public :: 0 game-ish paths'
+mintscripts_studio/goldsvet-casino-open-source-engine-public :: 0 game-ish paths
++ scan_gitlab kamrul-hasan2/goldsvet
++ local repo=kamrul-hasan2/goldsvet
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' kamrul-hasan2/goldsvet
++ local enc=kamrul-hasan2%2Fgoldsvet
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/kamrul-hasan2%2Fgoldsvet
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=74630526
++ '[' -z 74630526 ']'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ sort -u
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=1'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ echo kamrul-hasan2/goldsvet
+++ tr / _
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=2'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=3'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=4'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=5'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=6'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=7'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=8'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=9'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
++ for page in 1 2 3 4 5 6 7 8 9 10
++ curl -s --max-time 25 'https://gitlab.com/api/v4/projects/74630526/repository/tree?recursive=true&per_page=100&page=10'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  if isinstance(d,list):\n    for t in d:\n      p=t.get(\'path\',\'\')\n      if \'public/games/\' in p or \'provider/amatic/\' in p: print(p)\nexcept Exception: pass'
+++ wc -l
++++ echo kamrul-hasan2/goldsvet
++++ tr / _
++ echo 'kamrul-hasan2/goldsvet :: 0 game-ish paths'
+kamrul-hasan2/goldsvet :: 0 game-ish paths
++ scan_gitlab pasquqlale/Goldsvet-1Win-Sports-Script-8-5
++ local repo=pasquqlale/Goldsvet-1Win-Sports-Script-8-5
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1],safe='\'''\''))' pasquqlale/Goldsvet-1Win-Sports-Script-8-5
++ local enc=pasquqlale%2FGoldsvet-1Win-Sports-Script-8-5
+++ curl -s --max-time 25 https://gitlab.com/api/v4/projects/pasquqlale%2FGoldsvet-1Win-Sports-Script-8-5
+++ python3 -c $'import json,sys\ntry: print(json.load(sys.stdin)[\'id\'])\nexcept Exception: print(\'\')'
++ local pid=
++ '[' -z '' ']'
++ echo 'pasquqlale/Goldsvet-1Win-Sports-Script-8-5 :: no id'
+pasquqlale/Goldsvet-1Win-Sports-Script-8-5 :: no id
++ return
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_casinoman_handman_oldgaymes.txt'
+--- /tmp/hunt2/gl_casinoman_handman_oldgaymes.txt
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_casinoman_handman_oldgaymes.txt
++ head -12
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_kamrul-hasan2_goldsvet.txt'
+--- /tmp/hunt2/gl_kamrul-hasan2_goldsvet.txt
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_kamrul-hasan2_goldsvet.txt
++ head -12
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_mintscripts_goldsvet-7-5-casino-script-php-html5-games-open-source.txt'
+--- /tmp/hunt2/gl_mintscripts_goldsvet-7-5-casino-script-php-html5-games-open-source.txt
++ head -12
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_mintscripts_goldsvet-7-5-casino-script-php-html5-games-open-source.txt
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_mintscripts_studio_goldsvet-casino-open-source-engine-public.txt'
+--- /tmp/hunt2/gl_mintscripts_studio_goldsvet-casino-open-source-engine-public.txt
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_mintscripts_studio_goldsvet-casino-open-source-engine-public.txt
++ head -12
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_pmatic1_lab04-amatic-imijak.txt'
+--- /tmp/hunt2/gl_pmatic1_lab04-amatic-imijak.txt
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_pmatic1_lab04-amatic-imijak.txt
++ head -12
++ for f in /tmp/hunt2/gl_*.txt
++ echo '--- /tmp/hunt2/gl_skyline-labs_iamatic.txt'
+--- /tmp/hunt2/gl_skyline-labs_iamatic.txt
++ grep -E '(AM|amatic)/' /tmp/hunt2/gl_skyline-labs_iamatic.txt
++ head -12
++ cd /tmp/hunt2
++ du -sh mirror
+1.1G	mirror
++ rm -f amatic-clients.zip 'part_*'
++ zip -qr amatic-clients.zip mirror
+++ stat -c%s amatic-clients.zip
++ SIZE=971296181
+++ sha256sum amatic-clients.zip
+++ awk '{print $1}'
++ SHA=9c739659fc6baa9863e0f16ee82c85dc5ba8bc8cfb73a75e1f8a1ba650aa8f8a
++ echo 'MIRROR ZIP: 971296181 bytes sha256=9c739659fc6baa9863e0f16ee82c85dc5ba8bc8cfb73a75e1f8a1ba650aa8f8a'
+MIRROR ZIP: 971296181 bytes sha256=9c739659fc6baa9863e0f16ee82c85dc5ba8bc8cfb73a75e1f8a1ba650aa8f8a
++ '[' 971296181 -ge 2000000000 ']'
++ FILES=amatic-clients.zip
++ cat
++ gh release view amatic-clients -R oussema282/swapi
++ gh release upload amatic-clients amatic-clients.zip -R oussema282/swapi --clobber
++ gh release edit amatic-clients -R oussema282/swapi --notes-file notes.md
++ gh release view amatic-clients -R oussema282/swapi --json assets --jq '.assets[] | {name,size,state}'
+{"name":"amatic-clients.zip","size":971296181,"state":"uploaded"}
++ echo 'MIRROR DONE'
+MIRROR DONE
