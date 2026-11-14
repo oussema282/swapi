@@ -14,8 +14,8 @@ unzip -q prev/amatic-clients.zip -d .
 echo "=== verify (before) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_before.json
 
-echo "=== fill missing from demo (v4: per-ref outcomes + demo404 proof) ==="
-python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 10
+echo "=== fill missing from demo (v5: empty-config settings + exact-ext dotted refs) ==="
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 16
 
 echo "=== final status ==="
 python3 - <<'PY'
@@ -24,9 +24,10 @@ r=json.load(open('/tmp/comp/mirror/_verify_final.json'))
 from collections import Counter
 c=Counter(v['status'] for v in r.values())
 print('FINAL:', dict(c))
+json.dump({'summary': dict(c), 'games': r}, open('/tmp/comp/final_status.json','w'), indent=1)
 for g,v in sorted(r.items()):
-    if v['status']=='broken':
-        print('  broken:', g, 'crit:', v.get('critical_missing'), 'budget:', len(v.get('budget',[])))
+    if v['status'] in ('broken','absent'):
+        print(f"  {v['status']}: {g} crit: {v.get('critical_missing')} budget: {len(v.get('budget',[]))}")
 PY
 cp /tmp/comp/verify_before.json mirror/_verify_before.json
 
@@ -43,7 +44,7 @@ cat > notes.md <<EOF
 **Amatic (AM) client mirror v3 — completed against per-game JS manifests** (\$(date -u +%FT%TZ))
 
 - Every game verified against its own game-JS asset references (dotted refs = hard requirements)
-- Complete games: \$(python3 -c "import json;print(len(json.load(open('/tmp/comp/final_status.json'))['complete']))")
+- Complete games: \$(python3 -c "import json;print(json.load(open('/tmp/comp/final_status.json'))['summary'].get('complete',0)+json.load(open('/tmp/comp/final_status.json'))['summary'].get('demo_equivalent',0))")
 - Still incomplete (hidden in builds): see \`final_status.json\` inside the log branch
 - zip: $SIZE bytes — sha256 \`$SHA\`
 EOF

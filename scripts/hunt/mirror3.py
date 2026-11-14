@@ -82,8 +82,12 @@ def probe_paths(game, gd, refs_todo):
             # settings_<CONFIG>_<hash>.js — the demo serves the EMPTY-config variant
             # (settings__<hash>.js, double underscore) because its play page opens
             # amarent/ without a config param. Probe that first, then K variants.
+            # NOTE: the ref name arrives as "_<hash>.js" (loader's concat collapses
+            # the prefix) — strip the .js before building candidate names.
             core = name.lstrip('_')
-            dirs = ['amarent/src/', 'amarent/', 'src/']
+            if core.endswith('.js'):
+                core = core[:-3]
+            dirs = ['amarent/src/', 'amarent/']
             names = [f'settings__{core}.js', f'settings_{core}.js'] + \
                     [f'settings_{K}_{core}.js' for K in range(1, 16)]
             outcome = 'demo404'; where = None
@@ -103,6 +107,14 @@ def probe_paths(game, gd, refs_todo):
             out.append(dict(ref, outcome=outcome, where=where))
             continue
         names = [name]
+        # Dotted refs are authoritative: the browser requests THIS exact name, so
+        # only the referenced extension matters (filling logo.gif for a logo.png
+        # ref would satisfy the verifier but still 404 in the browser). Extension-
+        # less refs sweep the kind's extension list.
+        if rext:
+            exts = (rext.lower(),)
+        else:
+            exts = tuple(dict.fromkeys(exts + (rext.lower(),)))
         dirs = kind_dirs(ref.get('_info', {}), kind, ref.get('module'), ref.get('res'))
         if kind == 'script':
             dirs = ['amarent/src/', 'amarent/', 'src/'] + [d for d in dirs if d.endswith('src/')]
@@ -133,6 +145,11 @@ def complete_game(info):
     game = info['game']
     if info['status'] == 'complete':
         return {'game': game, 'result': 'complete', 'refs': []}
+    if info['status'] == 'absent':
+        # No amarent shell at all (and none on the demo either) — nothing to fill;
+        # stays absent => hidden by the build gate. NEVER demo_equivalent: an empty
+        # game dir would 404 in the browser from the first request.
+        return {'game': game, 'result': 'absent', 'refs': []}
     gd = os.path.join(MIRROR, game)
     info['_info'] = info
     todo = []
