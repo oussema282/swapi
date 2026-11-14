@@ -1,0 +1,304 @@
++ REPO=oussema282/swapi
++ cd /tmp/build
++ rm -rf ex stage packs final.zip
++ mkdir -p ex stage packs
++ python3 -m pip install -q gdown
++ OK=0
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov/view -O payload.rar
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1G36TB-guho76QTnBFaeYOGRQa2JkXe7I/view -O payload.rar
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU/view -O payload.rar
++ '[' 0 '!=' 1 ']'
++ echo 'gdown failed — trying drive confirm-page fallback'
+gdown failed — trying drive confirm-page fallback
++ FID=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov
++ curl -sL -c ck.txt 'https://drive.google.com/uc?export=download&id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov' -o page.html
++ python3 -
++ '[' -s dl_url.txt ']'
+++ cat dl_url.txt
++ curl -sL -b ck.txt 'https://drive.usercontent.google.com/download?id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov&export=download&confirm=t&uuid=ca8750c7-b3a9-4a80-b03f-eeb70546e171' -o payload.rar
++ ls -la payload.rar
+-rw-r--r-- 1 runner runner 580769515 Nov 14 05:15 payload.rar
++ head -c 7 payload.rar
++ grep -qi '^526172211a07'
++ xxd -p
++ sha256sum payload.rar
+fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb  payload.rar
++ curl -sSL -o unrar.tar.gz https://codeload.github.com/pmachapman/unrar/tar.gz/refs/heads/master
++ tar xzf unrar.tar.gz
++ cd unrar-master
++ make -j2 -s
++ U=/tmp/build/unrar-master/unrar
++ '[' -x /tmp/build/unrar-master/unrar ']'
++ cd ex
++ /tmp/build/unrar-master/unrar x -y ../payload.rar
++ echo '=== rar tree (top) ==='
+=== rar tree (top) ===
++ find /tmp/build/ex -maxdepth 3 -type d
++ head -20
+/tmp/build/ex
+/tmp/build/ex/8.5open
+/tmp/build/ex/8.5open/d60
+/tmp/build/ex/8.5open/d60/d60
+++ find /tmp/build/ex -path '*d60/d60/artisan' -type f
+++ head -1
+++ xargs dirname
++ SITE=/tmp/build/ex/8.5open/d60/d60
++ '[' -z /tmp/build/ex/8.5open/d60/d60 ']'
++ '[' -n /tmp/build/ex/8.5open/d60/d60 ']'
++ '[' -f /tmp/build/ex/8.5open/d60/d60/artisan ']'
++ echo SITE=/tmp/build/ex/8.5open/d60/d60
+SITE=/tmp/build/ex/8.5open/d60/d60
++ ls /tmp/build/ex/8.5open/d60/d60
++ head -40
+PTWebSocket
+app
+appbk.zip
+artisan
+bootstrap
+composer-setup.php
+composer.json
+composer.lock
+composer.phar
+config
+database
+package.json
+phpunit.xml
+public
+readme.md
+resources
+routes
+server.php
+storage
+tests
+vendor
+webpack.mix.js
++ cp -a /tmp/build/ex/8.5open/d60/d60/. stage/
++ rm -f stage/d60.sql stage/appbk.zip 'stage/*.log'
++ find stage -maxdepth 1 -name '*.sql' -delete
++ find stage -maxdepth 1 -name 'appbk*' -delete
++ HE=/tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
++ '[' -f /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php ']'
++ grep -n error_reporting /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
+41:        error_reporting(-1);
+68:        if (error_reporting() & $level) {
++ sed -i 's/error_reporting(-1)/error_reporting(E_ALL \& ~E_DEPRECATED \& ~E_USER_DEPRECATED)/' /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
++ grep -n error_reporting /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
+41:        error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+68:        if (error_reporting() & $level) {
++ python3 -
+CARBON PATCH applied (1)
++ df -h /tmp
++ tail -1
+/dev/root       145G   60G   85G  42% /
++ gh release download games-client-pack-85 -R oussema282/swapi -D packs
++ gh release download slots-publish-ready -R oussema282/swapi -D packs
++ gh release download amatic-clients -R oussema282/swapi -D packs
++ ls -la packs
+total 3114780
+drwxr-xr-x 2 runner runner       4096 Nov 14 05:16 .
+drwxr-xr-x 7 runner runner       4096 Nov 14 05:15 ..
+-rw-r--r-- 1 runner runner  980955660 Nov 14 05:16 amatic-clients.zip
+-rw-r--r-- 1 runner runner 1820345505 Nov 14 05:16 games-client-pack-85.zip
+-rw-r--r-- 1 runner runner  388218273 Nov 14 05:16 slots-publish-ready.zip
++ python3 /home/runner/work/swapi/swapi/scripts/replit-build/overlay_packs.py /tmp/build/stage /tmp/build/packs /tmp/build/names102.txt
+--- amatic-clients.zip: 17396 entries; sample: ['mirror/', 'mirror/DragonsKingdomAM/', 'mirror/DragonsKingdomAM/dragonskingdom/']
+    [no platform folders recognised in this zip]
+--- games-client-pack-85.zip: 15895 entries; sample: ['games/', 'games/Africa/', 'games/Africa/config/']
+    fallback games root: /tmp/packx/games_client_pack_85_zip/games (84 clients)
+    clients: added=85 already-in-site=0
+--- slots-publish-ready.zip: 4534 entries; sample: ['pack/', 'pack/public/', 'pack/public/games/']
+    clients: added=17 already-in-site=0
+    engines: added=0 already-in-site=102
+      existing: ActionMoneyEGT AdmiralNelsonAM Africa AfricaRunKA AgeOfEgyptPT AgeOfEgyptPTM AgeOfGodsKingofOlympusPT AgeOfGodsKingofOlympusPTM AgeOfPrivateersGT AgeOfPrivateersGTM AgeOfTheGodsGodOfStormsPT AgeOfTheGodsGodOfStormsPTM AgeOfTroyEGT AlchemistsSecretGT AlchemistsSecretGTM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM AmericanFootball Asian Attila AttilaDX AztecTreasure BananaSplash BananaSplashDX ...
+    blades: added=0 already-in-site=102
+      existing: ActionMoneyEGT.blade.php AdmiralNelsonAM.blade.php Africa.blade.php AfricaRunKA.blade.php AgeOfEgyptPT.blade.php AgeOfEgyptPTM.blade.php AgeOfGodsKingofOlympusPT.blade.php AgeOfGodsKingofOlympusPTM.blade.php AgeOfPrivateersGT.blade.php AgeOfPrivateersGTM.blade.php AgeOfTheGodsGodOfStormsPT.blade.php AgeOfTheGodsGodOfStormsPTM.blade.php AgeOfTroyEGT.blade.php AlchemistsSecretGT.blade.php AlchemistsSecretGTM.blade.php AllAmericanPokerAM.blade.php AllWaysFruitsAM.blade.php AllWaysJokerAM.blade.php AmericanFootball.blade.php Asian.blade.php Attila.blade.php AttilaDX.blade.php AztecTreasure.blade.php BananaSplash.blade.php BananaSplashDX.blade.php ...
+PACK OVERLAY OK — 102 pack game names recorded
++ wc -l /tmp/build/names102.txt
+102 /tmp/build/names102.txt
++ AMFILL=/tmp/build/amfill
++ rm -rf /tmp/build/amfill
++ mkdir -p /tmp/build/amfill
++ ls packs/amatic-clients.zip
++ unzip -q -o packs/amatic-clients.zip -d /tmp/build/amfill
++ python3 -
+AM fill: merged 102 client dirs; strong(published)=56 weak(hidden)=46
+published: AllWaysWinAM ArisingPhoenixAM AztecSecretAM BellsOnFireAM BellsOnFireHotAM BellsOnFireRomboAM BigPandaAM BillyonaireAM BlueDolphinAM BookOfAztecAM BookOfFortuneAM CasanovaAM CasinovaAM CoolDiamonds2AM DiamondCatsAM DiamondMonkeyAM DragonsKingdomAM DragonsPearlAM EyeOfRaAM FireAndIceAM GoldenBookAM GrandTigerAM GrandXAM Hot7AM Hot7DiceAM Hot81AM HotChoiceAM HotDiamondsAM HotNeonAM HotScatterAM HotScatterDiceAM HotStarAM HotTwentyAM KingsCrownAM LaGranAventuraAM LadyJokerAM LovelyLadyAM LuckyBellsAM LuckyCoinAM LuckyZodiacAM MagicForestAM MagicIdolAM MagicOwlAM MermaidsGoldAM MerryFruitsAM PartyTimeAM RedChilliAM RomanLegionAM RoyalUnicornAM TweetyBirdsAM VampiresAM Wild7AM WildRespinAM WildSharkAM WildStarsAM WolfMoonAM
+hidden: BeautyFairyAM BeautyWarriorAM BillysGameAM BlackJackAM BookOfLordsAM BookOfPharaoAM BookOfQueenAM DeucesWildAM DiamondsOnFireAM DoubleDoubleBonusAM DragonsGiftAM Dynamite7AM EnchantedCleopatraAM Fantastico7AM FireQueenAM FlyingDutchmanAM FortunasFruitsAM FruitExpressAM FruitPokerAM GemStarAM GoldenJokerAM GrandCasanovaAM GrandFruitsAM Hot27AM Hot40AM HotFruits100AM HotFruits20AM HotFruits40AM HottestFruits20AM HottestFruits40AM JacksOrBetterAM JokerCardAM JokerPokerAM LightingHotAM LuckyJoker20AM LuckyJoker5AM MultiWinAM MultiWinTripleAM PartyNightAM RouletteRoyalAM SakuraFruitsAM SakuraSecretAM TensOrBetterAM Ultra7AM WildDiamondsAM WildDragonAM
+++ find /tmp/build/ex -path '*d60/d60.sql' -type f
+++ head -1
++ D60SQL=/tmp/build/ex/8.5open/d60/d60.sql
++ '[' -z /tmp/build/ex/8.5open/d60/d60.sql ']'
++ '[' -n /tmp/build/ex/8.5open/d60/d60.sql ']'
++ '[' -s /tmp/build/ex/8.5open/d60/d60.sql ']'
++ mkdir -p stage/database stage/_mysql-legacy
++ cp /tmp/build/ex/8.5open/d60/d60.sql stage/_mysql-legacy/d60.sql
++ python3 /home/runner/work/swapi/swapi/scripts/replit-build/sqlite_convert.py /tmp/build/ex/8.5open/d60/d60.sql stage/database/database.sqlite /home/runner/work/swapi/swapi/sql/w_games-17-pack-v2-games.sql /tmp/build/names102.txt
+  [skip alter] w_payments: ALTER TABLE `w_payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INC
+  [skip alter] w_stat_game: ALTER TABLE `w_stat_game`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT
+  [skip alter] w_users: ALTER TABLE `w_users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AU
+tables=71  data_rows=5874  insert_failures=0
+w_games17 upsert applied: 17
+published canonical rows: 174; hid duplicate rows: 141
+sqlite tables: 71
+w_games rows: 2170
+   (1, 'AgeOfPrivateersGT', 1, 1)
+   (2, 'AlchemistsSecretGT', 1, 1)
+   (9, 'AttilaDX', 1, 1)
+   (10, 'BananasGoBahamasDX', 1, 1)
+   (11, 'BananaSplashDX', 1, 1)
+   (16, 'BookOfRaCL', 1, 1)
+   (22, 'DolphinsPearlCL', 1, 1)
+   (40, 'GryphonsGoldDX', 1, 1)
+   (41, 'Helena', 1, 1)
+   (47, 'JustJewelsDX', 1, 1)
+   (55, 'LuckyLadysCharmCL', 1, 1)
+   (56, 'LuckyLadysCharmDX', 1, 1)
+   (60, 'MoneyGameDX', 1, 1)
+   (64, 'PharaonsGoldDX', 1, 1)
+   (72, 'SilverFoxDX', 1, 1)
+   (73, 'SizzlingGems', 1, 1)
+   (74, 'SizzlingHotDX', 1, 1)
+   (81, 'Africa', 1, 1)
+   (82, 'AmericanFootball', 1, 1)
+   (83, 'Asian', 1, 1)
+w_users rows: 6
+SQLITE_CONVERT_OK
++ ls -la stage/database/
+total 5252
+drwxr-xr-x  4 runner runner    4096 Nov 14 05:17 .
+drwxr-xr-x 14 runner runner    4096 Nov 14 05:17 ..
+-rw-r--r--  1 runner runner 5357568 Nov 14 05:17 database.sqlite
+drwxr-xr-x  2 runner runner    4096 Jun  4  2022 factories
+drwxr-xr-x  2 runner runner    4096 Jun  4  2022 seeds
++ cd /tmp/build/stage
++ python3 -
+.env written: 646 bytes; APP_KEY present: True
++ cat
+scripts/replit-build/build.sh: line 175: stage/app/Providers/SqliteCompatProvider.php: No such file or directory
++ python3 -
+SqliteCompatProvider registered in config/app.php
++ mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
++ touch storage/logs/.keep
+++ find . -maxdepth 3 '(' -name server.js -o -name ws.js -o -name '*websocket*.js' -o -name socket.js ')' -not -path './vendor/*' -not -path './node_modules/*'
+++ head -1
++ WSJS=
++ echo 'WS server candidate: none'
+WS server candidate: none
++ '[' -n '' ']'
++ WS_BLOCK=': # no node websocket server found in this deployment (HTTP spins only)'
++ cat
++ chmod +x run.sh
++ cat
++ cat
++ cat
++ cd /tmp/build/stage
++ php -v
++ head -1
+PHP 8.2.35 (cli) (built: Oct 24 2026 11:57:07) (NTS)
++ php -r 'new PDO("sqlite:database/database.sqlite"); echo "pdo-sqlite OK\n";'
+pdo-sqlite OK
++ php artisan --version
+Laravel Framework 8.38.0
++ php artisan serve --host=127.0.0.1 --port=8099
++ sleep 12
+++ curl -s -o /tmp/build/logs/root.html -w '%{http_code}' -L http://127.0.0.1:8099/
++ CODE=200
++ echo 'HTTP GET / -> 200'
+HTTP GET / -> 200
++ curl -s -o /dev/null -w 'HTTP GET /login -> %{http_code}\n' http://127.0.0.1:8099/login
+HTTP GET /login -> 302
++ curl -s -o /dev/null -w 'HTTP GET /games -> %{http_code}\n' http://127.0.0.1:8099/games
+HTTP GET /games -> 404
++ head -c 300 /tmp/build/logs/root.html
+<!DOCTYPE html>
+<!--[if lte IE 8]>
+<html class="ie ie8" lang="ru"><![endif]-->
+<!--[if lte IE 9]>
+<html class="ie ie9" lang="ru"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="ie9up" lang="de"><!--<![endif]-->
+	<head>
+
+		<meta name="description" content="">
+		<meta name="keywords" content=++ ls -t /tmp/build/stage/storage/logs/laravel.log
+++ head -1
++ LLOG=/tmp/build/stage/storage/logs/laravel.log
++ echo '=== latest laravel log: /tmp/build/stage/storage/logs/laravel.log ==='
+=== latest laravel log: /tmp/build/stage/storage/logs/laravel.log ===
++ '[' -n /tmp/build/stage/storage/logs/laravel.log ']'
++ python3 - /tmp/build/stage/storage/logs/laravel.log
+--- exception headline ---
+.ERROR: The dump process failed with exitcode 2 : Misuse of shell builtins : sh: 1: cannot create /var/www/fastuser/data/www/demo60.2games.pw/backups/0000_01062022.sql: Directory nonexistent  {"exception":"[object] (Spatie\\DbDumper\\Exceptions\\DumpFailed(code: 0): The dump process failed with exitcode 2 : Misuse of shell builtins : sh: 1: cannot create /var/www/fastuser/data/www/demo60.2games.pw/backups/0000_01062022.sql: Directory nonexistent  at /var/www/fastuser/data/www/demo60.2games.pw/vendor/spatie/db-dumper/src/Exceptions/DumpFailed.php:17) [stacktrace] #0 /var/www/fastuser/data/www/demo60.2games.pw/vendor/spatie/db-dumper/src/DbDumper.php(263): Spatie\\DbDumper\\Exceptions\\DumpFai
++ echo '=== app/Http/Middleware/VerifyInstallation.php ==='
+=== app/Http/Middleware/VerifyInstallation.php ===
++ sed -n 1,55p /tmp/build/stage/app/Http/Middleware/VerifyInstallation.php
+<?php 
+namespace VanguardLTE\Http\Middleware
+{
+    class VerifyInstallation
+    {
+        public function handle($request, \Closure $next)
+        {
+            if( !file_exists(base_path('.env')) && !$request->is('install*') ) 
+            {
+                return redirect()->to('install');
+            }
+            if( file_exists(base_path('.env')) && $request->is('install*') && !$request->is('install/complete') ) 
+            {
+                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+            }
+            return $next($request);
+        }
+    }
+
+}
++ pkill -f 'artisan serve'
++ sleep 1
++ cd /tmp/build/stage
++ rm -f /tmp/build/final.zip '/tmp/build/part_*'
++ zip -qr /tmp/build/final.zip . -x 'node_modules/*' -x 'storage/logs/*.log'
+++ stat -c%s /tmp/build/final.zip
++ SIZE=3696921958
++ '[' 3696921958 -ge 2000000000 ']'
++ echo 'default zip 3696921958 — retrying with -9'
+default zip 3696921958 — retrying with -9
++ rm -f /tmp/build/final.zip
++ zip -9 -qr /tmp/build/final.zip . -x 'node_modules/*' -x 'storage/logs/*.log'
+++ stat -c%s /tmp/build/final.zip
++ SIZE=3694236344
++ cd /tmp/build
++ python3 -m zipfile -t final.zip
+Done testing
++ echo 'ZIP TEST OK'
+ZIP TEST OK
+++ stat -c%s final.zip
++ SIZE=3694236344
+++ sha256sum final.zip
+++ awk '{print $1}'
++ SHA=49f65ee138396da794d5415b9f1f068f657425e82c96bb539a0e6642d7470978
++ echo 'FINAL: 3694236344 bytes  sha256=49f65ee138396da794d5415b9f1f068f657425e82c96bb539a0e6642d7470978'
+FINAL: 3694236344 bytes  sha256=49f65ee138396da794d5415b9f1f068f657425e82c96bb539a0e6642d7470978
++ '[' 3694236344 -ge 2000000000 ']'
++ echo 'still over the 2GB asset cap — splitting'
+still over the 2GB asset cap — splitting
++ split -b 1900000000 -d final.zip part_
++ ls -la part_00 part_01
+-rw-r--r-- 1 runner runner 1900000000 Nov 14 05:21 part_00
+-rw-r--r-- 1 runner runner 1794236344 Nov 14 05:21 part_01
++ ls part_00 part_01
++ cat
++ ls part_00 part_01
++ gh release view replit-ready -R oussema282/swapi
++ gh release upload replit-ready part_00 part_01 -R oussema282/swapi --clobber
++ gh release edit replit-ready -R oussema282/swapi --notes-file notes.md
++ gh release view replit-ready -R oussema282/swapi --json assets --jq '.assets[] | {name,size,state}'
+{"name":"part_00","size":1900000000,"state":"uploaded"}
+{"name":"part_01","size":1794236344,"state":"uploaded"}
++ echo 'BUILD OK'
+BUILD OK
