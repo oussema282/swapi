@@ -1,0 +1,221 @@
++ REPO=oussema282/swapi
++ cd /tmp/build
++ rm -rf ex stage packs final.zip amfill
++ mkdir -p ex stage packs
++ python3 -m pip install -q gdown
++ OK=0
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov/view -O payload.rar
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1G36TB-guho76QTnBFaeYOGRQa2JkXe7I/view -O payload.rar
++ for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU
++ gdown --fuzzy https://drive.google.com/file/d/1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU/view -O payload.rar
++ '[' 0 '!=' 1 ']'
++ FID=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov
++ curl -sL -c ck.txt 'https://drive.google.com/uc?export=download&id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov' -o page.html
++ python3 -
++ '[' -s dl_url.txt ']'
+++ cat dl_url.txt
++ curl -sL -b ck.txt 'https://drive.usercontent.google.com/download?id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov&export=download&confirm=t&uuid=1853795a-5ece-4ebf-91b5-edf53b2ce25c' -o payload.rar
++ head -c 7 payload.rar
++ xxd -p
++ grep -qi '^526172211a07'
++ sha256sum payload.rar
+fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb  payload.rar
++ curl -sSL -o unrar.tar.gz https://codeload.github.com/pmachapman/unrar/tar.gz/refs/heads/master
++ tar xzf unrar.tar.gz
++ cd unrar-master
++ make -j2 -s
++ U=/tmp/build/unrar-master/unrar
++ '[' -x /tmp/build/unrar-master/unrar ']'
++ cd ex
++ /tmp/build/unrar-master/unrar x -y ../payload.rar
+++ find /tmp/build/ex -path '*d60/d60/artisan' -type f
+++ head -1
+++ xargs dirname
++ SITE=/tmp/build/ex/8.5open/d60/d60
++ '[' -z /tmp/build/ex/8.5open/d60/d60 ']'
++ '[' -n /tmp/build/ex/8.5open/d60/d60 ']'
++ '[' -f /tmp/build/ex/8.5open/d60/d60/artisan ']'
++ echo SITE=/tmp/build/ex/8.5open/d60/d60
+SITE=/tmp/build/ex/8.5open/d60/d60
++ cp -a /tmp/build/ex/8.5open/d60/d60/. stage/
++ rm -f stage/d60.sql stage/appbk.zip 'stage/*.log'
++ find stage -maxdepth 1 -name '*.sql' -delete
++ find stage -maxdepth 1 -name 'appbk*' -delete
++ '[' -d stage/public/games ']'
++ mkdir -p stage/public/games
++ gh release download amatic-clients -R oussema282/swapi -D packs
++ unzip -q -o packs/amatic-clients.zip -d amfill
++ rsync -a amfill/mirror/ stage/public/games/ --exclude=_done.txt --exclude=_summary.txt --exclude=_canon_summary.txt --exclude=_fill.txt --exclude=_fill_summary.txt
++ rm -f 'stage/public/games/_*.txt'
++ gh release download slots-publish-ready -R oussema282/swapi -D packs
++ mkdir -p pack5
++ unzip -q -o packs/slots-publish-ready.zip 'pack/public/games/AdmiralNelsonAM/*' 'pack/public/games/AllAmericanPokerAM/*' 'pack/public/games/AllWaysFruitsAM/*' 'pack/public/games/AllWaysJokerAM/*' 'pack/public/games/BingoAM/*' -d pack5
+caution: filename not matched:  pack/public/games/BingoAM/*
++ for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM
++ '[' -d pack5/pack/public/games/AdmiralNelsonAM ']'
++ cp -a pack5/pack/public/games/AdmiralNelsonAM stage/public/games/
++ for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM
++ '[' -d pack5/pack/public/games/AllAmericanPokerAM ']'
++ cp -a pack5/pack/public/games/AllAmericanPokerAM stage/public/games/
++ for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM
++ '[' -d pack5/pack/public/games/AllWaysFruitsAM ']'
++ cp -a pack5/pack/public/games/AllWaysFruitsAM stage/public/games/
++ for N in AdmiralNelsonAM AllAmericanPokerAM AllWaysFruitsAM AllWaysJokerAM
++ '[' -d pack5/pack/public/games/AllWaysJokerAM ']'
++ cp -a pack5/pack/public/games/AllWaysJokerAM stage/public/games/
++ '[' '!' -d stage/public/games/BingoAM ']'
++ rm -rf /tmp/bingo
++ git clone -q --depth 1 --filter=blob:none --sparse https://github.com/heidi-luong1109/game /tmp/bingo
++ cd /tmp/bingo
++ git sparse-checkout set public/games/BingoAM
++ cp -a /tmp/bingo/public/games/BingoAM stage/public/games/
++ echo 'BingoAM from heidi sparse checkout'
+BingoAM from heidi sparse checkout
+++ ls stage/public/games
+++ wc -l
++ echo 'clients now: 111'
+clients now: 111
++ python3 -
+gate: _verify_final.json -> {'complete': 0, 'demo_equivalent': 70, 'broken': 24}
+AM publish: 75 (70 verified + 5 pack)
+hidden-broken: BeautyFairyAM BeautyWarriorAM BookOfLordsAM BookOfPharaoAM BookOfQueenAM DoubleDoubleBonusAM DragonsGiftAM Dynamite7AM EnchantedCleopatraAM Fantastico7AM FireQueenAM FlyingDutchmanAM FruitExpressAM GoldenJokerAM GrandCasanovaAM GrandFruitsAM Hot40AM HotFruits100AM HotFruits20AM HotFruits40AM HottestFruits20AM HottestFruits40AM LightingHotAM LuckyJoker20AM LuckyJoker5AM PartyNightAM RomanLegionAM SakuraFruitsAM SakuraSecretAM TensOrBetterAM Wild7AM WildDiamondsAM
++ wc -l /tmp/build/am_names.txt
+75 /tmp/build/am_names.txt
+++ find /tmp/build/ex -path '*d60/d60.sql' -type f
+++ head -1
++ D60SQL=/tmp/build/ex/8.5open/d60/d60.sql
++ '[' -z /tmp/build/ex/8.5open/d60/d60.sql ']'
++ '[' -n /tmp/build/ex/8.5open/d60/d60.sql ']'
++ '[' -s /tmp/build/ex/8.5open/d60/d60.sql ']'
++ mkdir -p stage/database stage/_mysql-legacy
++ cp /tmp/build/ex/8.5open/d60/d60.sql stage/_mysql-legacy/d60.sql
++ cp /home/runner/work/swapi/swapi/sql/w_games-17-pack-v2-games.sql stage/_mysql-legacy/
++ python3 /home/runner/work/swapi/swapi/scripts/replit-build/sqlite_convert.py /tmp/build/ex/8.5open/d60/d60.sql stage/database/database.sqlite /home/runner/work/swapi/swapi/sql/w_games-17-pack-v2-games.sql /tmp/build/am_names.txt exclusive
+  [skip alter] w_payments: ALTER TABLE `w_payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INC
+  [skip alter] w_stat_game: ALTER TABLE `w_stat_game`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT
+  [skip alter] w_users: ALTER TABLE `w_users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AU
+tables=71  data_rows=5874  insert_failures=0
+w_games17 upsert applied: 17
+published canonical rows: 78; hid duplicate rows: 63
+EXCLUSIVE lobby: hid all non-list games (2092 rows)
+sqlite tables: 71
+w_games rows: 2170
+   (181, 'Ultra7AM', 1, 1)
+   (182, 'Hot7AM', 1, 1)
+   (184, 'HotTwentyAM', 1, 1)
+   (185, 'DiamondsOnFireAM', 1, 1)
+   (189, 'MerryFruitsAM', 1, 1)
+   (190, 'LuckyBellsAM', 1, 1)
+   (191, 'LadyJokerAM', 1, 1)
+   (192, 'KingsCrownAM', 1, 1)
+   (193, 'RedChilliAM', 1, 1)
+   (194, 'MagicIdolAM', 1, 1)
+   (195, 'TweetyBirdsAM', 1, 1)
+   (196, 'HotScatterAM', 1, 1)
+   (197, 'MagicForestAM', 1, 1)
+   (198, 'HotNeonAM', 1, 1)
+   (199, 'WolfMoonAM', 1, 1)
+   (227, 'WildDragonAM', 1, 1)
+   (228, 'BellsOnFireHotAM', 1, 1)
+   (229, 'FortunasFruitsAM', 1, 1)
+   (230, 'WildSharkAM', 1, 1)
+   (231, 'BlueDolphinAM', 1, 1)
+w_users rows: 6
+SQLITE_CONVERT_OK
++ cd /tmp/build/stage
++ python3 -
+.env written; APP_KEY present: True
++ mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
++ touch storage/logs/.keep
+++ find . -maxdepth 3 '(' -name server.js -o -name ws.js -o -name '*websocket*.js' -o -name socket.js ')' -not -path './vendor/*' -not -path './node_modules/*'
+++ head -1
++ WSJS=
++ echo 'WS server candidate: none'
+WS server candidate: none
++ '[' -n '' ']'
++ WS_BLOCK=': # no node websocket server found in this deployment (HTTP spins only)'
++ cat
++ chmod +x run.sh
++ cat
++ cat
++ cat
++ HE=/tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
++ '[' -f /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php ']'
++ sed -i 's/error_reporting(-1)/error_reporting(E_ALL \& ~E_DEPRECATED \& ~E_USER_DEPRECATED)/' /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
++ grep -n error_reporting /tmp/build/stage/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php
++ head -1
+41:        error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
++ python3 -
+CARBON PATCH applied
++ mkdir -p /tmp/build/stage/app/Providers
++ cat
++ python3 -
+SqliteCompatProvider registered
++ php -v
++ head -1
+PHP 8.2.35 (cli) (built: Oct 24 2026 11:57:07) (NTS)
++ php -r 'new PDO("sqlite:database/database.sqlite"); echo "pdo-sqlite OK\n";'
+pdo-sqlite OK
++ php artisan --version
+Laravel Framework 8.38.0
++ php artisan serve --host=127.0.0.1 --port=8099
++ sleep 12
+++ curl -s -o /tmp/build/logs/root.html -w '%{http_code}' -L http://127.0.0.1:8099/
++ CODE=200
++ echo 'HTTP GET / -> 200'
+HTTP GET / -> 200
++ curl -s -o /dev/null -w 'HTTP GET /login -> %{http_code}\n' http://127.0.0.1:8099/login
+HTTP GET /login -> 302
++ head -c 200 /tmp/build/logs/root.html
+<!DOCTYPE html>
+<!--[if lte IE 8]>
+<html class="ie ie8" lang="ru"><![endif]-->
+<!--[if lte IE 9]>
+<html class="ie ie9" lang="ru"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="ie9up" lang="d++ ls -t /tmp/build/stage/storage/logs/laravel.log
+++ head -1
++ LLOG=/tmp/build/stage/storage/logs/laravel.log
++ '[' -n /tmp/build/stage/storage/logs/laravel.log ']'
++ python3 - /tmp/build/stage/storage/logs/laravel.log
+--- exception headline ---
+.ERROR: The dump process failed with exitcode 2 : Misuse of shell builtins : sh: 1: cannot create /var/www/fastuser/data/www/demo60.2games.pw/backups/0000_01062022.sql: Directory nonexistent  {"exception":"[object] (Spatie\\DbDumper\\Exceptions\\DumpFailed(code: 0): The dump process failed with exitcode 2 : Misuse of shell builtins : sh: 1: cannot create /var/www/fastuser/data/www/demo60.2games.pw
++ pkill -f 'artisan serve'
++ sleep 1
++ cd /tmp/build/stage
++ rm -f /tmp/build/final.zip '/tmp/build/part_*'
++ zip -qr /tmp/build/final.zip . -x 'node_modules/*' -x 'storage/logs/*.log'
+++ stat -c%s /tmp/build/final.zip
++ SIZE=1555881526
++ '[' 1555881526 -ge 2000000000 ']'
++ cd /tmp/build
++ python3 -m zipfile -t final.zip
+Done testing
++ echo 'ZIP TEST OK'
+ZIP TEST OK
+++ stat -c%s final.zip
++ SIZE=1555881526
+++ sha256sum final.zip
+++ awk '{print $1}'
++ SHA=069f858ccd33737e35c847f0f12a4dabe07a2876a25b764c7fc517144b658225
+++ wc -l
++ PUB=75
++ echo 'FINAL: 1555881526 bytes  sha256=069f858ccd33737e35c847f0f12a4dabe07a2876a25b764c7fc517144b658225'
+FINAL: 1555881526 bytes  sha256=069f858ccd33737e35c847f0f12a4dabe07a2876a25b764c7fc517144b658225
++ '[' 1555881526 -ge 2000000000 ']'
++ ls 'part_*'
++ cat
+++ date -u +%F
++ ls 'part_*'
++ gh release view amatic-replit-ready -R oussema282/swapi
++ gh release upload amatic-replit-ready final.zip -R oussema282/swapi --clobber
++ gh release edit amatic-replit-ready -R oussema282/swapi --notes-file notes.md
++ gh release view amatic-replit-ready -R oussema282/swapi --json assets --jq '.assets[] | {name,size,state}'
+{"name":"final.zip","size":1555881526,"state":"uploaded"}
++ echo 'BUILD OK'
+BUILD OK
