@@ -79,11 +79,13 @@ def probe_paths(game, gd, refs_todo):
         base, rext = os.path.splitext(name)
         exts = tuple(dict.fromkeys(exts + (rext.lower(),)))
         if ref.get('settings'):
-            # settings_<CONFIG>_<hash>.js where CONFIG comes from the ?config= URL param.
-            # Discover the live config id by probing K=1..40 on the primary host.
+            # settings_<CONFIG>_<hash>.js — the demo serves the EMPTY-config variant
+            # (settings__<hash>.js, double underscore) because its play page opens
+            # amarent/ without a config param. Probe that first, then K variants.
             core = name.lstrip('_')
             dirs = ['amarent/src/', 'amarent/', 'src/']
-            names = [f'settings_{K}_{core}.js' for K in range(1, 41)]
+            names = [f'settings__{core}.js', f'settings_{core}.js'] + \
+                    [f'settings_{K}_{core}.js' for K in range(1, 16)]
             outcome = 'demo404'; where = None
             for nm in names:
                 for d in dirs:
@@ -96,10 +98,6 @@ def probe_paths(game, gd, refs_todo):
                             os.makedirs(os.path.dirname(fp), exist_ok=True)
                             with open(fp,'wb') as f: f.write(data)
                             outcome = 'filled'; where = rel
-                            try:
-                                ref['config_k'] = int(nm.split('_')[1])
-                            except Exception:
-                                pass
                         break
                 if outcome == 'filled': break
             out.append(dict(ref, outcome=outcome, where=where))

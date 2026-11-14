@@ -164,11 +164,12 @@ def analyze(mirror, game):
         r['local'] = local_sat(r['name'], r['kind'])
         r['from'] = sorted(r['from'])[:3]
 
-    # settings variants: "_(hash).js" refs are satisfied by ANY settings_<K>_<hash>.js
+    # settings variants: "_(hash).js" refs are satisfied by settings_<CONFIG>_<hash>.js
+    # (empty CONFIG = double underscore, e.g. settings__00296940.js — what the demo serves)
     for r in settings_refs:
         if r['local']: continue
         core = r['name'].lstrip('_')
-        pat = re.compile(r'^settings_\d+_' + re.escape(core) + r'$')
+        pat = re.compile(r'^settings_\d*_' + re.escape(core) + r'$')
         for f in idx:
             if pat.match(f):
                 r['local'] = True
