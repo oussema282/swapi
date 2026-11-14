@@ -1,0 +1,561 @@
+++ curl -sSL https://raw.githubusercontent.com/oussema282/swapi/arena%2F01a0cba2-swapi/scripts/gapscan/am_hunt.txt
++ NAMES=$'AllWaysWinAM\nArisingPhoenixAM\nAztecSecretAM\nBeautyFairyAM\nBeautyWarriorAM\nBellsOnFireAM\nBellsOnFireHotAM\nBellsOnFireRomboAM\nBigPandaAM\nBillyonaireAM\nBillysGameAM\nBlackJackAM\nBlueDolphinAM\nBookOfAztecAM\nBookOfFortuneAM\nBookOfLordsAM\nBookOfPharaoAM\nBookOfQueenAM\nCasanovaAM\nCasinovaAM\nCoolDiamonds2AM\nDeucesWildAM\nDiamondCatsAM\nDiamondMonkeyAM\nDiamondsOnFireAM\nDoubleDoubleBonusAM\nDragonsGiftAM\nDragonsKingdomAM\nDragonsPearlAM\nDynamite7AM\nEnchantedCleopatraAM\nEyeOfRaAM\nFantastico7AM\nFireAndIceAM\nFireQueenAM\nFlyingDutchmanAM\nFortunasFruitsAM\nFruitExpressAM\nFruitPokerAM\nGemStarAM\nGoldenBookAM\nGoldenJokerAM\nGrandCasanovaAM\nGrandFruitsAM\nGrandTigerAM\nGrandXAM\nHot27AM\nHot40AM\nHot7AM\nHot7DiceAM\nHot81AM\nHotChoiceAM\nHotDiamondsAM\nHotFruits100AM\nHotFruits20AM\nHotFruits40AM\nHotNeonAM\nHotScatterAM\nHotScatterDiceAM\nHotStarAM\nHotTwentyAM\nHottestFruits20AM\nHottestFruits40AM\nJacksOrBetterAM\nJokerCardAM\nJokerPokerAM\nKingsCrownAM\nLaGranAventuraAM\nLadyJokerAM\nLightingHotAM\nLovelyLadyAM\nLuckyBellsAM\nLuckyCoinAM\nLuckyJoker20AM\nLuckyJoker5AM\nLuckyZodiacAM\nMagicForestAM\nMagicIdolAM\nMagicOwlAM\nMermaidsGoldAM\nMerryFruitsAM\nMultiWinAM\nMultiWinTripleAM\nPartyNightAM\nPartyTimeAM\nRedChilliAM\nRomanLegionAM\nRouletteRoyalAM\nRoyalUnicornAM\nSakuraFruitsAM\nSakuraSecretAM\nTensOrBetterAM\nTweetyBirdsAM\nUltra7AM\nVampiresAM\nWild7AM\nWildDiamondsAM\nWildDragonAM\nWildRespinAM\nWildSharkAM\nWildStarsAM\nWolfMoonAM'
++ '[' -z $'AllWaysWinAM\nArisingPhoenixAM\nAztecSecretAM\nBeautyFairyAM\nBeautyWarriorAM\nBellsOnFireAM\nBellsOnFireHotAM\nBellsOnFireRomboAM\nBigPandaAM\nBillyonaireAM\nBillysGameAM\nBlackJackAM\nBlueDolphinAM\nBookOfAztecAM\nBookOfFortuneAM\nBookOfLordsAM\nBookOfPharaoAM\nBookOfQueenAM\nCasanovaAM\nCasinovaAM\nCoolDiamonds2AM\nDeucesWildAM\nDiamondCatsAM\nDiamondMonkeyAM\nDiamondsOnFireAM\nDoubleDoubleBonusAM\nDragonsGiftAM\nDragonsKingdomAM\nDragonsPearlAM\nDynamite7AM\nEnchantedCleopatraAM\nEyeOfRaAM\nFantastico7AM\nFireAndIceAM\nFireQueenAM\nFlyingDutchmanAM\nFortunasFruitsAM\nFruitExpressAM\nFruitPokerAM\nGemStarAM\nGoldenBookAM\nGoldenJokerAM\nGrandCasanovaAM\nGrandFruitsAM\nGrandTigerAM\nGrandXAM\nHot27AM\nHot40AM\nHot7AM\nHot7DiceAM\nHot81AM\nHotChoiceAM\nHotDiamondsAM\nHotFruits100AM\nHotFruits20AM\nHotFruits40AM\nHotNeonAM\nHotScatterAM\nHotScatterDiceAM\nHotStarAM\nHotTwentyAM\nHottestFruits20AM\nHottestFruits40AM\nJacksOrBetterAM\nJokerCardAM\nJokerPokerAM\nKingsCrownAM\nLaGranAventuraAM\nLadyJokerAM\nLightingHotAM\nLovelyLadyAM\nLuckyBellsAM\nLuckyCoinAM\nLuckyJoker20AM\nLuckyJoker5AM\nLuckyZodiacAM\nMagicForestAM\nMagicIdolAM\nMagicOwlAM\nMermaidsGoldAM\nMerryFruitsAM\nMultiWinAM\nMultiWinTripleAM\nPartyNightAM\nPartyTimeAM\nRedChilliAM\nRomanLegionAM\nRouletteRoyalAM\nRoyalUnicornAM\nSakuraFruitsAM\nSakuraSecretAM\nTensOrBetterAM\nTweetyBirdsAM\nUltra7AM\nVampiresAM\nWild7AM\nWildDiamondsAM\nWildDragonAM\nWildRespinAM\nWildSharkAM\nWildStarsAM\nWolfMoonAM' ']'
+++ echo $'AllWaysWinAM\nArisingPhoenixAM\nAztecSecretAM\nBeautyFairyAM\nBeautyWarriorAM\nBellsOnFireAM\nBellsOnFireHotAM\nBellsOnFireRomboAM\nBigPandaAM\nBillyonaireAM\nBillysGameAM\nBlackJackAM\nBlueDolphinAM\nBookOfAztecAM\nBookOfFortuneAM\nBookOfLordsAM\nBookOfPharaoAM\nBookOfQueenAM\nCasanovaAM\nCasinovaAM\nCoolDiamonds2AM\nDeucesWildAM\nDiamondCatsAM\nDiamondMonkeyAM\nDiamondsOnFireAM\nDoubleDoubleBonusAM\nDragonsGiftAM\nDragonsKingdomAM\nDragonsPearlAM\nDynamite7AM\nEnchantedCleopatraAM\nEyeOfRaAM\nFantastico7AM\nFireAndIceAM\nFireQueenAM\nFlyingDutchmanAM\nFortunasFruitsAM\nFruitExpressAM\nFruitPokerAM\nGemStarAM\nGoldenBookAM\nGoldenJokerAM\nGrandCasanovaAM\nGrandFruitsAM\nGrandTigerAM\nGrandXAM\nHot27AM\nHot40AM\nHot7AM\nHot7DiceAM\nHot81AM\nHotChoiceAM\nHotDiamondsAM\nHotFruits100AM\nHotFruits20AM\nHotFruits40AM\nHotNeonAM\nHotScatterAM\nHotScatterDiceAM\nHotStarAM\nHotTwentyAM\nHottestFruits20AM\nHottestFruits40AM\nJacksOrBetterAM\nJokerCardAM\nJokerPokerAM\nKingsCrownAM\nLaGranAventuraAM\nLadyJokerAM\nLightingHotAM\nLovelyLadyAM\nLuckyBellsAM\nLuckyCoinAM\nLuckyJoker20AM\nLuckyJoker5AM\nLuckyZodiacAM\nMagicForestAM\nMagicIdolAM\nMagicOwlAM\nMermaidsGoldAM\nMerryFruitsAM\nMultiWinAM\nMultiWinTripleAM\nPartyNightAM\nPartyTimeAM\nRedChilliAM\nRomanLegionAM\nRouletteRoyalAM\nRoyalUnicornAM\nSakuraFruitsAM\nSakuraSecretAM\nTensOrBetterAM\nTweetyBirdsAM\nUltra7AM\nVampiresAM\nWild7AM\nWildDiamondsAM\nWildDragonAM\nWildRespinAM\nWildSharkAM\nWildStarsAM\nWolfMoonAM'
+++ grep -c .
++ NCOUNT=102
++ echo 'AM names to hunt: 102'
+AM names to hunt: 102
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ for BASE in "https://demo4.scriptcasino.ru" "https://scriptcasino.ru" "https://demo.scriptcasino.ru"
++ echo '=== probing https://demo4.scriptcasino.ru ==='
+=== probing https://demo4.scriptcasino.ru ===
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1842
++ echo 'https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 200 (1842 B)'
+https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 200 (1842 B)
++ '[' 200 = 200 ']'
++ '[' 1842 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Admiral Nelson</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<di+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_3065ca.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1842
++ echo 'https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 200 (1842 B)'
+https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 200 (1842 B)
++ '[' 200 = 200 ']'
++ '[' 1842 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Admiral Nelson</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<di+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_d608e5.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/demo/AdmiralNelsonAM.html
++ CODE=302
+++ stat -c%s probe_out.html
++ SIZE=362
++ echo 'https://demo4.scriptcasino.ru/demo/AdmiralNelsonAM.html -> 302 (362 B)'
+https://demo4.scriptcasino.ru/demo/AdmiralNelsonAM.html -> 302 (362 B)
++ '[' 302 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/
++ CODE=403
+++ stat -c%s probe_out.html
++ SIZE=287
++ echo 'https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/ -> 403 (287 B)'
+https://demo4.scriptcasino.ru/games/AdmiralNelsonAM/ -> 403 (287 B)
++ '[' 403 = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1843
++ echo 'https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/ -> 200 (1843 B)'
+https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/ -> 200 (1843 B)
++ '[' 200 = 200 ']'
++ '[' 1843 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Billyonaire</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<div i+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_2799ea.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/index.html
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1843
++ echo 'https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 200 (1843 B)'
+https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 200 (1843 B)
++ '[' 200 = 200 ']'
++ '[' 1843 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Billyonaire</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<div i+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/BillyonaireAM/amarent/index.html
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_fd1065.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/demo/BillyonaireAM.html
++ CODE=302
+++ stat -c%s probe_out.html
++ SIZE=362
++ echo 'https://demo4.scriptcasino.ru/demo/BillyonaireAM.html -> 302 (362 B)'
+https://demo4.scriptcasino.ru/demo/BillyonaireAM.html -> 302 (362 B)
++ '[' 302 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BillyonaireAM/
++ CODE=403
+++ stat -c%s probe_out.html
++ SIZE=287
++ echo 'https://demo4.scriptcasino.ru/games/BillyonaireAM/ -> 403 (287 B)'
+https://demo4.scriptcasino.ru/games/BillyonaireAM/ -> 403 (287 B)
++ '[' 403 = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1845
++ echo 'https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 200 (1845 B)'
+https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 200 (1845 B)
++ '[' 200 = 200 ']'
++ '[' 1845 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Book Of Aztec</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<div+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_8ab375.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html
++ CODE=200
+++ stat -c%s probe_out.html
++ SIZE=1845
++ echo 'https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 200 (1845 B)'
+https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 200 (1845 B)
++ '[' 200 = 200 ']'
++ '[' 1845 -gt 200 ']'
++ head -c 600 probe_out.html
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Book Of Aztec</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="stylesheet" />
+	<script src="./src/webgl-2d.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="gameArea">
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas"></canvas>
+		<div+ echo
+
+++ echo https://demo4.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html
+++ md5sum
+++ cut -c1-6
++ cp probe_out.html sample_8e1743.html
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/demo/BookOfAztecAM.html
++ CODE=302
+++ stat -c%s probe_out.html
++ SIZE=362
++ echo 'https://demo4.scriptcasino.ru/demo/BookOfAztecAM.html -> 302 (362 B)'
+https://demo4.scriptcasino.ru/demo/BookOfAztecAM.html -> 302 (362 B)
++ '[' 302 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo4.scriptcasino.ru/games/BookOfAztecAM/
++ CODE=403
+++ stat -c%s probe_out.html
++ SIZE=287
++ echo 'https://demo4.scriptcasino.ru/games/BookOfAztecAM/ -> 403 (287 B)'
+https://demo4.scriptcasino.ru/games/BookOfAztecAM/ -> 403 (287 B)
++ '[' 403 = 200 ']'
++ for BASE in "https://demo4.scriptcasino.ru" "https://scriptcasino.ru" "https://demo.scriptcasino.ru"
++ echo '=== probing https://scriptcasino.ru ==='
+=== probing https://scriptcasino.ru ===
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 404 (278 B)'
+https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 404 (278 B)'
+https://scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/demo/AdmiralNelsonAM.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/demo/AdmiralNelsonAM.html -> 404 (278 B)'
+https://scriptcasino.ru/demo/AdmiralNelsonAM.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/AdmiralNelsonAM/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/AdmiralNelsonAM/ -> 404 (278 B)'
+https://scriptcasino.ru/games/AdmiralNelsonAM/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BillyonaireAM/amarent/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BillyonaireAM/amarent/ -> 404 (278 B)'
+https://scriptcasino.ru/games/BillyonaireAM/amarent/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BillyonaireAM/amarent/index.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 404 (278 B)'
+https://scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/demo/BillyonaireAM.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/demo/BillyonaireAM.html -> 404 (278 B)'
+https://scriptcasino.ru/demo/BillyonaireAM.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BillyonaireAM/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BillyonaireAM/ -> 404 (278 B)'
+https://scriptcasino.ru/games/BillyonaireAM/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BookOfAztecAM/amarent/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 404 (278 B)'
+https://scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BookOfAztecAM/amarent/index.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 404 (278 B)'
+https://scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/demo/BookOfAztecAM.html
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/demo/BookOfAztecAM.html -> 404 (278 B)'
+https://scriptcasino.ru/demo/BookOfAztecAM.html -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://scriptcasino.ru/games/BookOfAztecAM/
++ CODE=404
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://scriptcasino.ru/games/BookOfAztecAM/ -> 404 (278 B)'
+https://scriptcasino.ru/games/BookOfAztecAM/ -> 404 (278 B)
++ '[' 404 = 200 ']'
++ for BASE in "https://demo4.scriptcasino.ru" "https://scriptcasino.ru" "https://demo.scriptcasino.ru"
++ echo '=== probing https://demo.scriptcasino.ru ==='
+=== probing https://demo.scriptcasino.ru ===
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/AdmiralNelsonAM/amarent/index.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/demo/AdmiralNelsonAM.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/demo/AdmiralNelsonAM.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/demo/AdmiralNelsonAM.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/AdmiralNelsonAM/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/AdmiralNelsonAM/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/AdmiralNelsonAM/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/index.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BillyonaireAM/amarent/index.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/demo/BillyonaireAM.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/demo/BillyonaireAM.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/demo/BillyonaireAM.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BillyonaireAM/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BillyonaireAM/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BillyonaireAM/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for N in AdmiralNelsonAM BillyonaireAM BookOfAztecAM
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BookOfAztecAM/amarent/index.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/demo/BookOfAztecAM.html
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/demo/BookOfAztecAM.html -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/demo/BookOfAztecAM.html -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ for P in "/games/$N/amarent/" "/games/$N/amarent/index.html" "/demo/$N.html" "/games/$N/"
+++ curl -s -o probe_out.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 https://demo.scriptcasino.ru/games/BookOfAztecAM/
+++ echo ERR
++ CODE=000ERR
+++ stat -c%s probe_out.html
++ SIZE=278
++ echo 'https://demo.scriptcasino.ru/games/BookOfAztecAM/ -> 000ERR (278 B)'
+https://demo.scriptcasino.ru/games/BookOfAztecAM/ -> 000ERR (278 B)
++ '[' 000ERR = 200 ']'
++ echo '=== gitlab search ==='
+=== gitlab search ===
++ for Q in goldsvet "vanguard casino" "casino 8.5" amatic
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for p in d: print(p[\'path_with_namespace\'], p.get(\'default_branch\'), p.get(\'repository_size\') or \'\')\nexcept Exception as e: print(\'parse fail\', e)'
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote('\''goldsvet'\''))'
++ curl -s --max-time 30 'https://gitlab.com/api/v4/projects?search=goldsvet&per_page=50'
+mintscripts_studio/goldsvet-casino-open-source-engine-public main 
+mintscripts/goldsvet-7-5-casino-script-php-html5-games-open-source main 
+kamrul-hasan2/goldsvet main 
+pasquqlale/Goldsvet-1Win-Sports-Script-8-5 main 
+casinoman/handman/oldgaymes main 
++ for Q in goldsvet "vanguard casino" "casino 8.5" amatic
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for p in d: print(p[\'path_with_namespace\'], p.get(\'default_branch\'), p.get(\'repository_size\') or \'\')\nexcept Exception as e: print(\'parse fail\', e)'
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote('\''vanguard casino'\''))'
++ curl -s --max-time 30 'https://gitlab.com/api/v4/projects?search=vanguard%20casino&per_page=50'
++ for Q in goldsvet "vanguard casino" "casino 8.5" amatic
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for p in d: print(p[\'path_with_namespace\'], p.get(\'default_branch\'), p.get(\'repository_size\') or \'\')\nexcept Exception as e: print(\'parse fail\', e)'
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote('\''casino 8.5'\''))'
++ curl -s --max-time 30 'https://gitlab.com/api/v4/projects?search=casino%208.5&per_page=50'
++ for Q in goldsvet "vanguard casino" "casino 8.5" amatic
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for p in d: print(p[\'path_with_namespace\'], p.get(\'default_branch\'), p.get(\'repository_size\') or \'\')\nexcept Exception as e: print(\'parse fail\', e)'
+++ python3 -c 'import urllib.parse,sys;print(urllib.parse.quote('\''amatic'\''))'
++ curl -s --max-time 30 'https://gitlab.com/api/v4/projects?search=amatic&per_page=50'
+pmatic1/lab04-amatic-imijak main 
+FermataRest/DramaticShapeVoxelMod master 
+regrabneffop-ultimate/shareables/lfs-publish main 
+tbasham/kickflip-goblin-skate-jam main 
+dyansberg-c/appstronaut-mission-control main 
+luachem/chemical-element main 
+skyline-labs/iamatic main 
+khushigoyal127/swamaticss main 
+dynga/CAHgen main 
+nesscoffee/gramatica-proyecto-compi main 
+harmotus/gramatica-simplificada main 
+nooorr0044/telegramstickersimport master 
+GallVp/qshuf main 
+doodle1244/crab_game main 
+b4ux1t3/parsing-the-dark main 
+airdata/aws-billing-kibana master 
+MathieuMD/guntamatic-bmk-to-home-assistant main 
+AssaultFox/tankseer main 
+apurv3351/axiamatic-ui-exercise main 
+XLeoMasterX2/prueba-viamatica-1 main 
+XLeoMasterX2/prueba-viamatica main 
+mtt42/datamatics main 
+VKStudio/cpamatica-test-plugin main 
+Kitteh6660/DramaticDoors master 
+synamaticscodestudio/synamaticscodestudio.gitlab.io main 
+qnib-golang/qshuf main 
+mhasan341/bcash main 
+yorrran/pramatic-video-app main 
+u8array/pdf_form master 
+Musicminion/Clock-FLTK-2021-SJTU-CS-Problem-Solution-and-Practice-Assignment main 
+academic15/mapamatico main 
+Vitix1/dramatical-murder-2014-czech-subtitles main 
+nashmuhandes/gzdoom-gutamatics master 
+tutor29/auth_proyect_taller_tamatico main 
+jketzer33/logamatic_2107_wifi_comm main 
+marimonteiro/web-challange main 
+devmcclu/unreal-food-physics-old master 
+muhammad.osama2/orecamatic main 
+Elevatoz/sales-engagement-program main 
+mr.moazen/SQL-Slammer-Worm_Detection master 
+hostinfodev/headlines-api main 
+CamilaAlegre/gramatica1 main 
+CamilaAlegre/gramatica main 
+glytch1/DramaticIcebergPresskitBuild main 
+djsushi123/kcv-gen main 
+Danny8Bit/comment-freely-comment-truncation-overhaul master 
+svishwakarma1/datamatics master 
+chookiat08/python-onapsdk develop 
+the78mole/logamatic_2107_wifi_comm main 
+mounikakunchanapalli/asset_telamatics master 
++ echo '=== gitee search ==='
+=== gitee search ===
++ curl -s --max-time 30 'https://gitee.com/api/v5/search/repositories?q=goldsvet&per_page=50'
++ head -c 2000
+[]+ echo
+
++ curl -s --max-time 30 'https://gitee.com/api/v5/search/repositories?q=casino%20slot&per_page=30'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for p in d: print(p.get(\'full_name\'), p.get(\'default_branch\'))\nexcept Exception as e: print(\'parse fail\', e)'
+parse fail Expecting value: line 1 column 1 (char 0)
++ true
++ echo '=== codeberg search ==='
+=== codeberg search ===
++ curl -s --max-time 30 'https://codeberg.org/api/v1/repos/search?q=goldsvet&limit=30'
++ head -c 1500
+Search and filtering is seeing a high influx of requests for this repository, to preserve the availability of Codeberg, your search request will not be processed. Sorry for the inconvenience and please try again later.+ echo
+
++ echo '=== archive.org items ==='
+=== archive.org items ===
++ curl -s --max-time 30 'https://archive.org/advancedsearch.php?q=goldsvet+OR+%22casino+games+pack%22&fl%5B%5D=identifier&fl%5B%5D=item_size&rows=50&output=json'
++ python3 -c $'import json,sys\ntry:\n  d=json.load(sys.stdin)\n  for doc in d[\'response\'][\'docs\']: print(doc.get(\'identifier\'), doc.get(\'item_size\'))\nexcept Exception as e: print(\'parse fail\', e)'
+youtube-qCmG2GK3c90 212308583
++ echo 'PROBE DONE'
+PROBE DONE
