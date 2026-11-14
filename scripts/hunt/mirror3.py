@@ -20,6 +20,7 @@ HOSTS = ["https://demo4.scriptcasino.ru", "https://demo5.scriptcasino.ru",
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0"
 EXTS_IMG = ('.png', '.jpg', '.jpeg', '.webp', '.gif')
 EXTS_SND = ('.mp3', '.ogg', '.m4a')
+EXTS_JSON = ('.json',)
 SERIES = [('symbanim', 22), ('symbols', 10), ('freewheel', 12), ('firework', 4), ('symgame', 12)]
 PER_REF_DIR_CAP = 4
 
