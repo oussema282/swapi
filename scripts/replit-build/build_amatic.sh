@@ -378,6 +378,7 @@ fi
 cd /tmp/build
 python3 -m zipfile -t final.zip && echo "ZIP TEST OK"
 SIZE=$(stat -c%s final.zip); SHA=$(sha256sum final.zip | awk '{print $1}')
+PUB=$(wc -l < /tmp/build/am_names.txt)
 echo "FINAL: $SIZE bytes  sha256=$SHA"
 if [ "$SIZE" -ge 2000000000 ]; then
   split -b 1900000000 -d final.zip part_
@@ -386,7 +387,7 @@ fi
 
 if ls part_* >/dev/null 2>&1; then
 cat > notes.md <<EOF
-**Goldsvet 8.5 — Amatic-only Replit build** (auto-assembled \$(date -u +%F))
+**Goldsvet 8.5 — Amatic-only Replit build** (auto-assembled $(date -u +%F))
 
 Full zip is ${SIZE} bytes (sha256 \`$SHA\`) — split into two parts. Reassemble:
 
@@ -395,15 +396,15 @@ cat part_00 part_01 > amatic-replit-ready.zip
 sha256sum amatic-replit-ready.zip   # must equal $SHA
 \`\`\`
 
-Lobby: **AM games only** — 56 demo-harvested + 5 pack clients (61 published).
+Lobby: **AM games only** — $PUB published, every one verified against its own game-JS manifest (settings__<hash>.js boot scripts included) + 5 pack clients.
 Deploy steps in \`README-REPLIT.md\` inside the zip.
 EOF
 else
 cat > notes.md <<EOF
-**Goldsvet 8.5 — Amatic-only Replit build** (auto-assembled \$(date -u +%F))
+**Goldsvet 8.5 — Amatic-only Replit build** (auto-assembled $(date -u +%F))
 
-- Single asset: **amatic-replit-ready.zip** — ${SIZE} bytes, sha256 \`$SHA\`
-- Full Laravel platform; lobby limited to **Amatic games only** (61 published: 56 demo-harvested + 5 pack clients)
+- Single asset: **final.zip** — ${SIZE} bytes, sha256 \`$SHA\`
+- Full Laravel platform; lobby limited to **Amatic games only** — $PUB published, every one verified against its own game-JS manifest (settings__<hash>.js boot scripts included) + 5 pack clients; incomplete games hidden
 - DB: \`database/database.sqlite\` pre-converted, AM-exclusive lobby; MySQL legacy path included
 - Deploy: import into a blank Repl -> \`unzip\` -> Run. Steps in \`README-REPLIT.md\` inside the zip.
 EOF
