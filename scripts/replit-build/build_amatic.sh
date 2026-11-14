@@ -111,30 +111,10 @@ print('hidden-broken:', ' '.join(sorted(broken-set(pack))))
 PY
 wc -l /tmp/build/am_names.txt
 
-# ---------- 3d. blade patch: pass ?config=<shop> so the loader finds settings_<K>_<hash>.js ----------
-python3 - <<'PY'
-import json, os, re
-ks = {}
-p = '/tmp/build/amfill/mirror/_config_ids.json'
-if os.path.exists(p):
-    ks = json.load(open(p))
-names = [n.strip() for n in open('/tmp/build/am_names.txt').read().split() if n.strip()]
-default_k = sorted(set(ks.values()))[0] if ks else 1
-patched = 0
-for n in names:
-    bp = f'/tmp/build/stage/resources/views/frontend/games/list/{n}.blade.php'
-    if not os.path.exists(bp):
-        continue
-    k = ks.get(n, default_k)
-    s = open(bp).read()
-    s2 = re.sub(r'(/games/\{\{ \$game->name \}\}/amarent/)(?!\?)', rf'\1?config={k}', s, count=1)
-    if s2 == s:
-        s2 = re.sub(r'amarent/(["\'])', rf'amarent/?config={k}\1', s, count=1)
-    if s2 != s:
-        open(bp, 'w').write(s2)
-        patched += 1
-print(f'blades patched with ?config=: {patched} (default k={default_k})')
-PY
+# NOTE: do NOT append ?config=<K> to blade amarent URLs. With no config param the
+# loader requests settings__<loaderhash>.js (empty config, double underscore), which
+# the demo serves and which we now mirror. A config value forces settings_<K>_<hash>.js
+# which does not exist for K>=1 → guaranteed 404 (BET/LINE: NaN class). Blades stay bare.
 
 # ---------- 4. database (AM-exclusive lobby) ----------
 D60SQL=$(find /tmp/build/ex -path '*d60/d60.sql' -type f | head -1)
