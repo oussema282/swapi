@@ -1,0 +1,1344 @@
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ B=https://demo4.scriptcasino.ru
++ for N in BigPandaAM AllWaysWinAM
++ echo '########## BigPandaAM'
+########## BigPandaAM
++ c /games/BigPandaAM/amarent/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/index.html
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1838
++ echo '/games/BigPandaAM/amarent/index.html -> 200 (1838 B)'
+/games/BigPandaAM/amarent/index.html -> 200 (1838 B)
++ '[' 200 = 200 ']'
++ '[' 1838 -gt 120 ']'
++ '[' 1838 -lt 100000 ']'
++ head -c 400 /tmp/d.bin
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Big Panda</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="st+ echo
+
++ c /games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1179700
++ echo '/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js -> 200 (1179700 B)'
+/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js -> 200 (1179700 B)
++ '[' 200 = 200 ']'
++ '[' 1179700 -gt 120 ']'
++ '[' 1179700 -lt 100000 ']'
++ c /games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1092722
++ echo '/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js -> 200 (1092722 B)'
+/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js -> 200 (1092722 B)
++ '[' 200 = 200 ']'
++ '[' 1092722 -gt 120 ']'
++ '[' 1092722 -lt 100000 ']'
++ for N in BigPandaAM AllWaysWinAM
++ echo '########## AllWaysWinAM'
+########## AllWaysWinAM
++ c /games/AllWaysWinAM/amarent/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/AllWaysWinAM/amarent/index.html
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1842
++ echo '/games/AllWaysWinAM/amarent/index.html -> 200 (1842 B)'
+/games/AllWaysWinAM/amarent/index.html -> 200 (1842 B)
++ '[' 200 = 200 ']'
++ '[' 1842 -gt 120 ']'
++ '[' 1842 -lt 100000 ']'
++ head -c 400 /tmp/d.bin
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Allways Win</title>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<link media="screen" href="fixed_4.css" type= "text/css" rel="+ echo
+
++ c /games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1179700
++ echo '/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js -> 200 (1179700 B)'
+/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js -> 200 (1179700 B)
++ '[' 200 = 200 ']'
++ '[' 1179700 -gt 120 ']'
++ '[' 1179700 -lt 100000 ']'
++ c /games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js
++ CODE=200
+++ stat -c%s /tmp/d.bin
++ SZ=1092722
++ echo '/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js -> 200 (1092722 B)'
+/games/AllWaysWinAM/allwayswin/src/allwayswin_00156940.js -> 200 (1092722 B)
++ '[' 200 = 200 ']'
++ '[' 1092722 -gt 120 ']'
++ '[' 1092722 -lt 100000 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/index.html
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/bigpanda/index.html -> 404 (6579 B)'
+/games/BigPandaAM/bigpanda/index.html -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/
++ CODE=403
+++ stat -c%s /tmp/d.bin
++ SZ=287
++ echo '/games/BigPandaAM/bigpanda/ -> 403 (287 B)'
+/games/BigPandaAM/bigpanda/ -> 403 (287 B)
++ '[' 403 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/src/
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/
++ CODE=403
+++ stat -c%s /tmp/d.bin
++ SZ=287
++ echo '/games/BigPandaAM/bigpanda/src/ -> 403 (287 B)'
+/games/BigPandaAM/bigpanda/src/ -> 403 (287 B)
++ '[' 403 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json -> 404 (6579 B)'
+/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/data/gamerules_en.json
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/data/gamerules_en.json
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/bigpanda/data/gamerules_en.json -> 404 (6579 B)'
+/games/BigPandaAM/bigpanda/data/gamerules_en.json -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/amarent/src/settings_00296940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_00296940.js
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/amarent/src/settings_00296940.js -> 404 (6579 B)'
+/games/BigPandaAM/amarent/src/settings_00296940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js -> 404 (6579 B)'
+/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js -> 404 (6579 B)'
+/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/slot/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/slot/index.html
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/slot/index.html -> 404 (6579 B)'
+/games/BigPandaAM/slot/index.html -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/basic/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/basic/index.html
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/basic/index.html -> 404 (6579 B)'
+/games/BigPandaAM/basic/index.html -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for U in "/games/BigPandaAM/bigpanda/index.html" "/games/BigPandaAM/bigpanda/" "/games/BigPandaAM/bigpanda/src/" "/games/BigPandaAM/bigpanda/data/resources_desktop_12_1280.json" "/games/BigPandaAM/bigpanda/data/gamerules_en.json" "/games/BigPandaAM/amarent/src/settings_00296940.js" "/games/BigPandaAM/amarent/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/bigpanda/src/settings_bigpanda_00296940.js" "/games/BigPandaAM/slot/index.html" "/games/BigPandaAM/basic/index.html" "/games/BigPandaAM/gamble/index.html"
++ c /games/BigPandaAM/gamble/index.html
+++ curl -s -o /tmp/d.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/gamble/index.html
++ CODE=404
+++ stat -c%s /tmp/d.bin
++ SZ=6579
++ echo '/games/BigPandaAM/gamble/index.html -> 404 (6579 B)'
+/games/BigPandaAM/gamble/index.html -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ echo DIAG_DONE
+DIAG_DONE
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ U=https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ echo '--- plain (diag style)'
+--- plain (diag style)
++ curl -sS -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 30 -o /tmp/a.bin -w 'code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+code=200 size=1179700 time=1.557992
++ echo '--- compressed (mirror style)'
+--- compressed (mirror style)
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/b.bin -w 'code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+code=200 size=248864 time=1.354173
++ echo '--- compressed + referer'
+--- compressed + referer
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' -e https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/ --max-time 60 -o /tmp/c.bin -w 'code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+code=200 size=248864 time=1.212856
++ echo '--- compressed twice in a row (warm)'
+--- compressed twice in a row (warm)
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/d.bin -w 'code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+code=200 size=248864 time=1.241648
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/e.bin -w 'code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+code=200 size=248864 time=1.199424
++ echo '--- 6 concurrent compressed (simulate pool)'
+--- 6 concurrent compressed (simulate pool)
++ for i in 1 2 3 4 5 6
++ for i in 1 2 3 4 5 6
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f1.bin -w 'w1: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ for i in 1 2 3 4 5 6
++ for i in 1 2 3 4 5 6
++ for i in 1 2 3 4 5 6
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f4.bin -w 'w4: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ for i in 1 2 3 4 5 6
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f5.bin -w 'w5: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ wait
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f2.bin -w 'w2: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f3.bin -w 'w3: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 60 -o /tmp/f6.bin -w 'w6: code=%{http_code} size=%{size_download} time=%{time_total}\n' https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/bigpanda_00316940.js
+w4: code=200 size=248864 time=1.195391
+w1: code=200 size=248864 time=1.198842
+w2: code=200 size=248864 time=1.209333
+w5: code=200 size=248864 time=1.215183
+w6: code=200 size=248864 time=1.374742
+w3: code=200 size=248864 time=1.389852
++ ls -la /tmp/a.bin /tmp/b.bin /tmp/c.bin /tmp/d.bin /tmp/e.bin /tmp/f1.bin /tmp/f2.bin /tmp/f3.bin /tmp/f4.bin /tmp/f5.bin /tmp/f6.bin
++ head -10
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/a.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/b.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/c.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/d.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/e.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/f1.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/f2.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/f3.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/f4.bin
+-rw-r--r-- 1 runner runner 1179700 Nov 14 02:49 /tmp/f5.bin
++ echo DIAG2_DONE
+DIAG2_DONE
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ B=https://demo4.scriptcasino.ru
++ for N in BigPandaAM BillyonaireAM
+++ echo BigPandaAM
+++ tr A-Z a-z
+++ sed -E 's/AM$//'
++ T=bigpanda
++ echo '########## BigPandaAM theme=bigpanda'
+########## BigPandaAM theme=bigpanda
++ c /games/BigPandaAM/bigpanda/images/800_600/main.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/images/800_600/main.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=94393
++ echo '/games/BigPandaAM/bigpanda/images/800_600/main.png -> 200 (94393 B)'
+/games/BigPandaAM/bigpanda/images/800_600/main.png -> 200 (94393 B)
++ c /games/BigPandaAM/bigpanda/images/800_600/winPanel.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/images/800_600/winPanel.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=16602
++ echo '/games/BigPandaAM/bigpanda/images/800_600/winPanel.png -> 200 (16602 B)'
+/games/BigPandaAM/bigpanda/images/800_600/winPanel.png -> 200 (16602 B)
++ c /games/BigPandaAM/bigpanda/images/800_600/symbanim1.jpg
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/images/800_600/symbanim1.jpg
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=124822
++ echo '/games/BigPandaAM/bigpanda/images/800_600/symbanim1.jpg -> 200 (124822 B)'
+/games/BigPandaAM/bigpanda/images/800_600/symbanim1.jpg -> 200 (124822 B)
++ c /games/BigPandaAM/bigpanda/sounds/reels.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/sounds/reels.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=83762
++ echo '/games/BigPandaAM/bigpanda/sounds/reels.mp3 -> 200 (83762 B)'
+/games/BigPandaAM/bigpanda/sounds/reels.mp3 -> 200 (83762 B)
++ c /games/BigPandaAM/bigpanda/sounds/onstart.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/sounds/onstart.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=64262
++ echo '/games/BigPandaAM/bigpanda/sounds/onstart.mp3 -> 200 (64262 B)'
+/games/BigPandaAM/bigpanda/sounds/onstart.mp3 -> 200 (64262 B)
++ c /games/BigPandaAM/basic/images/800_600/loadanim.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/basic/images/800_600/loadanim.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=5773
++ echo '/games/BigPandaAM/basic/images/800_600/loadanim.png -> 200 (5773 B)'
+/games/BigPandaAM/basic/images/800_600/loadanim.png -> 200 (5773 B)
++ c /games/BigPandaAM/basic/sounds/btn.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/basic/sounds/btn.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=5389
++ echo '/games/BigPandaAM/basic/sounds/btn.mp3 -> 200 (5389 B)'
+/games/BigPandaAM/basic/sounds/btn.mp3 -> 200 (5389 B)
++ c /games/BigPandaAM/slot/images/800_600/wins.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/slot/images/800_600/wins.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=154313
++ echo '/games/BigPandaAM/slot/images/800_600/wins.png -> 200 (154313 B)'
+/games/BigPandaAM/slot/images/800_600/wins.png -> 200 (154313 B)
++ c /games/BigPandaAM/slot/sounds/bigwin.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/slot/sounds/bigwin.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=73037
++ echo '/games/BigPandaAM/slot/sounds/bigwin.mp3 -> 200 (73037 B)'
+/games/BigPandaAM/slot/sounds/bigwin.mp3 -> 200 (73037 B)
++ c /games/BigPandaAM/gamble/images/800_600/gamble.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/gamble/images/800_600/gamble.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=46241
++ echo '/games/BigPandaAM/gamble/images/800_600/gamble.png -> 200 (46241 B)'
+/games/BigPandaAM/gamble/images/800_600/gamble.png -> 200 (46241 B)
++ c /games/BigPandaAM/bigpanda/src/main.css
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BigPandaAM/bigpanda/src/main.css
++ CODE=404
+++ stat -c%s /tmp/d3.bin
++ SZ=6579
++ echo '/games/BigPandaAM/bigpanda/src/main.css -> 404 (6579 B)'
+/games/BigPandaAM/bigpanda/src/main.css -> 404 (6579 B)
++ for N in BigPandaAM BillyonaireAM
+++ echo BillyonaireAM
+++ sed -E 's/AM$//'
+++ tr A-Z a-z
++ T=billyonaire
++ echo '########## BillyonaireAM theme=billyonaire'
+########## BillyonaireAM theme=billyonaire
++ c /games/BillyonaireAM/billyonaire/images/800_600/main.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/images/800_600/main.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=83219
++ echo '/games/BillyonaireAM/billyonaire/images/800_600/main.png -> 200 (83219 B)'
+/games/BillyonaireAM/billyonaire/images/800_600/main.png -> 200 (83219 B)
++ c /games/BillyonaireAM/billyonaire/images/800_600/winPanel.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/images/800_600/winPanel.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=22968
++ echo '/games/BillyonaireAM/billyonaire/images/800_600/winPanel.png -> 200 (22968 B)'
+/games/BillyonaireAM/billyonaire/images/800_600/winPanel.png -> 200 (22968 B)
++ c /games/BillyonaireAM/billyonaire/images/800_600/symbanim1.jpg
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/images/800_600/symbanim1.jpg
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=53815
++ echo '/games/BillyonaireAM/billyonaire/images/800_600/symbanim1.jpg -> 200 (53815 B)'
+/games/BillyonaireAM/billyonaire/images/800_600/symbanim1.jpg -> 200 (53815 B)
++ c /games/BillyonaireAM/billyonaire/sounds/reels.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/sounds/reels.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=83762
++ echo '/games/BillyonaireAM/billyonaire/sounds/reels.mp3 -> 200 (83762 B)'
+/games/BillyonaireAM/billyonaire/sounds/reels.mp3 -> 200 (83762 B)
++ c /games/BillyonaireAM/billyonaire/sounds/onstart.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/sounds/onstart.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=49231
++ echo '/games/BillyonaireAM/billyonaire/sounds/onstart.mp3 -> 200 (49231 B)'
+/games/BillyonaireAM/billyonaire/sounds/onstart.mp3 -> 200 (49231 B)
++ c /games/BillyonaireAM/basic/images/800_600/loadanim.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/basic/images/800_600/loadanim.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=5773
++ echo '/games/BillyonaireAM/basic/images/800_600/loadanim.png -> 200 (5773 B)'
+/games/BillyonaireAM/basic/images/800_600/loadanim.png -> 200 (5773 B)
++ c /games/BillyonaireAM/basic/sounds/btn.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/basic/sounds/btn.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=5389
++ echo '/games/BillyonaireAM/basic/sounds/btn.mp3 -> 200 (5389 B)'
+/games/BillyonaireAM/basic/sounds/btn.mp3 -> 200 (5389 B)
++ c /games/BillyonaireAM/slot/images/800_600/wins.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/slot/images/800_600/wins.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=154313
++ echo '/games/BillyonaireAM/slot/images/800_600/wins.png -> 200 (154313 B)'
+/games/BillyonaireAM/slot/images/800_600/wins.png -> 200 (154313 B)
++ c /games/BillyonaireAM/slot/sounds/bigwin.mp3
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/slot/sounds/bigwin.mp3
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=73037
++ echo '/games/BillyonaireAM/slot/sounds/bigwin.mp3 -> 200 (73037 B)'
+/games/BillyonaireAM/slot/sounds/bigwin.mp3 -> 200 (73037 B)
++ c /games/BillyonaireAM/gamble/images/800_600/gamble.png
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/gamble/images/800_600/gamble.png
++ CODE=200
+++ stat -c%s /tmp/d3.bin
++ SZ=46241
++ echo '/games/BillyonaireAM/gamble/images/800_600/gamble.png -> 200 (46241 B)'
+/games/BillyonaireAM/gamble/images/800_600/gamble.png -> 200 (46241 B)
++ c /games/BillyonaireAM/billyonaire/src/main.css
+++ curl -s -o /tmp/d3.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 https://demo4.scriptcasino.ru/games/BillyonaireAM/billyonaire/src/main.css
++ CODE=404
+++ stat -c%s /tmp/d3.bin
++ SZ=6579
++ echo '/games/BillyonaireAM/billyonaire/src/main.css -> 404 (6579 B)'
+/games/BillyonaireAM/billyonaire/src/main.css -> 404 (6579 B)
++ echo DIAG3_DONE
+DIAG3_DONE
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### buttonback.png'
+### buttonback.png
++ c /amatic/images/800_600/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/buttonback.png -> 000
++ c /games/common/images/800_600/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/buttonback.png -> 000
++ c /games/_common/images/800_600/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/buttonback.png -> 000
++ c /static/images/800_600/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/buttonback.png -> 000
++ c /games/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/games/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/games/buttonback.png -> 000
++ c /images/800_600/buttonback.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/buttonback.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/buttonback.png -> 404'
+https://demo4.scriptcasino.ru/images/800_600/buttonback.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/buttonback.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/buttonback.png -> 000'
+https://demo5.scriptcasino.ru/images/800_600/buttonback.png -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### jackpot.png'
+### jackpot.png
++ c /amatic/images/800_600/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/jackpot.png -> 000
++ c /games/common/images/800_600/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/jackpot.png -> 000
++ c /games/_common/images/800_600/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/jackpot.png -> 000
++ c /static/images/800_600/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/jackpot.png -> 000
++ c /games/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/games/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/games/jackpot.png -> 000
++ c /images/800_600/jackpot.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/jackpot.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/jackpot.png -> 404'
+https://demo4.scriptcasino.ru/images/800_600/jackpot.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/jackpot.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/jackpot.png -> 000'
+https://demo5.scriptcasino.ru/images/800_600/jackpot.png -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### load.jpg'
+### load.jpg
++ c /amatic/images/800_600/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/load.jpg -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/load.jpg -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/load.jpg -> 000
++ c /games/common/images/800_600/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/load.jpg -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/load.jpg -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/load.jpg -> 000
++ c /games/_common/images/800_600/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/load.jpg -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/load.jpg -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/load.jpg -> 000
++ c /static/images/800_600/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/load.jpg -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/load.jpg -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/load.jpg -> 000
++ c /games/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/load.jpg -> 404'
+https://demo4.scriptcasino.ru/games/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/load.jpg -> 000'
+https://demo5.scriptcasino.ru/games/load.jpg -> 000
++ c /images/800_600/load.jpg
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/load.jpg
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/load.jpg -> 404'
+https://demo4.scriptcasino.ru/images/800_600/load.jpg -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/load.jpg
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/load.jpg -> 000'
+https://demo5.scriptcasino.ru/images/800_600/load.jpg -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### load_amatic.png'
+### load_amatic.png
++ c /amatic/images/800_600/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/load_amatic.png -> 000
++ c /games/common/images/800_600/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/load_amatic.png -> 000
++ c /games/_common/images/800_600/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/load_amatic.png -> 000
++ c /static/images/800_600/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/load_amatic.png -> 000
++ c /games/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/games/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/games/load_amatic.png -> 000
++ c /images/800_600/load_amatic.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/load_amatic.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/load_amatic.png -> 404'
+https://demo4.scriptcasino.ru/images/800_600/load_amatic.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/load_amatic.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/load_amatic.png -> 000'
+https://demo5.scriptcasino.ru/images/800_600/load_amatic.png -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### reelanim.png'
+### reelanim.png
++ c /amatic/images/800_600/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/reelanim.png -> 000
++ c /games/common/images/800_600/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/reelanim.png -> 000
++ c /games/_common/images/800_600/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/reelanim.png -> 000
++ c /static/images/800_600/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/reelanim.png -> 000
++ c /games/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/games/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/games/reelanim.png -> 000
++ c /images/800_600/reelanim.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/reelanim.png
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/reelanim.png -> 404'
+https://demo4.scriptcasino.ru/images/800_600/reelanim.png -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/reelanim.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/reelanim.png -> 000'
+https://demo5.scriptcasino.ru/images/800_600/reelanim.png -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### gui_desktop_v17.json'
+### gui_desktop_v17.json
++ c /amatic/images/800_600/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/gui_desktop_v17.json -> 000
++ c /games/common/images/800_600/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/gui_desktop_v17.json -> 000
++ c /games/_common/images/800_600/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/gui_desktop_v17.json -> 000
++ c /static/images/800_600/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/gui_desktop_v17.json -> 000
++ c /games/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/games/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/games/gui_desktop_v17.json -> 000
++ c /images/800_600/gui_desktop_v17.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/gui_desktop_v17.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/gui_desktop_v17.json -> 404'
+https://demo4.scriptcasino.ru/images/800_600/gui_desktop_v17.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/gui_desktop_v17.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/gui_desktop_v17.json -> 000'
+https://demo5.scriptcasino.ru/images/800_600/gui_desktop_v17.json -> 000
++ for N in buttonback.png jackpot.png load.jpg load_amatic.png reelanim.png gui_desktop_v17.json mystery_jackpot.json
++ echo '### mystery_jackpot.json'
+### mystery_jackpot.json
++ c /amatic/images/800_600/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/amatic/images/800_600/mystery_jackpot.json -> 000
++ c /games/common/images/800_600/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/games/common/images/800_600/mystery_jackpot.json -> 000
++ c /games/_common/images/800_600/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/games/_common/images/800_600/mystery_jackpot.json -> 000
++ c /static/images/800_600/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/static/images/800_600/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/static/images/800_600/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/static/images/800_600/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/static/images/800_600/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/static/images/800_600/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/static/images/800_600/mystery_jackpot.json -> 000
++ c /games/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/games/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/games/mystery_jackpot.json -> 000
++ c /images/800_600/mystery_jackpot.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/images/800_600/mystery_jackpot.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/images/800_600/mystery_jackpot.json -> 404'
+https://demo4.scriptcasino.ru/images/800_600/mystery_jackpot.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/images/800_600/mystery_jackpot.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/images/800_600/mystery_jackpot.json -> 000'
+https://demo5.scriptcasino.ru/images/800_600/mystery_jackpot.json -> 000
++ echo '### version-neighbour check on a working client (AllWaysWin)'
+### version-neighbour check on a working client (AllWaysWin)
++ c /games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json
++ CODE=404
++ echo 'https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json -> 404'
+https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json -> 404
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json -> 000'
+https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/gui_desktop_v27.json -> 000
++ c /games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png
++ CODE=200
++ echo 'https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png -> 200'
+https://demo4.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png -> 200
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png -> 000'
+https://demo5.scriptcasino.ru/games/AllWaysWinAM/allwayswin/images/800_600/symbols_small.png -> 000
++ echo '### alternate shells: what does the DEMO lobby actually load? (iframe page)'
+### alternate shells: what does the DEMO lobby actually load? (iframe page)
++ c /demo/AllWaysWinAM.html
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/demo/AllWaysWinAM.html
++ CODE=302
++ echo 'https://demo4.scriptcasino.ru/demo/AllWaysWinAM.html -> 302'
+https://demo4.scriptcasino.ru/demo/AllWaysWinAM.html -> 302
++ for HOST in https://demo4.scriptcasino.ru https://demo5.scriptcasino.ru
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo5.scriptcasino.ru/demo/AllWaysWinAM.html
++ CODE=000
++ echo 'https://demo5.scriptcasino.ru/demo/AllWaysWinAM.html -> 000'
+https://demo5.scriptcasino.ru/demo/AllWaysWinAM.html -> 000
++ echo DIAG_ROOT_DONE
+DIAG_ROOT_DONE
++ B=https://demo4.scriptcasino.ru
++ echo '### follow /demo/BigPandaAM.html'
+### follow /demo/BigPandaAM.html
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -D /tmp/h1.txt -o /tmp/b1.html -c /tmp/ck.txt https://demo4.scriptcasino.ru/demo/BigPandaAM.html
++ grep -iE '^location|^set-cookie' /tmp/h1.txt
++ head -6
+Set-Cookie: XSRF-TOKEN=eyJpdiI6InY1eU9ucGRkRkVvQmZKcTJRdHZ4Z3c9PSIsInZhbHVlIjoiei9PeVJFY25WeXF3Q0ZMcmJla0I1QjVhZElMdWVFVmJNSmc5YUNoaVp6NndZWldxZ08rY0ZYM3dUTUM1OXRVL1ExbmZoWUg5N2xPZnVmVi9RQnVxazFBWjlTYlJOR1BHZXhrZnpoV2YyUlpabXE0KzFxNTdWZUhMYnlLdWlpRjkiLCJtYWMiOiJmZmVlNjlkNTA4NzhiMmU3YWMyOTBjNjI5ODUwOGUzYmUxYzc4OWE5YzBlMjMzYzBmNzg5MjYxNjkxNzgzNGQ1IiwidGFnIjoiIn0%3D; expires=Sun, 14-Mar-2027 02:49:52 GMT; Max-Age=10368000; path=/; samesite=lax
+Set-Cookie: laravel_session=eyJpdiI6IkdvUit1aDI1aWZsWkRHc0FVZjByM1E9PSIsInZhbHVlIjoiOUZVZVpPVUxBL1RKNGUyS214N3lqK05ITmVwQXVQY3A4dEY1dUVLNkpXWlpHVFBsM1I0VnBiaWZzSlh5Q2VjY1FlaEV3MkxFN3RqRzFWTEZaWjlNajl3Vk1hWktEMHV4aDhJZVdtSUJTTngwMXc4RmNVN3F1M2VvRHFzSmhxb0ciLCJtYWMiOiJiM2U1NzYwNDhhNzRkM2I3YWZlY2IzNTZlZjJlMzcwZmUzZjY1MTE4MTY3NjBkMWVhYmUzYzE3ZWE2YzUyZTJjIiwidGFnIjoiIn0%3D; expires=Sun, 14-Mar-2027 02:49:52 GMT; Max-Age=10368000; path=/; samesite=lax
+Location: https://demo4.scriptcasino.ru
++ head -c 700 /tmp/b1.html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://demo4.scriptcasino.ru'" />
+
+        <title>Redirecting to https://demo4.scriptcasino.ru</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://demo4.scriptcasino.ru">https://demo4.scriptcasino.ru</a>.
+    </body>
+</html>+ echo
+
++ echo '### follow redirects fully'
+### follow redirects fully
++ curl -sL -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 30 -c /tmp/ck.txt -o /tmp/b2.html https://demo4.scriptcasino.ru/demo/BigPandaAM.html
++ grep -oE '(iframe[^>]*src|config)=[^"&> ]*' /tmp/b2.html
++ head -10
++ grep -oE 'config=[A-Za-z0-9_\-]+' /tmp/b2.html
++ sort -u
++ head -5
++ grep -oE 'href="[^"]*games[^"]*"' /tmp/b2.html
++ head -8
+href="/frontend/vulkan/img/mono-icons.svg#card-games"
+href="/frontend/vulkan/img/mono-icons.svg#instagames"
+href="https://demo4.scriptcasino.ru/categories/gdgames"
+href="https://demo4.scriptcasino.ru/categories/gdgames"
+href="/frontend/vulkan/img/mono-icons.svg#card-games"
+href="/categories/gdgames"
+href="/categories/gdgames"
++ echo '### homepage structure'
+### homepage structure
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -c /tmp/ck2.txt https://demo4.scriptcasino.ru/ -o /tmp/home.html
+++ stat -c%s /tmp/home.html
++ SIZE=339865
++ echo 'home: 339865 B'
+home: 339865 B
++ grep -oE '(href|src)="[^"]*"' /tmp/home.html
++ head -12
++ grep -iE 'game|play|demo'
+href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap"
+href="https://demo4.scriptcasino.ru"
+href="https://demo4.scriptcasino.ru"
+href="https://demo4.scriptcasino.ru/bonuses"
+href="https://demo4.scriptcasino.ru/vip-space"
+href="https://demo4.scriptcasino.ru/loyalty-program"
+href="https://demo4.scriptcasino.ru/hall-of-fame"
+href="https://demo4.scriptcasino.ru/ru"
+href="https://demo4.scriptcasino.ru/en"
+href="https://demo4.scriptcasino.ru/de"
+href="https://demo4.scriptcasino.ru/es"
+href="https://demo4.scriptcasino.ru/fr"
+grep: write error: Broken pipe
+grep: write error: Broken pipe
++ echo '### settings naming variants for BigPanda (hash 00215223 from its loader ref _00215223.js)'
+### settings naming variants for BigPanda (hash 00215223 from its loader ref _00215223.js)
++ for P in "settings_00215223.js" "settings_1_00215223.js" "settings_2_00215223.js" "settings_10_00215223.js"
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/src/settings_00215223.js -> 404'
+/games/BigPandaAM/amarent/src/settings_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/settings_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/settings_00215223.js -> 404'
+/games/BigPandaAM/amarent/settings_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings_00215223.js -> 404'
+/games/BigPandaAM/settings_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings/settings_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings/settings_00215223.js -> 404'
+/games/BigPandaAM/settings/settings_00215223.js -> 404
++ for P in "settings_00215223.js" "settings_1_00215223.js" "settings_2_00215223.js" "settings_10_00215223.js"
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_1_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/src/settings_1_00215223.js -> 404'
+/games/BigPandaAM/amarent/src/settings_1_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/settings_1_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/settings_1_00215223.js -> 404'
+/games/BigPandaAM/amarent/settings_1_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings_1_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings_1_00215223.js -> 404'
+/games/BigPandaAM/settings_1_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings/settings_1_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings/settings_1_00215223.js -> 404'
+/games/BigPandaAM/settings/settings_1_00215223.js -> 404
++ for P in "settings_00215223.js" "settings_1_00215223.js" "settings_2_00215223.js" "settings_10_00215223.js"
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_2_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/src/settings_2_00215223.js -> 404'
+/games/BigPandaAM/amarent/src/settings_2_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/settings_2_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/settings_2_00215223.js -> 404'
+/games/BigPandaAM/amarent/settings_2_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings_2_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings_2_00215223.js -> 404'
+/games/BigPandaAM/settings_2_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings/settings_2_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings/settings_2_00215223.js -> 404'
+/games/BigPandaAM/settings/settings_2_00215223.js -> 404
++ for P in "settings_00215223.js" "settings_1_00215223.js" "settings_2_00215223.js" "settings_10_00215223.js"
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/src/settings_10_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/src/settings_10_00215223.js -> 404'
+/games/BigPandaAM/amarent/src/settings_10_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/amarent/settings_10_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/amarent/settings_10_00215223.js -> 404'
+/games/BigPandaAM/amarent/settings_10_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings_10_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings_10_00215223.js -> 404'
+/games/BigPandaAM/settings_10_00215223.js -> 404
++ for D in "amarent/src/" "amarent/" "" "settings/"
+++ curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 12 https://demo4.scriptcasino.ru/games/BigPandaAM/settings/settings_10_00215223.js
++ CODE=404
++ echo '/games/BigPandaAM/settings/settings_10_00215223.js -> 404'
+/games/BigPandaAM/settings/settings_10_00215223.js -> 404
++ echo '### if config discovered above, probe it (manual check in log)'
+### if config discovered above, probe it (manual check in log)
++ echo DIAG_CFG_DONE
+DIAG_CFG_DONE
++ B=https://demo4.scriptcasino.ru
++ echo '### category page'
+### category page
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 -L -c /tmp/ck3.txt https://demo4.scriptcasino.ru/categories/gdgames -o /tmp/cat.html
+++ stat -c%s /tmp/cat.html
++ SIZE=319277
++ echo 'cat: 319277 B'
+cat: 319277 B
++ grep -oE 'href="[^"]*"' /tmp/cat.html
++ sort -u
++ grep -iE 'amatic|big.?panda|allways|billy|bookof|hot'
++ head -12
+href="/categories/amatic"
+href="/categories/hot"
+href="https://demo4.scriptcasino.ru/categories/amatic"
+href="https://demo4.scriptcasino.ru/categories/hot"
++ grep -oE 'href="[^"]*game[^"]*"' /tmp/cat.html
++ sort -u
++ head -12
+href="' + gameUrl + '"
+href="/categories/gdgames"
+href="/categories/netgame"
+href="/frontend/vulkan/img/mono-icons.svg#card-games"
+href="/frontend/vulkan/img/mono-icons.svg#instagames"
+href="https://demo4.scriptcasino.ru/categories/gdgames"
+href="https://demo4.scriptcasino.ru/categories/netgame"
++ echo '### search any AM name link'
+### search any AM name link
++ grep -oiE 'href="[^"]*"[^>]*>[^<]*(bigpanda|big panda|allways win|bells on fire|book of aztec|hot scatter)' /tmp/cat.html
++ head -8
++ echo '### try known play-route patterns'
+### try known play-route patterns
++ for P in "/game/big-panda" "/games/big-panda" "/play/big-panda" "/game/BigPandaAM" "/slots/big-panda"
+++ curl -s -o /tmp/p.html -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck3.txt https://demo4.scriptcasino.ru/game/big-panda
++ CODE=200
+++ stat -c%s /tmp/p.html
++ SZ=339865
++ echo '/game/big-panda -> 200 (339865 B)'
+/game/big-panda -> 200 (339865 B)
++ '[' 200 = 200 ']'
++ '[' 339865 -gt 5000 ']'
++ grep -oE '(iframe[^>]*src|config)=[^"&> ]*' /tmp/p.html
++ head -8
++ grep -oE 'config=[A-Za-z0-9_\-]+' /tmp/p.html
++ sort -u
++ head -5
++ grep -oE 'src="[^"]*amarent[^"]*"' /tmp/p.html
++ head -4
++ cp /tmp/p.html /tmp/playpage.html
++ break
++ echo '### if playpage captured, dump its amarent iframe line'
+### if playpage captured, dump its amarent iframe line
++ '[' -f /tmp/playpage.html ']'
++ grep -oE '[^"'\'']*amarent[^"'\'']*' /tmp/playpage.html
++ head -6
++ echo DIAG_PLAY_DONE
+DIAG_PLAY_DONE
++ B=https://demo4.scriptcasino.ru
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 -L -c /tmp/ck4.txt https://demo4.scriptcasino.ru/categories/amatic -o /tmp/am.html
+++ stat -c%s /tmp/am.html
++ echo 'amatic cat: 339954 B'
+amatic cat: 339954 B
++ grep -oiE 'href="[^"]*"' /tmp/am.html
++ grep -viE 'categories|frontend|fonts|\.css|\.svg|bonuses|loyalty|hall|vip|\.png|\.js'
++ sort -u
++ head -20
+href="#"
+href="' + demoUrl + '"
+href="' + gameUrl + '"
+href="' + playUrl + '"
+href="//cdnjs.cloudflare.com"
+href="//telegram.org"
+href="/uploads/favicon_1775372373.ico"
+href="https://demo4.scriptcasino.ru"
+href="https://demo4.scriptcasino.ru/bonus-policy"
+href="https://demo4.scriptcasino.ru/de"
+href="https://demo4.scriptcasino.ru/demo/AdmiralNelsonAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/AllAmericanPokerAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/AllWaysFruitsAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/AllWaysJokerAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/AllWaysWinAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/ArisingPhoenixAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/AztecSecretAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/BeautyFairyAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/BeautyWarriorAM?api_exit=/"
+href="https://demo4.scriptcasino.ru/demo/BellsOnFireAM?api_exit=/"
++ echo '### embedded data / api hints'
+### embedded data / api hints
++ grep -oE 'gameUrl[^;]{0,120}' /tmp/am.html
++ head -6
+gameUrl = '/game/' + game.name + '?api_exit=/'
+gameUrl + '" class="search-preview__play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></
+gameUrl = '/game/' + game.name + '?api_exit=/'
+gameUrl + '" class="game-card__play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 2
++ grep -oE '/api/[A-Za-z0-9_/?=&.-]+' /tmp/am.html
++ sort -u
++ head -15
++ grep -oE 'data-[a-z-]+="[^"]*(big|panda|allways|bells)[^"]*"' /tmp/am.html
++ head -8
+data-name="big time gaming"
++ grep -oE '"/[a-z-]+/[a-z0-9-]+"' /tmp/am.html
++ grep -iE 'panda|allways|bells|aztec|scatter|billy'
++ sort -u
++ head -12
++ echo '### direct iframe pattern in page'
+### direct iframe pattern in page
++ grep -oE 'amarent[^"]*' /tmp/am.html
++ head -5
++ echo '### try game open endpoints for BigPanda'
+### try game open endpoints for BigPanda
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/games/open/BigPandaAM
++ CODE=404
+++ stat -c%s /tmp/q.txt
++ SZ=6579
++ echo '/games/open/BigPandaAM -> 404 (6579 B)'
+/games/open/BigPandaAM -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/api/games/BigPandaAM
++ CODE=404
+++ stat -c%s /tmp/q.txt
++ SZ=6579
++ echo '/api/games/BigPandaAM -> 404 (6579 B)'
+/api/games/BigPandaAM -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/api/game/BigPandaAM
++ CODE=404
+++ stat -c%s /tmp/q.txt
++ SZ=6579
++ echo '/api/game/BigPandaAM -> 404 (6579 B)'
+/api/game/BigPandaAM -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/game/BigPandaAM/play
++ CODE=200
+++ stat -c%s /tmp/q.txt
++ SZ=3089
++ echo '/game/BigPandaAM/play -> 200 (3089 B)'
+/game/BigPandaAM/play -> 200 (3089 B)
++ '[' 200 = 200 ']'
++ '[' 3089 -lt 300000 ']'
++ grep -oE 'config=[A-Za-z0-9_\-]+|amarent[^"]*' /tmp/q.txt
++ head -6
+amarent/
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/games/BigPandaAM/play
++ CODE=404
+++ stat -c%s /tmp/q.txt
++ SZ=6579
++ echo '/games/BigPandaAM/play -> 404 (6579 B)'
+/games/BigPandaAM/play -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for P in "/games/open/BigPandaAM" "/api/games/BigPandaAM" "/api/game/BigPandaAM" "/game/BigPandaAM/play" "/games/BigPandaAM/play" "/play/BigPandaAM"
+++ curl -s -o /tmp/q.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -L -b /tmp/ck4.txt https://demo4.scriptcasino.ru/play/BigPandaAM
++ CODE=404
+++ stat -c%s /tmp/q.txt
++ SZ=6579
++ echo '/play/BigPandaAM -> 404 (6579 B)'
+/play/BigPandaAM -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ echo '### XHR-style open (common goldsvet route /game/open/{id} with session)'
+### XHR-style open (common goldsvet route /game/open/{id} with session)
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 20 -b /tmp/ck4.txt -L https://demo4.scriptcasino.ru/game/list -o /tmp/gl.txt -w 'list: %{http_code} %{size_download}\n'
+list: 200 339865
++ head -c 300 /tmp/gl.txt
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="MJ0cJtb1JLvUFOGdXtbA4n67gg+ echo
+
++ echo DIAG_AMATIC_DONE
+DIAG_AMATIC_DONE
++ B=https://demo4.scriptcasino.ru
++ curl -s -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 25 -L -c /tmp/ck5.txt 'https://demo4.scriptcasino.ru/demo/AllWaysWinAM?api_exit=/' -o /tmp/play.html
+++ stat -c%s /tmp/play.html
++ echo 'play page: 3096 B'
+play page: 3096 B
++ grep -oE '[^"'\'']*amarent[^"'\'']*' /tmp/play.html
++ head -5
+/games/AllWaysWinAM/amarent/
++ grep -oE 'config=[A-Za-z0-9_%\-.]+' /tmp/play.html
++ sort -u
++ head -5
+grep: Invalid range end
++ grep -oE 'iframe[^>]*' /tmp/play.html
++ head -3
++ echo '### settings files with discovered config'
+### settings files with discovered config
+++ grep -oE 'config=([A-Za-z0-9_%\-.]+)' /tmp/play.html
+++ head -1
+++ sed s/config=//
+grep: Invalid range end
++ CFG=
++ echo 'CFG=[]'
+CFG=[]
++ for NAME in "settings_${CFG}_00296940.js" "settings_${CFG}_00156940.js"
++ for D in "amarent/src/" "amarent/"
+++ curl -s -o /tmp/s.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/amarent/src/settings__00296940.js
++ CODE=200
+++ stat -c%s /tmp/s.txt
++ SZ=3879
++ echo '/games/AllWaysWinAM/amarent/src/settings__00296940.js -> 200 (3879 B)'
+/games/AllWaysWinAM/amarent/src/settings__00296940.js -> 200 (3879 B)
++ '[' 200 = 200 ']'
++ '[' 3879 -gt 50 ']'
++ head -c 300 /tmp/s.txt
+
+	var serverString='';
+
+    var XmlHttpRequest = new XMLHttpRequest();
+    XmlHttpRequest.overrideMimeType("application/json");
+    XmlHttpRequest.open('GET', '/socket_config.json', false);
+    XmlHttpRequest.onreadystatechange = function ()
+    {
+        if (XmlHttpRequest.readyState == 4 &+ echo
+
++ cp /tmp/s.txt /tmp/settings_sample.js
++ for D in "amarent/src/" "amarent/"
+++ curl -s -o /tmp/s.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/amarent/settings__00296940.js
++ CODE=404
+++ stat -c%s /tmp/s.txt
++ SZ=6579
++ echo '/games/AllWaysWinAM/amarent/settings__00296940.js -> 404 (6579 B)'
+/games/AllWaysWinAM/amarent/settings__00296940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for NAME in "settings_${CFG}_00296940.js" "settings_${CFG}_00156940.js"
++ for D in "amarent/src/" "amarent/"
+++ curl -s -o /tmp/s.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/amarent/src/settings__00156940.js
++ CODE=404
+++ stat -c%s /tmp/s.txt
++ SZ=6579
++ echo '/games/AllWaysWinAM/amarent/src/settings__00156940.js -> 404 (6579 B)'
+/games/AllWaysWinAM/amarent/src/settings__00156940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ for D in "amarent/src/" "amarent/"
+++ curl -s -o /tmp/s.txt -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --max-time 15 https://demo4.scriptcasino.ru/games/AllWaysWinAM/amarent/settings__00156940.js
++ CODE=404
+++ stat -c%s /tmp/s.txt
++ SZ=6579
++ echo '/games/AllWaysWinAM/amarent/settings__00156940.js -> 404 (6579 B)'
+/games/AllWaysWinAM/amarent/settings__00156940.js -> 404 (6579 B)
++ '[' 404 = 200 ']'
++ echo DIAG_DEMO_DONE
+DIAG_DEMO_DONE
