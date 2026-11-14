@@ -28,11 +28,13 @@ def sh(args):
     return subprocess.run(args, capture_output=True, text=True)
 
 def head(url):
-    p = sh(['curl','-sS','-I','-A',UA,'--max-time','15','-o','/dev/null','-w','%{http_code}',url])
+    p = sh(['curl','-sS','-I','-A',UA,'--connect-timeout','4','--max-time','10',
+            '-o','/dev/null','-w','%{http_code}',url])
     return (p.stdout or '').strip()
 
 def get(url, tmpbin):
-    p = sh(['curl','-sS','--compressed','-A',UA,'--max-time','45','-o',tmpbin,'-w','%{http_code}',url])
+    p = sh(['curl','-sS','--compressed','-A',UA,'--connect-timeout','4','--max-time','45',
+            '-o',tmpbin,'-w','%{http_code}',url])
     if (p.stdout or '').strip() == '200':
         try:
             with open(tmpbin,'rb') as f: return f.read()
@@ -77,40 +79,55 @@ def probe_paths(game, gd, refs_todo):
         base, rext = os.path.splitext(name)
         exts = tuple(dict.fromkeys(exts + (rext.lower(),)))
         if ref.get('settings'):
+            # settings_<CONFIG>_<hash>.js where CONFIG comes from the ?config= URL param.
+            # Discover the live config id by probing K=1..40 on the primary host.
             core = name.lstrip('_')
-            names = []
-            for pref in ('settings_', f"{ref.get('theme','')}_" if ref.get('theme') else 'settings_', 'config_'):
-                names += [pref + core, pref + name]
-            names += [name]
-            names = list(dict.fromkeys(names))
-        else:
-            names = [name]
+            dirs = ['amarent/src/', 'amarent/', 'src/']
+            names = [f'settings_{K}_{core}.js' for K in range(1, 41)]
+            outcome = 'demo404'; where = None
+            for nm in names:
+                for d in dirs:
+                    rel = d + nm
+                    code = head(f'{HOSTS[0]}/games/{game}/' + urllib.parse.quote(rel, safe='/'))
+                    if code == '200':
+                        data = get(f'{HOSTS[0]}/games/{game}/' + urllib.parse.quote(rel, safe='/'), tmpbin)
+                        if data is not None and len(data) > 60:
+                            fp = os.path.join(gd, rel)
+                            os.makedirs(os.path.dirname(fp), exist_ok=True)
+                            with open(fp,'wb') as f: f.write(data)
+                            outcome = 'filled'; where = rel
+                            try:
+                                ref['config_k'] = int(nm.split('_')[1])
+                            except Exception:
+                                pass
+                        break
+                if outcome == 'filled': break
+            out.append(dict(ref, outcome=outcome, where=where))
+            continue
+        names = [name]
         dirs = kind_dirs(ref.get('_info', {}), kind, ref.get('module'), ref.get('res'))
         if kind == 'script':
             dirs = ['amarent/src/', 'amarent/', 'src/'] + [d for d in dirs if d.endswith('src/')]
         outcome = 'demo404'; where = None
-        try:
-            for nm in names:
+        for nm in names:
+            if outcome == 'filled': break
+            for d in dirs:
                 if outcome == 'filled': break
-                for d in dirs:
+                for e in exts:
                     if outcome == 'filled': break
-                    for e in exts:
-                        if outcome == 'filled': break
-                        rel = d + nm if nm.endswith(e) else d + base + e
-                        got = False
-                        for host in HOSTS:
-                            code = head(f'{host}/games/{game}/' + urllib.parse.quote(rel, safe='/'))
-                            if code == '200':
-                                data = get(f'{host}/games/{game}/' + urllib.parse.quote(rel, safe='/'), tmpbin)
-                                if data is not None and len(data) > 60:
-                                    fp = os.path.join(gd, rel)
-                                    os.makedirs(os.path.dirname(fp), exist_ok=True)
-                                    with open(fp,'wb') as f: f.write(data)
-                                    outcome = 'filled'; where = rel; got = True
-                                break
-                        if got: break
-        finally:
-            pass
+                    rel = d + nm if nm.endswith(e) else d + base + e
+                    got = False
+                    for host in HOSTS:
+                        code = head(f'{host}/games/{game}/' + urllib.parse.quote(rel, safe='/'))
+                        if code == '200':
+                            data = get(f'{host}/games/{game}/' + urllib.parse.quote(rel, safe='/'), tmpbin)
+                            if data is not None and len(data) > 60:
+                                fp = os.path.join(gd, rel)
+                                os.makedirs(os.path.dirname(fp), exist_ok=True)
+                                with open(fp,'wb') as f: f.write(data)
+                                outcome = 'filled'; where = rel; got = True
+                            break
+                    if got: break
         out.append(dict(ref, outcome=outcome, where=where))
     return out
 
@@ -169,9 +186,14 @@ if __name__ == '__main__':
             final[g] = {'status': d.get('result', 'broken'),
                         'critical_missing': d.get('critical_missing', []),
                         'budget': d.get('budget', []),
-                        'demo404': d.get('demo404', [])}
+                        'demo404': d.get('demo404', []),
+                        'config_k': d.get('config_k')}
     json.dump(details, open(os.path.join(mirror, '_fill_detail.json'), 'w'), indent=1)
     json.dump(final, open(os.path.join(mirror, '_verify_final.json'), 'w'), indent=1)
+    ks = {g: v['config_k'] for g, v in details.items() if v.get('config_k')}
+    if ks:
+        json.dump(ks, open(os.path.join(mirror, '_config_ids.json'), 'w'), indent=1)
+        print('config ids discovered:', ks, flush=True)
     n = {}
     for v in final.values(): n[v['status']] = n.get(v['status'], 0) + 1
     print('FINAL:', json.dumps(n), flush=True)

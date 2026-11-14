@@ -55,6 +55,9 @@ def analyze(mirror, game):
         return None
     theme = game_theme(mirror, game)
     idx = local_index(gd)
+    if not os.path.exists(os.path.join(gd, 'amarent', 'index.html')):
+        return {'game': game, 'theme': theme, 'types': ['800_600'], 'refs': [], 'n_refs': 0,
+                'unsat_critical': [], 'unsat_pending': [], 'status': 'absent'}
     refs = {}   # (name) -> {kind, module, critical, local, where}
 
     def note(name, kind, module, critical, srcfile):
@@ -161,18 +164,16 @@ def analyze(mirror, game):
         r['local'] = local_sat(r['name'], r['kind'])
         r['from'] = sorted(r['from'])[:3]
 
-    # settings variants: if "_(hash).js" unresolved, check settings_/theme_/game_ prefixed copies locally
+    # settings variants: "_(hash).js" refs are satisfied by ANY settings_<K>_<hash>.js
     for r in settings_refs:
         if r['local']: continue
-        h = r['name']  # like _00296940.js or 00296940.js
-        core = h.lstrip('_')
-        for pref in ('settings_', f'{theme}_', f'{game[:-2].lower() if game.endswith("AM") else game.lower()}_', 'config_'):
-            for cand in (pref + core, pref + h):
-                if cand in idx:
-                    r['local'] = True
-                    r['resolved_as'] = cand
-                    break
-            if r['local']: break
+        core = r['name'].lstrip('_')
+        pat = re.compile(r'^settings_\d+_' + re.escape(core) + r'$')
+        for f in idx:
+            if pat.match(f):
+                r['local'] = True
+                r['resolved_as'] = f
+                break
 
     unsat = [r for r in refs.values() if not r['local']]
     broken = [r for r in unsat if r['critical']]
