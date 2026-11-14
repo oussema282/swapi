@@ -43,8 +43,8 @@ def init(m):
     global MIRROR; MIRROR = m
 
 def kind_dirs(info, kind, module, res):
-    theme = info['theme']
-    types = ([res] if res else []) + [t for t in info['types'] if t != res] or ['800_600']
+    theme = (info or {}).get('theme') or 'game'
+    types = ([res] if res else []) + [t for t in (info or {}).get('types', []) if t != res] or ['800_600']
     mods = ([module] if module else []) + [m for m in (theme,'basic','slot','gamble','poker') if m != module]
     out = []
     if kind == 'sounds':
@@ -123,11 +123,13 @@ def complete_game(info):
     for r in info.get('unsat_critical', []):
         todo.append({'name': r, 'kind': 'script' if r.endswith('.js') else 'images',
                      'module': None, 'res': None, 'critical': True,
-                     'settings': bool(re.match(r'^_?\d{6,}\.js$', r)), 'theme': info['theme']})
+                     'settings': bool(re.match(r'^_?\d{6,}\.js$', r)), 'theme': info['theme'],
+                     '_info': info})
     for r in info.get('unsat_pending', []):
         todo.append({'name': r['name'], 'kind': r['kind'], 'module': r.get('module'),
                      'res': r.get('res'), 'critical': False,
-                     'settings': r.get('settings', False), 'theme': info['theme']})
+                     'settings': r.get('settings', False), 'theme': info['theme'],
+                     '_info': info})
     done = probe_paths(game, gd, todo)
     crit_missing = [r['name'] for r in done if r.get('critical') and r['outcome'] != 'filled']
     pend_404 = [r['name'] for r in done if not r.get('critical') and r['outcome'] == 'demo404']
