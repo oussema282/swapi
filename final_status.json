@@ -1,0 +1,1989 @@
+{
+ "summary": {
+  "demo_equivalent": 70,
+  "broken": 24,
+  "absent": 8
+ },
+ "games": {
+  "AllWaysWinAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "ArisingPhoenixAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "AztecSecretAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BeautyFairyAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "BeautyWarriorAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "BellsOnFireAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BellsOnFireHotAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BellsOnFireRomboAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "winPanel.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BigPandaAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BillyonaireAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbols.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BillysGameAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BlackJackAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BlueDolphinAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BookOfAztecAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbols.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BookOfFortuneAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbols.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "BookOfLordsAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "BookOfPharaoAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "BookOfQueenAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "CasanovaAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "CasinovaAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "CoolDiamonds2AM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DeucesWildAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DiamondCatsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DiamondMonkeyAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DiamondsOnFireAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DoubleDoubleBonusAM": {
+   "status": "broken",
+   "critical_missing": [
+    "jacksorbetterloader_00246940.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "DragonsGiftAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00366957.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "DragonsKingdomAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "DragonsPearlAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Dynamite7AM": {
+   "status": "broken",
+   "critical_missing": [
+    "ultraseven_0056080.js",
+    "kingscrown_0096080.js",
+    "hotchoice_0046080.js",
+    "magicscatter_00116239.js",
+    "billyonaire_00355223.js",
+    "dragonspearl_00325223.js",
+    "bookofaztec_00395223.js",
+    "diamondcats_00335223.js",
+    "dragonskingdom_00265223.js",
+    "cooldiamondsii_00315038.js",
+    "bellsonfirerombo_00295223.js",
+    "hotscatter_00325223.js",
+    "eyeofra_00345223.js",
+    "arisingphoenix_00365223.js",
+    "wildshark_00325223.js",
+    "diamondmonkey_00285223.js",
+    "magicidol_00295223.js",
+    "wolfmoon_00325223.js",
+    "magicowl_00305223.js",
+    "hottwenty_00285223.js",
+    "admiral_00355223.js",
+    "gemstar_0075223.js",
+    "wildrespin_00345223.js",
+    "bookoffortune_00395223.js",
+    "grandtiger_0075223.js",
+    "goldenbook_00245223.js",
+    "wilddragon_0045223.js",
+    "aztecsecret_00115223.js",
+    "bigpanda_00215223.js",
+    "diamondsonfire_00125223.js",
+    "tweetybirds_00125223.js",
+    "fireandice_00125223.js",
+    "billysgame_00105223.js",
+    "casinova_00245223.js",
+    "wildstars_00365223.js",
+    "bellsonfirehot_00245223.js",
+    "scarabtreasure_00215223.js",
+    "fortunasfruits_00315223.js",
+    "luckyzodiac_00355223.js",
+    "hot81_00255223.js",
+    "ladyjoker_00325223.js",
+    "redchilli_00235223.js",
+    "magicforest_00245223.js",
+    "royalunicorn_00375223.js",
+    "hot7_00295223.js",
+    "casanova_00305223.js",
+    "luckybells_00315223.js",
+    "hotstar_00335223.js",
+    "wild7_00285223.js",
+    "hotneon_00295223.js",
+    "bluedolphin_00305223.js",
+    "mermaidsgold_00305223.js",
+    "hotdiamonds_00315223.js",
+    "twentyseven_00305223.js",
+    "allwaysfruits_00345223.js",
+    "luckycoin_00315223.js",
+    "ladyluck_00305223.js",
+    "partytime_00335223.js",
+    "merryfruits_00285223.js",
+    "ladyluck2_00133123.js",
+    "grandx_00345223.js",
+    "romanlegion_00183212.js",
+    "fantastico_0033647.js",
+    "bellsonfire_00285223.js",
+    "wilddiamonds_00123212.js",
+    "allwayswin_0065223.js",
+    "vampires_0075223.js",
+    "lightninghot_0035223.js",
+    "lagranaventura_0074795.js",
+    "keno_00325223.js",
+    "jacksorbetter_00215223.js",
+    "jokercardpoker_00245223.js",
+    "multicardwin_00275223.js",
+    "multicardwintriple_00215223.js",
+    "fruitcardpoker_00265223.js",
+    "blackjack_00405223.js",
+    "rouletteroyal_00355223.js",
+    "settings_00395223.js",
+    "slideup.png"
+   ],
+   "budget": [],
+   "demo404": [
+    "load_grandx.jpg",
+    "load_amatic.png",
+    "load_mwc.jpg",
+    "smartphone.png",
+    "tablet.png",
+    "btn_s2.png",
+    "icon_sound.png",
+    "icon_music.png",
+    "icon_pctablet.png",
+    "icon_smartphone.png",
+    "icon_fb.png",
+    "btn_ir_spin.png",
+    "btn_ir_menu.png",
+    "btn_ir_exit.png",
+    "btn_ir_return.png",
+    "btn_ir_next.png",
+    "btn_ir_prev.png",
+    "btn_i_music.png",
+    "btn_i_autostart.png",
+    "btn_music.png"
+   ],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "EnchantedCleopatraAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00366957.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "EyeOfRaAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "winPanel.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Fantastico7AM": {
+   "status": "broken",
+   "critical_missing": [
+    "ultraseven_0056080.js",
+    "kingscrown_0096080.js",
+    "hotchoice_0046080.js",
+    "magicscatter_00116239.js",
+    "billyonaire_00355223.js",
+    "dragonspearl_00325223.js",
+    "bookofaztec_00395223.js",
+    "diamondcats_00335223.js",
+    "dragonskingdom_00265223.js",
+    "cooldiamondsii_00315038.js",
+    "bellsonfirerombo_00295223.js",
+    "hotscatter_00325223.js",
+    "eyeofra_00345223.js",
+    "arisingphoenix_00365223.js",
+    "wildshark_00325223.js",
+    "diamondmonkey_00285223.js",
+    "magicidol_00295223.js",
+    "wolfmoon_00325223.js",
+    "magicowl_00305223.js",
+    "hottwenty_00285223.js",
+    "admiral_00355223.js",
+    "gemstar_0075223.js",
+    "wildrespin_00345223.js",
+    "bookoffortune_00395223.js",
+    "grandtiger_0075223.js",
+    "goldenbook_00245223.js",
+    "wilddragon_0045223.js",
+    "aztecsecret_00115223.js",
+    "bigpanda_00215223.js",
+    "diamondsonfire_00125223.js",
+    "tweetybirds_00125223.js",
+    "fireandice_00125223.js",
+    "billysgame_00105223.js",
+    "casinova_00245223.js",
+    "wildstars_00365223.js",
+    "bellsonfirehot_00245223.js",
+    "scarabtreasure_00215223.js",
+    "fortunasfruits_00315223.js",
+    "luckyzodiac_00355223.js",
+    "hot81_00255223.js",
+    "ladyjoker_00325223.js",
+    "redchilli_00235223.js",
+    "magicforest_00245223.js",
+    "royalunicorn_00375223.js",
+    "hot7_00295223.js",
+    "casanova_00305223.js",
+    "luckybells_00315223.js",
+    "hotstar_00335223.js",
+    "wild7_00285223.js",
+    "hotneon_00295223.js",
+    "bluedolphin_00305223.js",
+    "mermaidsgold_00305223.js",
+    "hotdiamonds_00315223.js",
+    "twentyseven_00305223.js",
+    "allwaysfruits_00345223.js",
+    "luckycoin_00315223.js",
+    "ladyluck_00305223.js",
+    "partytime_00335223.js",
+    "merryfruits_00285223.js",
+    "ladyluck2_00133123.js",
+    "grandx_00345223.js",
+    "romanlegion_00183212.js",
+    "dynamite7_0033647.js",
+    "bellsonfire_00285223.js",
+    "wilddiamonds_00123212.js",
+    "allwayswin_0065223.js",
+    "vampires_0075223.js",
+    "lightninghot_0035223.js",
+    "lagranaventura_0074795.js",
+    "keno_00325223.js",
+    "jacksorbetter_00215223.js",
+    "jokercardpoker_00245223.js",
+    "multicardwin_00275223.js",
+    "multicardwintriple_00215223.js",
+    "fruitcardpoker_00265223.js",
+    "blackjack_00405223.js",
+    "rouletteroyal_00355223.js",
+    "settings_00395223.js",
+    "slideup.png"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_grandx.jpg",
+    "load_amatic.png",
+    "load_mwc.jpg",
+    "load_amanet.png",
+    "icon_out.png",
+    "main.png",
+    "winPanel.png",
+    "smartphone.png",
+    "tablet.png",
+    "symbols_small.png",
+    "wthelp.jpg",
+    "wlhelp.jpg",
+    "icon_music.png",
+    "icon_pctablet.png",
+    "icon_smartphone.png",
+    "icon_fb.png",
+    "btn_ir_spin.png",
+    "btn_ir_menu.png",
+    "btn_ir_exit.png",
+    "btn_ir_return.png",
+    "btn_ir_next.png",
+    "btn_ir_prev.png",
+    "btn_i_music.png",
+    "btn_i_autostart.png",
+    "btn_music.png",
+    "gamble.jpg",
+    "wthelptop.jpg"
+   ],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "FireAndIceAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbols.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "FireQueenAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "FlyingDutchmanAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "FortunasFruitsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "FruitExpressAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00387222.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "FruitPokerAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "GemStarAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "respin.png",
+    "mobile_respin_help.jpg",
+    "symbols.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "GoldenBookAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "GoldenJokerAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "GrandCasanovaAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "GrandFruitsAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "GrandTigerAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "GrandXAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "gui_mobile_v29.json",
+    "gui_desktop_v17.json",
+    "symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Hot27AM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Hot40AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00346946.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "Hot7AM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Hot7DiceAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "jackpot.json",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbols.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Hot81AM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "HotChoiceAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "HotDiamondsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "HotFruits100AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00346946.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "HotFruits20AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00346946.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "HotFruits40AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00346946.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "HotNeonAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "HotScatterAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "HotScatterDiceAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00317222.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "jackpot.json",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "HotStarAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "HotTwentyAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "HottestFruits20AM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "HottestFruits40AM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "JacksOrBetterAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "JokerCardAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "JokerPokerAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "KingsCrownAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "wlhelp.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LaGranAventuraAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LadyJokerAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LightingHotAM": {
+   "status": "broken",
+   "critical_missing": [
+    "ultraseven_0056080.js",
+    "kingscrown_0096080.js",
+    "hotchoice_0046080.js",
+    "magicscatter_00116239.js",
+    "billyonaire_00355223.js",
+    "dragonspearl_00325223.js",
+    "bookofaztec_00395223.js",
+    "diamondcats_00335223.js",
+    "dragonskingdom_00265223.js",
+    "cooldiamondsii_00315038.js",
+    "bellsonfirerombo_00295223.js",
+    "hotscatter_00325223.js",
+    "eyeofra_00345223.js",
+    "arisingphoenix_00365223.js",
+    "wildshark_00325223.js",
+    "diamondmonkey_00285223.js",
+    "magicidol_00295223.js",
+    "wolfmoon_00325223.js",
+    "magicowl_00305223.js",
+    "hottwenty_00285223.js",
+    "admiral_00355223.js",
+    "gemstar_0075223.js",
+    "wildrespin_00345223.js",
+    "bookoffortune_00395223.js",
+    "grandtiger_0075223.js",
+    "goldenbook_00245223.js",
+    "wilddragon_0045223.js",
+    "aztecsecret_00115223.js",
+    "bigpanda_00215223.js",
+    "diamondsonfire_00125223.js",
+    "tweetybirds_00125223.js",
+    "fireandice_00125223.js",
+    "billysgame_00105223.js",
+    "casinova_00245223.js",
+    "wildstars_00365223.js",
+    "bellsonfirehot_00245223.js",
+    "scarabtreasure_00215223.js",
+    "fortunasfruits_00315223.js",
+    "luckyzodiac_00355223.js",
+    "hot81_00255223.js",
+    "ladyjoker_00325223.js",
+    "redchilli_00235223.js",
+    "magicforest_00245223.js",
+    "royalunicorn_00375223.js",
+    "hot7_00295223.js",
+    "casanova_00305223.js",
+    "luckybells_00315223.js",
+    "hotstar_00335223.js",
+    "wild7_00285223.js",
+    "hotneon_00295223.js",
+    "bluedolphin_00305223.js",
+    "mermaidsgold_00305223.js",
+    "hotdiamonds_00315223.js",
+    "twentyseven_00305223.js",
+    "allwaysfruits_00345223.js",
+    "luckycoin_00315223.js",
+    "ladyluck_00305223.js",
+    "partytime_00335223.js",
+    "merryfruits_00285223.js",
+    "ladyluck2_00133123.js",
+    "grandx_00345223.js",
+    "romanlegion_00183212.js",
+    "dynamite7_0033647.js",
+    "fantastico_0033647.js",
+    "bellsonfire_00285223.js",
+    "wilddiamonds_00123212.js",
+    "allwayswin_0065223.js",
+    "vampires_0075223.js",
+    "lagranaventura_0074795.js",
+    "keno_00325223.js",
+    "jacksorbetter_00215223.js",
+    "jokercardpoker_00245223.js",
+    "multicardwin_00275223.js",
+    "multicardwintriple_00215223.js",
+    "fruitcardpoker_00265223.js",
+    "blackjack_00405223.js",
+    "rouletteroyal_00355223.js",
+    "settings_00395223.js",
+    "slideup.png",
+    "rotatedevice.png"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "load_amanet.png",
+    "icon_out.png",
+    "smartphone.png",
+    "tablet.png",
+    "symbols_small.png",
+    "buttonback.png",
+    "gui_mobile_v13.json",
+    "gui_desktop_v13.json",
+    "main.png",
+    "winPanel.png",
+    "wthelp.jpg",
+    "wlhelp.jpg",
+    "symbols.json",
+    "symbol_help.jpg",
+    "wthelptop.jpg",
+    "mobile_gamble.jpg",
+    "mobile_panels.json",
+    "masks.json",
+    "maskmultiplier.png",
+    "winmultiplier.png",
+    "gui_mobile_v24.png"
+   ],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "LovelyLadyAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LuckyBellsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LuckyCoinAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "LuckyJoker20AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "LuckyJoker5AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "LuckyZodiacAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "mobile_symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MagicForestAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "mobile_symbol_help.jpg",
+    "symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MagicIdolAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MagicOwlAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "gui_mobile_v29.json",
+    "gui_desktop_v17.json",
+    "symbol_help.jpg",
+    "gui_mobile_v17.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MermaidsGoldAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MerryFruitsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MultiWinAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "MultiWinTripleAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "gui_desktop_v15.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "PartyNightAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00366957.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "PartyTimeAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "gui_mobile_v29.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "RedChilliAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "RomanLegionAM": {
+   "status": "broken",
+   "critical_missing": [
+    "ultraseven_0056080.js",
+    "kingscrown_0096080.js",
+    "hotchoice_0046080.js",
+    "magicscatter_00116239.js",
+    "billyonaire_00355223.js",
+    "dragonspearl_00325223.js",
+    "bookofaztec_00395223.js",
+    "diamondcats_00335223.js",
+    "dragonskingdom_00265223.js",
+    "cooldiamondsii_00315038.js",
+    "bellsonfirerombo_00295223.js",
+    "hotscatter_00325223.js",
+    "eyeofra_00345223.js",
+    "arisingphoenix_00365223.js",
+    "wildshark_00325223.js",
+    "diamondmonkey_00285223.js",
+    "magicidol_00295223.js",
+    "wolfmoon_00325223.js",
+    "magicowl_00305223.js",
+    "hottwenty_00285223.js",
+    "admiral_00355223.js",
+    "gemstar_0075223.js",
+    "wildrespin_00345223.js",
+    "bookoffortune_00395223.js",
+    "grandtiger_0075223.js",
+    "goldenbook_00245223.js",
+    "wilddragon_0045223.js",
+    "aztecsecret_00115223.js",
+    "bigpanda_00215223.js",
+    "diamondsonfire_00125223.js",
+    "tweetybirds_00125223.js",
+    "fireandice_00125223.js",
+    "billysgame_00105223.js",
+    "casinova_00245223.js",
+    "wildstars_00365223.js",
+    "bellsonfirehot_00245223.js",
+    "scarabtreasure_00215223.js",
+    "fortunasfruits_00315223.js",
+    "luckyzodiac_00355223.js",
+    "hot81_00255223.js",
+    "ladyjoker_00325223.js",
+    "redchilli_00235223.js",
+    "magicforest_00245223.js",
+    "royalunicorn_00375223.js",
+    "hot7_00295223.js",
+    "casanova_00305223.js",
+    "luckybells_00315223.js",
+    "hotstar_00335223.js",
+    "wild7_00285223.js",
+    "hotneon_00295223.js",
+    "bluedolphin_00305223.js",
+    "mermaidsgold_00305223.js",
+    "hotdiamonds_00315223.js",
+    "twentyseven_00305223.js",
+    "allwaysfruits_00345223.js",
+    "luckycoin_00315223.js",
+    "ladyluck_00305223.js",
+    "partytime_00335223.js",
+    "merryfruits_00285223.js",
+    "ladyluck2_00133123.js",
+    "grandx_00345223.js",
+    "dynamite7_0033647.js",
+    "fantastico_0033647.js",
+    "bellsonfire_00285223.js",
+    "wilddiamonds_00123212.js",
+    "allwayswin_0065223.js",
+    "vampires_0075223.js",
+    "lightninghot_0035223.js",
+    "lagranaventura_0074795.js",
+    "keno_00325223.js",
+    "jacksorbetter_00215223.js",
+    "jokercardpoker_00245223.js",
+    "multicardwin_00275223.js",
+    "multicardwintriple_00215223.js",
+    "fruitcardpoker_00265223.js",
+    "blackjack_00405223.js",
+    "rouletteroyal_00355223.js",
+    "settings_00395223.js",
+    "slideup.png",
+    "rotatedevice.png"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_grandx.jpg",
+    "load_amatic.png",
+    "load_mwc.jpg",
+    "smartphone.png",
+    "tablet.png",
+    "icon_music.png",
+    "icon_pctablet.png",
+    "icon_smartphone.png",
+    "icon_fb.png",
+    "btn_ir_spin.png",
+    "btn_ir_menu.png",
+    "btn_ir_exit.png",
+    "btn_ir_return.png",
+    "btn_ir_next.png",
+    "btn_ir_prev.png",
+    "btn_i_spin.png",
+    "btn_i_menu.png",
+    "btn_i_exit.png",
+    "btn_i_return.png",
+    "btn_i_next.png",
+    "btn_i_prev.png",
+    "btn_i_settings.png",
+    "btn_i_bet.png",
+    "btn_i_info.png",
+    "btn_i_design.png",
+    "btn_i_turbo.png",
+    "btn_i_fullscreen.png",
+    "btn_i_sound.png",
+    "btn_i_help.png",
+    "btn_i_statistics.png",
+    "btn_i_deposit.png",
+    "btn_i_history.png",
+    "btn_i_gamble.png",
+    "btn_i_close.png",
+    "btn_i_music.png",
+    "btn_i_autostart.png",
+    "buttonback.png",
+    "btn_music.png"
+   ],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "RouletteRoyalAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "ball.png",
+    "serie_5_8.png",
+    "big_serie.png",
+    "orphelins_cheval.png",
+    "orphelins_plein.png",
+    "zero_game.png"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "RoyalUnicornAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "SakuraFruitsAM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00377028.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "SakuraSecretAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "TensOrBetterAM": {
+   "status": "broken",
+   "critical_missing": [
+    "jacksorbetterloader_00246940.js"
+   ],
+   "budget": [],
+   "demo404": [],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "TweetyBirdsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "Ultra7AM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "VampiresAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "demo_equivalent",
+   "config_k": null
+  },
+  "Wild7AM": {
+   "status": "broken",
+   "critical_missing": [
+    "_00296940.js"
+   ],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": "broken",
+   "config_k": null
+  },
+  "WildDiamondsAM": {
+   "status": "absent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [],
+   "rescued": null,
+   "config_k": null
+  },
+  "WildDragonAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "WildRespinAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "WildSharkAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "WildStarsAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "respininfo.png"
+   ],
+   "rescued": null,
+   "config_k": null
+  },
+  "WolfMoonAM": {
+   "status": "demo_equivalent",
+   "critical_missing": [],
+   "budget": [],
+   "demo404": [
+    "load.jpg",
+    "load_amatic.png",
+    "smartphone.png",
+    "tablet.png",
+    "jackpot.png",
+    "mystery_jackpot.json",
+    "buttonback.png",
+    "gui_mobile_v17.json",
+    "gui_desktop_v17.json",
+    "mobile_symbol_help.jpg"
+   ],
+   "rescued": null,
+   "config_k": null
+  }
+ }
+}

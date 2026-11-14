@@ -1,0 +1,269 @@
++ REPO=oussema282/swapi
++ mkdir -p prev
++ gh release download amatic-clients -R oussema282/swapi -D prev
++ rm -rf mirror
++ unzip -q prev/amatic-clients.zip -d .
++ echo '=== verify (before) ==='
+=== verify (before) ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/amverify.py mirror /tmp/comp/verify_before.json
+VERIFY: complete=0 pending=0 broken=94 of 102
+  BROKEN AllWaysWinAM: critical missing: ['_00296940.js']
+  BROKEN ArisingPhoenixAM: critical missing: ['_00296940.js']
+  BROKEN AztecSecretAM: critical missing: ['_00296940.js']
+  BROKEN BeautyFairyAM: critical missing: ['_00377028.js']
+  BROKEN BeautyWarriorAM: critical missing: ['_00377028.js']
+  BROKEN BellsOnFireAM: critical missing: ['_00296940.js']
+  BROKEN BellsOnFireHotAM: critical missing: ['_00296940.js']
+  BROKEN BellsOnFireRomboAM: critical missing: ['_00296940.js']
+  BROKEN BigPandaAM: critical missing: ['_00296940.js']
+  BROKEN BillyonaireAM: critical missing: ['_00296940.js']
+  BROKEN BillysGameAM: critical missing: ['_00296940.js']
+  BROKEN BlackJackAM: critical missing: ['_00296940.js']
+  BROKEN BlueDolphinAM: critical missing: ['_00296940.js']
+  BROKEN BookOfAztecAM: critical missing: ['_00296940.js']
+  BROKEN BookOfFortuneAM: critical missing: ['_00296940.js']
+  BROKEN BookOfLordsAM: critical missing: ['_00377028.js']
+  BROKEN BookOfQueenAM: critical missing: ['_00377028.js']
+  BROKEN CasanovaAM: critical missing: ['_00296940.js']
+  BROKEN CasinovaAM: critical missing: ['_00296940.js']
+  BROKEN CoolDiamonds2AM: critical missing: ['_00296940.js']
+  BROKEN DeucesWildAM: critical missing: ['_00317222.js']
+  BROKEN DiamondCatsAM: critical missing: ['_00296940.js']
+  BROKEN DiamondMonkeyAM: critical missing: ['_00296940.js']
+  BROKEN DiamondsOnFireAM: critical missing: ['_00296940.js']
+  BROKEN DoubleDoubleBonusAM: critical missing: ['jacksorbetterloader_00246940.js']
+  BROKEN DragonsGiftAM: critical missing: ['_00366957.js']
+  BROKEN DragonsKingdomAM: critical missing: ['_00296940.js']
+  BROKEN DragonsPearlAM: critical missing: ['_00296940.js']
+  BROKEN Dynamite7AM: critical missing: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js']
+  BROKEN EnchantedCleopatraAM: critical missing: ['_00366957.js']
+  BROKEN EyeOfRaAM: critical missing: ['_00296940.js']
+  BROKEN Fantastico7AM: critical missing: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js']
+  BROKEN FireAndIceAM: critical missing: ['_00296940.js']
+  BROKEN FlyingDutchmanAM: critical missing: ['_00377028.js']
+  BROKEN FortunasFruitsAM: critical missing: ['_00296940.js']
+  BROKEN FruitExpressAM: critical missing: ['_00387222.js']
+  BROKEN FruitPokerAM: critical missing: ['_00317222.js']
+  BROKEN GemStarAM: critical missing: ['_00296940.js']
+  BROKEN GoldenBookAM: critical missing: ['_00296940.js']
+  BROKEN GoldenJokerAM: critical missing: ['_00377028.js']
+  BROKEN GrandTigerAM: critical missing: ['_00296940.js']
+  BROKEN GrandXAM: critical missing: ['_00296940.js']
+  BROKEN Hot27AM: critical missing: ['_00296940.js']
+  BROKEN Hot40AM: critical missing: ['_00346946.js']
+  BROKEN Hot7AM: critical missing: ['_00296940.js']
+  BROKEN Hot7DiceAM: critical missing: ['_00317222.js']
+  BROKEN Hot81AM: critical missing: ['_00296940.js']
+  BROKEN HotChoiceAM: critical missing: ['_00296940.js']
+  BROKEN HotDiamondsAM: critical missing: ['_00296940.js']
+  BROKEN HotFruits100AM: critical missing: ['_00346946.js']
+  BROKEN HotFruits20AM: critical missing: ['_00346946.js']
+  BROKEN HotFruits40AM: critical missing: ['_00346946.js']
+  BROKEN HotNeonAM: critical missing: ['_00296940.js']
+  BROKEN HotScatterAM: critical missing: ['_00296940.js']
+  BROKEN HotScatterDiceAM: critical missing: ['_00317222.js']
+  BROKEN HotStarAM: critical missing: ['_00296940.js']
+  BROKEN HotTwentyAM: critical missing: ['_00296940.js']
+  BROKEN JacksOrBetterAM: critical missing: ['_00296940.js']
+  BROKEN JokerCardAM: critical missing: ['_00317222.js']
+  BROKEN JokerPokerAM: critical missing: ['_00317222.js']
+  BROKEN KingsCrownAM: critical missing: ['_00296940.js']
+  BROKEN LaGranAventuraAM: critical missing: ['_00296940.js']
+  BROKEN LadyJokerAM: critical missing: ['_00296940.js']
+  BROKEN LightingHotAM: critical missing: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js']
+  BROKEN LovelyLadyAM: critical missing: ['_00296940.js']
+  BROKEN LuckyBellsAM: critical missing: ['_00296940.js']
+  BROKEN LuckyCoinAM: critical missing: ['_00296940.js']
+  BROKEN LuckyJoker20AM: critical missing: ['_00377028.js']
+  BROKEN LuckyJoker5AM: critical missing: ['_00377028.js']
+  BROKEN LuckyZodiacAM: critical missing: ['_00296940.js']
+  BROKEN MagicForestAM: critical missing: ['_00296940.js']
+  BROKEN MagicIdolAM: critical missing: ['_00296940.js']
+  BROKEN MagicOwlAM: critical missing: ['_00296940.js']
+  BROKEN MermaidsGoldAM: critical missing: ['_00296940.js']
+  BROKEN MerryFruitsAM: critical missing: ['_00296940.js']
+  BROKEN MultiWinAM: critical missing: ['_00317222.js']
+  BROKEN MultiWinTripleAM: critical missing: ['_00317222.js']
+  BROKEN PartyNightAM: critical missing: ['_00366957.js']
+  BROKEN PartyTimeAM: critical missing: ['_00296940.js']
+  BROKEN RedChilliAM: critical missing: ['_00296940.js']
+  BROKEN RomanLegionAM: critical missing: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js']
+  BROKEN RouletteRoyalAM: critical missing: ['_00296940.js']
+  BROKEN RoyalUnicornAM: critical missing: ['_00296940.js']
+  BROKEN SakuraFruitsAM: critical missing: ['_00377028.js']
+  BROKEN TensOrBetterAM: critical missing: ['jacksorbetterloader_00246940.js']
+  BROKEN TweetyBirdsAM: critical missing: ['_00296940.js']
+  BROKEN Ultra7AM: critical missing: ['_00296940.js']
+  BROKEN VampiresAM: critical missing: ['_00296940.js']
+  BROKEN Wild7AM: critical missing: ['_00296940.js']
+  BROKEN WildDragonAM: critical missing: ['_00296940.js']
+  BROKEN WildRespinAM: critical missing: ['_00296940.js']
+  BROKEN WildSharkAM: critical missing: ['_00296940.js']
+  BROKEN WildStarsAM: critical missing: ['_00296940.js']
+  BROKEN WolfMoonAM: critical missing: ['_00296940.js']
++ echo '=== fill missing from demo (v6: empty-config settings + demo-shell rescue) ==='
+=== fill missing from demo (v6: empty-config settings + demo-shell rescue) ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror3.py mirror /tmp/comp/verify_before.json 16
+fill v4: 102 games, 16 workers
+   BlackJackAM: demo_equivalent filled=2 demo404=1 crit_missing=[] budget=0
+   BookOfPharaoAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   BookOfLordsAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   BeautyWarriorAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   BeautyFairyAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   BookOfQueenAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   BlueDolphinAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   DeucesWildAM: demo_equivalent filled=1 demo404=2 crit_missing=[] budget=0
+   BellsOnFireHotAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   BillysGameAM: demo_equivalent filled=2 demo404=9 crit_missing=[] budget=0
+   BellsOnFireAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   BigPandaAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   AztecSecretAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   AllWaysWinAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   BellsOnFireRomboAM: demo_equivalent filled=1 demo404=10 crit_missing=[] budget=0
+   ArisingPhoenixAM: demo_equivalent filled=6 demo404=9 crit_missing=[] budget=0
+   BillyonaireAM: demo_equivalent filled=1 demo404=10 crit_missing=[] budget=0
+   BookOfAztecAM: demo_equivalent filled=4 demo404=10 crit_missing=[] budget=0
+   DoubleDoubleBonusAM: broken filled=0 demo404=0 crit_missing=['jacksorbetterloader_00246940.js'] budget=0
+   FireQueenAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   BookOfFortuneAM: demo_equivalent filled=4 demo404=10 crit_missing=[] budget=0
+   CasinovaAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   CasanovaAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   DragonsGiftAM: broken filled=0 demo404=0 crit_missing=['_00366957.js'] budget=0
+   CoolDiamonds2AM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   EnchantedCleopatraAM: broken filled=0 demo404=0 crit_missing=['_00366957.js'] budget=0
+   FlyingDutchmanAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   GrandCasanovaAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   GrandFruitsAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   FruitPokerAM: demo_equivalent filled=1 demo404=2 crit_missing=[] budget=0
+   DiamondCatsAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   DragonsKingdomAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   FruitExpressAM: broken filled=0 demo404=0 crit_missing=['_00387222.js'] budget=0
+   DiamondMonkeyAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   DiamondsOnFireAM: demo_equivalent filled=4 demo404=9 crit_missing=[] budget=0
+   DragonsPearlAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   GoldenJokerAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   EyeOfRaAM: demo_equivalent filled=1 demo404=10 crit_missing=[] budget=0
+   FortunasFruitsAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   FireAndIceAM: demo_equivalent filled=2 demo404=10 crit_missing=[] budget=0
+   HotFruits40AM: broken filled=0 demo404=0 crit_missing=['_00346946.js'] budget=0
+   GoldenBookAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   Hot40AM: broken filled=0 demo404=0 crit_missing=['_00346946.js'] budget=0
+   GrandTigerAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   HotFruits100AM: broken filled=0 demo404=0 crit_missing=['_00346946.js'] budget=0
+   HotFruits20AM: broken filled=0 demo404=0 crit_missing=['_00346946.js'] budget=0
+   HottestFruits20AM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   HottestFruits40AM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   GemStarAM: demo_equivalent filled=2 demo404=12 crit_missing=[] budget=0
+   Hot7DiceAM: demo_equivalent filled=1 demo404=7 crit_missing=[] budget=0
+   Hot27AM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   GrandXAM: demo_equivalent filled=2 demo404=9 crit_missing=[] budget=0
+   Hot7AM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   Hot81AM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   HotChoiceAM: demo_equivalent filled=2 demo404=9 crit_missing=[] budget=0
+   JokerPokerAM: demo_equivalent filled=1 demo404=2 crit_missing=[] budget=0
+   HotDiamondsAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   JokerCardAM: demo_equivalent filled=3 demo404=2 crit_missing=[] budget=0
+   LuckyJoker20AM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   LaGranAventuraAM: demo_equivalent filled=2 demo404=9 crit_missing=[] budget=0
+   LadyJokerAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   KingsCrownAM: demo_equivalent filled=2 demo404=10 crit_missing=[] budget=0
+   LovelyLadyAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   LuckyBellsAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   LuckyCoinAM: demo_equivalent filled=3 demo404=9 crit_missing=[] budget=0
+   LuckyJoker5AM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   JacksOrBetterAM: demo_equivalent filled=0 demo404=5 crit_missing=['_00296940.js'] budget=0
+   MultiWinAM: demo_equivalent filled=3 demo404=2 crit_missing=[] budget=0
+   HotNeonAM: demo_equivalent filled=1 demo404=7 crit_missing=['_00296940.js'] budget=0
+   LuckyZodiacAM: demo_equivalent filled=2 demo404=10 crit_missing=[] budget=0
+   HotScatterDiceAM: demo_equivalent filled=0 demo404=6 crit_missing=['_00317222.js'] budget=0
+   MultiWinTripleAM: demo_equivalent filled=3 demo404=2 crit_missing=[] budget=0
+   MermaidsGoldAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   MagicOwlAM: demo_equivalent filled=1 demo404=10 crit_missing=[] budget=0
+   MagicIdolAM: demo_equivalent filled=1 demo404=9 crit_missing=[] budget=0
+   SakuraSecretAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   MagicForestAM: demo_equivalent filled=1 demo404=11 crit_missing=[] budget=0
+   MerryFruitsAM: demo_equivalent filled=1 demo404=10 crit_missing=[] budget=0
+   TensOrBetterAM: broken filled=0 demo404=0 crit_missing=['jacksorbetterloader_00246940.js'] budget=0
+   PartyNightAM: broken filled=0 demo404=0 crit_missing=['_00366957.js'] budget=0
+   SakuraFruitsAM: broken filled=0 demo404=0 crit_missing=['_00377028.js'] budget=0
+   WildDiamondsAM: absent filled=0 demo404=0 crit_missing=[] budget=0
+   HotScatterAM: demo_equivalent filled=0 demo404=9 crit_missing=['_00296940.js'] budget=0
+   HotStarAM: demo_equivalent filled=1 demo404=9 crit_missing=['_00296940.js'] budget=0
+   HotTwentyAM: demo_equivalent filled=2 demo404=9 crit_missing=['_00296940.js'] budget=0
+   TweetyBirdsAM: demo_equivalent filled=4 demo404=9 crit_missing=[] budget=0
+   WildDragonAM: demo_equivalent filled=2 demo404=9 crit_missing=[] budget=0
+   WildRespinAM: demo_equivalent filled=6 demo404=9 crit_missing=[] budget=0
+   WildSharkAM: demo_equivalent filled=2 demo404=10 crit_missing=[] budget=0
+   WildStarsAM: demo_equivalent filled=3 demo404=10 crit_missing=[] budget=0
+   WolfMoonAM: demo_equivalent filled=2 demo404=10 crit_missing=[] budget=0
+   RouletteRoyalAM: demo_equivalent filled=10 demo404=7 crit_missing=['_00296940.js'] budget=0
+   Wild7AM: broken filled=0 demo404=9 crit_missing=['_00296940.js'] budget=0
+   PartyTimeAM: demo_equivalent filled=1 demo404=8 crit_missing=['_00296940.js'] budget=0
+   RedChilliAM: demo_equivalent filled=0 demo404=9 crit_missing=['_00296940.js'] budget=0
+   Ultra7AM: demo_equivalent filled=1 demo404=9 crit_missing=['_00296940.js'] budget=0
+   RoyalUnicornAM: demo_equivalent filled=0 demo404=9 crit_missing=['_00296940.js'] budget=0
+   VampiresAM: demo_equivalent filled=0 demo404=9 crit_missing=['_00296940.js'] budget=0
+   Fantastico7AM: broken filled=23 demo404=28 crit_missing=['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'dynamite7_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png'] budget=0
+   Dynamite7AM: broken filled=22 demo404=20 crit_missing=['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png'] budget=0
+   RomanLegionAM: broken filled=23 demo404=39 crit_missing=['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'dynamite7_0033647.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png', 'rotatedevice.png'] budget=0
+   LightingHotAM: broken filled=1 demo404=23 crit_missing=['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'dynamite7_0033647.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png', 'rotatedevice.png'] budget=0
+FINAL: {"demo_equivalent": 70, "broken": 24, "absent": 8}
+FILL DONE
++ '[' -s mirror/_verify_final.json ']'
++ echo '=== final status ==='
+=== final status ===
++ python3 -
+FINAL: {'demo_equivalent': 70, 'broken': 24, 'absent': 8}
+  broken: BeautyFairyAM crit: ['_00377028.js'] budget: 0
+  broken: BeautyWarriorAM crit: ['_00377028.js'] budget: 0
+  broken: BookOfLordsAM crit: ['_00377028.js'] budget: 0
+  absent: BookOfPharaoAM crit: [] budget: 0
+  broken: BookOfQueenAM crit: ['_00377028.js'] budget: 0
+  broken: DoubleDoubleBonusAM crit: ['jacksorbetterloader_00246940.js'] budget: 0
+  broken: DragonsGiftAM crit: ['_00366957.js'] budget: 0
+  broken: Dynamite7AM crit: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png'] budget: 0
+  broken: EnchantedCleopatraAM crit: ['_00366957.js'] budget: 0
+  broken: Fantastico7AM crit: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'dynamite7_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png'] budget: 0
+  absent: FireQueenAM crit: [] budget: 0
+  broken: FlyingDutchmanAM crit: ['_00377028.js'] budget: 0
+  broken: FruitExpressAM crit: ['_00387222.js'] budget: 0
+  broken: GoldenJokerAM crit: ['_00377028.js'] budget: 0
+  absent: GrandCasanovaAM crit: [] budget: 0
+  absent: GrandFruitsAM crit: [] budget: 0
+  broken: Hot40AM crit: ['_00346946.js'] budget: 0
+  broken: HotFruits100AM crit: ['_00346946.js'] budget: 0
+  broken: HotFruits20AM crit: ['_00346946.js'] budget: 0
+  broken: HotFruits40AM crit: ['_00346946.js'] budget: 0
+  absent: HottestFruits20AM crit: [] budget: 0
+  absent: HottestFruits40AM crit: [] budget: 0
+  broken: LightingHotAM crit: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'romanlegion_00183212.js', 'dynamite7_0033647.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png', 'rotatedevice.png'] budget: 0
+  broken: LuckyJoker20AM crit: ['_00377028.js'] budget: 0
+  broken: LuckyJoker5AM crit: ['_00377028.js'] budget: 0
+  broken: PartyNightAM crit: ['_00366957.js'] budget: 0
+  broken: RomanLegionAM crit: ['ultraseven_0056080.js', 'kingscrown_0096080.js', 'hotchoice_0046080.js', 'magicscatter_00116239.js', 'billyonaire_00355223.js', 'dragonspearl_00325223.js', 'bookofaztec_00395223.js', 'diamondcats_00335223.js', 'dragonskingdom_00265223.js', 'cooldiamondsii_00315038.js', 'bellsonfirerombo_00295223.js', 'hotscatter_00325223.js', 'eyeofra_00345223.js', 'arisingphoenix_00365223.js', 'wildshark_00325223.js', 'diamondmonkey_00285223.js', 'magicidol_00295223.js', 'wolfmoon_00325223.js', 'magicowl_00305223.js', 'hottwenty_00285223.js', 'admiral_00355223.js', 'gemstar_0075223.js', 'wildrespin_00345223.js', 'bookoffortune_00395223.js', 'grandtiger_0075223.js', 'goldenbook_00245223.js', 'wilddragon_0045223.js', 'aztecsecret_00115223.js', 'bigpanda_00215223.js', 'diamondsonfire_00125223.js', 'tweetybirds_00125223.js', 'fireandice_00125223.js', 'billysgame_00105223.js', 'casinova_00245223.js', 'wildstars_00365223.js', 'bellsonfirehot_00245223.js', 'scarabtreasure_00215223.js', 'fortunasfruits_00315223.js', 'luckyzodiac_00355223.js', 'hot81_00255223.js', 'ladyjoker_00325223.js', 'redchilli_00235223.js', 'magicforest_00245223.js', 'royalunicorn_00375223.js', 'hot7_00295223.js', 'casanova_00305223.js', 'luckybells_00315223.js', 'hotstar_00335223.js', 'wild7_00285223.js', 'hotneon_00295223.js', 'bluedolphin_00305223.js', 'mermaidsgold_00305223.js', 'hotdiamonds_00315223.js', 'twentyseven_00305223.js', 'allwaysfruits_00345223.js', 'luckycoin_00315223.js', 'ladyluck_00305223.js', 'partytime_00335223.js', 'merryfruits_00285223.js', 'ladyluck2_00133123.js', 'grandx_00345223.js', 'dynamite7_0033647.js', 'fantastico_0033647.js', 'bellsonfire_00285223.js', 'wilddiamonds_00123212.js', 'allwayswin_0065223.js', 'vampires_0075223.js', 'lightninghot_0035223.js', 'lagranaventura_0074795.js', 'keno_00325223.js', 'jacksorbetter_00215223.js', 'jokercardpoker_00245223.js', 'multicardwin_00275223.js', 'multicardwintriple_00215223.js', 'fruitcardpoker_00265223.js', 'blackjack_00405223.js', 'rouletteroyal_00355223.js', 'settings_00395223.js', 'slideup.png', 'rotatedevice.png'] budget: 0
+  broken: SakuraFruitsAM crit: ['_00377028.js'] budget: 0
+  absent: SakuraSecretAM crit: [] budget: 0
+  broken: TensOrBetterAM crit: ['jacksorbetterloader_00246940.js'] budget: 0
+  broken: Wild7AM crit: ['_00296940.js'] budget: 0
+  absent: WildDiamondsAM crit: [] budget: 0
++ cp /tmp/comp/verify_before.json mirror/_verify_before.json
++ du -sh mirror
+1.1G	mirror
++ rm -f amatic-clients.zip 'part_*'
++ zip -qr amatic-clients.zip mirror
+++ stat -c%s amatic-clients.zip
++ SIZE=980955660
+++ sha256sum amatic-clients.zip
+++ awk '{print $1}'
++ SHA=5bf9bf9b82c39d6ad09e740e1405868b96522c294cb7ccb3b43c1c99cef25f2a
++ echo 'MIRROR ZIP: 980955660 bytes sha256=5bf9bf9b82c39d6ad09e740e1405868b96522c294cb7ccb3b43c1c99cef25f2a'
+MIRROR ZIP: 980955660 bytes sha256=5bf9bf9b82c39d6ad09e740e1405868b96522c294cb7ccb3b43c1c99cef25f2a
++ '[' 980955660 -ge 2000000000 ']'
++ FILES=amatic-clients.zip
++ cat
++ gh release upload amatic-clients amatic-clients.zip -R oussema282/swapi --clobber
++ gh release edit amatic-clients -R oussema282/swapi --notes-file notes.md
++ gh release view amatic-clients -R oussema282/swapi --json assets --jq '.assets[] | {name,size,state}'
+{"name":"amatic-clients.zip","size":980955660,"state":"uploaded"}
++ echo 'COMPLETE RUN OK'
+COMPLETE RUN OK
