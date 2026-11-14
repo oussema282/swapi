@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Complete the AM mirror: verify vs JS manifests, fill gaps from the demo, verify again, release
-set -uo pipefail
+set -euo pipefail
 mkdir -p /tmp/comp && cd /tmp/comp
 exec > >(tee complete.log) 2>&1
 set -x
@@ -14,8 +14,10 @@ unzip -q prev/amatic-clients.zip -d .
 echo "=== verify (before) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_before.json
 
-echo "=== fill missing from demo (v5: empty-config settings + exact-ext dotted refs) ==="
+echo "=== fill missing from demo (v6: empty-config settings + demo-shell rescue) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 16
+
+[ -s mirror/_verify_final.json ] || { echo "FATAL: mirror3 produced no _verify_final.json — NOT uploading a gateless zip"; exit 1; }
 
 echo "=== final status ==="
 python3 - <<'PY'
