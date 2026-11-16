@@ -29,6 +29,17 @@ PER_REF_DIR_CAP = 4
 def sh(args):
     return subprocess.run(args, capture_output=True, text=True)
 
+def alive_hosts(timeout=3):
+    """Demo mirrors die regularly; each dead host costs a connect timeout on
+    EVERY probe. Keep only hosts answering HTTP at startup (fallback: demo4)."""
+    out = []
+    for h in HOSTS:
+        p = sh(['curl','-sS','-I','-A',UA,'--connect-timeout',str(timeout),
+                '--max-time',str(timeout+2),'-o','/dev/null','-w','%{http_code}', h + '/'])
+        if (p.stdout or '').strip() not in ('', '000'):
+            out.append(h)
+    return out or HOSTS[:1]
+
 def head(url):
     p = sh(['curl','-sS','-I','-A',UA,'--connect-timeout','4','--max-time','10',
             '-o','/dev/null','-w','%{http_code}',url])
@@ -255,6 +266,8 @@ def complete_game(info):
 if __name__ == '__main__':
     mirror, report_path = sys.argv[1], sys.argv[2]
     workers = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+    HOSTS[:] = alive_hosts()
+    print('alive demo hosts:', HOSTS, flush=True)
     rep = json.load(open(report_path))
     todo = [r for r in rep.values() if r['status'] != 'complete']
     print(f'fill v4: {len(todo)} games, {workers} workers', flush=True)

@@ -363,6 +363,8 @@ def complete_game(args):
 
 if __name__ == '__main__':
     mirror, workers = sys.argv[1], int(sys.argv[3]) if len(sys.argv) > 3 else 16
+    HOSTS[:] = M3.alive_hosts()
+    print('alive demo hosts:', HOSTS, flush=True)
     games = sorted(d for d in os.listdir(mirror)
                    if os.path.isdir(os.path.join(mirror, d)) and not d.startswith('_'))
     csvrefs = load_csv()
