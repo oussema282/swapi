@@ -159,6 +159,8 @@ def _todo_from_report(rep):
                      'settings': bool(re.match(r'^_?\d{6,}\.js$', r)), 'theme': rep.get('theme'),
                      '_info': rep})
     for r in rep.get('unsat_pending', []):
+        if r.get('series'):
+            continue   # v4 series entities are mirror4's job (real walk, not literal probes)
         todo.append({'name': r['name'], 'kind': r['kind'], 'module': r.get('module'),
                      'res': r.get('res'), 'critical': False,
                      'settings': r.get('settings', False), 'theme': rep.get('theme'),

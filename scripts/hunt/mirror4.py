@@ -285,6 +285,7 @@ def complete_game(args):
         return {'game': game, 'result': 'absent', 'filled': [], 'browser404': []}
     filled_all = []
     rescued = None
+    minimal = bool(rep['unsat_critical'])   # broken on boot refs: skip series/audit work
     blocking_now = [rel for rel in csvrefs.get('blocking', [])
                     if not os.path.exists(os.path.join(gd, rel))]
     if rep['status'] == 'complete' and not blocking_now:
@@ -310,12 +311,14 @@ def complete_game(args):
             return {'game': game, 'result': 'absent', 'filled': filled_all, 'browser404': unfilled_browser}
         if rep['status'] == 'complete':
             break
-        if it == 0:
+        if it == 0 and not minimal:
             filled_all += theme_audit(game, gd, rep, tmpbin)
             rep = amverify.analyze(M3.MIRROR, game)
             if rep is None or rep['status'] == 'complete':
                 break
         todo = _todo4(rep)
+        if minimal:
+            todo = [t for t in todo if t.get('critical')]
         got = []
         for t in todo:
             f = probe_ref(game, gd, t, rep, tmpbin)
