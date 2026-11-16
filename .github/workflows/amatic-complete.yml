@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/hunt/amverify.py'
       - 'scripts/hunt/mirror3.py'
+      - 'scripts/hunt/mirror4.py'
+      - 'scripts/hunt/amatic-missing-files.csv'
       - 'scripts/hunt/complete_run.sh'
       - '.github/workflows/amatic-complete.yml'
   workflow_dispatch: {}

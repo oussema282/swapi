@@ -29,6 +29,12 @@ PATHY = re.compile(r'^[A-Za-z0-9_\-]+(?:/[A-Za-z0-9_\-]+)+\.(?:png|jpe?g|webp|gi
 MODCTX = re.compile(r'/([A-Za-z0-9_\-]+)/(images|sounds|data)/')
 MOD_AHEAD = re.compile(r'"/(?:[A-Za-z0-9_\-]+)/(?:images|sounds|data)/"')
 RES_CTX = re.compile(r'\b(480_320|640_1136|800_600|960_540|960_640|1024_768|1280_720|1440_1080|2048_1536)\b')
+SERIES_RE = re.compile(r'^([A-Za-z][A-Za-z_]{2,}?)(\d{1,3})\.(png|jpe?g|gif|mp3|ogg)$')
+CANON_SERIES = [('symbanim', 'images', ('.png', '.jpg')), ('symbanimwild', 'images', ('.png', '.jpg')),
+                ('symbols', 'images', ('.png', '.jpg')), ('freewheel', 'images', ('.png', '.jpg')),
+                ('firework', 'images', ('.png', '.jpg')), ('symgame', 'images', ('.png', '.jpg')),
+                ('freespin', 'images', ('.png', '.jpg')), ('fullscreen_', 'images', ('.jpg', '.png')),
+                ('symb', 'sounds', ('.mp3', '.ogg'))]
 SKIP_NAMES = set('''function return images sounds data src true false game slot basic audio texture sprite stage null undefined window document console object prototype this length index width height value number string attach encrypt decrypt format reload panel spin reel bonus win bet line total click start stop init close open load ready error reset state event timer config option params result device mobile desktop version request response server port token user money balance credit currency language english russian support donate channel contact social links license copyright create destroy update render animate draw scale move position rotate parent child items frames delay repeat loop action mode type name label text icon title info help UTF-8'''.split())
 
 def game_theme(mirror, game):
@@ -49,12 +55,17 @@ def local_index(gd):
             idx.setdefault(f, set()).add(rel)
     return idx
 
+def local_dirs(gd):
+    """basename -> set of relative dirs (same walk as local_index, shared shape)"""
+    return local_index(gd)
+
 def analyze(mirror, game):
     gd = os.path.join(mirror, game)
     if not os.path.isdir(gd):
         return None
     theme = game_theme(mirror, game)
     idx = local_index(gd)
+    idx_dirs = idx   # basename -> set of rel dirs (exact-path checks)
     if not os.path.exists(os.path.join(gd, 'amarent', 'index.html')):
         return {'game': game, 'theme': theme, 'types': ['800_600'], 'refs': [], 'n_refs': 0,
                 'unsat_critical': [], 'unsat_pending': [], 'status': 'absent'}
@@ -126,6 +137,8 @@ def analyze(mirror, game):
                 mod = parts[0] if kind != 'sounds' or len(parts) > 2 else None
                 if '/' in s and parts[0] in ('basic','slot','gamble','poker',theme,'core','keno','amarent'):
                     mod = parts[0]
+                if s.lower().endswith(('.css', '.js')):
+                    mod = None   # css/, src/ prefixes are directories, not asset modules
                 note(name, kind, mod, critical_zone, f'{rel}/{fname}')
                 continue
             if not DOTTED.match(s):
@@ -153,6 +166,28 @@ def analyze(mirror, game):
                 if mm: mod = mm.group(1)
             note(s, kind, mod, critical_zone, f'{rel}/{fname}')
 
+    # ---- v4: series synthesis (JS loop-generated names are invisible strings) ----
+    def mod_of(r):
+        return r['module']
+
+    series_groups = {}
+    for r in refs.values():
+        if r['critical']:
+            continue
+        m = SERIES_RE.match(r['name'])
+        if m and m.group(1).lower() not in SKIP_NAMES and len(m.group(1)) >= 3:
+            key = (m.group(1).lower(), m.group(3).lower(), r['kind'], r['module'])
+            series_groups.setdefault(key, True)
+    for stem, kind, exts in CANON_SERIES:
+        for ext in exts:
+            series_groups.setdefault((stem, ext, kind, theme), True)
+    for (stem, ext, kind, mod) in series_groups:
+        name = f'{stem}*{ext}'
+        if name in refs:
+            continue
+        refs[name] = {'name': name, 'kind': kind, 'module': mod, 'critical': False,
+                      'local': False, 'from': {'series'}, 'series': True}
+
     # settings/config loader scripts: "_<digits>.js" refs and their prefix variants
     settings_refs = []
     for r in list(refs.values()):
@@ -160,8 +195,34 @@ def analyze(mirror, game):
             settings_refs.append(r)
 
     # mark satisfaction
+    segs = set()
+    for _dirs in idx.values():
+        for _d in _dirs:
+            segs.add(_d.split('/')[0])
+
+    def module_path_ok(r):
+        """Exact-path check: same basename must exist under THIS module's dir,
+        not just anywhere in the game tree (the browser requests full paths).
+        Skipped when the module segment doesn't exist in the tree at all (a
+        parse artifact like 'css' or 'src' would otherwise never satisfy)."""
+        mod, base = r['module'], os.path.splitext(r['name'])[0]
+        if mod not in segs:
+            return True
+        dirs = idx_dirs.get(r['name'], set())
+        if r['kind'] == 'sounds':
+            return any(re.match(rf'^{re.escape(mod)}/sounds$', d) for d in dirs)
+        if r['kind'] == 'data':
+            return any(re.match(rf'^{re.escape(mod)}/(data|images/[^/]+)$', d) for d in dirs)
+        return any(re.match(rf'^{re.escape(mod)}/images/[^/]+$', d) for d in dirs)
+
     for r in refs.values():
-        r['local'] = local_sat(r['name'], r['kind'])
+        if r.get('series'):
+            r['local'] = False   # fill pass enumerates and records proof
+        else:
+            r['local'] = local_sat(r['name'], r['kind'])
+            if r['local'] and r['module'] and not module_path_ok(r):
+                r['local'] = False   # basename exists elsewhere — wrong location
+                r['mislocated'] = True
         r['from'] = sorted(r['from'])[:3]
 
     # settings variants: "_(hash).js" refs are satisfied by settings_<CONFIG>_<hash>.js
@@ -185,7 +246,8 @@ def analyze(mirror, game):
             'n_refs': len(refs),
             'unsat_critical': [r['name'] for r in broken],
             'unsat_pending': [{'name': r['name'], 'kind': r['kind'], 'module': r['module'],
-                               'res': r.get('res'), 'settings': bool(re.match(r'^_?\d{6,}\.js$', r['name']))}
+                               'res': r.get('res'), 'settings': bool(re.match(r'^_?\d{6,}\.js$', r['name'])),
+                               'series': bool(r.get('series')), 'mislocated': bool(r.get('mislocated'))}
                               for r in pending],
             'status': status}
 

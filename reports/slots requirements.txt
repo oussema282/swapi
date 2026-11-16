@@ -1,0 +1,867 @@
+AMATIC MISSING GAME FILES — REGENERATED REPORT
+Generated (UTC): 2026-11-16T19:30:15+00:00
+
+SOURCE AND SCOPE
+Archive: final.zip (the last downloaded corrected build)
+Source URL: https://github.com/oussema282/swapi/releases/download/amatic-replit-ready/final.zip
+Size verified: 1555881526 bytes
+SHA256 verified: 069f858ccd33737e35c847f0f12a4dabe07a2876a25b764c7fc517144b658225
+This report was regenerated from the preserved phone and desktop browser
+results, and each exact missing path was checked against the ZIP again.
+No new browser tests, downloads, game installations or live account changes
+were performed to generate this report.
+
+SUMMARY
+Titles covered by the recorded browser runs: 75
+Passed on both recorded viewports: 9
+Did not pass those runs: 66
+Failing titles with exact captured missing paths: 52
+Failing titles without an exact captured missing path: 14
+Unique captured HTTP 404 paths absent from ZIP: 182
+Titles with those paths (including an optional asset in a passing title): 53
+Captured HTTP 404 paths whose ZIP member exists: 0
+
+HOW TO INTERPRET THE EVIDENCE
+Recorded viewports: phone landscape 874x402; desktop 1440x900.
+The nine retained titles were subsequently verified through the integrated
+customer flow after the native geographic-support packaging fix.
+The other titles were not rerun after that fix. Old timeout/no-spin results
+are investigation targets, not proof that all failures are missing artwork.
+These are observed missing requests, not an exhaustive scan of every later
+bonus, gamble, help screen or asset reference. Repair may expose more paths.
+The archive manifest contains heuristic basename lists; these are not
+invented into full URLs or treated as additional browser-confirmed 404s.
+
+REPAIR INSTRUCTIONS
+1. Restore original assets matching the exact title/version and paths below.
+   Keep filename hashes, spelling, directory names and letter case unchanged.
+2. Supply both OGG and MP3 when both are listed, and matching atlas JSON/images.
+   Verify files decode; do not replace missing assets with empty files,
+   unrelated art, silent audio, or HTML error pages returning HTTP 200.
+3. Keep amarent/src/settings__<hash>.js (double underscore) boot scripts.
+   Do NOT add ?config= to the game URL. Boot scripts in this archive were
+   present in the recorded runs; an identical redownload cannot add files.
+4. Preserve storage/app/GeoIP2-City_20201006/GeoIP2-City.mmdb and native
+   support dependencies. Test both fresh and reused native sessions.
+5. Re-test art, original START/SPIN, BET/LINE, bonus and gamble on phone
+   and desktop before enabling any excluded game. Never fabricate a spin
+   response or relax balance/settlement validation to hide a failure.
+6. Keep intentionally hidden/incomplete games disabled. Do not overwrite
+   Doblobet accounts, wallets, vendor files or the original native database.
+7. Keep deployment under 8 GB; omit ZIPs and test output, not needed assets.
+8. Supply a new checksum and size when sending a corrected archive.
+
+PATH MAPPING
+Browser: /api/customer/native-assets/games/<title>/<relative-file>
+Standalone URL: /games/<title>/<relative-file>
+ZIP/project member: public/games/<title>/<relative-file>
+No original vendor hostname was captured; no vendor download URL is guessed.
+
+A. EXACT MISSING PATHS — FAILING TITLES
+
+01. AllWaysWinAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/AllWaysWinAM/allwayswin/images/800_600/freespin0.png
+    ZIP: public/games/AllWaysWinAM/allwayswin/images/800_600/freespin0.png
+    HTTP 404 observed on: Desktop, Phone
+
+02. ArisingPhoenixAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/ArisingPhoenixAM/arisingphoenix/images/800_600/fullscreen_1.jpg
+    ZIP: public/games/ArisingPhoenixAM/arisingphoenix/images/800_600/fullscreen_1.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+03. AztecSecretAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/AztecSecretAM/aztecsecret/images/800_600/symbanim1.png
+    ZIP: public/games/AztecSecretAM/aztecsecret/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+04. BellsOnFireAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BellsOnFireAM/bellsonfire/sounds/stopwild.mp3
+    ZIP: public/games/BellsOnFireAM/bellsonfire/sounds/stopwild.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BellsOnFireAM/bellsonfire/sounds/stopwild.ogg
+    ZIP: public/games/BellsOnFireAM/bellsonfire/sounds/stopwild.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+05. BellsOnFireRomboAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BellsOnFireRomboAM/slot/sounds/addfreespin_5.mp3
+    ZIP: public/games/BellsOnFireRomboAM/slot/sounds/addfreespin_5.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BellsOnFireRomboAM/slot/sounds/addfreespin_5.ogg
+    ZIP: public/games/BellsOnFireRomboAM/slot/sounds/addfreespin_5.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+06. BigPandaAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BigPandaAM/bigpanda/images/800_600/symbanimwild1.png
+    ZIP: public/games/BigPandaAM/bigpanda/images/800_600/symbanimwild1.png
+    HTTP 404 observed on: Desktop, Phone
+
+07. BillyonaireAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BillyonaireAM/billyonaire/images/800_600/symbanimwild1.jpg
+    ZIP: public/games/BillyonaireAM/billyonaire/images/800_600/symbanimwild1.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+08. BillysGameAM — 6 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/fullscreenchance.mp3
+    ZIP: public/games/BillysGameAM/billysgame/sounds/fullscreenchance.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/fullscreenchance.ogg
+    ZIP: public/games/BillysGameAM/billysgame/sounds/fullscreenchance.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/stop_wild.mp3
+    ZIP: public/games/BillysGameAM/billysgame/sounds/stop_wild.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/stop_wild.ogg
+    ZIP: public/games/BillysGameAM/billysgame/sounds/stop_wild.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/symb.mp3
+    ZIP: public/games/BillysGameAM/billysgame/sounds/symb.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BillysGameAM/billysgame/sounds/symb.ogg
+    ZIP: public/games/BillysGameAM/billysgame/sounds/symb.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+09. BlueDolphinAM — 6 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb11.mp3
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb11.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb11.ogg
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb11.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb12.mp3
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb12.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb12.ogg
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb12.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb13.mp3
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BlueDolphinAM/bluedolphin/sounds/symb13.ogg
+    ZIP: public/games/BlueDolphinAM/bluedolphin/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+10. BookOfAztecAM — 12 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwin.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwin.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwin.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwin.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwinend.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwinend.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwinend.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/bonussymbolwinend.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/choicesymbol.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/choicesymbol.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/choicesymbol.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/choicesymbol.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/choicewinsymbol.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/choicewinsymbol.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/choicewinsymbol.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/choicewinsymbol.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/replace.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/replace.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/replace.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/replace.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/transitionstart.mp3
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/transitionstart.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfAztecAM/bookofaztec/sounds/transitionstart.ogg
+    ZIP: public/games/BookOfAztecAM/bookofaztec/sounds/transitionstart.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+11. BookOfFortuneAM — 12 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwin.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwin.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwin.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwin.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwinend.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwinend.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwinend.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/bonussymbolwinend.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/choicesymbol.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/choicesymbol.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/choicesymbol.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/choicesymbol.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/choicewinsymbol.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/choicewinsymbol.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/choicewinsymbol.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/choicewinsymbol.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/replace.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/replace.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/replace.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/replace.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/transitionstart.mp3
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/transitionstart.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/BookOfFortuneAM/bookoffortune/sounds/transitionstart.ogg
+    ZIP: public/games/BookOfFortuneAM/bookoffortune/sounds/transitionstart.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+12. CasanovaAM — 8 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/expand.mp3
+    ZIP: public/games/CasanovaAM/casanova/sounds/expand.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/expand.ogg
+    ZIP: public/games/CasanovaAM/casanova/sounds/expand.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb11.mp3
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb11.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb11.ogg
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb11.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb12.mp3
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb12.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb12.ogg
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb12.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb13.mp3
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/CasanovaAM/casanova/sounds/symb13.ogg
+    ZIP: public/games/CasanovaAM/casanova/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+13. CasinovaAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/CasinovaAM/casinova/images/800_600/symbanim20.jpg
+    ZIP: public/games/CasinovaAM/casinova/images/800_600/symbanim20.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+14. DiamondCatsAM — 4 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/DiamondCatsAM/diamondcats/sounds/freeze.mp3
+    ZIP: public/games/DiamondCatsAM/diamondcats/sounds/freeze.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondCatsAM/diamondcats/sounds/freeze.ogg
+    ZIP: public/games/DiamondCatsAM/diamondcats/sounds/freeze.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondCatsAM/diamondcats/sounds/symb13.mp3
+    ZIP: public/games/DiamondCatsAM/diamondcats/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondCatsAM/diamondcats/sounds/symb13.ogg
+    ZIP: public/games/DiamondCatsAM/diamondcats/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+15. DiamondMonkeyAM — 10 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbol.mp3
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbol.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbol.ogg
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbol.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbolwin.mp3
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbolwin.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbolwin.ogg
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/bonussymbolwin.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/replace.mp3
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/replace.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/replace.ogg
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/replace.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/tick.mp3
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/tick.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/tick.ogg
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/tick.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/transition.mp3
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/transition.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DiamondMonkeyAM/diamondmonkey/sounds/transition.ogg
+    ZIP: public/games/DiamondMonkeyAM/diamondmonkey/sounds/transition.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+16. DiamondsOnFireAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/DiamondsOnFireAM/diamondsonfire/images/800_600/symbanim1.png
+    ZIP: public/games/DiamondsOnFireAM/diamondsonfire/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+17. DragonsKingdomAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/DragonsKingdomAM/dragonskingdom/images/800_600/symbanimwild2.jpg
+    ZIP: public/games/DragonsKingdomAM/dragonskingdom/images/800_600/symbanimwild2.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+18. DragonsPearlAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/DragonsPearlAM/dragonspearl/sounds/addfreespin2.mp3
+    ZIP: public/games/DragonsPearlAM/dragonspearl/sounds/addfreespin2.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/DragonsPearlAM/dragonspearl/sounds/addfreespin2.ogg
+    ZIP: public/games/DragonsPearlAM/dragonspearl/sounds/addfreespin2.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+19. EyeOfRaAM — 6 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/eyeofra/sounds/symb11.mp3
+    ZIP: public/games/EyeOfRaAM/eyeofra/sounds/symb11.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/eyeofra/sounds/symb11.ogg
+    ZIP: public/games/EyeOfRaAM/eyeofra/sounds/symb11.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/eyeofra/sounds/symb12.mp3
+    ZIP: public/games/EyeOfRaAM/eyeofra/sounds/symb12.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/eyeofra/sounds/symb12.ogg
+    ZIP: public/games/EyeOfRaAM/eyeofra/sounds/symb12.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/slot/sounds/addfreespin_5.mp3
+    ZIP: public/games/EyeOfRaAM/slot/sounds/addfreespin_5.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/EyeOfRaAM/slot/sounds/addfreespin_5.ogg
+    ZIP: public/games/EyeOfRaAM/slot/sounds/addfreespin_5.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+20. FireAndIceAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/FireAndIceAM/fireandice/images/800_600/symbanim31.jpg
+    ZIP: public/games/FireAndIceAM/fireandice/images/800_600/symbanim31.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+21. FortunasFruitsAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/FortunasFruitsAM/fortunasfruits/images/800_600/symbanim9.png
+    ZIP: public/games/FortunasFruitsAM/fortunasfruits/images/800_600/symbanim9.png
+    HTTP 404 observed on: Desktop, Phone
+
+22. GemStarAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/GemStarAM/gemstar/images/800_600/symbols.png
+    ZIP: public/games/GemStarAM/gemstar/images/800_600/symbols.png
+    HTTP 404 observed on: Desktop, Phone
+
+23. GoldenBookAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/GoldenBookAM/goldenbook/images/800_600/symbanim1.png
+    ZIP: public/games/GoldenBookAM/goldenbook/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+24. GrandTigerAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/GrandTigerAM/grandtiger/images/800_600/symbanim1.png
+    ZIP: public/games/GrandTigerAM/grandtiger/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+25. GrandXAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/GrandXAM/grandx/images/800_600/symbol_help.jpg
+    ZIP: public/games/GrandXAM/grandx/images/800_600/symbol_help.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+26. Hot27AM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/Hot27AM/twentyseven/sounds/symb_low.mp3
+    ZIP: public/games/Hot27AM/twentyseven/sounds/symb_low.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot27AM/twentyseven/sounds/symb_low.ogg
+    ZIP: public/games/Hot27AM/twentyseven/sounds/symb_low.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+27. Hot7DiceAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/Hot7DiceAM/hot7dice/images/800_600/symbols.png
+    ZIP: public/games/Hot7DiceAM/hot7dice/images/800_600/symbols.png
+    HTTP 404 observed on: Desktop, Phone
+
+28. Hot81AM — 8 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/replace.mp3
+    ZIP: public/games/Hot81AM/hot81/sounds/replace.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/replace.ogg
+    ZIP: public/games/Hot81AM/hot81/sounds/replace.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild1.mp3
+    ZIP: public/games/Hot81AM/hot81/sounds/wild1.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild1.ogg
+    ZIP: public/games/Hot81AM/hot81/sounds/wild1.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild2.mp3
+    ZIP: public/games/Hot81AM/hot81/sounds/wild2.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild2.ogg
+    ZIP: public/games/Hot81AM/hot81/sounds/wild2.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild3.mp3
+    ZIP: public/games/Hot81AM/hot81/sounds/wild3.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/Hot81AM/hot81/sounds/wild3.ogg
+    ZIP: public/games/Hot81AM/hot81/sounds/wild3.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+29. HotChoiceAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/HotChoiceAM/hotchoice/images/800_600/symbanim1.png
+    ZIP: public/games/HotChoiceAM/hotchoice/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+30. HotStarAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/HotStarAM/hotstar/images/800_600/symbanim9.png
+    ZIP: public/games/HotStarAM/hotstar/images/800_600/symbanim9.png
+    HTTP 404 observed on: Desktop, Phone
+
+31. KingsCrownAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/KingsCrownAM/kingscrown/images/800_600/symbanim1.png
+    ZIP: public/games/KingsCrownAM/kingscrown/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+32. LaGranAventuraAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LaGranAventuraAM/lagranaventura/images/800_600/symbanim1.png
+    ZIP: public/games/LaGranAventuraAM/lagranaventura/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+33. LadyJokerAM — 8 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi2.mp3
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi2.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi2.ogg
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi2.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi3.mp3
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi3.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi3.ogg
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi3.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi5.mp3
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi5.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/multi5.ogg
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/multi5.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/stopwild.mp3
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/stopwild.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LadyJokerAM/ladyjoker/sounds/stopwild.ogg
+    ZIP: public/games/LadyJokerAM/ladyjoker/sounds/stopwild.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+34. LovelyLadyAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LovelyLadyAM/ladyluck/sounds/symb13.mp3
+    ZIP: public/games/LovelyLadyAM/ladyluck/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LovelyLadyAM/ladyluck/sounds/symb13.ogg
+    ZIP: public/games/LovelyLadyAM/ladyluck/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+35. LuckyBellsAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LuckyBellsAM/luckybells/sounds/wild.mp3
+    ZIP: public/games/LuckyBellsAM/luckybells/sounds/wild.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LuckyBellsAM/luckybells/sounds/wild.ogg
+    ZIP: public/games/LuckyBellsAM/luckybells/sounds/wild.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+36. LuckyCoinAM — 4 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LuckyCoinAM/luckycoin/sounds/symb13.mp3
+    ZIP: public/games/LuckyCoinAM/luckycoin/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LuckyCoinAM/luckycoin/sounds/symb13.ogg
+    ZIP: public/games/LuckyCoinAM/luckycoin/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LuckyCoinAM/luckycoin/sounds/symb14.mp3
+    ZIP: public/games/LuckyCoinAM/luckycoin/sounds/symb14.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/LuckyCoinAM/luckycoin/sounds/symb14.ogg
+    ZIP: public/games/LuckyCoinAM/luckycoin/sounds/symb14.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+37. LuckyZodiacAM — 15 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/images/800_600/mobile_symbol_help.jpg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/images/800_600/mobile_symbol_help.jpg
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/bonussymbolwin.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/bonussymbolwin.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/bonussymbolwin.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/bonussymbolwin.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/choicemultiplier.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/choicemultiplier.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/choicemultiplier.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/choicemultiplier.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/choicesymbol.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/choicesymbol.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/choicesymbol.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/choicesymbol.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/melody.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/melody.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/melody.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/melody.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/replace.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/replace.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/replace.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/replace.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/symb14.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/symb14.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/symb14.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/symb14.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/symb15.mp3
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/symb15.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/LuckyZodiacAM/luckyzodiac/sounds/symb15.ogg
+    ZIP: public/games/LuckyZodiacAM/luckyzodiac/sounds/symb15.ogg
+    HTTP 404 observed on: Desktop
+
+38. MagicForestAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/MagicForestAM/magicforest/images/800_600/mobile_symbol_help.jpg
+    ZIP: public/games/MagicForestAM/magicforest/images/800_600/mobile_symbol_help.jpg
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/MagicForestAM/magicforest/images/800_600/symbol_help.jpg
+    ZIP: public/games/MagicForestAM/magicforest/images/800_600/symbol_help.jpg
+    HTTP 404 observed on: Desktop
+
+39. MagicOwlAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/MagicOwlAM/magicowl/images/800_600/symbol_help.jpg
+    ZIP: public/games/MagicOwlAM/magicowl/images/800_600/symbol_help.jpg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/MagicOwlAM/slot/images/800_600/gui_mobile_v17.png
+    ZIP: public/games/MagicOwlAM/slot/images/800_600/gui_mobile_v17.png
+    HTTP 404 observed on: Phone
+
+40. MermaidsGoldAM — 2 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/MermaidsGoldAM/mermaidsgold/sounds/symb13.mp3
+    ZIP: public/games/MermaidsGoldAM/mermaidsgold/sounds/symb13.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/MermaidsGoldAM/mermaidsgold/sounds/symb13.ogg
+    ZIP: public/games/MermaidsGoldAM/mermaidsgold/sounds/symb13.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+41. MerryFruitsAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/MerryFruitsAM/merryfruits/images/800_600/symbol_help.jpg
+    ZIP: public/games/MerryFruitsAM/merryfruits/images/800_600/symbol_help.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+42. PartyTimeAM — 4 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/PartyTimeAM/partytime/sounds/symb11.mp3
+    ZIP: public/games/PartyTimeAM/partytime/sounds/symb11.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/PartyTimeAM/partytime/sounds/symb11.ogg
+    ZIP: public/games/PartyTimeAM/partytime/sounds/symb11.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/PartyTimeAM/partytime/sounds/symbbonus.mp3
+    ZIP: public/games/PartyTimeAM/partytime/sounds/symbbonus.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/PartyTimeAM/partytime/sounds/symbbonus.ogg
+    ZIP: public/games/PartyTimeAM/partytime/sounds/symbbonus.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+43. RedChilliAM — 12 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_1.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_1.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_1.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_1.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_2.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_2.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_2.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_2.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_3.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_3.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_3.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_3.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_4.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_4.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_4.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_4.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_5.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_5.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/addfreespin_5.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/addfreespin_5.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/bonus1.mp3
+    ZIP: public/games/RedChilliAM/redchilli/sounds/bonus1.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/RedChilliAM/redchilli/sounds/bonus1.ogg
+    ZIP: public/games/RedChilliAM/redchilli/sounds/bonus1.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+44. RoyalUnicornAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/RoyalUnicornAM/royalunicorn/images/800_600/symbanimwild2.jpg
+    ZIP: public/games/RoyalUnicornAM/royalunicorn/images/800_600/symbanimwild2.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+45. TweetyBirdsAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/TweetyBirdsAM/tweetybirds/images/800_600/symbanim1.png
+    ZIP: public/games/TweetyBirdsAM/tweetybirds/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+46. Ultra7AM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/Ultra7AM/ultraseven/images/800_600/symbanim1.png
+    ZIP: public/games/Ultra7AM/ultraseven/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+47. VampiresAM — 10 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/bonuschance2_fs.mp3
+    ZIP: public/games/VampiresAM/vampires/sounds/bonuschance2_fs.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/bonuschance2_fs.ogg
+    ZIP: public/games/VampiresAM/vampires/sounds/bonuschance2_fs.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/bonusmelody.mp3
+    ZIP: public/games/VampiresAM/vampires/sounds/bonusmelody.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/bonusmelody.ogg
+    ZIP: public/games/VampiresAM/vampires/sounds/bonusmelody.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/selection.mp3
+    ZIP: public/games/VampiresAM/vampires/sounds/selection.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/selection.ogg
+    ZIP: public/games/VampiresAM/vampires/sounds/selection.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/stop_expanding.mp3
+    ZIP: public/games/VampiresAM/vampires/sounds/stop_expanding.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/stop_expanding.ogg
+    ZIP: public/games/VampiresAM/vampires/sounds/stop_expanding.ogg
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/tick.mp3
+    ZIP: public/games/VampiresAM/vampires/sounds/tick.mp3
+    HTTP 404 observed on: Desktop, Phone
+    Browser: /api/customer/native-assets/games/VampiresAM/vampires/sounds/tick.ogg
+    ZIP: public/games/VampiresAM/vampires/sounds/tick.ogg
+    HTTP 404 observed on: Desktop, Phone
+
+48. WildDragonAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/WildDragonAM/wilddragon/images/800_600/symbanim1.png
+    ZIP: public/games/WildDragonAM/wilddragon/images/800_600/symbanim1.png
+    HTTP 404 observed on: Desktop, Phone
+
+49. WildRespinAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/WildRespinAM/wildrespin/images/800_600/fullscreen_1.jpg
+    ZIP: public/games/WildRespinAM/wildrespin/images/800_600/fullscreen_1.jpg
+    HTTP 404 observed on: Desktop, Phone
+
+50. WildSharkAM — 5 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/WildSharkAM/wildshark/images/800_600/symbol_help.jpg
+    ZIP: public/games/WildSharkAM/wildshark/images/800_600/symbol_help.jpg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WildSharkAM/wildshark/sounds/addfreespin.mp3
+    ZIP: public/games/WildSharkAM/wildshark/sounds/addfreespin.mp3
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/WildSharkAM/wildshark/sounds/addfreespin.ogg
+    ZIP: public/games/WildSharkAM/wildshark/sounds/addfreespin.ogg
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/WildSharkAM/wildshark/sounds/symb11.mp3
+    ZIP: public/games/WildSharkAM/wildshark/sounds/symb11.mp3
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/WildSharkAM/wildshark/sounds/symb11.ogg
+    ZIP: public/games/WildSharkAM/wildshark/sounds/symb11.ogg
+    HTTP 404 observed on: Phone
+
+51. WildStarsAM — 1 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/WildStarsAM/wildstars/images/800_600/respininfo.png
+    ZIP: public/games/WildStarsAM/wildstars/images/800_600/respininfo.png
+    HTTP 404 observed on: Desktop, Phone
+
+52. WolfMoonAM — 7 missing path(s)
+    Phone: no-accepted-visible-spin
+    Desktop: no-accepted-visible-spin
+    Browser: /api/customer/native-assets/games/WolfMoonAM/slot/sounds/addfreespin_5.mp3
+    ZIP: public/games/WolfMoonAM/slot/sounds/addfreespin_5.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WolfMoonAM/slot/sounds/addfreespin_5.ogg
+    ZIP: public/games/WolfMoonAM/slot/sounds/addfreespin_5.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WolfMoonAM/wolfmoon/images/800_600/mobile_symbol_help.jpg
+    ZIP: public/games/WolfMoonAM/wolfmoon/images/800_600/mobile_symbol_help.jpg
+    HTTP 404 observed on: Phone
+    Browser: /api/customer/native-assets/games/WolfMoonAM/wolfmoon/sounds/stopwild.mp3
+    ZIP: public/games/WolfMoonAM/wolfmoon/sounds/stopwild.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WolfMoonAM/wolfmoon/sounds/stopwild.ogg
+    ZIP: public/games/WolfMoonAM/wolfmoon/sounds/stopwild.ogg
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WolfMoonAM/wolfmoon/sounds/symb12.mp3
+    ZIP: public/games/WolfMoonAM/wolfmoon/sounds/symb12.mp3
+    HTTP 404 observed on: Desktop
+    Browser: /api/customer/native-assets/games/WolfMoonAM/wolfmoon/sounds/symb12.ogg
+    ZIP: public/games/WolfMoonAM/wolfmoon/sounds/symb12.ogg
+    HTTP 404 observed on: Desktop
+
+B. OPTIONAL MISSING PATHS — TITLE STILL PASSED
+
+AllWaysJokerAM
+    Browser: /api/customer/native-assets/games/AllWaysJokerAM/gamerules/images/icon_exit.png
+    ZIP: public/games/AllWaysJokerAM/gamerules/images/icon_exit.png
+    HTTP 404 observed on: Desktop, Phone
+    Both recorded runs passed; do not label this a blocked spin.
+
+C. FAILED RUNS WITHOUT A CAPTURED EXACT MISSING PATH
+- AllAmericanPokerAM: Phone=TimeoutError; Desktop=TimeoutError
+- BingoAM: Phone=TimeoutError; Desktop=TimeoutError
+- BlackJackAM: Phone=TimeoutError; Desktop=TimeoutError
+- DeucesWildAM: Phone=TimeoutError; Desktop=TimeoutError
+- FruitPokerAM: Phone=TimeoutError; Desktop=TimeoutError
+- Hot7AM: Phone=no-accepted-visible-spin; Desktop=no-accepted-visible-spin
+- HotScatterDiceAM: Phone=no-accepted-visible-spin; Desktop=no-accepted-visible-spin
+- HotTwentyAM: Phone=no-accepted-visible-spin; Desktop=no-accepted-visible-spin
+- JacksOrBetterAM: Phone=TimeoutError; Desktop=TimeoutError
+- JokerCardAM: Phone=TimeoutError; Desktop=TimeoutError
+- JokerPokerAM: Phone=TimeoutError; Desktop=TimeoutError
+- MultiWinAM: Phone=TimeoutError; Desktop=TimeoutError
+- MultiWinTripleAM: Phone=TimeoutError; Desktop=TimeoutError
+- RouletteRoyalAM: Phone=TimeoutError; Desktop=TimeoutError
+Investigate the client/native errors for these titles. Do not assume a
+missing filename without an actual failing request.
+
+D. TITLES THAT PASSED BOTH RECORDED VIEWPORTS
+- AdmiralNelsonAM
+- AllWaysFruitsAM
+- AllWaysJokerAM
+- BellsOnFireHotAM
+- CoolDiamonds2AM
+- HotDiamondsAM
+- HotNeonAM
+- HotScatterAM
+- MagicIdolAM
+
+E. ARCHIVE MANIFEST ENTRIES MARKED BROKEN
+Source: public/games/_verify.json. This is a manifest status, not a fresh
+browser result. It can overlap the previously published/tested list.
+- BellsOnFireRomboAM
+- BillyonaireAM
+- BookOfAztecAM
+- BookOfFortuneAM
+- Dynamite7AM
+- EyeOfRaAM
+- Fantastico7AM
+- FireAndIceAM
+- Hot7DiceAM
+- HotScatterDiceAM
+- LightingHotAM
+- RomanLegionAM
+- RouletteRoyalAM
+
+END OF REPORT

@@ -17,6 +17,9 @@ python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_bef
 echo "=== fill missing from demo (v6: empty-config settings + demo-shell rescue) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 16
 
+echo "=== browser-404 CSV fill + strict re-verify (v7) ==="
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror4.py" mirror /tmp/comp/verify_before.json 16
+
 [ -s mirror/_verify_final.json ] || { echo "FATAL: mirror3 produced no _verify_final.json — NOT uploading a gateless zip"; exit 1; }
 
 echo "=== final status ==="
@@ -29,7 +32,8 @@ print('FINAL:', dict(c))
 json.dump({'summary': dict(c), 'games': r}, open('/tmp/comp/final_status.json','w'), indent=1)
 for g,v in sorted(r.items()):
     if v['status'] in ('broken','absent'):
-        print(f"  {v['status']}: {g} crit: {v.get('critical_missing')} budget: {len(v.get('budget',[]))}")
+        print(f"  {v['status']}: {g} crit: {v.get('critical_missing')} "
+              f"browser404: {v.get('browser404')} unproven: {len(v.get('unproven',[]))}")
 PY
 cp /tmp/comp/verify_before.json mirror/_verify_before.json
 
