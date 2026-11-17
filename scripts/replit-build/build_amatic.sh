@@ -14,7 +14,8 @@ mkdir -p ex stage packs
 # ---------- 1. payload from Google Drive ----------
 python3 -m pip install -q gdown
 OK=0
-for FID in 1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU; do
+FID_LIST=(1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU)
+for FID in "${FID_LIST[@]}"; do
   if gdown --fuzzy "https://drive.google.com/file/d/${FID}/view" -O payload.rar >/dev/null 2>&1 \
      && head -c 7 payload.rar | xxd -p | grep -qi "^526172211a07"; then OK=1; break; fi
 done
@@ -29,6 +30,31 @@ open('dl_url.txt','w').write(m.group(1)+"?"+("&".join(f"{k}={v}" for k,v in f)) 
 PY
   [ -s dl_url.txt ] && curl -sL -b ck.txt "$(cat dl_url.txt)" -o payload.rar
 fi
+# full integrity check: Drive sometimes serves a truncated file (unrar:
+# "Unexpected end of archive") — verify size+sha and retry on mismatch
+EXPECTED_SHA=fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb
+EXPECTED_SIZE=580769515
+for ATTEMPT in 1 2 3 4 5; do
+  ACTUAL=$(sha256sum payload.rar 2>/dev/null | awk '{print $1}')
+  ACTUAL_SIZE=$(stat -c%s payload.rar 2>/dev/null || echo 0)
+  if [ "$ACTUAL" = "$EXPECTED_SHA" ] && [ "$ACTUAL_SIZE" = "$EXPECTED_SIZE" ]; then
+    echo "payload.rar verified ($ACTUAL_SIZE bytes)"
+    break
+  fi
+  echo "attempt $ATTEMPT: sha=${ACTUAL:0:8} size=$ACTUAL_SIZE — mismatch, re-downloading"
+  sleep $((ATTEMPT * 10))
+  FID=${FID_LIST[ATTEMPT % 3]}
+  curl -sL -c ck.txt "https://drive.google.com/uc?export=download&id=${FID}" -o page.html
+  python3 - <<'PY'
+import re
+html=open('page.html',errors='ignore').read()
+m=re.search(r'action="([^"]+)"',html); f=re.findall(r'name="([^"]+)" value="([^"]*)"',html)
+open('dl_url.txt','w').write(m.group(1)+"?"+("&".join(f"{k}={v}" for k,v in f)) if m else "")
+PY
+  [ -s dl_url.txt ] && curl -sL -b ck.txt "$(cat dl_url.txt)" -o payload.rar
+done
+ACTUAL=$(sha256sum payload.rar 2>/dev/null | awk '{print $1}')
+[ "$ACTUAL" = "$EXPECTED_SHA" ] || { echo "RAR DOWNLOAD FAILED — checksum never matched"; exit 1; }
 head -c 7 payload.rar | xxd -p | grep -qi "^526172211a07" || { echo "RAR DOWNLOAD FAILED"; exit 1; }
 sha256sum payload.rar
 
