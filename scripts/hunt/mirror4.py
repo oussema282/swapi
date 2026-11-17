@@ -89,13 +89,13 @@ def local_basenames(gd):
     return idx
 
 
-def expand_siblings(game, gd, rel, tmpbin):
+def expand_siblings(game, gd, rel, tmpbin, types=None):
     """Filled <mod>/images/<res>/<name> -> fetch other res dirs; audio -> pair ext."""
     extra = []
     m = re.match(r'^([^/]+)/images/([^/]+)/([^/]+)$', rel)
     if m:
         mod, _res, name = m.groups()
-        for rt in RES_TYPES:
+        for rt in (types or RES_TYPES):
             r2 = f'{mod}/images/{rt}/{name}'
             if r2 == rel or os.path.exists(os.path.join(gd, r2)):
                 continue
@@ -154,8 +154,10 @@ COARSE = [0, 1, 2, 3, 5, 8, 11, 15, 20, 25, 30]
 
 
 def probe_series(game, gd, ref, rep, tmpbin):
-    """Coarse scan to locate the occupied index range (series can start at 11,
-    like symb-sounds), then dense walk with 2 margins."""
+    """Series walk with prefix locking: find the ONE dir the series lives in
+    (probing a few sparse indices across prefixes), then dense-walk only that
+    prefix. Early-absent after {0,1,2,11,15} all miss (symb-sounds start at 11).
+    If the series already exists locally, walk only its range +/- 2."""
     m = SERIES_NAME.match(ref['name'])
     if not m:
         return []
@@ -164,38 +166,68 @@ def probe_series(game, gd, ref, rep, tmpbin):
     prefixes = series_prefixes(ref, rep)[:6]
     ext2 = AUDIO_PAIR.get(ext)
 
+    # local range: if the series already exists locally, only fill gaps/margins
+    local_idx = set()
+    for dirpath, _, files in os.walk(gd):
+        for f in files:
+            fm = re.match(rf'^{stem}(\d{{1,3}}){re.escape(ext)}$', f, re.I)
+            if fm:
+                local_idx.add(int(fm.group(1)))
+    if local_idx:
+        lo = max(0, min(local_idx) - 2)
+        hi = min(30, max(local_idx) + 2)
+        idx_plan = [i for i in range(lo, hi + 1) if i not in local_idx]
+    else:
+        idx_plan = None   # coarse discovery
+
+    locked = None
+    misses = 0
+    hits = {}
+
     def grab(i):
-        for pre in prefixes:
+        nonlocal locked, misses
+        cands = [locked] if locked else prefixes
+        for pre in cands:
             rel = f'{pre}{stem}{i}{ext}'
             data = fetch_exact(game, rel, tmpbin)
             if data:
+                if not locked:
+                    locked = pre
                 save(gd, rel, data)
-                out = [rel] + expand_siblings(game, gd, rel, tmpbin)
+                out = [rel] + expand_siblings(game, gd, rel, tmpbin,
+                                              types=((rep or {}).get('types') or ['800_600'])[:3])
                 if ext2:
-                    for pre2 in prefixes:
-                        rel2 = f'{pre2}{stem}{i}{ext2}'
-                        d2 = fetch_exact(game, rel2, tmpbin)
-                        if d2:
-                            save(gd, rel2, d2)
-                            out.append(rel2)
-                            break
+                    rel2 = f'{pre}{stem}{i}{ext2}'
+                    d2 = fetch_exact(game, rel2, tmpbin)
+                    if d2:
+                        save(gd, rel2, d2)
+                        out.append(rel2)
                 return out
+        if not locked:
+            misses += 1
         return None
 
+    if idx_plan is not None:
+        for i in idx_plan:
+            got = grab(i)
+            if got:
+                hits[i] = got
+    else:
+        for i in COARSE:
+            got = grab(i)
+            if got:
+                hits[i] = got
+            elif misses >= 5 and not locked:
+                break   # absent at 0,1,2,11,15 across all prefixes
+        if hits:
+            lo = max(0, min(hits) - 2)
+            hi = min(30, max(hits) + 2)
+            for i in range(lo, hi + 1):
+                if i not in hits:
+                    got = grab(i)
+                    if got:
+                        hits[i] = got
     filled = []
-    hits = {}
-    for i in COARSE:
-        got = grab(i)
-        if got:
-            hits[i] = got
-    if not hits:
-        return []
-    lo = max(0, min(hits) - 2)
-    hi = min(30, max(hits) + 2)
-    for i in range(lo, hi + 1):
-        got = grab(i)
-        if got:
-            hits[i] = got
     for i in sorted(hits):
         filled += hits[i]
     return filled
@@ -243,7 +275,8 @@ def probe_ref(game, gd, ref, rep, tmpbin):
             data = fetch_exact(game, rel, tmpbin)
             if data:
                 save(gd, rel, data)
-                return [rel] + expand_siblings(game, gd, rel, tmpbin)
+                ts = ((ref.get('_info') or {}).get('types') or ['800_600'])[:3]
+                return [rel] + expand_siblings(game, gd, rel, tmpbin, types=ts)
     return []
 
 
@@ -252,7 +285,7 @@ def theme_audit(game, gd, rep, tmpbin):
     path <theme>/sounds/<name> or <theme>/images/<type>/<name> is missing but
     the ref is locally satisfied elsewhere, fetch the theme-location copy."""
     theme = rep.get('theme') or 'game'
-    types = list(rep.get('types') or ['800_600'])[:4]
+    types = list(rep.get('types') or ['800_600'])[:2]
     filled = []
     for p in rep.get('refs', []):
         if p.get('critical') or p.get('series') or p.get('module') or not p.get('local'):
@@ -286,6 +319,9 @@ def complete_game(args):
     filled_all = []
     rescued = None
     minimal = bool(rep['unsat_critical'])   # broken on boot refs: skip series/audit work
+    if minimal and any(not os.path.exists(os.path.join(gd, rel))
+                       for rel in csvrefs.get('blocking', [])):
+        minimal = False   # browser-confirmed paths must be attempted in full mode
     blocking_now = [rel for rel in csvrefs.get('blocking', [])
                     if not os.path.exists(os.path.join(gd, rel))]
     if rep['status'] == 'complete' and not blocking_now:
@@ -305,7 +341,7 @@ def complete_game(args):
 
     # 2) iterative strict verify + fill (series walk, theme audit, generic)
     exhausted = set()
-    for it in range(4):
+    for it in range(3):
         rep = amverify.analyze(M3.MIRROR, game)
         if rep is None:
             return {'game': game, 'result': 'absent', 'filled': filled_all, 'browser404': unfilled_browser}
@@ -332,6 +368,9 @@ def complete_game(args):
                 rescued = rescue_game(game, gd)
                 if rescued == 'complete':
                     break
+                if rescued != 'broken':
+                    minimal = False
+                    continue   # re-verify post-rescue with the full checklist
             break
         filled_all += got
 

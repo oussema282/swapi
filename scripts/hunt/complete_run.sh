@@ -14,10 +14,7 @@ unzip -q prev/amatic-clients.zip -d .
 echo "=== verify (before) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_before.json
 
-echo "=== fill missing from demo (v6: empty-config settings + demo-shell rescue) ==="
-python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror3.py" mirror /tmp/comp/verify_before.json 16
-
-echo "=== browser-404 CSV fill + strict re-verify (v7) ==="
+echo "=== fill v7: browser-404 CSV + strict re-verify + series walk + rescue ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror4.py" mirror /tmp/comp/verify_before.json 16
 
 [ -s mirror/_verify_final.json ] || { echo "FATAL: mirror3 produced no _verify_final.json — NOT uploading a gateless zip"; exit 1; }
