@@ -1,0 +1,1155 @@
+{
+ "summary": {
+  "demo_equivalent": 71,
+  "broken": 23,
+  "absent": 8
+ },
+ "games": {
+  "AllWaysWinAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "glass*.png",
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "ArisingPhoenixAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "AztecSecretAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BeautyFairyAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "BeautyWarriorAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "BellsOnFireAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BellsOnFireHotAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BellsOnFireRomboAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "glass*.png",
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BigPandaAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BillyonaireAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "symbanim*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BillysGameAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BlackJackAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BlueDolphinAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BookOfAztecAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "book*.jpg",
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg",
+    "symbols*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BookOfFortuneAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg",
+    "symbols*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "BookOfLordsAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "BookOfPharaoAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "BookOfQueenAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "CasanovaAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "CasinovaAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "CoolDiamonds2AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DeucesWildAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DiamondCatsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DiamondMonkeyAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DiamondsOnFireAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DoubleDoubleBonusAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "DragonsGiftAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "DragonsKingdomAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "DragonsPearlAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Dynamite7AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "btn*.png",
+    "btn_s*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "EnchantedCleopatraAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "EyeOfRaAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Fantastico7AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "btn*.png",
+    "btn_s*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "FireAndIceAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "FireQueenAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "FlyingDutchmanAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "FortunasFruitsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "symbanim*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "FruitExpressAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "FruitPokerAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "GemStarAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "asteroid*.png",
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "GoldenBookAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "GoldenJokerAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "GrandCasanovaAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "GrandFruitsAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "GrandTigerAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 6,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "GrandXAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Hot27AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Hot40AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "Hot7AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Hot7DiceAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Hot81AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotChoiceAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotDiamondsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotFruits100AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "HotFruits20AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "HotFruits40AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "HotNeonAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotScatterAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotScatterDiceAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotStarAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HotTwentyAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "HottestFruits20AM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "HottestFruits40AM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "JacksOrBetterAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "JokerCardAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "JokerPokerAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "KingsCrownAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LaGranAventuraAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LadyJokerAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "multi*.jpg",
+    "symbanim*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LightingHotAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LovelyLadyAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LuckyBellsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LuckyCoinAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "LuckyJoker20AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "LuckyJoker5AM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "LuckyZodiacAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MagicForestAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MagicIdolAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MagicOwlAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MermaidsGoldAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MerryFruitsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MultiWinAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "seven*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "MultiWinTripleAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "seven*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "PartyNightAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "PartyTimeAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "RedChilliAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg",
+    "symbanim*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "RomanLegionAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "btn*.png",
+    "btn_s*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "RouletteRoyalAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "RoyalUnicornAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "frame*.png",
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "SakuraFruitsAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "wins_*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "SakuraSecretAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "TensOrBetterAM": {
+   "status": "broken",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": "broken"
+  },
+  "TweetyBirdsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Ultra7AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 1,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "VampiresAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 3,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "Wild7AM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "WildDiamondsAM": {
+   "status": "absent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [],
+   "budget": false,
+   "rescued": null
+  },
+  "WildDragonAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "WildRespinAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "mobile_wlhelp*.jpg",
+    "wlhelp*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "WildSharkAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "WildStarsAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png"
+   ],
+   "budget": false,
+   "rescued": null
+  },
+  "WolfMoonAM": {
+   "status": "demo_equivalent",
+   "filled_v7": 0,
+   "browser404": [],
+   "series_done": [
+    "gui_desktop_v*.png",
+    "gui_mobile_v*.png",
+    "symbanim*.jpg"
+   ],
+   "budget": false,
+   "rescued": null
+  }
+ }
+}
