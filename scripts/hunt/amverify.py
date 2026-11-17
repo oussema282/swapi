@@ -176,17 +176,20 @@ def analyze(mirror, game):
             continue
         m = SERIES_RE.match(r['name'])
         if m and m.group(1).lower() not in SKIP_NAMES and len(m.group(1)) >= 3:
-            key = (m.group(1).lower(), m.group(3).lower(), r['kind'], r['module'])
-            series_groups.setdefault(key, True)
+            ext = '.' + {'jpeg': 'jpg'}.get(m.group(3).lower(), m.group(3).lower())
+            key = (m.group(1).lower(), ext, r['kind'], r['module'])
+            series_groups.setdefault(key, {'canon_only': True})
+            series_groups[key]['canon_only'] = False   # stem seen in corpus
     for stem, kind, exts in CANON_SERIES:
         for ext in exts:
-            series_groups.setdefault((stem, ext, kind, theme), True)
-    for (stem, ext, kind, mod) in series_groups:
+            series_groups.setdefault((stem, ext, kind, theme), {'canon_only': True})
+    for (stem, ext, kind, mod), meta in series_groups.items():
         name = f'{stem}*{ext}'
         if name in refs:
             continue
         refs[name] = {'name': name, 'kind': kind, 'module': mod, 'critical': False,
-                      'local': False, 'from': {'series'}, 'series': True}
+                      'local': False, 'from': {'series'}, 'series': True,
+                      'canon_only': meta['canon_only']}
 
     # settings/config loader scripts: "_<digits>.js" refs and their prefix variants
     settings_refs = []
@@ -247,7 +250,8 @@ def analyze(mirror, game):
             'unsat_critical': [r['name'] for r in broken],
             'unsat_pending': [{'name': r['name'], 'kind': r['kind'], 'module': r['module'],
                                'res': r.get('res'), 'settings': bool(re.match(r'^_?\d{6,}\.js$', r['name'])),
-                               'series': bool(r.get('series')), 'mislocated': bool(r.get('mislocated'))}
+                               'series': bool(r.get('series')), 'canon_only': bool(r.get('canon_only')),
+                               'mislocated': bool(r.get('mislocated'))}
                               for r in pending],
             'status': status}
 

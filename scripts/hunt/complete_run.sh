@@ -15,7 +15,7 @@ echo "=== verify (before) ==="
 python3 "$GITHUB_WORKSPACE/scripts/hunt/amverify.py" mirror /tmp/comp/verify_before.json
 
 echo "=== fill v7: browser-404 CSV + strict re-verify + series walk + rescue ==="
-python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror4.py" mirror /tmp/comp/verify_before.json 16
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror4.py" mirror /tmp/comp/verify_before.json 24
 
 [ -s mirror/_verify_final.json ] || { echo "FATAL: mirror3 produced no _verify_final.json — NOT uploading a gateless zip"; exit 1; }
 

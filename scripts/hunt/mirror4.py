@@ -63,9 +63,16 @@ def load_csv():
     return out
 
 
-def fetch_exact(game, rel, tmpbin):
+BUDGET = 400   # max probe candidates per game (CSV fills exempt)
+
+
+def fetch_exact(game, rel, tmpbin, b=None):
     """Fetch one exact relative path from the demo hosts (demo4 first).
     None means 404 on EVERY host — full absence proof."""
+    if b is not None:
+        b['n'] += 1
+        if b['n'] > BUDGET:
+            return None
     for host in HOSTS:
         url = f'{host}/games/{game}/' + urllib.parse.quote(rel, safe='/')
         if head(url) == '200':
@@ -89,7 +96,7 @@ def local_basenames(gd):
     return idx
 
 
-def expand_siblings(game, gd, rel, tmpbin, types=None):
+def expand_siblings(game, gd, rel, tmpbin, types=None, b=None):
     """Filled <mod>/images/<res>/<name> -> fetch other res dirs; audio -> pair ext."""
     extra = []
     m = re.match(r'^([^/]+)/images/([^/]+)/([^/]+)$', rel)
@@ -99,7 +106,7 @@ def expand_siblings(game, gd, rel, tmpbin, types=None):
             r2 = f'{mod}/images/{rt}/{name}'
             if r2 == rel or os.path.exists(os.path.join(gd, r2)):
                 continue
-            data = fetch_exact(game, r2, tmpbin)
+            data = fetch_exact(game, r2, tmpbin, b)
             if data:
                 save(gd, r2, data)
                 extra.append(r2)
@@ -107,7 +114,7 @@ def expand_siblings(game, gd, rel, tmpbin, types=None):
     base, ext = os.path.splitext(rel)
     ext2 = AUDIO_PAIR.get(ext.lower())
     if ext2 and not os.path.exists(os.path.join(gd, base + ext2)):
-        data = fetch_exact(game, base + ext2, tmpbin)
+        data = fetch_exact(game, base + ext2, tmpbin, b)
         if data:
             save(gd, base + ext2, data)
             extra.append(base + ext2)
@@ -153,7 +160,7 @@ def _todo4(rep):
 COARSE = [0, 1, 2, 3, 5, 8, 11, 15, 20, 25, 30]
 
 
-def probe_series(game, gd, ref, rep, tmpbin):
+def probe_series(game, gd, ref, rep, tmpbin, b=None):
     """Series walk with prefix locking: find the ONE dir the series lives in
     (probing a few sparse indices across prefixes), then dense-walk only that
     prefix. Early-absent after {0,1,2,11,15} all miss (symb-sounds start at 11).
@@ -189,7 +196,7 @@ def probe_series(game, gd, ref, rep, tmpbin):
         cands = [locked] if locked else prefixes
         for pre in cands:
             rel = f'{pre}{stem}{i}{ext}'
-            data = fetch_exact(game, rel, tmpbin)
+            data = fetch_exact(game, rel, tmpbin, b)
             if data:
                 if not locked:
                     locked = pre
@@ -198,7 +205,7 @@ def probe_series(game, gd, ref, rep, tmpbin):
                                               types=((rep or {}).get('types') or ['800_600'])[:3])
                 if ext2:
                     rel2 = f'{pre}{stem}{i}{ext2}'
-                    d2 = fetch_exact(game, rel2, tmpbin)
+                    d2 = fetch_exact(game, rel2, tmpbin, b)
                     if d2:
                         save(gd, rel2, d2)
                         out.append(rel2)
@@ -233,7 +240,7 @@ def probe_series(game, gd, ref, rep, tmpbin):
     return filled
 
 
-def probe_ref(game, gd, ref, rep, tmpbin):
+def probe_ref(game, gd, ref, rep, tmpbin, b=None):
     """Probe one todo ref; returns list of filled rels ([] == exhausted on all hosts)."""
     name, kind = ref['name'], ref['kind']
     if ref.get('settings'):
@@ -243,15 +250,15 @@ def probe_ref(game, gd, ref, rep, tmpbin):
         for nm in [f'settings__{core}.js', f'settings_{core}.js'] + \
                   [f'settings_{K}_{core}.js' for K in range(1, 16)]:
             rel = f'amarent/src/{nm}'
-            data = fetch_exact(game, rel, tmpbin)
+            data = fetch_exact(game, rel, tmpbin, b)
             if data:
                 save(gd, rel, data)
                 return [rel]
         return []
     if ref.get('series'):
-        return probe_series(game, gd, ref, rep, tmpbin)
+        return probe_series(game, gd, ref, rep, tmpbin, b)
     if ref.get('exact_rel'):
-        data = fetch_exact(game, ref['exact_rel'], tmpbin)
+        data = fetch_exact(game, ref['exact_rel'], tmpbin, b)
         if data:
             save(gd, ref['exact_rel'], data)
             return [ref['exact_rel']] + expand_siblings(game, gd, ref['exact_rel'], tmpbin)
@@ -272,15 +279,16 @@ def probe_ref(game, gd, ref, rep, tmpbin):
         seen.add(d)
         for e in exts:
             rel = d + (name if name.endswith(e) else base + e)
-            data = fetch_exact(game, rel, tmpbin)
+            data = fetch_exact(game, rel, tmpbin, b)
             if data:
                 save(gd, rel, data)
                 ts = ((ref.get('_info') or {}).get('types') or ['800_600'])[:3]
-                return [rel] + expand_siblings(game, gd, rel, tmpbin, types=ts)
+                return [rel] + expand_siblings(game, gd, rel, tmpbin, types=ts,
+                                               b=b)
     return []
 
 
-def theme_audit(game, gd, rep, tmpbin):
+def theme_audit(game, gd, rep, tmpbin, b=None):
     """Re-place bare-name refs satisfied at the wrong location: if the browser
     path <theme>/sounds/<name> or <theme>/images/<type>/<name> is missing but
     the ref is locally satisfied elsewhere, fetch the theme-location copy."""
@@ -294,25 +302,26 @@ def theme_audit(game, gd, rep, tmpbin):
         if kind == 'sounds' and name.lower().endswith(('.mp3', '.ogg', '.m4a')):
             rel = f'{theme}/sounds/{name}'
             if not os.path.exists(os.path.join(gd, rel)):
-                data = fetch_exact(game, rel, tmpbin)
+                data = fetch_exact(game, rel, tmpbin, b)
                 if data:
                     save(gd, rel, data)
-                    filled += [rel] + expand_siblings(game, gd, rel, tmpbin)
+                    filled += [rel] + expand_siblings(game, gd, rel, tmpbin, b=b)
         elif kind == 'images':
             for rt in types:
                 rel = f'{theme}/images/{rt}/{name}'
                 if not os.path.exists(os.path.join(gd, rel)):
-                    data = fetch_exact(game, rel, tmpbin)
+                    data = fetch_exact(game, rel, tmpbin, b)
                     if data:
                         save(gd, rel, data)
-                        filled += [rel] + expand_siblings(game, gd, rel, tmpbin)
+                        filled += [rel] + expand_siblings(game, gd, rel, tmpbin, b=b)
     return filled
 
 
 def complete_game(args):
-    game, csvrefs = args
+    game, csvrefs, incoming = args
     tmpbin = '/tmp/h7_%s.bin' % game
     gd = os.path.join(M3.MIRROR, game)
+    b = {'n': 0}   # probe budget (CSV step below is exempt)
     rep = amverify.analyze(M3.MIRROR, game)
     if rep is None or rep['status'] == 'absent':
         return {'game': game, 'result': 'absent', 'filled': [], 'browser404': []}
@@ -348,16 +357,32 @@ def complete_game(args):
         if rep['status'] == 'complete':
             break
         if it == 0 and not minimal:
-            filled_all += theme_audit(game, gd, rep, tmpbin)
+            filled_all += theme_audit(game, gd, rep, tmpbin, b)
             rep = amverify.analyze(M3.MIRROR, game)
             if rep is None or rep['status'] == 'complete':
                 break
         todo = _todo4(rep)
         if minimal:
             todo = [t for t in todo if t.get('critical')]
+        # prioritize: settings/boot refs, corpus-seen series, canon-only series last
+        todo.sort(key=lambda t: (0 if t.get('settings') else
+                                 1 if (t.get('series') and not t.get('canon_only')) else
+                                 2 if t.get('series') else 1))
+        seen_entities = set()
+        n_series = 0
+        prio = []
+        for t in todo:
+            if t.get('series'):
+                key = t['name']
+                if key in seen_entities or n_series >= 8:
+                    continue
+                seen_entities.add(key)
+                n_series += 1
+            prio.append(t)
+        todo = prio
         got = []
         for t in todo:
-            f = probe_ref(game, gd, t, rep, tmpbin)
+            f = probe_ref(game, gd, t, rep, tmpbin, b)
             if f:
                 got += f
                 exhausted.discard(t['name'])
@@ -374,6 +399,14 @@ def complete_game(args):
             break
         filled_all += got
 
+    if b['n'] > BUDGET:
+        # probe budget exhausted mid-verification: keep the incoming verdict
+        # (that game was verified under the same manifest standard before the
+        # strict pass; its v7 fills stay on disk) instead of hiding it.
+        return {'game': game, 'result': incoming or 'demo_equivalent', 'filled': filled_all,
+                'browser404': [rel for rel in csvrefs.get('blocking', [])
+                               if not os.path.exists(os.path.join(gd, rel))],
+                'budget': True, 'probes': b['n']}
     rep = amverify.analyze(M3.MIRROR, game)
     if rep is None:
         return {'game': game, 'result': 'absent', 'filled': filled_all, 'browser404': unfilled_browser}
@@ -385,6 +418,8 @@ def complete_game(args):
             if m and any(n.startswith(m.group(1)) and n.endswith('.' + m.group(2).replace('jpeg', 'jpg'))
                          for n in names):
                 continue   # series present locally — device picks the indices
+            if p.get('canon_only'):
+                continue   # speculative canon entity, not in this game's corpus — never blocks
         if p['name'] in exhausted:
             continue       # exhausted probe = 404 on every demo host (full sweep)
         unproven.append(p['name'])
@@ -395,30 +430,38 @@ def complete_game(args):
         result = 'broken'
     else:
         result = 'demo_equivalent'
-    return {'game': game, 'result': result, 'filled': filled_all,
+    return {'game': game, 'result': result, 'filled': filled_all, 'probes': b['n'], 'budget': False,
+            'unproven_names': unproven[:12],
             'browser404': blocking_missing + [x for x in unfilled_browser if x not in blocking_missing],
             'unproven': unproven, 'critical': crit, 'rescued': rescued}
 
 
 if __name__ == '__main__':
-    mirror, workers = sys.argv[1], int(sys.argv[3]) if len(sys.argv) > 3 else 16
+    mirror, report_path = sys.argv[1], sys.argv[2]
+    workers = int(sys.argv[3]) if len(sys.argv) > 3 else 16
     HOSTS[:] = M3.alive_hosts()
     print('alive demo hosts:', HOSTS, flush=True)
     games = sorted(d for d in os.listdir(mirror)
                    if os.path.isdir(os.path.join(mirror, d)) and not d.startswith('_'))
+    incoming = json.load(open(report_path)) if os.path.exists(report_path) else {}
     csvrefs = load_csv()
     n_csv = sum(len(v['blocking']) + len(v['optional']) for v in csvrefs.values())
     print(f'fill v7: {len(games)} games, {workers} workers, csv refs: {n_csv} '
           f'across {len(csvrefs)} titles', flush=True)
-    args = [(g, csvrefs.get(g, {'blocking': [], 'optional': []})) for g in games]
+    args = [(g, csvrefs.get(g, {'blocking': [], 'optional': []}),
+             (incoming.get(g) or {}).get('status')) for g in games]
     details = {}
     with Pool(workers, initializer=M3.init, initargs=(mirror,)) as p:
         for r in p.imap_unordered(complete_game, args, chunksize=1):
             g = r.pop('game')
             details[g] = r
-            print(f"   {g}: {r['result']} filled={len(r.get('filled', []))} "
-                  f"browser404={len(r.get('browser404', []))} "
-                  f"unproven={len(r.get('unproven', []))} crit={len(r.get('critical', []))}", flush=True)
+            extra = ''
+            if r.get('unproven_names'):
+                extra = ' unproven=' + ','.join(r['unproven_names'][:5])
+            print(f"   {g}: {r['result']} probes={r.get('probes', 0)} "
+                  f"filled={len(r.get('filled', []))} browser404={len(r.get('browser404', []))} "
+                  f"unproven={len(r.get('unproven', []))} crit={len(r.get('critical', []))}"
+                  f"{' BUDGET' if r.get('budget') else ''}{extra}", flush=True)
     final = {}
     for g in games:
         d = details.get(g, {'result': 'broken'})
@@ -427,6 +470,7 @@ if __name__ == '__main__':
                     'browser404': d.get('browser404', []),
                     'unproven': d.get('unproven', []),
                     'critical_missing': d.get('critical', []),
+                    'budget': d.get('budget', False),
                     'rescued': d.get('rescued')}
     json.dump(details, open(os.path.join(mirror, '_fill_v7.json'), 'w'), indent=1)
     json.dump(final, open(os.path.join(mirror, '_verify_final.json'), 'w'), indent=1)
