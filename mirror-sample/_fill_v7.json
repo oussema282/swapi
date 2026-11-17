@@ -1,0 +1,1375 @@
+{
+ "BookOfPharaoAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "BlackJackAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png"
+  ]
+ },
+ "DoubleDoubleBonusAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 0,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": []
+ },
+ "BookOfQueenAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "BookOfLordsAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "BeautyFairyAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "BeautyWarriorAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "BellsOnFireAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "bellsonfire/sounds/stopwild.mp3",
+   "bellsonfire/sounds/stopwild.ogg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "DeucesWildAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "ArisingPhoenixAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "arisingphoenix/images/800_600/fullscreen_1.jpg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "CoolDiamonds2AM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "FireQueenAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "BigPandaAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "bigpanda/images/800_600/symbanimwild1.png",
+   "bigpanda/images/800_600/symbanim10.png"
+  ],
+  "probes": 43,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.png"
+  ]
+ },
+ "DiamondCatsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "diamondcats/sounds/freeze.mp3",
+   "diamondcats/sounds/freeze.ogg",
+   "diamondcats/sounds/symb13.mp3",
+   "diamondcats/sounds/symb13.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "BellsOnFireHotAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "BillysGameAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "billysgame/sounds/fullscreenchance.mp3",
+   "billysgame/sounds/fullscreenchance.ogg",
+   "billysgame/sounds/stop_wild.mp3",
+   "billysgame/sounds/stop_wild.ogg",
+   "billysgame/sounds/symb.mp3",
+   "billysgame/sounds/symb.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "CasanovaAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "casanova/sounds/expand.mp3",
+   "casanova/sounds/expand.ogg",
+   "casanova/sounds/symb11.mp3",
+   "casanova/sounds/symb11.ogg",
+   "casanova/sounds/symb12.mp3",
+   "casanova/sounds/symb12.ogg",
+   "casanova/sounds/symb13.mp3",
+   "casanova/sounds/symb13.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "DiamondMonkeyAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "diamondmonkey/sounds/bonussymbol.mp3",
+   "diamondmonkey/sounds/bonussymbol.ogg",
+   "diamondmonkey/sounds/bonussymbolwin.mp3",
+   "diamondmonkey/sounds/bonussymbolwin.ogg",
+   "diamondmonkey/sounds/replace.mp3",
+   "diamondmonkey/sounds/replace.ogg",
+   "diamondmonkey/sounds/tick.mp3",
+   "diamondmonkey/sounds/tick.ogg",
+   "diamondmonkey/sounds/transition.mp3",
+   "diamondmonkey/sounds/transition.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "DragonsGiftAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "GrandCasanovaAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "GrandFruitsAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "BlueDolphinAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "bluedolphin/sounds/symb11.mp3",
+   "bluedolphin/sounds/symb11.ogg",
+   "bluedolphin/sounds/symb12.mp3",
+   "bluedolphin/sounds/symb12.ogg",
+   "bluedolphin/sounds/symb13.mp3",
+   "bluedolphin/sounds/symb13.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "BillyonaireAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "billyonaire/images/800_600/symbanimwild1.jpg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "symbanim*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "EnchantedCleopatraAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "AllWaysWinAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "allwayswin/images/800_600/freespin0.png",
+   "allwayswin/images/800_600/symbanim10.png",
+   "allwayswin/images/800_600/symbanim11.png"
+  ],
+  "probes": 54,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "glass*.png",
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.png"
+  ]
+ },
+ "DiamondsOnFireAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "diamondsonfire/images/800_600/symbanim1.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "AztecSecretAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "aztecsecret/images/800_600/symbanim1.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "Dynamite7AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "btn*.png",
+   "btn_s*.png"
+  ]
+ },
+ "BellsOnFireRomboAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "slot/sounds/addfreespin_5.mp3",
+   "slot/sounds/addfreespin_5.ogg"
+  ],
+  "probes": 70,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "glass*.png",
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "BookOfFortuneAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "bookoffortune/sounds/bonussymbolwin.mp3",
+   "bookoffortune/sounds/bonussymbolwin.ogg",
+   "bookoffortune/sounds/bonussymbolwinend.mp3",
+   "bookoffortune/sounds/bonussymbolwinend.ogg",
+   "bookoffortune/sounds/choicesymbol.mp3",
+   "bookoffortune/sounds/choicesymbol.ogg",
+   "bookoffortune/sounds/choicewinsymbol.mp3",
+   "bookoffortune/sounds/choicewinsymbol.ogg",
+   "bookoffortune/sounds/replace.mp3",
+   "bookoffortune/sounds/replace.ogg",
+   "bookoffortune/sounds/transitionstart.mp3",
+   "bookoffortune/sounds/transitionstart.ogg"
+  ],
+  "probes": 70,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg",
+   "symbols*.jpg"
+  ]
+ },
+ "GoldenJokerAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "FlyingDutchmanAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "Fantastico7AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "btn*.png",
+   "btn_s*.png"
+  ]
+ },
+ "FruitExpressAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "DragonsPearlAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "dragonspearl/sounds/addfreespin2.mp3",
+   "dragonspearl/sounds/addfreespin2.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "DragonsKingdomAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "dragonskingdom/images/800_600/symbanimwild2.jpg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "EyeOfRaAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "eyeofra/sounds/symb11.mp3",
+   "eyeofra/sounds/symb11.ogg",
+   "eyeofra/sounds/symb12.mp3",
+   "eyeofra/sounds/symb12.ogg",
+   "slot/sounds/addfreespin_5.mp3",
+   "slot/sounds/addfreespin_5.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "FruitPokerAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "HottestFruits20AM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "HottestFruits40AM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "Hot40AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "BookOfAztecAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "bookofaztec/sounds/bonussymbolwin.mp3",
+   "bookofaztec/sounds/bonussymbolwin.ogg",
+   "bookofaztec/sounds/bonussymbolwinend.mp3",
+   "bookofaztec/sounds/bonussymbolwinend.ogg",
+   "bookofaztec/sounds/choicesymbol.mp3",
+   "bookofaztec/sounds/choicesymbol.ogg",
+   "bookofaztec/sounds/choicewinsymbol.mp3",
+   "bookofaztec/sounds/choicewinsymbol.ogg",
+   "bookofaztec/sounds/replace.mp3",
+   "bookofaztec/sounds/replace.ogg",
+   "bookofaztec/sounds/transitionstart.mp3",
+   "bookofaztec/sounds/transitionstart.ogg"
+  ],
+  "probes": 90,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "book*.jpg",
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg",
+   "symbols*.jpg"
+  ]
+ },
+ "Hot27AM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "twentyseven/sounds/symb_low.mp3",
+   "twentyseven/sounds/symb_low.ogg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "Hot7AM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "Hot7DiceAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "hot7dice/images/800_600/symbols.png"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "HotFruits100AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "GemStarAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "gemstar/images/800_600/symbols.png"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "asteroid*.png",
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "HotFruits20AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "FortunasFruitsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "fortunasfruits/images/800_600/symbanim9.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "symbanim*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "HotFruits40AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "GrandTigerAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "grandtiger/images/800_600/symbanim1.png",
+   "grandtiger/images/800_600/symbanim2.png",
+   "grandtiger/images/800_600/symbanim3.png",
+   "grandtiger/images/800_600/symbanim4.png",
+   "grandtiger/images/800_600/symbanim5.png",
+   "grandtiger/images/800_600/symbanim6.png",
+   "grandtiger/images/800_600/symbanim7.png"
+  ],
+  "probes": 52,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.png"
+  ]
+ },
+ "Hot81AM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "hot81/sounds/replace.mp3",
+   "hot81/sounds/replace.ogg",
+   "hot81/sounds/wild1.mp3",
+   "hot81/sounds/wild1.ogg",
+   "hot81/sounds/wild2.mp3",
+   "hot81/sounds/wild2.ogg",
+   "hot81/sounds/wild3.mp3",
+   "hot81/sounds/wild3.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "GrandXAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "grandx/images/800_600/symbol_help.jpg"
+  ],
+  "probes": 56,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotTwentyAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "GoldenBookAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "goldenbook/images/800_600/symbanim1.png"
+  ],
+  "probes": 60,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotDiamondsAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotScatterAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotScatterDiceAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotStarAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "hotstar/images/800_600/symbanim9.png"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "HotChoiceAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "hotchoice/images/800_600/symbanim1.png",
+   "hotchoice/images/800_600/symbanim3.png",
+   "hotchoice/images/800_600/symbanim4.png",
+   "hotchoice/images/800_600/symbanim5.png",
+   "hotchoice/images/800_600/symbanim6.png",
+   "hotchoice/images/800_600/symbanim7.png",
+   "hotchoice/images/800_600/symbanim8.png"
+  ],
+  "probes": 53,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.png"
+  ]
+ },
+ "JacksOrBetterAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "JokerPokerAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "LuckyJoker20AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "LuckyJoker5AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "RouletteRoyalAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 0,
+  "browser404": [],
+  "rescued": null,
+  "series_done": []
+ },
+ "JokerCardAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "LuckyBellsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "luckybells/sounds/wild.mp3",
+   "luckybells/sounds/wild.ogg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "SakuraSecretAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "LightingHotAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "CasinovaAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "casinova/images/800_600/symbanim20.jpg"
+  ],
+  "probes": 145,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.png"
+  ]
+ },
+ "LaGranAventuraAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "lagranaventura/images/800_600/symbanim1.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "LovelyLadyAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "ladyluck/sounds/symb13.mp3",
+   "ladyluck/sounds/symb13.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "KingsCrownAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "kingscrown/images/800_600/symbanim1.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "wlhelp*.jpg"
+  ]
+ },
+ "WildDiamondsAM": {
+  "result": "absent",
+  "filled": [],
+  "browser404": []
+ },
+ "PartyNightAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "LuckyCoinAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "luckycoin/sounds/symb13.mp3",
+   "luckycoin/sounds/symb13.ogg",
+   "luckycoin/sounds/symb14.mp3",
+   "luckycoin/sounds/symb14.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "MagicIdolAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "MerryFruitsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "merryfruits/images/800_600/symbol_help.jpg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "MermaidsGoldAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "mermaidsgold/sounds/symb13.mp3",
+   "mermaidsgold/sounds/symb13.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "SakuraFruitsAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 20,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "wins_*.png"
+  ]
+ },
+ "FireAndIceAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "fireandice/images/800_600/symbanim31.jpg"
+  ],
+  "probes": 135,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "LadyJokerAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "ladyjoker/sounds/multi2.mp3",
+   "ladyjoker/sounds/multi2.ogg",
+   "ladyjoker/sounds/multi3.mp3",
+   "ladyjoker/sounds/multi3.ogg",
+   "ladyjoker/sounds/multi5.mp3",
+   "ladyjoker/sounds/multi5.ogg",
+   "ladyjoker/sounds/stopwild.mp3",
+   "ladyjoker/sounds/stopwild.ogg"
+  ],
+  "probes": 75,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "multi*.jpg",
+   "symbanim*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "MagicForestAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "magicforest/images/800_600/mobile_symbol_help.jpg",
+   "magicforest/images/800_600/symbol_help.jpg"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "TensOrBetterAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 40,
+  "browser404": [],
+  "rescued": "broken",
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "PartyTimeAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "partytime/sounds/symb11.mp3",
+   "partytime/sounds/symb11.ogg",
+   "partytime/sounds/symbbonus.mp3",
+   "partytime/sounds/symbbonus.ogg"
+  ],
+  "probes": 56,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "HotNeonAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 106,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "Ultra7AM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 35,
+  "browser404": [
+   "ultraseven/images/800_600/symbanim1.png"
+  ],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "MultiWinAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 65,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "seven*.png"
+  ]
+ },
+ "MultiWinTripleAM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 65,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "seven*.png"
+  ]
+ },
+ "MagicOwlAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "magicowl/images/800_600/symbol_help.jpg",
+   "slot/images/800_600/gui_mobile_v17.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "LuckyZodiacAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "luckyzodiac/images/800_600/mobile_symbol_help.jpg",
+   "luckyzodiac/sounds/bonussymbolwin.mp3",
+   "luckyzodiac/sounds/bonussymbolwin.ogg",
+   "luckyzodiac/sounds/choicemultiplier.mp3",
+   "luckyzodiac/sounds/choicemultiplier.ogg",
+   "luckyzodiac/sounds/choicesymbol.mp3",
+   "luckyzodiac/sounds/choicesymbol.ogg",
+   "luckyzodiac/sounds/melody.mp3",
+   "luckyzodiac/sounds/melody.ogg",
+   "luckyzodiac/sounds/replace.mp3",
+   "luckyzodiac/sounds/replace.ogg",
+   "luckyzodiac/sounds/symb14.mp3",
+   "luckyzodiac/sounds/symb14.ogg",
+   "luckyzodiac/sounds/symb15.mp3",
+   "luckyzodiac/sounds/symb15.ogg"
+  ],
+  "probes": 70,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "WildDragonAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "wilddragon/images/800_600/symbanim1.png"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "WildRespinAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "wildrespin/images/800_600/fullscreen_1.jpg"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "mobile_wlhelp*.jpg",
+   "wlhelp*.jpg"
+  ]
+ },
+ "TweetyBirdsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "tweetybirds/images/800_600/symbanim1.png"
+  ],
+  "probes": 55,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "WildStarsAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "wildstars/images/800_600/respininfo.png"
+  ],
+  "probes": 35,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ },
+ "RedChilliAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "redchilli/sounds/addfreespin_1.mp3",
+   "redchilli/sounds/addfreespin_1.ogg",
+   "redchilli/sounds/addfreespin_2.mp3",
+   "redchilli/sounds/addfreespin_2.ogg",
+   "redchilli/sounds/addfreespin_3.mp3",
+   "redchilli/sounds/addfreespin_3.ogg",
+   "redchilli/sounds/addfreespin_4.mp3",
+   "redchilli/sounds/addfreespin_4.ogg",
+   "redchilli/sounds/addfreespin_5.mp3",
+   "redchilli/sounds/addfreespin_5.ogg",
+   "redchilli/sounds/bonus1.mp3",
+   "redchilli/sounds/bonus1.ogg"
+  ],
+  "probes": 70,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg",
+   "symbanim*.png"
+  ]
+ },
+ "VampiresAM": {
+  "result": "broken",
+  "filled": [
+   "vampires/sounds/bonuschance2_fs.ogg",
+   "vampires/sounds/selection.mp3",
+   "vampires/sounds/selection.ogg",
+   "vampires/sounds/stop_expanding.mp3",
+   "vampires/sounds/stop_expanding.ogg",
+   "vampires/sounds/tick.mp3",
+   "vampires/sounds/tick.ogg"
+  ],
+  "probes": 50,
+  "browser404": [
+   "vampires/sounds/bonuschance2_fs.mp3",
+   "vampires/sounds/bonusmelody.mp3",
+   "vampires/sounds/bonusmelody.ogg"
+  ],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "WildSharkAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "wildshark/images/800_600/symbol_help.jpg",
+   "wildshark/sounds/addfreespin.mp3",
+   "wildshark/sounds/addfreespin.ogg",
+   "wildshark/sounds/symb11.mp3",
+   "wildshark/sounds/symb11.ogg"
+  ],
+  "probes": 50,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "RoyalUnicornAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "royalunicorn/images/800_600/symbanimwild2.jpg"
+  ],
+  "probes": 75,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "frame*.png",
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "WolfMoonAM": {
+  "result": "demo_equivalent",
+  "filled": [
+   "slot/sounds/addfreespin_5.ogg",
+   "slot/sounds/addfreespin_5.mp3",
+   "wolfmoon/images/800_600/mobile_symbol_help.jpg",
+   "wolfmoon/sounds/stopwild.mp3",
+   "wolfmoon/sounds/stopwild.ogg",
+   "wolfmoon/sounds/symb12.mp3",
+   "wolfmoon/sounds/symb12.ogg"
+  ],
+  "probes": 50,
+  "browser404": [
+   "slot/sounds/addfreespin_5.mp3"
+  ],
+  "rescued": null,
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "RomanLegionAM": {
+  "result": "broken",
+  "filled": [],
+  "probes": 100,
+  "browser404": [],
+  "rescued": null,
+  "series_done": [
+   "btn*.png",
+   "btn_s*.png",
+   "symbanim*.jpg"
+  ]
+ },
+ "Wild7AM": {
+  "result": "demo_equivalent",
+  "filled": [],
+  "probes": 35,
+  "browser404": [],
+  "rescued": "demo_equivalent",
+  "series_done": [
+   "gui_desktop_v*.png",
+   "gui_mobile_v*.png"
+  ]
+ }
+}
