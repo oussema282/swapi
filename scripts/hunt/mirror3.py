@@ -200,6 +200,7 @@ def rescue_game(game, gd):
     os.makedirs(os.path.dirname(idx), exist_ok=True)
     with open(idx, 'wb') as f:
         f.write(html)
+    proven404 = set()
     for _ in range(4):
         rep = amverify.analyze(MIRROR, game)
         if rep is None:
@@ -210,6 +211,7 @@ def rescue_game(game, gd):
         if not todo:
             break
         done = probe_paths(game, gd, todo)
+        proven404.update(d['name'] for d in done if d['outcome'] == 'demo404')
         if all(d['outcome'] != 'filled' for d in done):
             break
     rep = amverify.analyze(MIRROR, game)
@@ -217,7 +219,25 @@ def rescue_game(game, gd):
         return 'absent'
     if rep['status'] == 'complete':
         return 'complete'
-    return 'broken' if rep['unsat_critical'] else 'demo_equivalent'
+    if rep['unsat_critical']:
+        return 'broken'
+    # pending refs: tolerate ONLY canon-only-absent series, series present
+    # locally, or refs 404-proven during the rescue probes
+    names = set()
+    for dirpath, _, files in os.walk(gd):
+        names.update(files)
+    for p in rep['unsat_pending']:
+        if p.get('series'):
+            import re as _re
+            m = _re.match(r'^([A-Za-z_]+)\*', p['name'])
+            if m and any(n.startswith(m.group(1)) for n in names):
+                continue   # series present locally — device picks indices
+            if p.get('canon_only'):
+                continue   # speculative canon entity, not in this corpus
+        if p['name'] in proven404:
+            continue
+        return 'broken'   # referenced, missing, unproven — not publishable
+    return 'demo_equivalent'
 
 def complete_game(info):
     game = info['game']

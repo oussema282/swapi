@@ -384,13 +384,14 @@ def complete_game(args):
     # 3) theme-path audit: only for basenames the browser proved it needs
     filled_all += theme_audit(game, gd, rep, tmpbin, b, only=audit_names)
 
-    # 4) rescue ONLY for games already broken (they are hidden anyway unless it
-    #    succeeds); cabinets are known-unfixable
+    # 4) rescue for games already broken OR games whose browser-proven paths
+    #    stay unfilled (generation mismatch — adopt the demo's own shell/JS);
+    #    cabinets are known-unfixable
     rep = amverify.analyze(M3.MIRROR, game)
-    if rep is not None and rep['unsat_critical'] and incoming == 'broken' \
-            and game not in CABINETS and b['n'] <= BUDGET:
+    if rep is not None and game not in CABINETS and b['n'] <= BUDGET and \
+            (blocking_missing or (rep['unsat_critical'] and incoming == 'broken')):
         rescued = rescue_game(game, gd)
-        if rescued == 'complete':
+        if rescued in ('complete', 'demo_equivalent'):
             blocking_missing = []
 
     # 5) verdict: trust the previously browser-validated gate verdict, upgrade
