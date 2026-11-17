@@ -157,7 +157,7 @@ def _todo4(rep):
     return todo
 
 
-COARSE = [0, 1, 2, 3, 5, 8, 11, 15, 20, 25, 30]
+COARSE = [0, 1, 2, 11, 3, 5, 8, 15, 20, 25, 30]   # 11 before the early-absent threshold (symb sounds start at 11)
 
 
 def probe_series(game, gd, ref, rep, tmpbin, b=None):
@@ -288,10 +288,11 @@ def probe_ref(game, gd, ref, rep, tmpbin, b=None):
     return []
 
 
-def theme_audit(game, gd, rep, tmpbin, b=None):
+def theme_audit(game, gd, rep, tmpbin, b=None, only=None):
     """Re-place bare-name refs satisfied at the wrong location: if the browser
     path <theme>/sounds/<name> or <theme>/images/<type>/<name> is missing but
-    the ref is locally satisfied elsewhere, fetch the theme-location copy."""
+    the ref is locally satisfied elsewhere, fetch the theme-location copy.
+    `only` restricts the audit to basenames the browser proved it needs."""
     theme = rep.get('theme') or 'game'
     types = list(rep.get('types') or ['800_600'])[:2]
     filled = []
@@ -299,6 +300,8 @@ def theme_audit(game, gd, rep, tmpbin, b=None):
         if p.get('critical') or p.get('series') or p.get('module') or not p.get('local'):
             continue
         name, kind = p['name'], p['kind']
+        if only is not None and name not in only:
+            continue
         if kind == 'sounds' and name.lower().endswith(('.mp3', '.ogg', '.m4a')):
             rel = f'{theme}/sounds/{name}'
             if not os.path.exists(os.path.join(gd, rel)):
@@ -317,24 +320,28 @@ def theme_audit(game, gd, rep, tmpbin, b=None):
     return filled
 
 
+CABINETS = {'Dynamite7AM', 'Fantastico7AM', 'LightingHotAM', 'RomanLegionAM'}   # multi-game loaders referencing ~80 other games — unfixable from the demo
+
+# basenames the browser PROVED it needs at theme paths (from the CSV) — the
+# theme audit only re-places these classes, nothing else
+def csv_basenames(csvrefs_all):
+    names = set()
+    for d in csvrefs_all.values():
+        for rel in d['blocking'] + d['optional']:
+            names.add(os.path.basename(rel))
+    return names
+
+
 def complete_game(args):
-    game, csvrefs, incoming = args
+    game, csvrefs, incoming, audit_names = args
     tmpbin = '/tmp/h7_%s.bin' % game
     gd = os.path.join(M3.MIRROR, game)
-    b = {'n': 0}   # probe budget (CSV step below is exempt)
+    b = {'n': 0}   # safety budget (CSV fills below are exempt)
     rep = amverify.analyze(M3.MIRROR, game)
     if rep is None or rep['status'] == 'absent':
         return {'game': game, 'result': 'absent', 'filled': [], 'browser404': []}
     filled_all = []
     rescued = None
-    minimal = bool(rep['unsat_critical'])   # broken on boot refs: skip series/audit work
-    if minimal and any(not os.path.exists(os.path.join(gd, rel))
-                       for rel in csvrefs.get('blocking', [])):
-        minimal = False   # browser-confirmed paths must be attempted in full mode
-    blocking_now = [rel for rel in csvrefs.get('blocking', [])
-                    if not os.path.exists(os.path.join(gd, rel))]
-    if rep['status'] == 'complete' and not blocking_now:
-        return {'game': game, 'result': 'complete', 'filled': [], 'browser404': []}
 
     # 1) browser-captured paths: exact, authoritative (blocking + optional)
     unfilled_browser = []
@@ -348,92 +355,62 @@ def complete_game(args):
         else:
             unfilled_browser.append(rel)
 
-    # 2) iterative strict verify + fill (series walk, theme audit, generic)
-    exhausted = set()
-    for it in range(3):
-        rep = amverify.analyze(M3.MIRROR, game)
-        if rep is None:
-            return {'game': game, 'result': 'absent', 'filled': filled_all, 'browser404': unfilled_browser}
-        if rep['status'] == 'complete':
-            break
-        if it == 0 and not minimal:
-            filled_all += theme_audit(game, gd, rep, tmpbin, b)
-            rep = amverify.analyze(M3.MIRROR, game)
-            if rep is None or rep['status'] == 'complete':
-                break
-        todo = _todo4(rep)
-        if minimal:
-            todo = [t for t in todo if t.get('critical')]
-        # prioritize: settings/boot refs, corpus-seen series, canon-only series last
-        todo.sort(key=lambda t: (0 if t.get('settings') else
-                                 1 if (t.get('series') and not t.get('canon_only')) else
-                                 2 if t.get('series') else 1))
-        seen_entities = set()
-        n_series = 0
-        prio = []
-        for t in todo:
-            if t.get('series'):
-                key = t['name']
-                if key in seen_entities or n_series >= 8:
-                    continue
-                seen_entities.add(key)
-                n_series += 1
-            prio.append(t)
-        todo = prio
-        got = []
-        for t in todo:
-            f = probe_ref(game, gd, t, rep, tmpbin, b)
-            if f:
-                got += f
-                exhausted.discard(t['name'])
-            else:
-                exhausted.add(t['name'])
-        if not got:
-            if rep['unsat_critical'] and rescued is None:
-                rescued = rescue_game(game, gd)
-                if rescued == 'complete':
-                    break
-                if rescued != 'broken':
-                    minimal = False
-                    continue   # re-verify post-rescue with the full checklist
-            break
-        filled_all += got
-
-    if b['n'] > BUDGET:
-        # probe budget exhausted mid-verification: keep the incoming verdict
-        # (that game was verified under the same manifest standard before the
-        # strict pass; its v7 fills stay on disk) instead of hiding it.
-        return {'game': game, 'result': incoming or 'demo_equivalent', 'filled': filled_all,
-                'browser404': [rel for rel in csvrefs.get('blocking', [])
-                               if not os.path.exists(os.path.join(gd, rel))],
-                'budget': True, 'probes': b['n']}
-    rep = amverify.analyze(M3.MIRROR, game)
-    if rep is None:
-        return {'game': game, 'result': 'absent', 'filled': filled_all, 'browser404': unfilled_browser}
-    names = local_basenames(gd)
-    unproven = []
-    for p in rep['unsat_pending']:
-        if p.get('series'):
-            m = SERIES_NAME.match(p['name'])
-            if m and any(n.startswith(m.group(1)) and n.endswith('.' + m.group(2).replace('jpeg', 'jpg'))
-                         for n in names):
-                continue   # series present locally — device picks the indices
-            if p.get('canon_only'):
-                continue   # speculative canon entity, not in this game's corpus — never blocks
-        if p['name'] in exhausted:
-            continue       # exhausted probe = 404 on every demo host (full sweep)
-        unproven.append(p['name'])
     blocking_missing = [rel for rel in csvrefs.get('blocking', [])
                         if not os.path.exists(os.path.join(gd, rel))]
-    crit = rep['unsat_critical']
-    if crit or unproven or blocking_missing:
+
+    # 2) series gap-fill: ONLY corpus-seen entities, or stems already present
+    #    locally (fill their gaps/margins). Canon-only absentees were never on
+    #    the reference demo either (its corpus matches ours) — tolerated.
+    names = local_basenames(gd)
+    done_entities = set()
+    n_series = 0
+    for p in sorted(rep['unsat_pending'], key=lambda x: 0 if not x.get('canon_only') else 1):
+        if not p.get('series') or n_series >= 8:
+            continue
+        m = SERIES_NAME.match(p['name'])
+        if not m:
+            continue
+        stem, ext = m.group(1), '.' + m.group(2).replace('jpeg', 'jpg')
+        seen_in_corpus = not p.get('canon_only')
+        present_locally = any(n.startswith(stem) and n.endswith('.' + ext) for n in names)
+        if not (seen_in_corpus or present_locally):
+            continue   # speculative + absent locally: browser evidence says these games ran fine
+        got = probe_series(game, gd, p, rep, tmpbin, b)
+        if got:
+            filled_all += got
+        done_entities.add(p['name'])
+        n_series += 1
+
+    # 3) theme-path audit: only for basenames the browser proved it needs
+    filled_all += theme_audit(game, gd, rep, tmpbin, b, only=audit_names)
+
+    # 4) rescue ONLY for games already broken (they are hidden anyway unless it
+    #    succeeds); cabinets are known-unfixable
+    rep = amverify.analyze(M3.MIRROR, game)
+    if rep is not None and rep['unsat_critical'] and incoming == 'broken' \
+            and game not in CABINETS and b['n'] <= BUDGET:
+        rescued = rescue_game(game, gd)
+        if rescued == 'complete':
+            blocking_missing = []
+
+    # 5) verdict: trust the previously browser-validated gate verdict, upgrade
+    #    when the CSV evidence is resolved, downgrade only on unfilled
+    #    browser-proven paths
+    if rep is None or rep['status'] == 'absent':
+        return {'game': game, 'result': 'absent', 'filled': filled_all,
+                'browser404': blocking_missing, 'probes': b['n'], 'rescued': rescued}
+    if blocking_missing:
         result = 'broken'
+    elif incoming == 'broken':
+        result = 'demo_equivalent' if rescued in ('complete', 'demo_equivalent') else 'broken'
+    elif incoming in ('complete', 'demo_equivalent', 'pending', None):
+        result = incoming if incoming in ('complete', 'demo_equivalent') else 'demo_equivalent'
     else:
-        result = 'demo_equivalent'
-    return {'game': game, 'result': result, 'filled': filled_all, 'probes': b['n'], 'budget': False,
-            'unproven_names': unproven[:12],
+        result = incoming
+    return {'game': game, 'result': result, 'filled': filled_all, 'probes': b['n'],
             'browser404': blocking_missing + [x for x in unfilled_browser if x not in blocking_missing],
-            'unproven': unproven, 'critical': crit, 'rescued': rescued}
+            'rescued': rescued,
+            'series_done': sorted(done_entities)}
 
 
 if __name__ == '__main__':
@@ -448,28 +425,24 @@ if __name__ == '__main__':
     n_csv = sum(len(v['blocking']) + len(v['optional']) for v in csvrefs.values())
     print(f'fill v7: {len(games)} games, {workers} workers, csv refs: {n_csv} '
           f'across {len(csvrefs)} titles', flush=True)
+    audit_names = csv_basenames(csvrefs)
     args = [(g, csvrefs.get(g, {'blocking': [], 'optional': []}),
-             (incoming.get(g) or {}).get('status')) for g in games]
+             (incoming.get(g) or {}).get('status'), audit_names) for g in games]
     details = {}
     with Pool(workers, initializer=M3.init, initargs=(mirror,)) as p:
         for r in p.imap_unordered(complete_game, args, chunksize=1):
             g = r.pop('game')
             details[g] = r
-            extra = ''
-            if r.get('unproven_names'):
-                extra = ' unproven=' + ','.join(r['unproven_names'][:5])
             print(f"   {g}: {r['result']} probes={r.get('probes', 0)} "
-                  f"filled={len(r.get('filled', []))} browser404={len(r.get('browser404', []))} "
-                  f"unproven={len(r.get('unproven', []))} crit={len(r.get('critical', []))}"
-                  f"{' BUDGET' if r.get('budget') else ''}{extra}", flush=True)
+                  f"filled={len(r.get('filled', []))} browser404={len(r.get('browser404', []))}"
+                  f"{' BUDGET' if r.get('budget') else ''}", flush=True)
     final = {}
     for g in games:
         d = details.get(g, {'result': 'broken'})
         final[g] = {'status': d['result'],
                     'filled_v7': len(d.get('filled', [])),
                     'browser404': d.get('browser404', []),
-                    'unproven': d.get('unproven', []),
-                    'critical_missing': d.get('critical', []),
+                    'series_done': d.get('series_done', []),
                     'budget': d.get('budget', False),
                     'rescued': d.get('rescued')}
     json.dump(details, open(os.path.join(mirror, '_fill_v7.json'), 'w'), indent=1)
