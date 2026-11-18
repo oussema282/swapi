@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/hunt/diag.sh'
       - 'scripts/hunt/diag_pp.sh'
+      - 'scripts/hunt/diag_pp2.sh'
+      - '.github/workflows/amatic-diag.yml'
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -17,7 +19,7 @@ jobs:
       - name: trace demo asset chain
         run: |
           bash scripts/hunt/diag.sh
-          bash scripts/hunt/diag_pp.sh
+          bash scripts/hunt/diag_pp2.sh
       - name: push diag log
         if: always()
         run: |
