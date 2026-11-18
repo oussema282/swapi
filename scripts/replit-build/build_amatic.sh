@@ -255,26 +255,17 @@ for name, sql in cur.execute(
         continue
     info = list(cur.execute(f'PRAGMA table_info("{name}")'))
     pkcols = [c for c in info if c[5] > 0]
-    pk = None
-    if len(pkcols) == 1:
-        pk = pkcols[0]
-        if re.search(rf'"{pk[1]}"\s+INTEGER\s+PRIMARY\s+KEY', sql, re.I):
-            continue
-        if (pk[2] or '').upper() not in ('INTEGER', 'INT', 'BIGINT'):
-            continue
-    elif len(pkcols) == 0:
-        # PK-less table with an int "id" column (goldsvet dumps ship some this
-        # way) — Eloquent inserts without id need a rowid alias.
-        cand = [c for c in info if c[1] == 'id' and
-                (c[2] or '').upper() in ('INTEGER', 'INT', 'BIGINT')]
-        if not cand:
-            continue
-        pk = cand[0]
-    else:
+    idcol = next((c for c in info if c[1] == 'id'), None)
+    if not idcol:
+        continue
+    if not re.search(r'int', idcol[2] or '', re.I):
+        continue
+    # already a rowid alias?
+    if re.search(rf'"{idcol[1]}"\s+INTEGER\s+PRIMARY\s+KEY', sql, re.I):
         continue
     defs = []
     for _cid, cname, ctype, notnull, dflt, _cpk in info:
-        if cname == pk[1]:
+        if cname == idcol[1]:
             defs.append(f'"{cname}" INTEGER PRIMARY KEY')
         else:
             d = f' DEFAULT {dflt}' if dflt is not None else ''
@@ -298,6 +289,10 @@ print(f'PK normalizer: {fixed} tables rebuilt with rowid-alias PKs')
 for nm in ('w_game_log', 'w_stat_game'):
     row = cur.execute("SELECT sql FROM sqlite_master WHERE name=?", (nm,)).fetchone()
     print(f'  {nm}:', ('INTEGER PRIMARY KEY' in row[0]) if row else 'MISSING')
+if fixed:
+    row = cur.execute("SELECT sql FROM sqlite_master WHERE name='w_game_log'").fetchone()
+    if row:
+        print('  w_game_log schema:', row[0].replace('\n', ' ')[:200])
 con.close()
 PY
 
