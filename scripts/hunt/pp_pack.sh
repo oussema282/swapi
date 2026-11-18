@@ -57,6 +57,12 @@ ls -d "$SITE"/app/Games/*/ 2>/dev/null | xargs -n1 basename > engines.txt || tru
 wc -l engines.txt
 
 # ---- 2. discover clients on demo ----
+# self-check: the known-good gs2c game must be discoverable (logs the raw code otherwise)
+for H in https://demo4.scriptcasino.ru https://demo2.scriptcasino.ru https://demo3.scriptcasino.ru; do
+  C=$(curl -sS --compressed -A "Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0" \
+      --connect-timeout 4 --max-time 30 -o /dev/null -w '%{http_code}' "$H/games/BigBassBonanza/gs2c/html5Game.html")
+  echo "SELF-CHECK BigBassBonanza gs2c on $H -> $C"
+done
 python3 "$HUNT/pp_discover.py" nonam_names.txt candidates.json 16
 python3 - <<'PY'
 import json

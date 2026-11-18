@@ -12,11 +12,11 @@ def sh(args):
     return subprocess.run(args, capture_output=True, text=True)
 
 def code(url):
-    # the demo serves 405/403 to HEAD on gs2c routes — use a ranged GET
-    p = sh(['curl', '-sS', '-r', '0-99', '-A', UA, '--connect-timeout', '4', '--max-time', '15',
+    # identical flags to mirror5.fetch (which demonstrably works): full GET + compressed
+    p = sh(['curl', '-sS', '--compressed', '-A', UA, '--connect-timeout', '4', '--max-time', '30',
             '-o', '/dev/null', '-w', '%{http_code}', url])
     c = (p.stdout or '').strip()
-    return c if c in ('200', '206') else None
+    return c if c == '200' else None
 
 HOSTS = HOSTS_ALL
 
