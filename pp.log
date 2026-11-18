@@ -1,0 +1,724 @@
++ REPO=oussema282/swapi
++ HUNT=/home/runner/work/swapi/swapi/scripts/hunt
++ mkdir -p ex prev
++ FID_LIST=(1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov 1G36TB-guho76QTnBFaeYOGRQa2JkXe7I 1M504Ai3gwQ8bGSpFVraXEkb2o2811MmU)
++ EXPECTED_SHA=fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb
++ EXPECTED_SIZE=580769515
++ for ATTEMPT in 0 1 2 3 4 5
++ FID=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov
++ curl -sL -c ck.txt 'https://drive.google.com/uc?export=download&id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov' -o page.html
++ python3 -
++ '[' -s dl_url.txt ']'
+++ cat dl_url.txt
++ curl -sL -b ck.txt 'https://drive.usercontent.google.com/download?id=1GrVmYgMOMMP3Nhj-tdgrSsdhlUxUy8Ov&export=download&confirm=t&uuid=238ace4f-a879-4047-8ffb-d4ea085ecb00' -o payload.rar
+++ sha256sum payload.rar
+++ awk '{print $1}'
++ ACTUAL=fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb
+++ stat -c%s payload.rar
++ ACTUAL_SIZE=580769515
++ '[' fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb = fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb ']'
++ '[' 580769515 = 580769515 ']'
++ echo 'rar verified'
+rar verified
++ break
+++ sha256sum payload.rar
+++ awk '{print $1}'
++ ACTUAL=fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb
++ '[' fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb = fccadd9f9fafb957826c32d47721b37182f30597048f20413da1f022977849fb ']'
++ '[' '!' -x /tmp/pp/unrar ']'
++ curl -sSL -o unrar.tar.gz https://codeload.github.com/pmachapman/unrar/tar.gz/refs/heads/master
++ tar xzf unrar.tar.gz
++ make -C unrar-master -j2 -s
++ cp unrar-master/unrar /tmp/pp/unrar
++ cd ex
++ /tmp/pp/unrar x -y ../payload.rar
++ cd ..
+++ find ex -path '*d60/d60/artisan' -type f
+++ xargs dirname
+++ head -1
++ SITE=ex/8.5open/d60/d60
++ '[' -n ex/8.5open/d60/d60 ']'
++ echo SITE=ex/8.5open/d60/d60
+SITE=ex/8.5open/d60/d60
++ ls ex/8.5open/d60/d60/resources/views/frontend/games/list/
++ sort -u
++ sed 's/\.blade\.php$//'
++ wc -l all_names.txt
+1092 all_names.txt
++ grep -v 'AM$' all_names.txt
++ sort -u
++ wc -l nonam_names.txt
+985 nonam_names.txt
++ echo '--- PP gs2c-style names present in the rar?'
+--- PP gs2c-style names present in the rar?
++ grep -E '^(BigBassBonanza|SweetBonanza|WolfGold|GatesOfOlympus|FruitParty|AncientEgypt|AztecKing|BookofTut|JohnHunter|MustangGold|GreatRhino|PekingLuck|JokersJewel|Dragons888|FirePortals|StarzPragmatic)' all_names.txt
+AncientEgyptPM
+AncientEgyptPMM
+Dragons888PM
+Dragons888PMM
+GreatRhinoPM
+GreatRhinoPMM
+JokersJewelPM
+JokersJewelPMM
+PekingLuckPM
+PekingLuckPMM
++ echo '--- engines.txt content:'
+--- engines.txt content:
++ cat engines.txt
++ head -12
++ true
++ find ex/8.5open/d60/d60/app/Games -maxdepth 1 -mindepth 1 -type d -printf '%f\n'
++ wc -l engines.txt
+1092 engines.txt
++ for H in https://demo4.scriptcasino.ru https://demo2.scriptcasino.ru https://demo3.scriptcasino.ru
+++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 4 --max-time 30 -o /dev/null -w '%{http_code}' https://demo4.scriptcasino.ru/games/BigBassBonanza/gs2c/html5Game.html
++ C=200
++ echo 'SELF-CHECK BigBassBonanza gs2c on https://demo4.scriptcasino.ru -> 200'
+SELF-CHECK BigBassBonanza gs2c on https://demo4.scriptcasino.ru -> 200
++ for H in https://demo4.scriptcasino.ru https://demo2.scriptcasino.ru https://demo3.scriptcasino.ru
+++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 4 --max-time 30 -o /dev/null -w '%{http_code}' https://demo2.scriptcasino.ru/games/BigBassBonanza/gs2c/html5Game.html
++ C=200
++ echo 'SELF-CHECK BigBassBonanza gs2c on https://demo2.scriptcasino.ru -> 200'
+SELF-CHECK BigBassBonanza gs2c on https://demo2.scriptcasino.ru -> 200
++ for H in https://demo4.scriptcasino.ru https://demo2.scriptcasino.ru https://demo3.scriptcasino.ru
+++ curl -sS --compressed -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 4 --max-time 30 -o /dev/null -w '%{http_code}' https://demo3.scriptcasino.ru/games/BigBassBonanza/gs2c/html5Game.html
++ C=200
++ echo 'SELF-CHECK BigBassBonanza gs2c on https://demo3.scriptcasino.ru -> 200'
+SELF-CHECK BigBassBonanza gs2c on https://demo3.scriptcasino.ru -> 200
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/pp_discover.py nonam_names.txt candidates.json 6
+probing 985 names on 6 workers
+  200/985 probed, 2 candidates
+  400/985 probed, 4 candidates
+  600/985 probed, 5 candidates
+  800/985 probed, 6 candidates
+CANDIDATES: 6
+gs2c: 0  pm: 6
++ python3 -
+candidates: 6
+++ grep -E '^(AncientEgypt|AztecGems|AztecKing|BigBass|BiggerBass|BonanzaGold|BookOfELDorado|BookofAztecKing|BookofKingdoms|BookofTut|BookofVikings|BookoftheFallen|BubblePop|BullFiesta|CandyVillage|CashPatrol|ChilliHeat|ChristmasBigBass|FruitParty|SweetBonanza|WolfGold|GatesOfOlympus|JohnHunter|MustangGold|GreatRhino|StarzPragmatic|FirePortals|GemsBonanza|PeakyBlunders|MadameDestiny|WildBoar|BuffaloKing|QueenGold|ReleaseThe|TheHandOfMidas|JuicyFruits|PiggyNicholas|CurseOfTheMummy|SeaHunter|SugarRush|GardenGnome|FloatingDragon|Sumoboss|ThreeStar|HottoBurn|DiamondStrike|ChickenDrop|ZebraHawa|TwinSpin|Cash Elevator)' nonam_names.txt
+++ head -80
++ PRAG_FIRST=$'AncientEgyptPM\nAncientEgyptPMM\nAztecGemsPM\nAztecGemsPMM\nGreatRhinoPM\nGreatRhinoPMM'
++ printf '%s\n' $'AncientEgyptPM\nAncientEgyptPMM\nAztecGemsPM\nAztecGemsPMM\nGreatRhinoPM\nGreatRhinoPMM'
++ wc -l prag_first.txt
+6 prag_first.txt
++ python3 -
+harvest order: 6
++ mkdir -p mirror
++ BATCH=0
++ '[' 0 -lt 20 ']'
+++ head -n 10 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=1
++ echo '=== harvest batch 1 ==='
+=== harvest batch 1 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18202184 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24459297 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=43564328 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32350373 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=47769759 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 1 -lt 20 ']'
+++ head -n 20 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=2
++ echo '=== harvest batch 2 ==='
+=== harvest batch 2 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18200895 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24447683 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=33909790 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=41020194 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47441063 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 2 -lt 20 ']'
+++ head -n 30 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=3
++ echo '=== harvest batch 3 ==='
+=== harvest batch 3 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18202073 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23924624 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32425634 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42454611 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47877277 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 3 -lt 20 ']'
+++ head -n 40 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=4
++ echo '=== harvest batch 4 ==='
+=== harvest batch 4 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18196441 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19540853 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24058798 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32650768 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=43764163 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48193722 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=179
++ echo 'mirror so far: 179 MB'
+mirror so far: 179 MB
++ '[' 179 -ge 3200 ']'
++ '[' 4 -lt 20 ']'
+++ head -n 50 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=5
++ echo '=== harvest batch 5 ==='
+=== harvest batch 5 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18218568 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19556636 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23913455 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32650980 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42391200 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47316191 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=176
++ echo 'mirror so far: 176 MB'
+mirror so far: 176 MB
++ '[' 176 -ge 3200 ']'
++ '[' 5 -lt 20 ']'
+++ head -n 60 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=6
++ echo '=== harvest batch 6 ==='
+=== harvest batch 6 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18218568 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542799 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24355095 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=42657545 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32559698 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=47503332 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 6 -lt 20 ']'
+++ head -n 70 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=7
++ echo '=== harvest batch 7 ==='
+=== harvest batch 7 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19533280 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18202073 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24184829 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32382315 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=43281261 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47106399 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 7 -lt 20 ']'
+++ head -n 80 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=8
++ echo '=== harvest batch 8 ==='
+=== harvest batch 8 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18214472 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19541510 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23928646 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32586270 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42497843 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47328229 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=176
++ echo 'mirror so far: 176 MB'
+mirror so far: 176 MB
++ '[' 176 -ge 3200 ']'
++ '[' 8 -lt 20 ']'
+++ head -n 90 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=9
++ echo '=== harvest batch 9 ==='
+=== harvest batch 9 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18208994 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23915623 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32490952 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=43286620 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48248038 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 9 -lt 20 ']'
+++ head -n 100 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=10
++ echo '=== harvest batch 10 ==='
+=== harvest batch 10 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18202073 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19546485 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24099186 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32643574 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=41498711 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47731304 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=176
++ echo 'mirror so far: 176 MB'
+mirror so far: 176 MB
++ '[' 176 -ge 3200 ']'
++ '[' 10 -lt 20 ']'
+++ head -n 110 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=11
++ echo '=== harvest batch 11 ==='
+=== harvest batch 11 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18203362 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23901311 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=42791590 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32328664 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=48695844 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 11 -lt 20 ']'
+++ head -n 120 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=12
++ echo '=== harvest batch 12 ==='
+=== harvest batch 12 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18208994 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19544083 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24249024 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=43490728 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=31796850 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=47306386 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 12 -lt 20 ']'
+++ head -n 130 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=13
++ echo '=== harvest batch 13 ==='
+=== harvest batch 13 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18208994 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19549715 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=23965858 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32396222 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42731611 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48246579 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 13 -lt 20 ']'
+++ head -n 140 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=14
++ echo '=== harvest batch 14 ==='
+=== harvest batch 14 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18212936 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19540196 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24323776 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=33007298 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=41561817 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48288568 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 14 -lt 20 ']'
+++ head -n 150 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=15
++ echo '=== harvest batch 15 ==='
+=== harvest batch 15 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19541485 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18203362 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24048646 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32084449 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=43791405 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=47940774 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 15 -lt 20 ']'
+++ head -n 160 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=16
++ echo '=== harvest batch 16 ==='
+=== harvest batch 16 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18197730 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24381123 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=43417676 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32491597 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=46566909 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=177
++ echo 'mirror so far: 177 MB'
+mirror so far: 177 MB
++ '[' 177 -ge 3200 ']'
++ '[' 16 -lt 20 ']'
+++ head -n 170 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=17
++ echo '=== harvest batch 17 ==='
+=== harvest batch 17 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18202073 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542142 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24351901 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32184603 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=43013649 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48541543 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 17 -lt 20 ']'
+++ tail -n 10
+++ head -n 180 harvest_order.txt
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=18
++ echo '=== harvest batch 18 ==='
+=== harvest batch 18 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19542799 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18202184 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24442800 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32423855 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42788124 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=48238801 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=178
++ echo 'mirror so far: 178 MB'
+mirror so far: 178 MB
++ '[' 178 -ge 3200 ']'
++ '[' 18 -lt 20 ']'
+++ head -n 190 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=19
++ echo '=== harvest batch 19 ==='
+=== harvest batch 19 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   JokersJewelPM: type=pm files=45 bytes=19536966 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   Dragons888PM: type=pm files=41 bytes=18217856 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24294003 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   GreatRhinoPM: type=pm files=80 bytes=42497352 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32474616 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   PekingLuckPM: type=pm files=76 bytes=46692256 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=176
++ echo 'mirror so far: 176 MB'
+mirror so far: 176 MB
++ '[' 176 -ge 3200 ']'
++ '[' 19 -lt 20 ']'
+++ head -n 200 harvest_order.txt
+++ tail -n 10
++ REMAIN=$'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM'
++ '[' -z $'AncientEgyptPM\nAztecGemsPM\nGreatRhinoPM\nDragons888PM\nJokersJewelPM\nPekingLuckPM' ']'
++ BATCH=20
++ echo '=== harvest batch 20 ==='
+=== harvest batch 20 ===
++ python3 /home/runner/work/swapi/swapi/scripts/hunt/mirror5.py mirror AncientEgyptPM AztecGemsPM GreatRhinoPM Dragons888PM JokersJewelPM PekingLuckPM --max-files 900 --max-mb 200
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 6 games, max_files=900, max_mb=200
+   Dragons888PM: type=pm files=41 bytes=18200132 rounds=2 unfilled=11 site=0
+      unfilled sample: games/Dragons888PM/desktop/game/-0.5, games/Dragons888PM/desktop/game/m_LocalPosition.x, games/Dragons888PM/desktop/game/m_LocalPosition.y, games/Dragons888PM/desktop/game/m_LocalPosition.z, games/Dragons888PM/desktop/game/m_LocalRotation.w, games/Dragons888PM/desktop/game/m_LocalRotation.x, games/Dragons888PM/desktop/game/m_LocalRotation.y, games/Dragons888PM/desktop/game/m_LocalRotation.z, games/Dragons888PM/desktop/game/m_LocalScale.x, games/Dragons888PM/desktop/game/m_LocalScale.y, games/Dragons888PM/desktop/game/m_LocalScale.z
+   JokersJewelPM: type=pm files=45 bytes=19542799 rounds=2 unfilled=10 site=0
+      unfilled sample: games/JokersJewelPM/desktop/game/m_LocalPosition.x, games/JokersJewelPM/desktop/game/m_LocalPosition.y, games/JokersJewelPM/desktop/game/m_LocalPosition.z, games/JokersJewelPM/desktop/game/m_LocalRotation.w, games/JokersJewelPM/desktop/game/m_LocalRotation.x, games/JokersJewelPM/desktop/game/m_LocalRotation.y, games/JokersJewelPM/desktop/game/m_LocalRotation.z, games/JokersJewelPM/desktop/game/m_LocalScale.x, games/JokersJewelPM/desktop/game/m_LocalScale.y, games/JokersJewelPM/desktop/game/m_LocalScale.z
+   AztecGemsPM: type=pm files=53 bytes=24240004 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=33082713 rounds=2 unfilled=20 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/-0.01, games/AncientEgyptPM/desktop/game/-0.015, games/AncientEgyptPM/desktop/game/-0.16, games/AncientEgyptPM/desktop/game/-0.5, games/AncientEgyptPM/desktop/game/-0.72, games/AncientEgyptPM/desktop/game/-0.89, games/AncientEgyptPM/desktop/game/mColor.a, games/AncientEgyptPM/desktop/game/mColor.b, games/AncientEgyptPM/desktop/game/mColor.g, games/AncientEgyptPM/desktop/game/mColor.r, games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y
+   GreatRhinoPM: type=pm files=80 bytes=42412908 rounds=2 unfilled=12 site=0
+      unfilled sample: games/GreatRhinoPM/desktop/game/-0.5, games/GreatRhinoPM/desktop/game/mColor.a, games/GreatRhinoPM/desktop/game/m_LocalPosition.x, games/GreatRhinoPM/desktop/game/m_LocalPosition.y, games/GreatRhinoPM/desktop/game/m_LocalPosition.z, games/GreatRhinoPM/desktop/game/m_LocalRotation.w, games/GreatRhinoPM/desktop/game/m_LocalRotation.x, games/GreatRhinoPM/desktop/game/m_LocalRotation.y, games/GreatRhinoPM/desktop/game/m_LocalRotation.z, games/GreatRhinoPM/desktop/game/m_LocalScale.x, games/GreatRhinoPM/desktop/game/m_LocalScale.y, games/GreatRhinoPM/desktop/game/m_LocalScale.z
+   PekingLuckPM: type=pm files=76 bytes=46479823 rounds=2 unfilled=7 site=0
+      unfilled sample: games/PekingLuckPM/desktop/game/mColor.a, games/PekingLuckPM/desktop/game/m_LocalPosition.x, games/PekingLuckPM/desktop/game/m_LocalPosition.y, games/PekingLuckPM/desktop/game/m_LocalPosition.z, games/PekingLuckPM/desktop/game/m_LocalScale.x, games/PekingLuckPM/desktop/game/m_LocalScale.y, games/PekingLuckPM/desktop/game/m_LocalScale.z
+PILOT DONE
+++ du -sm mirror
+++ awk '{print $1}'
++ SIZE=176
++ echo 'mirror so far: 176 MB'
+mirror so far: 176 MB
++ '[' 176 -ge 3200 ']'
++ '[' 20 -lt 20 ']'
++ du -sh mirror
+176M	mirror
++ rm -f pp-clients.zip
++ zip -qr pp-clients.zip mirror
+++ stat -c%s pp-clients.zip
++ SIZE=104059958
+++ sha256sum pp-clients.zip
+++ awk '{print $1}'
++ SHA=002cdab3c24c223fdc7098253ca6e6cddf7f938ca6b8c419234d12e08fa4b6bf
++ echo 'PP MIRROR ZIP: 104059958 bytes sha256=002cdab3c24c223fdc7098253ca6e6cddf7f938ca6b8c419234d12e08fa4b6bf'
+PP MIRROR ZIP: 104059958 bytes sha256=002cdab3c24c223fdc7098253ca6e6cddf7f938ca6b8c419234d12e08fa4b6bf
++ cat
++ gh release view pp-clients -R oussema282/swapi
++ gh release upload pp-clients pp-clients.zip -R oussema282/swapi --clobber
++ echo PP_PACK_OK
+PP_PACK_OK
