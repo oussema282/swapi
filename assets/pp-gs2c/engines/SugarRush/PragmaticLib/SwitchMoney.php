@@ -33,9 +33,7 @@ class SwitchMoney
         if (array_key_exists('FSPay', $currentLog)) $win = $currentLog['FSPay']; // если выпали фриспины то добавить к выигрышу
 
         $game->stat_out += $win;
-        $game->stat_in += $toSlotBank; // добавить сумму внесенных в слот денег
-        $game->rtp_stat_out += $win;
-        $game->rtp_stat_in += $toSlotBank; // add the amount of money deposited into the slot for rtp calculation
+        $game->stat_in += $toSlotBank; // add the amount of money deposited into the slot
         $game->save();
 
         Statistic::setStatistic($user, $win, $game, $bank, $bet, $toSlotBank, $toJackpot, $toProfit, $freespins, $slotArea);
