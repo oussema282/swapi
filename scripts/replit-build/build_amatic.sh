@@ -108,7 +108,38 @@ if [ ! -d stage/public/games/BingoAM ]; then
     && echo "BingoAM from heidi sparse checkout" \
     || echo "BINGOAM SPARSE CHECKOUT FAILED"
 fi
-echo "clients now: $(ls stage/public/games | wc -l)"
+# ---------- 3b-bis. PM (Pragmatic-style OneWorks) clients from the pp-clients mirror ----------
+mkdir -p /tmp/build/ppfill
+gh release download pp-clients -R "$REPO" -D /tmp/build/ppfill 2>/dev/null || echo "PP mirror download failed"
+if [ -s /tmp/build/ppfill/pp-clients.zip ]; then
+  rm -rf /tmp/build/ppmirror
+  unzip -q /tmp/build/ppfill/pp-clients.zip -d /tmp/build/ppfill/
+  python3 - <<'PY'
+import json, os, shutil
+mirror = '/tmp/build/ppfill/mirror'
+staging = '/tmp/build/stage/public/games'
+stats = '/tmp/build/ppfill/mirror/_pilot.json'
+if not os.path.exists(stats):
+    print('PP gate: _pilot.json missing — publishing nothing from pp mirror')
+    json.dump({'pm': []}, open('/tmp/build/pm_names.json', 'w'))
+else:
+    rep = json.load(open(stats))
+    pm, hidden = [], []
+    for g, r in sorted(rep.items()):
+        if r.get('type') in ('gs2c', 'pm') and r.get('files', 0) >= 8 and r.get('unfilled_n', 99) == 0:
+            src = os.path.join(mirror, g)
+            if os.path.isdir(src):
+                shutil.copytree(src, os.path.join(staging, g), dirs_exist_ok=True)
+                pm.append(g)
+        else:
+            hidden.append(g)
+    print(f'PP gate: {len(pm)} published ({pm}), hidden: {hidden}')
+    json.dump({'pm': pm, 'hidden': hidden}, open('/tmp/build/pm_names.json', 'w'))
+PY
+else
+  echo "PP mirror zip missing — PM games skipped"
+  echo '{"pm": []}' > /tmp/build/pm_names.json
+fi
 
 # ---------- 3c. AM publish list (JS-manifest verification is authoritative) ----------
 python3 - <<'PY'
@@ -135,6 +166,12 @@ with open('/tmp/build/am_names.txt','w') as f:
 print(f'AM publish: {len(publish_names)} ({len(publish)} verified + 5 pack)')
 print('hidden-broken:', ' '.join(sorted(broken-set(pack))))
 PY
+# PM (Pragmatic-style) names verified by the pp mirror gate join the publish list
+PMN=$(python3 -c "import json;print(' '.join(json.load(open('/tmp/build/pm_names.json'))['pm']))" 2>/dev/null || true)
+for N in $PMN; do
+  if [ -d "stage/public/games/$N" ]; then echo "$N" >> /tmp/build/am_names.txt; fi
+done
+echo "PM joined: $PMN"
 wc -l /tmp/build/am_names.txt
 
 # NOTE: do NOT append ?config=<K> to blade amarent URLs. With no config param the
