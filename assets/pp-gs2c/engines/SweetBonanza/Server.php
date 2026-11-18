@@ -21,8 +21,8 @@ namespace VanguardLTE\Games\SweetBonanza
                 if( $userId == null )
                 {
                     $response = '{"responseEvent":"error","responseType":"","serverResponse":"invalid login"}';
-                    var_dump($request->callbackUrl);
-                    var_dump($request->userId);
+                    // var_dump removed
+                    // var_dump removed
                     exit( $response );
                 }
                 $user = User::lockForUpdate()->find($userId);

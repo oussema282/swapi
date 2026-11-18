@@ -54,7 +54,7 @@ class WinChecker
         $win = round($paytableElement * $bet * $group['multi'], 2);
 
         if ($win > 0) {
-            var_dump('symbol=' . $group['symbol'] . ' pos=' . implode(',', $group['pos']));
+            // var_dump removed (corrupts spin response)
             $winPositions = $group['pos'];
             $winSymbols[] = [
                 'WinSymbol' => $group['symbol'],
@@ -111,7 +111,7 @@ class WinChecker
                 } else {
                     // Handle the case when the condition is not met
                     // You may want to log an error or take appropriate action
-                    error_log("Error: Unexpected condition in WinChecker.php at line 101");
+                    // error_log removed
                     // Example: Provide a default value or take appropriate action
                     $isIncluded[$newPos] = 1; // Set a default value for $newPos
                 }

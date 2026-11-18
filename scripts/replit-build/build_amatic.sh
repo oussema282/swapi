@@ -281,12 +281,18 @@ for name, sql in cur.execute(
             nn = ' NOT NULL' if notnull else ''
             defs.append(f'"{cname}" {ctype}{nn}{d}')
     colnames = ', '.join(f'"{c[1]}"' for c in info)
-    cur.execute(f'DROP TABLE IF EXISTS "{name}__pkfix"')
-    cur.execute(f'CREATE TABLE "{name}__pkfix" (' + ', '.join(defs) + ')')
-    cur.execute(f'INSERT INTO "{name}__pkfix" ({colnames}) SELECT {colnames} FROM "{name}"')
-    cur.execute(f'DROP TABLE "{name}"')
-    cur.execute(f'ALTER TABLE "{name}__pkfix" RENAME TO "{name}"')
-    fixed += 1
+    try:
+        cur.execute(f'DROP TABLE IF EXISTS "{name}__pkfix"')
+        cur.execute(f'CREATE TABLE "{name}__pkfix" (' + ', '.join(defs) + ')')
+        cur.execute(f'INSERT INTO "{name}__pkfix" ({colnames}) SELECT {colnames} FROM "{name}"')
+        cur.execute(f'DROP TABLE "{name}"')
+        cur.execute(f'ALTER TABLE "{name}__pkfix" RENAME TO "{name}"')
+        fixed += 1
+    except sqlite3.IntegrityError as e:
+        # e.g. duplicate ids in dump data — drop the partial copy, keep original
+        con.rollback()
+        cur.execute(f'DROP TABLE IF EXISTS "{name}__pkfix"')
+        print(f'  [PK normalize skip] {name}: {e}')
 con.commit()
 print(f'PK normalizer: {fixed} tables rebuilt with rowid-alias PKs')
 for nm in ('w_game_log', 'w_stat_game'):
