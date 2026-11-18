@@ -1,0 +1,40 @@
+name: pp-trace
+on:
+  push:
+    branches: [arena/01a0cba2-swapi]
+    paths:
+      - 'scripts/hunt/pp_trace.py'
+      - '.github/workflows/pp-trace.yml'
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: install playwright + chromium
+        run: |
+          pip install -q playwright
+          python -m playwright install --with-deps chromium
+      - name: trace game clients
+        run: |
+          mkdir -p /tmp/pp
+          cd /tmp/pp
+          python3 "$GITHUB_WORKSPACE/scripts/hunt/pp_trace.py" BigBassBonanza BookofTut WolfGold AncientEgyptPM AztecGemsPM AncientEgypt 2>&1 | tee trace.log
+      - name: push trace
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b pp-trace-log
+          cp /tmp/pp/trace.json . 2>/dev/null || echo '{}' > trace.json
+          cp /tmp/pp/trace.log . 2>/dev/null || true
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "pp trace $(date -u +%FT%TZ)"
+          git push -qf origin pp-trace-log
