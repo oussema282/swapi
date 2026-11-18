@@ -120,7 +120,10 @@ def parse_refs(text, base_dir, game):
         if not c or c.endswith('/'):
             continue
         base = c.rsplit('/', 1)[-1]
-        # sane basename: exactly one dot, no spaces/brackets, ext is alphanumeric
+        # sane basename: exactly one dot, no spaces/brackets, ext alphanumeric;
+        # drop pure decimals (bet values like 0.75/1250.00 in paytable jsons)
+        if re.match(r'^\d+\.\d+$', base):
+            continue
         if not re.match(r'^[A-Za-z0-9_@-][A-Za-z0-9_@-]*\.[A-Za-z0-9]{1,5}$', base):
             continue
         if base.startswith('.'):
@@ -225,7 +228,10 @@ def harvest_game(args):
                     # invisible to string parsing — seed index 000 per series
                     'desktop/game/GUI000.json', 'desktop/game/game000.json',
                     'desktop/game/main_resources000.json', 'desktop/game/other_resources000.json',
-                    'desktop/game/GUI_resources000.json'):
+                    'desktop/game/GUI_resources000.json',
+                    'desktop/game/GUI0.json', 'desktop/game/game0.json',
+                    'desktop/game/main_resources0.json', 'desktop/game/other_resources0.json',
+                    'desktop/game/GUI_resources0.json'):
             manifest_files.append(root + rel)
     for sref in manifest_files:
         if sref in local or sref in site:
@@ -293,7 +299,7 @@ def harvest_game(args):
     # main_resources000.json...). The client jsons list them, but enumerate a
     # few extra indices anyway (early-stop after 2 misses) so late-loading
     # packages are not missed.
-    pkg_re = re.compile(r'^(.*?/)((?:GUI|GUI_resources|game|main_resources|other_resources))([0-9]{3})\.json$')
+    pkg_re = re.compile(r'^(.*?/)((?:GUI|GUI_resources|game|main_resources|other_resources))([0-9]{1,3})\.json$')
     maxima = {}
     for sp in list(local.keys()) + list(site.keys()):
         m = pkg_re.match(sp)
@@ -354,7 +360,8 @@ def harvest_game(args):
                                                     'index.js', 't.data', 't.url', 'thumbnail.atlas',
                                                     'x-domainrequestproviderremote.html')
                  or '.m_localposition' in r.lower()
-                 or r.endswith('/gs2c/bootstrap.js')}
+                 or r.endswith('/gs2c/bootstrap.js')
+                 or 'x-domain' in r.lower()}
     unfilled -= tolerated
     total = sum(len(v) for v in local.values()) + sum(len(v) for v in site.values())
     return {'game': game, 'type': typ, 'files': len(local) + len(site),
