@@ -518,12 +518,12 @@ if [ -s /tmp/build/gs2c_names.txt ]; then
     JAR=/tmp/build/jar_$NAME.txt; rm -f $JAR
     CODE=$(curl -s -c $JAR -o /tmp/build/go_$NAME.html -w '%{http_code}' -L "http://127.0.0.1:8099/game/$NAME/demo" || echo curlfail)
     BLADE=$(grep -c "gs2c/html5Game.php" /tmp/build/go_$NAME.html 2>/dev/null || echo 0)
-    INIT=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doInit&index=1&counter=0" | head -c 400)
-    SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=20&index=1&counter=1&bl=0&pur=1" | head -c 600)
+    INIT=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doInit&index=1&counter=0" | head -c 4000)
+    SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=20&index=1&counter=1&bl=0&pur=1" | head -c 4000)
     echo "GS2C E2E $NAME: go=$CODE bladeRefs=$BLADE"
     echo "  doInit: $(echo "$INIT" | head -c 150)"
     echo "  doSpin: $(echo "$SPIN" | head -c 150)"
-    if echo "$INIT" | grep -q "balance=" && echo "$SPIN" | grep -q "tw=" && echo "$SPIN" | grep -q "s="; then
+    if echo "$INIT" | grep -qE "balance=[0-9]" && echo "$SPIN" | grep -qE "tw=[0-9]" && echo "$SPIN" | grep -qE "(^|&)s=[0-9]"; then
       echo "  GS2C E2E $NAME: PASS"
       GS2C_E2E=1
     else
