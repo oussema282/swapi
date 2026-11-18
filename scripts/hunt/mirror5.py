@@ -94,6 +94,11 @@ def parse_refs(text, base_dir, game):
         cands.append(m.group(1))
     for m in REF_STR.finditer(text):
         cands.append(m.group(1))
+    # JSON manifests list assets as plain string values, sometimes without an
+    # extension context — add every quoted string token too (validated later)
+    if base_dir.endswith(('client', 'game')) or '/client' in base_dir or '/game' in base_dir:
+        for m in re.finditer(r'"([A-Za-z0-9_./@-]{3,120})"', text):
+            cands.append(m.group(1))
     for c in cands[:MAX_PARSE]:
         c = c.strip()
         if not c or c.startswith(('data:', '#', 'javascript:', 'about:')):
@@ -107,6 +112,11 @@ def parse_refs(text, base_dir, game):
         c = c.split('?')[0].split('#')[0]
         if not c or c.endswith('/'):
             continue
+        base = c.rsplit('/', 1)[-1]
+        if not re.match(r'^[A-Za-z0-9_$@.-][A-Za-z0-9_$@. -]{1,120}$', base) or '..' in base:
+            continue
+        if '.' not in base and not re.match(r'^(GUI|game|main_resources|other_resources|GUI_resources|res)[A-Za-z0-9_]*$', base):
+            continue   # bare token: only PP data-package stems are real targets
         if c.startswith('/'):
             site = c.lstrip('/')
         else:
@@ -184,6 +194,37 @@ def harvest_game(args):
         if d is not None:
             store(sref, d)
             frontier.append((sref, d))
+    # PP UHT manifest chain (same shape for gs2c and PM roots):
+    #   {root}desktop/{bootstrap.js,build.js,style.css,client/resources.json,client/game.json}
+    # client/*.json enumerate the numbered data packages (game/GUI000.json,
+    # game/main_resources000.json, ...) whose strings reference game/res/<md5>.png etc.
+    roots = []
+    if typ == 'gs2c' and dp:
+        roots.append(dp)                                   # .../vs10bbbonanza/
+    roots.append(f'games/{game}/')                          # PM layout root
+    seen_roots = set()
+    manifest_files = []
+    for root in roots:
+        if root in seen_roots:
+            continue
+        seen_roots.add(root)
+        for rel in ('desktop/bootstrap.js', 'desktop/build.js', 'desktop/style.css',
+                    'desktop/client/resources.json', 'desktop/client/game.json',
+                    'desktop/customizations.info'):
+            manifest_files.append(root + rel)
+    for sref in manifest_files:
+        if sref in local or sref in site:
+            continue
+        d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(sref, safe="/.")}', tmpbin)
+        if d is None:
+            for h in HOSTS[1:]:
+                d = fetch(f'{h}/{urllib.parse.quote(sref, safe="/.")}', tmpbin)
+                if d is not None:
+                    break
+        if d is not None:
+            store(sref, d)
+            frontier.append((sref, d))
+
     rounds = 0
     budget_hit = False
 
@@ -232,6 +273,32 @@ def harvest_game(args):
             budget_hit = True
         if budget_hit:
             break
+
+    # PP data packages are numbered (GUI000.json, game001.json,
+    # main_resources000.json...). The client jsons list them, but enumerate a
+    # few extra indices anyway (early-stop after 2 misses) so late-loading
+    # packages are not missed.
+    pkg_re = re.compile(r'^(.*?/)((?:GUI|GUI_resources|game|main_resources|other_resources))([0-9]{3})\.json$')
+    maxima = {}
+    for sp in list(local.keys()) + list(site.keys()):
+        m = pkg_re.match(sp)
+        if m:
+            key = (m.group(1), m.group(2))
+            maxima[key] = max(maxima.get(key, -1), int(m.group(3)))
+    for (pre, stem), hi in maxima.items():
+        misses = 0
+        for i in range(hi + 1, hi + 41):
+            ref = f'{pre}{stem}{i:03d}.json'
+            if len(local) + len(site) >= max_files:
+                break
+            d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
+            if d is None:
+                misses += 1
+                if misses >= 2:
+                    break
+            else:
+                store(ref, d)
+                frontier2 = [(ref, d)]
 
     # verify round: re-parse every downloaded text file for refs we never fetched
     vtodo = set()
