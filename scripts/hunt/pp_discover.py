@@ -12,18 +12,22 @@ def sh(args):
     return subprocess.run(args, capture_output=True, text=True)
 
 def code(url):
-    p = sh(['curl', '-sS', '-I', '-A', UA, '--connect-timeout', '4', '--max-time', '10',
+    # the demo serves 405/403 to HEAD on gs2c routes — use a ranged GET
+    p = sh(['curl', '-sS', '-r', '0-99', '-A', UA, '--connect-timeout', '4', '--max-time', '15',
             '-o', '/dev/null', '-w', '%{http_code}', url])
-    return (p.stdout or '').strip()
+    c = (p.stdout or '').strip()
+    return c if c in ('200', '206') else None
 
 HOSTS = HOSTS_ALL
 
 def probe(name):
     for h in HOSTS:
-        if code(f'{h}/games/{name}/gs2c/html5Game.html') == '200':
+        c = code(f'{h}/games/{name}/gs2c/html5Game.html')
+        if c:
             return name, 'gs2c'
     for h in HOSTS:
-        if code(f'{h}/games/{name}/desktop/bootstrap.js') == '200':
+        c = code(f'{h}/games/{name}/desktop/bootstrap.js')
+        if c:
             return name, 'pm'
     return name, None
 
