@@ -124,7 +124,7 @@ if not os.path.exists(stats):
     json.dump({'pm': []}, open('/tmp/build/pm_names.json', 'w'))
 else:
     import re as _re
-    noise = _re.compile(r'(?:^|/)(m[A-Z][A-Za-z]*\.\w+|-\d+\.\d+)$')
+    noise = _re.compile(r'(?:^|/)(m(?:_[A-Za-z]+|[A-Z])[A-Za-z_]*\.\w+|-\d+\.\d+)$')
     rep = json.load(open(stats))
     pm, hidden = [], []
     for g, r in sorted(rep.items()):
