@@ -278,11 +278,13 @@ for name, sql in cur.execute(
         cur.execute(f'INSERT INTO "{name}__pkfix" ({colnames}) SELECT {colnames} FROM "{name}"')
         cur.execute(f'DROP TABLE "{name}"')
         cur.execute(f'ALTER TABLE "{name}__pkfix" RENAME TO "{name}"')
+        con.commit()  # commit per table: one bad table must not roll back the rest
         fixed += 1
-    except sqlite3.IntegrityError as e:
+    except sqlite3.Error as e:
         # e.g. duplicate ids in dump data — drop the partial copy, keep original
         con.rollback()
         cur.execute(f'DROP TABLE IF EXISTS "{name}__pkfix"')
+        con.commit()
         print(f'  [PK normalize skip] {name}: {e}')
 con.commit()
 print(f'PK normalizer: {fixed} tables rebuilt with rowid-alias PKs')
