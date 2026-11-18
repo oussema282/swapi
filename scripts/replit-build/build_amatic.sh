@@ -255,12 +255,22 @@ for name, sql in cur.execute(
         continue
     info = list(cur.execute(f'PRAGMA table_info("{name}")'))
     pkcols = [c for c in info if c[5] > 0]
-    if len(pkcols) != 1:
-        continue
-    pk = pkcols[0]
-    if re.search(rf'"{pk[1]}"\s+INTEGER\s+PRIMARY\s+KEY', sql, re.I):
-        continue
-    if (pk[2] or '').upper() not in ('INTEGER', 'INT', 'BIGINT'):
+    pk = None
+    if len(pkcols) == 1:
+        pk = pkcols[0]
+        if re.search(rf'"{pk[1]}"\s+INTEGER\s+PRIMARY\s+KEY', sql, re.I):
+            continue
+        if (pk[2] or '').upper() not in ('INTEGER', 'INT', 'BIGINT'):
+            continue
+    elif len(pkcols) == 0:
+        # PK-less table with an int "id" column (goldsvet dumps ship some this
+        # way) — Eloquent inserts without id need a rowid alias.
+        cand = [c for c in info if c[1] == 'id' and
+                (c[2] or '').upper() in ('INTEGER', 'INT', 'BIGINT')]
+        if not cand:
+            continue
+        pk = cand[0]
+    else:
         continue
     defs = []
     for _cid, cname, ctype, notnull, dflt, _cpk in info:
