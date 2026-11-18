@@ -51,6 +51,10 @@ ls "$SITE/resources/views/frontend/games/list/" 2>/dev/null | sed 's/\.blade\.ph
 wc -l all_names.txt
 grep -v 'AM$' all_names.txt | sort -u > nonam_names.txt
 wc -l nonam_names.txt
+echo "--- PP gs2c-style names present in the rar?"
+grep -E '^(BigBassBonanza|SweetBonanza|WolfGold|GatesOfOlympus|FruitParty|AncientEgypt|AztecKing|BookofTut|JohnHunter|MustangGold|GreatRhino|PekingLuck|JokersJewel|Dragons888|FirePortals|StarzPragmatic)' all_names.txt || echo "NONE — the rar has no gs2c Pragmatic titles"
+echo "--- engines.txt content:"
+cat engines.txt | head -12
 
 # engines present (for the publish gate)
 ls -d "$SITE"/app/Games/*/ 2>/dev/null | xargs -n1 basename > engines.txt || true
@@ -63,7 +67,7 @@ for H in https://demo4.scriptcasino.ru https://demo2.scriptcasino.ru https://dem
       --connect-timeout 4 --max-time 30 -o /dev/null -w '%{http_code}' "$H/games/BigBassBonanza/gs2c/html5Game.html")
   echo "SELF-CHECK BigBassBonanza gs2c on $H -> $C"
 done
-python3 "$HUNT/pp_discover.py" nonam_names.txt candidates.json 16
+python3 "$HUNT/pp_discover.py" nonam_names.txt candidates.json 6
 python3 - <<'PY'
 import json
 cand = json.load(open('/tmp/pp/candidates.json'))
