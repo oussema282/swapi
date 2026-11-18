@@ -296,30 +296,79 @@ def harvest_game(args):
             break
 
     # PP data packages are numbered (GUI000.json, game001.json,
-    # main_resources000.json...). The client jsons list them, but enumerate a
-    # few extra indices anyway (early-stop after 2 misses) so late-loading
-    # packages are not missed.
+    # main_resources000.json...). The client jsons list some, but enumerate a
+    # few extra indices anyway (early-stop after 2 misses). EVERY newly stored
+    # package is parsed and its refs fetched (res/<md5>.png etc.) — otherwise
+    # late packages' art never lands.
     pkg_re = re.compile(r'^(.*?/)((?:GUI|GUI_resources|game|main_resources|other_resources))([0-9]{1,3})\.json$')
     maxima = {}
+    parsed = set()
     for sp in list(local.keys()) + list(site.keys()):
         m = pkg_re.match(sp)
         if m:
             key = (m.group(1), m.group(2))
             maxima[key] = max(maxima.get(key, -1), int(m.group(3)))
-    for (pre, stem), hi in maxima.items():
-        misses = 0
-        for i in range(hi + 1, hi + 41):
-            ref = f'{pre}{stem}{i:03d}.json'
+
+    def parse_and_fetch(sp, data):
+        """Parse one stored text file; fetch refs not yet local. Returns filled refs."""
+        got = []
+        try:
+            text = data.decode('utf-8', errors='replace')
+        except Exception:
+            return got
+        todo = []
+        for ref, _kind in parse_refs(text, os.path.dirname(sp), game):
+            if ref in local or ref in site or ref in unfilled or ref in todo:
+                continue
             if len(local) + len(site) >= max_files:
                 break
-            d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
-            if d is None:
-                misses += 1
-                if misses >= 2:
+            todo.append(ref)
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for ref, d in ex.map(fetch_any, todo):
+                if d is not None:
+                    store(ref, d)
+                    got.append((ref, d))
+                else:
+                    unfilled.add(ref)
+        return got
+
+    newpkgs = [(sp, local.get(sp) or site.get(sp)) for sp in list(local.keys()) + list(site.keys())
+               if pkg_re.match(sp)]
+    for rnd in range(3):
+        next_pkgs = []
+        for sp, data in newpkgs:
+            if sp in parsed:
+                continue
+            parsed.add(sp)
+            for ref, d in parse_and_fetch(sp, data):
+                if pkg_re.match(ref):
+                    next_pkgs.append((ref, d))
+        # extend each series beyond its current max (early-stop after 2 misses)
+        maxima = {}
+        for sp in list(local.keys()) + list(site.keys()):
+            m = pkg_re.match(sp)
+            if m:
+                key = (m.group(1), m.group(2))
+                maxima[key] = max(maxima.get(key, -1), int(m.group(3)))
+        next_pkgs2 = []
+        for (pre, stem), hi in maxima.items():
+            misses = 0
+            fmt = '{:03d}' if hi >= 100 or stem != 'game' else '{}'
+            for i in range(hi + 1, hi + 41):
+                if len(local) + len(site) >= max_files:
                     break
-            else:
-                store(ref, d)
-                frontier2 = [(ref, d)]
+                ref = f'{pre}{stem}{fmt.format(i)}.json'
+                d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
+                if d is None:
+                    misses += 1
+                    if misses >= 2:
+                        break
+                else:
+                    store(ref, d)
+                    next_pkgs2.append((ref, d))
+        newpkgs = next_pkgs + next_pkgs2
+        if not newpkgs:
+            break
 
     # verify round: re-parse every downloaded text file for refs we never fetched
     vtodo = set()
