@@ -21,6 +21,7 @@ Budget: --max-files / --max-mb per game (soft; shell chain always finishes).
 """
 import os, re, sys, json, time, subprocess, urllib.parse
 from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urljoin, urlparse
 
 HOSTS_ALL = ["https://demo4.scriptcasino.ru", "https://demo2.scriptcasino.ru",
@@ -151,9 +152,21 @@ def harvest_game(args):
     frontier = [(f'games/{game}/{shell_rel}', shell_bytes)]
     rounds = 0
     budget_hit = False
+
+    def fetch_any(ref):
+        """Fetch a ref from the alive hosts; returns (ref, data|None)."""
+        d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
+        if d is not None:
+            return ref, d
+        for h in HOSTS[1:]:
+            d = fetch(f'{h}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
+            if d is not None:
+                return ref, d
+        return ref, None
+
     while frontier and rounds < 14:
         rounds += 1
-        newf = []
+        todo = []
         for sp, data in frontier:
             base_dir = os.path.dirname(sp)
             try:
@@ -161,29 +174,24 @@ def harvest_game(args):
             except Exception:
                 continue
             for ref, _kind in parse_refs(text, base_dir, game):
-                if ref in local or ref in site or ref in unfilled:
+                if ref in local or ref in site or ref in unfilled or ref in todo:
                     continue
                 if len(local) + len(site) >= max_files:
                     budget_hit = True
                     break
-                host = HOSTS[0]
-                url = f'{host}/{urllib.parse.quote(ref, safe="/.")}'
-                d = fetch(url, tmpbin)
+                todo.append(ref)
+            if budget_hit:
+                break
+        if budget_hit:
+            break
+        newf = []
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for ref, d in ex.map(fetch_any, todo):
                 if d is not None:
                     store(ref, d)
                     newf.append((ref, d))
                 else:
-                    # try other alive hosts before declaring unfilled
-                    for h in HOSTS[1:]:
-                        d = fetch(f'{h}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
-                        if d is not None:
-                            store(ref, d)
-                            newf.append((ref, d))
-                            break
-                    else:
-                        unfilled.add(ref)
-            if budget_hit:
-                break
+                    unfilled.add(ref)
         frontier = newf
         total_mb = (sum(len(v) for v in local.values()) + sum(len(v) for v in site.values())) / 1e6
         if total_mb >= max_mb:
@@ -192,6 +200,7 @@ def harvest_game(args):
             break
 
     # verify round: re-parse every downloaded text file for refs we never fetched
+    vtodo = set()
     for sp, data in list(local.items()) + list(site.items()):
         try:
             text = data.decode('utf-8', errors='replace')
@@ -199,21 +208,14 @@ def harvest_game(args):
             continue
         for ref, _kind in parse_refs(text, os.path.dirname(sp), game):
             if ref not in local and ref not in site and ref not in unfilled:
-                if len(local) + len(site) < max_files:
-                    url = f'{HOSTS[0]}/{urllib.parse.quote(ref, safe="/.")}'
-                    d = fetch(url, tmpbin)
-                    if d is not None:
-                        store(ref, d)
-                    else:
-                        for h in HOSTS[1:]:
-                            d = fetch(f'{h}/{urllib.parse.quote(ref, safe="/.")}', tmpbin)
-                            if d is not None:
-                                store(ref, d)
-                                break
-                        else:
-                            unfilled.add(ref)
-                else:
-                    unfilled.add(ref)
+                vtodo.add(ref)
+    vtodo = [r for r in sorted(vtodo) if len(local) + len(site) < max_files]
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        for ref, d in ex.map(fetch_any, vtodo):
+            if d is not None:
+                store(ref, d)
+            else:
+                unfilled.add(ref)
 
     # persist to disk
     for sp, data in local.items():

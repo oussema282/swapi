@@ -11,22 +11,24 @@ permissions:
 jobs:
   pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: harvest pilot games (structure + size measurement)
         run: |
           mkdir -p /tmp/pp
           cd /tmp/pp
+          set -o pipefail
           python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror5.py" /tmp/pp/mirror \
-            BigBassBonanza WolfGold AncientEgyptPM BookofTut AztecGemsPM \
-            --max-files 2500 --max-mb 600
+            BigBassBonanza AncientEgyptPM WolfGold BookofTut AztecGemsPM \
+            --max-files 2500 --max-mb 600 2>&1 | tee pilot.log
       - name: push pilot stats
         if: always()
         run: |
           mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
           git init -q -b pp-hunt-log
           cp /tmp/pp/mirror/_pilot.json . 2>/dev/null || echo '{}' > _pilot.json
+          cp /tmp/pp/pilot.log . 2>/dev/null || true
           git config user.email "log@bot" && git config user.name "logbot"
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
           git add -A
