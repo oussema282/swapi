@@ -646,7 +646,6 @@ cat > notes.md <<EOF
 - Single asset: **final.zip** — ${SIZE} bytes, sha256 \`$SHA\`
 - Full Laravel platform; lobby limited to **Amatic + Pragmatic-style PM games** — $PUB published (AM verified against per-game JS manifests incl. settings__<hash>.js boot scripts; PM harvested manifest-first from the reference demo), incomplete games hidden
 - **gs2c Pragmatic starter: $GS2C_N real PP games with local math engines** — GatesofOlympus, SugarRush, SweetBonanza (engines: VanguardLTE-native PragmaticLib; clients: official gs2c packages; spins via \`/game/<Name>/server\`; verified end-to-end in CI: open → doInit → doSpin). **Total published: $TOTAL_PUB**
-- **gs2c Pragmatic starter: $GS2C_N real PP games with local math engines** — GatesofOlympus, SugarRush, SweetBonanza (engines: VanguardLTE-native PragmaticLib; clients: official gs2c packages; spins via \`/game/<Name>/server\`; verified end-to-end in CI: open → doInit → doSpin)
 - DB: \`database/database.sqlite\` pre-converted, curated lobby; MySQL legacy path included
 - Deploy: import into a blank Repl -> \`unzip\` -> Run. Steps in \`README-REPLIT.md\` inside the zip.
 EOF
