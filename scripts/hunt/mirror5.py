@@ -76,6 +76,7 @@ def init(m):
 
 def classify(game, tmpbin):
     """Returns (type, shell_relpath, shell_bytes, site_files) or None."""
+    # gs2c first: it carries the inline datapath and is the full client
     for typ, rel in (('gs2c', 'gs2c/html5Game.html'), ('pm', 'index.html'), ('am', 'amarent/index.html')):
         data = fetch(f'{HOSTS[0]}/games/{game}/{rel}', tmpbin)
         if data and len(data) > 500:
@@ -130,7 +131,7 @@ def game_type_of(sitepath, game):
     """paths inside this game's dir start with games/<game>/ ; others are site-level"""
     return sitepath.startswith(f'games/{game}/')
 
-DATA_RE = re.compile(r'(?:datapath|GAME_URL)"?\s*[:=]\s*"([^"]*?(?:games/[A-Za-z0-9_./-]+|gs2c/[A-Za-z0-9_./-]+))"')
+DATA_RE = re.compile(r'(?:datapath|GAME_URL)"?\s*[:=]\s*"[^"]*?(/games/[A-Za-z0-9_./-]+)')
 
 
 def datapath_of(shell_text, game):
@@ -138,10 +139,8 @@ def datapath_of(shell_text, game):
     gs2c html5Game.html or PM shell. Returns e.g.
     games/<N>/gs2c/common/games-html5/games/vs/vs10bbbonanza/ or None."""
     for m in DATA_RE.finditer(shell_text):
-        path = m.group(1)
-        if path.startswith('/'):
-            path = path.lstrip('/')
-        if f'games/{game}/' in path or path.startswith('games/'):
+        path = m.group(1).lstrip('/')
+        if f'games/{game}/' in path:
             return path if path.endswith('/') else path + '/'
     return None
 
@@ -172,9 +171,9 @@ def harvest_game(args):
     dp = datapath_of(shell_bytes.decode('utf-8', errors='replace'), game)
     seeds = []
     if dp:
-        for sub in ('bootstrap.js', 'desktop/bootstrap.js', 'mobile/bootstrap.js', 'mini/bootstrap.js'):
+        for sub in ('desktop/bootstrap.js', 'mobile/bootstrap.js', 'bootstrap.js', 'mini/bootstrap.js'):
             seeds.append(f'{dp}{sub}')
-        seeds.append(f'{dp}logo_info.js')
+
     for sref in seeds:
         d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(sref, safe="/.")}', tmpbin)
         if d is None:
@@ -267,7 +266,7 @@ def harvest_game(args):
                 f.write(data)
 
     tolerated = {r for r in list(unfilled)
-                 if os.path.basename(r).lower() in ('wurfl.js', 'logo_info.js')}
+                 if os.path.basename(r).lower() in ('wurfl.js', 'logo_info.js', 'oneworks_logo.png')}
     unfilled -= tolerated
     total = sum(len(v) for v in local.values()) + sum(len(v) for v in site.values())
     return {'game': game, 'type': typ, 'files': len(local) + len(site),
