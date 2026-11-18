@@ -15,7 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: trace demo asset chain
-        run: bash scripts/hunt/diag.sh
+        run: |
+          bash scripts/hunt/diag.sh
+          bash scripts/hunt/diag_pp.sh
       - name: push diag log
         if: always()
         run: |
