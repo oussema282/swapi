@@ -1,0 +1,10 @@
+alive demo hosts: ['https://demo4.scriptcasino.ru', 'https://demo2.scriptcasino.ru', 'https://demo3.scriptcasino.ru']
+harvest pilot: 5 games, max_files=2500, max_mb=600
+   AztecGemsPM: type=pm files=53 bytes=23924624 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AztecGemsPM/desktop/game/m_LocalPosition.x, games/AztecGemsPM/desktop/game/m_LocalPosition.y, games/AztecGemsPM/desktop/game/m_LocalPosition.z, games/AztecGemsPM/desktop/game/m_LocalRotation.w, games/AztecGemsPM/desktop/game/m_LocalRotation.x, games/AztecGemsPM/desktop/game/m_LocalRotation.y, games/AztecGemsPM/desktop/game/m_LocalRotation.z, games/AztecGemsPM/desktop/game/m_LocalScale.x, games/AztecGemsPM/desktop/game/m_LocalScale.y, games/AztecGemsPM/desktop/game/m_LocalScale.z
+   AncientEgyptPM: type=pm files=71 bytes=32333319 rounds=2 unfilled=10 site=0
+      unfilled sample: games/AncientEgyptPM/desktop/game/m_LocalPosition.x, games/AncientEgyptPM/desktop/game/m_LocalPosition.y, games/AncientEgyptPM/desktop/game/m_LocalPosition.z, games/AncientEgyptPM/desktop/game/m_LocalRotation.w, games/AncientEgyptPM/desktop/game/m_LocalRotation.x, games/AncientEgyptPM/desktop/game/m_LocalRotation.y, games/AncientEgyptPM/desktop/game/m_LocalRotation.z, games/AncientEgyptPM/desktop/game/m_LocalScale.x, games/AncientEgyptPM/desktop/game/m_LocalScale.y, games/AncientEgyptPM/desktop/game/m_LocalScale.z
+   BigBassBonanza: type=gs2c files=37 bytes=24823714 rounds=2 unfilled=0 site=0
+   BookofTut: type=gs2c files=46 bytes=40283086 rounds=2 unfilled=0 site=0
+   WolfGold: type=gs2c files=73 bytes=53011873 rounds=2 unfilled=0 site=0
+PILOT DONE
