@@ -582,7 +582,6 @@ if [ -s /tmp/build/gs2c_names.txt ]; then
     echo "  doSpin: $(echo "$SPIN" | head -c 150)"
     if echo "$INIT" | grep -qE "balance=[0-9]" && echo "$SPIN" | grep -qE "tw=[0-9]" && echo "$SPIN" | grep -qE "(^|&)s=[0-9]"; then
       echo "  GS2C E2E $NAME: PASS"
-      GS2C_E2E=1
     else
       echo "  GS2C E2E $NAME: FAIL (doInit/doSpin invalid)"
       GS2C_E2E=2
