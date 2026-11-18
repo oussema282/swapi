@@ -88,6 +88,12 @@ def parse_refs(text, base_dir, game):
     out = []
     seen = set()
     cands = []
+    # Unity-style JSONs escape slashes ("game\/GUI000.json") — unescape first
+    text = text.replace('\\/', '/')
+    # client/*.json manifests reference packages relative to the CLIENT ROOT
+    # (their parent dir, e.g. desktop/), not their own dir
+    if re.search(r'/(client|game)/?$', base_dir) and base_dir.rstrip('/').endswith('client'):
+        base_dir = os.path.dirname(base_dir)
     for m in HTML_REF.finditer(text):
         cands.append(m.group(1))
     for m in CSS_URL.finditer(text):
