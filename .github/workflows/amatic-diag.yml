@@ -4,6 +4,7 @@ on:
     branches: [arena/01a0cba2-swapi]
     paths:
       - 'scripts/hunt/diag.sh'
+      - 'scripts/hunt/diag_pp.sh'
   workflow_dispatch: {}
 permissions:
   contents: write
