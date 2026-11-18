@@ -104,13 +104,15 @@ def parse_refs(text, base_dir, game):
         if c.split('?')[0].endswith(SKIP_EXT):
             continue
         c = c.split('?')[0].split('#')[0]
-        if not c:
+        if not c or c.endswith('/'):
             continue
         if c.startswith('/'):
             site = c.lstrip('/')
         else:
             joined = urljoin(base_dir + '/', c)
             site = joined.lstrip('/')
+        if not site or site.endswith('/'):
+            continue
         if site in seen:
             continue
         seen.add(site)
@@ -240,12 +242,19 @@ def harvest_game(args):
 
 if __name__ == '__main__':
     mirror = sys.argv[1]
-    games = [g for g in sys.argv[2:] if not g.startswith('--')]
-    max_files, max_mb = 1500, 400
-    if '--max-files' in sys.argv:
-        max_files = int(sys.argv[sys.argv.index('--max-files') + 1])
-    if '--max-mb' in sys.argv:
-        max_mb = int(sys.argv[sys.argv.index('--max-mb') + 1])
+    rest = sys.argv[2:]
+    games, max_files, max_mb = [], 1500, 400
+    i = 0
+    while i < len(rest):
+        t = rest[i]
+        if t == '--max-files':
+            max_files = int(rest[i + 1]); i += 2
+        elif t == '--max-mb':
+            max_mb = int(rest[i + 1]); i += 2
+        elif t.startswith('--'):
+            i += 2
+        else:
+            games.append(t); i += 1
     HOSTS[:] = alive_hosts()
     print('alive demo hosts:', HOSTS, flush=True)
     print(f'harvest pilot: {len(games)} games, max_files={max_files}, max_mb={max_mb}', flush=True)
