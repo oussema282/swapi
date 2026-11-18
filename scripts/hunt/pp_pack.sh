@@ -54,11 +54,11 @@ wc -l nonam_names.txt
 echo "--- PP gs2c-style names present in the rar?"
 grep -E '^(BigBassBonanza|SweetBonanza|WolfGold|GatesOfOlympus|FruitParty|AncientEgypt|AztecKing|BookofTut|JohnHunter|MustangGold|GreatRhino|PekingLuck|JokersJewel|Dragons888|FirePortals|StarzPragmatic)' all_names.txt || echo "NONE — the rar has no gs2c Pragmatic titles"
 echo "--- engines.txt content:"
-cat engines.txt | head -12
+cat engines.txt 2>/dev/null | head -12 || true
 
 # engines present (for the publish gate)
-ls -d "$SITE"/app/Games/*/ 2>/dev/null | xargs -n1 basename > engines.txt || true
-wc -l engines.txt
+find "$SITE/app/Games" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null > engines.txt || true
+wc -l engines.txt || true
 
 # ---- 2. discover clients on demo ----
 # self-check: the known-good gs2c game must be discoverable (logs the raw code otherwise)
