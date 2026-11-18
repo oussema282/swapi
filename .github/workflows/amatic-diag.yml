@@ -27,6 +27,7 @@ jobs:
           bash scripts/hunt/diag_pp7.sh
           bash scripts/hunt/diag_pp8.sh
           bash scripts/hunt/diag_pp9.sh
+          bash scripts/hunt/diag_pp10.sh
       - name: push diag log
         if: always()
         run: |
