@@ -462,7 +462,7 @@ cat part_00 part_01 > amatic-replit-ready.zip
 sha256sum amatic-replit-ready.zip   # must equal $SHA
 \`\`\`
 
-Lobby: **AM games only** — $PUB published, every one verified against its own game-JS manifest (settings__<hash>.js boot scripts included) + 5 pack clients.
+Lobby: **Amatic + PM games** — $PUB published.
 Deploy steps in \`README-REPLIT.md\` inside the zip.
 EOF
 else
@@ -470,7 +470,7 @@ cat > notes.md <<EOF
 **Goldsvet 8.5 — Amatic-only Replit build** (auto-assembled $(date -u +%F))
 
 - Single asset: **final.zip** — ${SIZE} bytes, sha256 \`$SHA\`
-- Full Laravel platform; lobby limited to **Amatic games only** — $PUB published, every one verified against its own game-JS manifest (settings__<hash>.js boot scripts included) + 5 pack clients; incomplete games hidden
+- Full Laravel platform; lobby limited to **Amatic + Pragmatic-style PM games** — $PUB published (AM verified against per-game JS manifests incl. settings__<hash>.js boot scripts; PM harvested manifest-first from the reference demo), incomplete games hidden
 - DB: \`database/database.sqlite\` pre-converted, AM-exclusive lobby; MySQL legacy path included
 - Deploy: import into a blank Repl -> \`unzip\` -> Run. Steps in \`README-REPLIT.md\` inside the zip.
 EOF
