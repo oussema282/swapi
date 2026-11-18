@@ -130,6 +130,22 @@ def game_type_of(sitepath, game):
     """paths inside this game's dir start with games/<game>/ ; others are site-level"""
     return sitepath.startswith(f'games/{game}/')
 
+DATA_RE = re.compile(r'(?:datapath|GAME_URL)"?\s*[:=]\s*"([^"]*?(?:games/[A-Za-z0-9_./-]+|gs2c/[A-Za-z0-9_./-]+))"')
+
+
+def datapath_of(shell_text, game):
+    """Extract the PP bundle root (games/... up to the game symbol dir) from a
+    gs2c html5Game.html or PM shell. Returns e.g.
+    games/<N>/gs2c/common/games-html5/games/vs/vs10bbbonanza/ or None."""
+    for m in DATA_RE.finditer(shell_text):
+        path = m.group(1)
+        if path.startswith('/'):
+            path = path.lstrip('/')
+        if f'games/{game}/' in path or path.startswith('games/'):
+            return path if path.endswith('/') else path + '/'
+    return None
+
+
 def harvest_game(args):
     game, max_files, max_mb = args
     tmpbin = '/tmp/m5_%s.bin' % re.sub(r'[^A-Za-z0-9]', '', game)[:40] + ('_%d' % os.getpid())
@@ -152,6 +168,23 @@ def harvest_game(args):
 
     store(f'games/{game}/{shell_rel}', shell_bytes)
     frontier = [(f'games/{game}/{shell_rel}', shell_bytes)]
+    # PP UHT clients load bundles from a datapath root; seed the BFS there
+    dp = datapath_of(shell_bytes.decode('utf-8', errors='replace'), game)
+    seeds = []
+    if dp:
+        for sub in ('bootstrap.js', 'desktop/bootstrap.js', 'mobile/bootstrap.js', 'mini/bootstrap.js'):
+            seeds.append(f'{dp}{sub}')
+        seeds.append(f'{dp}logo_info.js')
+    for sref in seeds:
+        d = fetch(f'{HOSTS[0]}/{urllib.parse.quote(sref, safe="/.")}', tmpbin)
+        if d is None:
+            for h in HOSTS[1:]:
+                d = fetch(f'{h}/{urllib.parse.quote(sref, safe="/.")}', tmpbin)
+                if d is not None:
+                    break
+        if d is not None:
+            store(sref, d)
+            frontier.append((sref, d))
     rounds = 0
     budget_hit = False
 
@@ -233,11 +266,14 @@ def harvest_game(args):
             with open(fp, 'wb') as f:
                 f.write(data)
 
+    tolerated = {r for r in list(unfilled)
+                 if os.path.basename(r).lower() in ('wurfl.js', 'logo_info.js')}
+    unfilled -= tolerated
     total = sum(len(v) for v in local.values()) + sum(len(v) for v in site.values())
     return {'game': game, 'type': typ, 'files': len(local) + len(site),
             'bytes': total, 'rounds': rounds, 'budget': budget_hit,
-            'unfilled': sorted(unfilled)[:30], 'unfilled_n': len(unfilled),
-            'site_files': len(site)}
+            'datapath': dp, 'unfilled': sorted(unfilled)[:30], 'unfilled_n': len(unfilled),
+            'tolerated': sorted(tolerated), 'site_files': len(site)}
 
 
 if __name__ == '__main__':
