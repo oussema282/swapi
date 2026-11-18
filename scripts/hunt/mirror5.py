@@ -124,6 +124,10 @@ def parse_refs(text, base_dir, game):
         # drop pure decimals (bet values like 0.75/1250.00 in paytable jsons)
         if re.match(r'^\d+\.\d+$', base):
             continue
+        # Unity serialization fields (m_LocalPosition.x, mColor.a) and negative
+        # decimals (-0.5) leak out of the game packages — not file requests
+        if re.match(r'^m[A-Z]', base) or base.startswith('-'):
+            continue
         if not re.match(r'^[A-Za-z0-9_@-][A-Za-z0-9_@-]*\.[A-Za-z0-9]{1,5}$', base):
             continue
         if base.startswith('.'):

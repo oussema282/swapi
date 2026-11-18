@@ -123,10 +123,13 @@ if not os.path.exists(stats):
     print('PP gate: _pilot.json missing — publishing nothing from pp mirror')
     json.dump({'pm': []}, open('/tmp/build/pm_names.json', 'w'))
 else:
+    import re as _re
+    noise = _re.compile(r'(?:^|/)(m[A-Z][A-Za-z]*\.\w+|-\d+\.\d+)$')
     rep = json.load(open(stats))
     pm, hidden = [], []
     for g, r in sorted(rep.items()):
-        if r.get('type') in ('gs2c', 'pm') and r.get('files', 0) >= 8 and r.get('unfilled_n', 99) == 0:
+        real_unfilled = [x for x in r.get('unfilled', []) if not noise.search(x)]
+        if r.get('type') in ('gs2c', 'pm') and r.get('files', 0) >= 8 and not real_unfilled:
             src = os.path.join(mirror, g)
             if os.path.isdir(src):
                 shutil.copytree(src, os.path.join(staging, g), dirs_exist_ok=True)
