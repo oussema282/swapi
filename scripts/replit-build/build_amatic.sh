@@ -241,6 +241,50 @@ python3 "$GITHUB_WORKSPACE/scripts/replit-build/sqlite_convert.py" \
   "$GITHUB_WORKSPACE/sql/w_games-17-pack-v2-games.sql" \
   /tmp/build/am_names.txt exclusive || exit 1
 
+# ---------- 4a-bis. PK normalizer: every single-int-PK w_ table gets a true
+# sqlite rowid alias so Eloquent inserts WITHOUT id (GameLog::create,
+# StatGame::create, ...) cannot hit "NOT NULL constraint failed: *.id" ----------
+python3 - <<'PY'
+import sqlite3, re
+con = sqlite3.connect('stage/database/database.sqlite')
+cur = con.cursor()
+fixed = 0
+for name, sql in cur.execute(
+        "SELECT name, sql FROM sqlite_master WHERE type='table' AND name LIKE 'w_%'").fetchall():
+    if not sql:
+        continue
+    info = list(cur.execute(f'PRAGMA table_info("{name}")'))
+    pkcols = [c for c in info if c[5] > 0]
+    if len(pkcols) != 1:
+        continue
+    pk = pkcols[0]
+    if re.search(rf'"{pk[1]}"\s+INTEGER\s+PRIMARY\s+KEY', sql, re.I):
+        continue
+    if (pk[2] or '').upper() not in ('INTEGER', 'INT', 'BIGINT'):
+        continue
+    defs = []
+    for _cid, cname, ctype, notnull, dflt, _cpk in info:
+        if cname == pk[1]:
+            defs.append(f'"{cname}" INTEGER PRIMARY KEY')
+        else:
+            d = f' DEFAULT {dflt}' if dflt is not None else ''
+            nn = ' NOT NULL' if notnull else ''
+            defs.append(f'"{cname}" {ctype}{nn}{d}')
+    colnames = ', '.join(f'"{c[1]}"' for c in info)
+    cur.execute(f'DROP TABLE IF EXISTS "{name}__pkfix"')
+    cur.execute(f'CREATE TABLE "{name}__pkfix" (' + ', '.join(defs) + ')')
+    cur.execute(f'INSERT INTO "{name}__pkfix" ({colnames}) SELECT {colnames} FROM "{name}"')
+    cur.execute(f'DROP TABLE "{name}"')
+    cur.execute(f'ALTER TABLE "{name}__pkfix" RENAME TO "{name}"')
+    fixed += 1
+con.commit()
+print(f'PK normalizer: {fixed} tables rebuilt with rowid-alias PKs')
+for nm in ('w_game_log', 'w_stat_game'):
+    row = cur.execute("SELECT sql FROM sqlite_master WHERE name=?", (nm,)).fetchone()
+    print(f'  {nm}:', ('INTEGER PRIMARY KEY' in row[0]) if row else 'MISSING')
+con.close()
+PY
+
 # ---------- 4b. gs2c Pragmatic starter w_games rows ----------
 if [ -s /tmp/build/gs2c_names.txt ]; then
   python3 - "$GITHUB_WORKSPACE/sql/w_games-gs2c-starter.sql" <<'PY'
