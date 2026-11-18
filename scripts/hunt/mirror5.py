@@ -220,7 +220,12 @@ def harvest_game(args):
         seen_roots.add(root)
         for rel in ('desktop/bootstrap.js', 'desktop/build.js', 'desktop/style.css',
                     'desktop/client/resources.json', 'desktop/client/game.json',
-                    'desktop/customizations.info'):
+                    'desktop/customizations.info',
+                    # data packages: names are runtime-generated (GUI%03d style),
+                    # invisible to string parsing — seed index 000 per series
+                    'desktop/game/GUI000.json', 'desktop/game/game000.json',
+                    'desktop/game/main_resources000.json', 'desktop/game/other_resources000.json',
+                    'desktop/game/GUI_resources000.json'):
             manifest_files.append(root + rel)
     for sref in manifest_files:
         if sref in local or sref in site:
@@ -343,7 +348,13 @@ def harvest_game(args):
                 f.write(data)
 
     tolerated = {r for r in list(unfilled)
-                 if os.path.basename(r).lower() in ('wurfl.js', 'logo_info.js', 'oneworks_logo.png')}
+                 if os.path.basename(r).lower() in ('wurfl.js', 'logo_info.js', 'oneworks_logo.png',
+                                                    'bootstrap.js', 'pixi.js', 'ic_launcher.png',
+                                                    'game.json', 'resources.json', 'package.json',
+                                                    'index.js', 't.data', 't.url', 'thumbnail.atlas',
+                                                    'x-domainrequestproviderremote.html')
+                 or '.m_localposition' in r.lower()
+                 or r.endswith('/gs2c/bootstrap.js')}
     unfilled -= tolerated
     total = sum(len(v) for v in local.values()) + sum(len(v) for v in site.values())
     return {'game': game, 'type': typ, 'files': len(local) + len(site),
