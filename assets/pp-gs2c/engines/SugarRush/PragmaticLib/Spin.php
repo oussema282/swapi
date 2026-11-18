@@ -62,23 +62,7 @@ class Spin
             $newSpinCnt ++;
             goto NewSpin;
         }
-        // check rtp when you spin
-        $checkRtpSlots = new CheckRtp($gameSettings['rtp_slots'], $game);
-        if(!$freeSpins && $currentLog && !array_key_exists('FreeSpinNumber', $currentLog) && !$checkRtpSlots->checkRtp($bet * $lines, $win['TotalWin'] , $user, $game, $bank) && $newSpinCnt < 4 && $bank->slots > $bet * $lines){
-            $newSpinCnt ++;
-            goto NewSpin;
-        }
-        // check rtp when you're on free spin
-        $checkRtpBonus = new CheckRtp($gameSettings['rtp_bonus'], $game);
-        if($currentLog 
-        && array_key_exists('FreeSpinNumber', $currentLog) 
-        && !$checkRtpBonus->checkRtp($bet * $lines * 100 / $currentLog['FreeSpins'], $win['TotalWin'] , $user, $game, $bank)
-        && $bank->bonus + $bank->slots > $bet * $lines * 100 / $currentLog['FreeSpins']
-        && $newSpinCnt < 4){
-            $newSpinCnt ++;
-            goto NewSpin;
-        }
-        // распределить деньги в банк и записать в статистику
+        // CheckRtp RTP-governor blocks removed: SR init has no rtp_slots/rtp_bonus keys and no CheckRtp class in this engine generation
         SwitchMoney::set($changeBalance, $shop, $bank, $jpgs, $user, $game, $callbackUrl, $win['TotalWin'], $slotArea, $freeSpins, $logAndServer['Log'], $win_permission);
         //записать лог
         Log::setLog($logAndServer['Log'], $game->id, $user->id, $user->shop_id);
