@@ -154,10 +154,10 @@ fi
 # serves AM/PM spins). Aux .do endpoints become static files — no new routes.
 : > /tmp/build/gs2c_names.txt
 GS2C_FETCHED=1
-rm -rf /tmp/build/ppeng /tmp/build/ppcli
-git clone -q --depth 1 --filter=blob:none --sparse https://github.com/louisbrant/goldsvet-pragmatic /tmp/build/ppeng 2>/tmp/build/gs2c_clone_eng.log \
-  && (cd /tmp/build/ppeng && git sparse-checkout set GatesofOlympus SugarRush SweetBonanza) \
-  || { echo "PP ENGINE sparse clone FAILED (see /tmp/build/gs2c_clone_eng.log)"; GS2C_FETCHED=0; }
+# Engines are COMMITTED in the repo (assets/pp-gs2c/engines, incl. the sqlite
+# Jackpots fix and the SugarRush WinChecker syntax repair) — no clone needed.
+# Clients come from the pinned ahmed_bet sparse clone (full official PP gs2c packages).
+rm -rf /tmp/build/ppcli
 git clone -q --depth 1 --filter=blob:none --sparse https://github.com/babyline00/ahmed_bet /tmp/build/ppcli 2>/tmp/build/gs2c_clone_cli.log \
   && (cd /tmp/build/ppcli && git sparse-checkout set public/vs20olympgate public/vs20sugarrush public/vs20pbonanza) \
   || { echo "PP CLIENT sparse clone FAILED (see /tmp/build/gs2c_clone_cli.log)"; GS2C_FETCHED=0; }
@@ -166,13 +166,13 @@ if [ "$GS2C_FETCHED" = 1 ]; then
   for pair in "GatesofOlympus:vs20olympgate" "SugarRush:vs20sugarrush" "SweetBonanza:vs20pbonanza"; do
     NAME=${pair%%:*}; SYM=${pair##*:}
     rm -rf "stage/app/Games/$NAME" "stage/public/games/$NAME"
-    if [ -d "/tmp/build/ppeng/$NAME" ] && [ -d "/tmp/build/ppcli/public/$SYM" ]; then
-      cp -a "/tmp/build/ppeng/$NAME" "stage/app/Games/$NAME"
+    if [ -d "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" ] && [ -d "/tmp/build/ppcli/public/$SYM" ]; then
+      cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" "stage/app/Games/$NAME"
       cp -a "/tmp/build/ppcli/public/$SYM" "stage/public/games/$NAME"
       cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/views/$NAME.blade.php" "stage/resources/views/frontend/games/list/$NAME.blade.php"
       echo "$NAME" >> /tmp/build/gs2c_names.txt
     else
-      echo "GS2C MISSING SOURCES for $NAME (eng: $(ls /tmp/build/ppeng 2>/dev/null | tr '\n' ' '); cli: $(ls /tmp/build/ppcli/public 2>/dev/null | tr '\n' ' '))"
+      echo "GS2C MISSING SOURCES for $NAME (eng: $(ls "$GITHUB_WORKSPACE/assets/pp-gs2c/engines" 2>/dev/null | tr '\n' ' '); cli: $(ls /tmp/build/ppcli/public 2>/dev/null | tr '\n' ' '))"
     fi
   done
   if [ -s /tmp/build/gs2c_names.txt ]; then

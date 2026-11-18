@@ -44,7 +44,10 @@ def php_lint(path, php):
     ok = r.returncode == 0
     if not ok:
         print(f'  PHP LINT FAIL {path}: {r.stderr.strip()[:400]}')
-    return ok
+    return bool(ok)
+
+
+LINT_FAILURES = []
 
 
 def patch_loader(path, name, sym, gname):
@@ -204,13 +207,20 @@ def main():
                 raise SystemExit(1)
         add_static_endpoints(cli)
         for f in eng_files:
-            if f.endswith('.php'):
-                php_lint(f, php)
-        php_lint(loader, php)
+            if f.endswith('.php') and not php_lint(f, php):
+                LINT_FAILURES.append(f)
+        if not php_lint(loader, php):
+            LINT_FAILURES.append(loader)
         print(f'PP-GS2C {name}: loader+engine wired ({len(cli_files)} client files)')
     # 3. controller patch
     ctrl = patch_controller(stage)
-    php_lint(ctrl, php)
+    if not php_lint(ctrl, php):
+        LINT_FAILURES.append(ctrl)
+    if LINT_FAILURES:
+        print(f'PP-GS2C: {len(LINT_FAILURES)} PHP LINT FAILURES:')
+        for f in LINT_FAILURES:
+            print(f'  {f}')
+        raise SystemExit(1)
     print('PP-GS2C PATCH OK:', ', '.join(names))
 
 
