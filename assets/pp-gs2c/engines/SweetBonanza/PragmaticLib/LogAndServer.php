@@ -112,7 +112,7 @@ class LogAndServer
                         'psym='.$addFSLog['Scatter'].'~'.$addFSLog['FSPay'].'~'.implode(',', $addFSLog['ScatterPositions'])
                     ];
                 }
-                    if ($log && $log['State'] === 'Respin' || $log['State'] === 'FirstRespin')$addFSLog['State'] = 'LastRespin';
+                    if ($log && ($log['State'] === 'Respin' || $log['State'] === 'FirstRespin'))$addFSLog['State'] = 'LastRespin';
                     else $addFSLog['State'] = 'Spin';
                     $toLog = array_merge($toLog, $addFSLog);
                     $toServer = array_merge($toServer, $responseFs);
@@ -121,7 +121,7 @@ class LogAndServer
         // Если есть выигрыш
         else{
             // Если предыдущий раз был Respin или FirstRespin
-            if ($log && $log['State'] === 'Respin' || $log['State'] === 'FirstRespin'){
+            if ($log && ($log['State'] === 'Respin' || $log['State'] === 'FirstRespin')){
                 $addLog = [
                     'Respin' => $log['Respin'] + 1,
                     'RespinWin' => $log['RespinWin'] + $win['TotalWin'],

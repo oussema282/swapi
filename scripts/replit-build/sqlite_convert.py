@@ -142,6 +142,20 @@ def conv_column(item):
             parts.append('DEFAULT ' + d.upper().replace('()',''))
     return {'name':name, 'auto':auto, 'line':' '.join(parts), 'int': sql_t=='INTEGER'}
 
+def ident_list(inner):
+    """Parse a parenthesized column list that may use backticks or bare names."""
+    out = []
+    for part in inner.split(','):
+        m = re.match(r'\s*`([^`]+)`|([A-Za-z_][\w$]*)', part.strip())
+        if m:
+            out.append(m.group(1) or m.group(2))
+    return out
+
+def paren_tail(item):
+    """Last top-level (...) at the end of a constraint item, allowing USING x."""
+    mm = re.search(r'\(([^()]*)\)\s*(?:USING\s+\w+\s*)?$', item, re.I)
+    return mm
+
 def conv_create(stmt):
     m=re.match(r'\s*CREATE TABLE `([^`]+)` \((.*)\)\s*(ENGINE.*)?$', stmt, re.S)
     if not m: return None
@@ -151,10 +165,11 @@ def conv_create(stmt):
         it=item.strip()
         iu=it.upper()
         if iu.startswith('PRIMARY KEY'):
-            pk=re.findall(r'`([^`]+)`', re.search(r'\(([^()]*)\)\s*$', it).group(1))
+            mm = paren_tail(it)
+            pk = ident_list(mm.group(1)) if mm else []
         elif iu.startswith('UNIQUE'):
-            mm=re.search(r'\(([^()]*)\)\s*$', it)
-            uniques.append(re.findall(r'`([^`]+)`', mm.group(1)) if mm else [])
+            mm = paren_tail(it)
+            uniques.append(ident_list(mm.group(1)) if mm else [])
         elif iu.startswith(('KEY ','INDEX ','FULLTEXT','SPATIAL')):
             mm=re.search(r'\(([^()]*)\)\s*$', it)
             indexes.append(re.findall(r'`([^`]+)`', mm.group(1)) if mm else [])
@@ -187,7 +202,7 @@ def main():
             mun=re.search(r'ADD UNIQUE\s+(?:KEY|INDEX)?\s*`?\w*`?\s*\(([^()]*)\)', s, re.I)
             midx=re.search(r'ADD (?:KEY|INDEX)\s+`?\w*`?\s*\(([^()]*)\)', s, re.I)
             if mpk:
-                pks[tn]=re.findall(r'`([^`]+)`', mpk.group(1))
+                pks[tn]=ident_list(mpk.group(1))
             elif mun:
                 cols=re.findall(r'`([^`]+)`', mun.group(1))
                 if cols: uniques.setdefault(tn,[]).append(cols)
@@ -221,6 +236,11 @@ def main():
     for tn in order:
         t=creates[tn]
         pk=pks.get(tn)
+        if not pk:
+            autos=[c['name'] for c in t['cols'] if c.get('auto')]
+            if len(autos)==1:
+                pk=[autos[0]]
+                print(f'  [PK fallback] {tn}: AUTO_INCREMENT column {pk[0]} (constraint parse missed)')
         lines=[]; inline_pk=None
         for c in t['cols']:
             if pk and len(pk)==1 and c['name']==pk[0] and c['int']:
