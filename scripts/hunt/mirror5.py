@@ -94,9 +94,10 @@ def parse_refs(text, base_dir, game):
         cands.append(m.group(1))
     for m in REF_STR.finditer(text):
         cands.append(m.group(1))
-    # JSON manifests list assets as plain string values, sometimes without an
-    # extension context — add every quoted string token too (validated later)
-    if base_dir.endswith(('client', 'game')) or '/client' in base_dir or '/game' in base_dir:
+    # JSON manifests (desktop/client/*.json, desktop/game/*.json) list assets as
+    # plain string values — add every quoted token, but ONLY for those dirs
+    # (running this on minified JS floods the queue with Unity member names)
+    if re.search(r'/(client|game)$', base_dir):
         for m in re.finditer(r'"([A-Za-z0-9_./@-]{3,120})"', text):
             cands.append(m.group(1))
     for c in cands[:MAX_PARSE]:
@@ -113,10 +114,13 @@ def parse_refs(text, base_dir, game):
         if not c or c.endswith('/'):
             continue
         base = c.rsplit('/', 1)[-1]
-        if not re.match(r'^[A-Za-z0-9_$@.-][A-Za-z0-9_$@. -]{1,120}$', base) or '..' in base:
+        # sane basename: exactly one dot, no spaces/brackets, ext is alphanumeric
+        if not re.match(r'^[A-Za-z0-9_@-][A-Za-z0-9_@-]*\.[A-Za-z0-9]{1,5}$', base):
             continue
-        if '.' not in base and not re.match(r'^(GUI|game|main_resources|other_resources|GUI_resources|res)[A-Za-z0-9_]*$', base):
-            continue   # bare token: only PP data-package stems are real targets
+        if base.startswith('.'):
+            continue
+        if not base.rsplit('.', 1)[0]:
+            continue
         if c.startswith('/'):
             site = c.lstrip('/')
         else:
