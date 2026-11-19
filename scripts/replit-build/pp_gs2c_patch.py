@@ -258,6 +258,42 @@ def main():
                     print(f'  URL-LINE: {line.strip()[:300]}')
             raise SystemExit(1)
         add_static_endpoints(cli)
+        # deterministic engine-integrity gates: (a) namespaces must match the
+        # engine dir (upstream ships doubled/cross-game namespaces); (b) every
+        # referenced class must ship (upstream drops files like WinPermission)
+        # — both bugs are RNG-path fatals that 1-spin e2e can miss.
+        shipped = {os.path.splitext(os.path.basename(f))[0] for f in eng_files}
+        externals = {'DB', 'Auth', 'Carbon', 'Gate', 'Validator', 'Config',
+                     'Cache', 'Hash', 'Event', 'Session', 'Crypt', 'Str',
+                     'Arr', 'Banker', 'GameBank', 'SlotBank', 'PHP_EOL'}
+        ns_bad, ref_bad = [], []
+        for f in eng_files:
+            if not f.endswith('.php'):
+                continue
+            fn = os.path.basename(f)
+            head = open(f, encoding='utf-8', errors='replace').read(600)
+            if fn != 'init.php':
+                m = re.search(r'namespace\s+([A-Za-z0-9_\\]+)', head)
+                exp = (f'VanguardLTE\\Games\\{name}'
+                       if fn in ('Server.php', 'SlotSettings.php', 'GameReel.php')
+                       else f'VanguardLTE\\Games\\{name}\\PragmaticLib')
+                if not m or m.group(1) != exp:
+                    ns_bad.append((os.path.relpath(f, eng),
+                                   m.group(1) if m else 'NO NAMESPACE', exp))
+            s = open(f, encoding='utf-8', errors='replace').read()
+            imports = set(re.findall(r'(?m)^\s*use\s+[\w\\]*?(\w+)\s*;', s))
+            for mm in re.finditer(r'\bnew\s+(\w+)\s*\(|(?<![\\\w:])([A-Z]\w+)::',
+                                  s):
+                c = mm.group(1) or mm.group(2)
+                if not c or c in shipped or c in externals or c in imports:
+                    continue
+                ref_bad.append((os.path.relpath(f, eng), c))
+        if ns_bad:
+            print(f'PP-GS2C GATE FAIL {name}: wrong namespaces: {ns_bad[:5]}')
+            raise SystemExit(1)
+        if ref_bad:
+            print(f'PP-GS2C GATE FAIL {name}: missing classes: {ref_bad[:8]}')
+            raise SystemExit(1)
         for f in eng_files:
             if f.endswith('.php') and not php_lint(f, php):
                 LINT_FAILURES.append(f)

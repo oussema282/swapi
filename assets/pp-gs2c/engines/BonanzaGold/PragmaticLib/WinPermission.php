@@ -1,6 +1,6 @@
 <?php
 
-namespace VanguardLTE\Games\BonanzaGold\BonanzaGold\PragmaticLib;
+namespace VanguardLTE\Games\BonanzaGold\PragmaticLib;
 
 class WinPermission
 {

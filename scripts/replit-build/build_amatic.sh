@@ -670,17 +670,27 @@ if [ -s /tmp/build/gs2c_l.txt ]; then
     CODE=$(curl -s -c $JAR -o /tmp/build/go_$NAME.html -w '%{http_code}' -L "http://127.0.0.1:8099/game/$NAME/demo" || echo curlfail)
     BLADE=$(grep -c "gs2c/html5Game.php" /tmp/build/go_$NAME.html 2>/dev/null || echo 0)
     INIT=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doInit&index=1&counter=0" | head -c 60000)
-    SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=$L&index=1&counter=1&bl=0&pur=1" | head -c 60000)
-    echo "GS2C E2E $NAME (l=$L): go=$CODE bladeRefs=$BLADE"
-    echo "  doInit: $(echo "$INIT" | head -c 150)"
-    echo "  doSpin: $(echo "$SPIN" | head -c 150)"
-    if echo "$INIT" | grep -qE "balance=[0-9]" && echo "$SPIN" | grep -qE "tw=[0-9]" && echo "$SPIN" | grep -qE "(^|&)s=[0-9]"; then
-      echo "  GS2C E2E $NAME: PASS"
+    # 5 spins per game: RNG-path fatals (e.g. missing class on a WIN) must not ship
+    SPINOK=1
+    for SI in 1 2 3 4 5; do
+      SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=$L&index=1&counter=$SI&bl=0&pur=1" | head -c 60000)
+      if ! echo "$SPIN" | grep -qE "tw=[0-9]" || ! echo "$SPIN" | grep -qE "(^|&)s=[0-9]"; then
+        SPINOK=0
+        echo "GS2C E2E $NAME (l=$L): go=$CODE bladeRefs=$BLADE spin#$SI INVALID"
+        echo "  doInit: $(echo "$INIT" | head -c 150)"
+        echo "  doSpin#$SI: $(echo "$SPIN" | head -c 150)"
+        printf '%s' "$INIT" > "/tmp/build/logs/e2e_init_$NAME.txt" 2>/dev/null || true
+        printf '%s' "$SPIN" > "/tmp/build/logs/e2e_spin_$NAME.txt" 2>/dev/null || true
+        break
+      fi
+    done
+    if [ "$SPINOK" = 1 ] && echo "$INIT" | grep -qE "balance=[0-9]"; then
+      echo "GS2C E2E $NAME (l=$L): go=$CODE bladeRefs=$BLADE"
+      echo "  doInit: $(echo "$INIT" | head -c 120)"
+      echo "  GS2C E2E $NAME: PASS (doInit + 5 spins)"
       echo "$NAME" >> /tmp/build/gs2c_passed.txt
     else
       echo "  GS2C E2E $NAME: FAIL — will be HIDDEN"
-      printf '%s' "$INIT" > "/tmp/build/logs/e2e_init_$NAME.txt" 2>/dev/null || true
-      printf '%s' "$SPIN" > "/tmp/build/logs/e2e_spin_$NAME.txt" 2>/dev/null || true
       echo "  FAIL-SPIN 1200: $(printf '%s' "$SPIN" | head -c 1200 | tr '\n' ' ')"
       LLOGF=$(ls -t /tmp/build/stage/storage/logs/laravel*.log 2>/dev/null | head -1)
       [ -n "$LLOGF" ] && grep -E "\.ERROR: " "$LLOGF" | tail -3 | cut -c1-400 | while IFS= read -r EL; do echo "  FAIL-LOG: $EL"; done
