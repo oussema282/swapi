@@ -162,23 +162,29 @@ SYM_LIST=$(for pair in $PP_PAIRS; do SYM=${pair##*:}; [ "$SYM" != RELEASE ] && e
 git clone -q --depth 1 --filter=blob:none --sparse https://github.com/babyline00/ahmed_bet /tmp/build/ppcli 2>/tmp/build/gs2c_clone_cli.log \
   && (cd /tmp/build/ppcli && git sparse-checkout set $SYM_LIST) \
   || { echo "PP CLIENT sparse clone FAILED (see /tmp/build/gs2c_clone_cli.log)"; GS2C_FETCHED=0; }
-# BookofTutPM client comes from the release `pp-clients` (demo4 PM harvest —
-# STATIC gs2c package: html5Game.html, no PHP loader). We stage it and graft a
-# donor PHP loader (ahmed_bet generation, symbol-agnostic apart from the
-# symbol string) with the client's real symbol detected from its statics.
-# Fail-closed: if the fetch fails the game is skipped this run (never faked).
+# BookofTutPM client is NOT in any release — harvest the real Book of Tut
+# gs2c client from the demo hosts in-runner (mirror5 harvester, gated: type
+# gs2c, >=8 files, unfilled only noise). Fail-closed: skipped if the gate fails.
 TUT_OK=0
-mkdir -p /tmp/build/pprel
-RELJSON=/tmp/build/pprel/rel.json
-if curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" "${GITHUB_API_URL:-https://api.github.com}/repos/${GITHUB_REPOSITORY}/releases/tags/pp-clients" > "$RELJSON" \
-  && ASSET_URL=$(python3 -c "import json;d=json.load(open('$RELJSON'));print([a['url'] for a in d.get('assets',[]) if a['name']=='pp-clients.zip'][0])") \
-  && curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" -H "Accept: application/octet-stream" "$ASSET_URL" -o /tmp/build/pprel/pp-clients.zip \
-  && unzip -q /tmp/build/pprel/pp-clients.zip -d /tmp/build/pprel/x; then
-  TUT_FIND=$(find /tmp/build/pprel/x -path '*gs2c/html5Game.htm*' | grep -i 'BookofTut' | head -1 || true)
-  if [ -n "$TUT_FIND" ]; then
-    TUT_SRC=$(dirname "$TUT_FIND")
-    cp -a "$TUT_SRC" /tmp/build/pprel/BookofTutPM
-    TUTSYM=$(python3 - /tmp/build/pprel/BookofTutPM <<'PY'
+TUTSYM=""
+rm -rf /tmp/build/pprel
+mkdir -p /tmp/build/pprel/tut
+python3 "$GITHUB_WORKSPACE/scripts/hunt/mirror5.py" /tmp/build/pprel/tut BookofTut --max-files 1500 --max-mb 400 > /tmp/build/pprel/tut_harvest.log 2>&1 || echo "mirror5 exit nonzero (see log)"
+grep -E "alive demo hosts|BookofTut: type|unfilled" /tmp/build/pprel/tut_harvest.log || true
+TUTSTAT=$(python3 - <<'PY'
+import json
+try:
+    r = json.load(open('/tmp/build/pprel/tut/_pilot.json'))['BookofTut']
+    print(f"{r.get('type')} {r.get('files')} {r.get('unfilled_n')}")
+except Exception as e:
+    print('ERR', e)
+PY
+)
+echo "BookofTut harvest status: $TUTSTAT"
+if [ "$(echo "$TUTSTAT" | awk '{print $1}')" = gs2c ] && [ "$(echo "$TUTSTAT" | awk '{print $2}')" -ge 8 ] 2>/dev/null; then
+  cp -a /tmp/build/pprel/tut/BookofTut /tmp/build/pprel/BookofTutPM
+  [ -d /tmp/build/pprel/tut/_site ] && cp -a /tmp/build/pprel/tut/_site/. /tmp/build/pprel/site_root/ 2>/dev/null || true
+  TUTSYM=$(python3 - /tmp/build/pprel/BookofTutPM <<'PY'
 import re, sys, glob, os
 root = sys.argv[1]
 cands = [os.path.join(root, 'gs2c', 'html5Game.html')]
@@ -194,14 +200,11 @@ for p in cands:
         break
 PY
 )
-    TUTSYM=${TUTSYM:-vs20tut}
-    echo "BookofTutPM client from release: $TUT_SRC (symbol=$TUTSYM)"
-    TUT_OK=1
-  else
-    echo "PP-CLIENTS RELEASE: no BookofTut gs2c package found in zip"
-  fi
+  TUTSYM=${TUTSYM:-vs20tut}
+  echo "BookofTutPM client harvested (symbol=$TUTSYM)"
+  TUT_OK=1
 else
-  echo "PP-CLIENTS RELEASE FETCH FAILED — BookofTutPM skipped this run"
+  echo "BookofTut harvest GATE FAIL ($TUTSTAT) — BookofTutPM skipped this run"
 fi
 if [ "$GS2C_FETCHED" = 1 ]; then
   mkdir -p stage/app/Games stage/resources/views/frontend/games/list stage/public/games
@@ -235,6 +238,7 @@ if [ "$GS2C_FETCHED" = 1 ]; then
         # static harvest has no PHP loader — graft the doghouse donor loader,
         # sed its symbol to the detected one, then let the patcher rewrite it
         if [ -f /tmp/build/ppcli/public/vs20doghouse/gs2c/html5Game.php ] && [ -n "$TUTSYM" ]; then
+          [ -d /tmp/build/pprel/site_root ] && cp -a /tmp/build/pprel/site_root/. stage/ || true
           cp -a /tmp/build/ppcli/public/vs20doghouse/gs2c/html5Game.php "stage/public/games/BookofTutPM/gs2c/html5Game.php"
           sed -i "s/vs20doghouse/$TUTSYM/g" "stage/public/games/BookofTutPM/gs2c/html5Game.php"
           echo "GS2C BookofTutPM: donor loader grafted (symbol=$TUTSYM)"
@@ -660,8 +664,8 @@ GS2C_N=0
 : > /tmp/build/gs2c_passed.txt
 : > /tmp/build/gs2c_failed.txt
 if [ -s /tmp/build/gs2c_l.txt ]; then
-  for PAIRLINE in $(cat /tmp/build/gs2c_l.txt); do
-    NAME=${PAIRLINE%% *}; L=${PAIRLINE##* }
+  while read -r NAME L; do
+    [ -n "$NAME" ] || continue
     JAR=/tmp/build/jar_$NAME.txt; rm -f $JAR
     CODE=$(curl -s -c $JAR -o /tmp/build/go_$NAME.html -w '%{http_code}' -L "http://127.0.0.1:8099/game/$NAME/demo" || echo curlfail)
     BLADE=$(grep -c "gs2c/html5Game.php" /tmp/build/go_$NAME.html 2>/dev/null || echo 0)
@@ -679,7 +683,7 @@ if [ -s /tmp/build/gs2c_l.txt ]; then
       printf '%s' "$SPIN" > "/tmp/build/logs/e2e_spin_$NAME.txt" 2>/dev/null || true
       echo "$NAME" >> /tmp/build/gs2c_failed.txt
     fi
-  done
+  done < /tmp/build/gs2c_l.txt
   if [ -s /tmp/build/gs2c_failed.txt ]; then
     python3 - <<'PY'
 import sqlite3
@@ -742,13 +746,15 @@ if [ "$SIZE" -ge 2000000000 ]; then
 fi
 
 if ls part_* >/dev/null 2>&1; then
+PARTLIST=$(ls part_* | tr '\n' ' ' | sed 's/ $//')
+CATLINE=$(ls part_* | tr '\n' ' ' | sed 's/ $//; s/ / /g')
 cat > notes.md <<EOF
 **Goldsvet 8.5 — Amatic + Pragmatic Replit build** (auto-assembled $(date -u +%F))
 
-Full zip is ${SIZE} bytes (sha256 \`$SHA\`) — split into two parts. Reassemble:
+Full zip is ${SIZE} bytes (sha256 \`$SHA\`) — split into $(ls part_* | wc -l) parts. Reassemble:
 
 \`\`\`bash
-cat part_00 part_01 > amatic-replit-ready.zip
+cat $CATLINE > amatic-replit-ready.zip
 sha256sum amatic-replit-ready.zip   # must equal $SHA
 \`\`\`
 
@@ -768,6 +774,14 @@ EOF
 fi
 
 if ls part_* >/dev/null 2>&1; then
+  # drop stale parts from earlier runs (a leftover part_02 from a 3-part run
+  # would corrupt a 2-part reassembly)
+  for A in $(gh release view amatic-replit-ready -R "$REPO" --json assets --jq '.assets[].name' 2>/dev/null | grep -E '^part_' || true); do
+    case " $(ls part_*) " in
+      *" $A "*) ;; # still produced this run — keep (clobber overwrites)
+      *) gh release delete-asset "$A" -R "$REPO" -y 2>/dev/null || true ;;
+    esac
+  done
   gh release view amatic-replit-ready -R "$REPO" >/dev/null 2>&1 \
     && gh release upload amatic-replit-ready part_* -R "$REPO" --clobber \
     || gh release create amatic-replit-ready part_* -R "$REPO" \
