@@ -62,8 +62,9 @@ class Spin
         else $win_permission = true;
         if (!$win_permission) {
             $newSpinCnt ++;
-            goto NewSpin;
-        }
+            if ($newSpinCnt < 8) goto NewSpin;
+            $win_permission = true; // bounded reroll: pay after 8 (bank-credit fallback, RNG outcome stands)
+            }
         // распределить деньги в банк и записать в статистику
         SwitchMoney::set($changeBalance, $shop, $bank, $jpgs, $user, $game, $callbackUrl, $win['TotalWin'], $slotArea, $freeSpins, $logAndServer['Log'], $win_permission);
         //записать лог

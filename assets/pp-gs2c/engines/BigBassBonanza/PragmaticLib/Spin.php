@@ -71,8 +71,9 @@ class Spin
         else $win_permission = true;
         if (!$win_permission) {
             $newSpinCnt ++;
-            goto NewSpin;
-        }
+            if ($newSpinCnt < 8) goto NewSpin;
+            $win_permission = true; // bounded reroll: pay after 8 (bank-credit fallback, RNG outcome stands)
+            }
         // [repair] debug statement removed: var_dump('7');
         if (!$win_permission) goto NewSpin;
         // allocate money to the bank and write it down in statistics
