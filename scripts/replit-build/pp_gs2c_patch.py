@@ -31,6 +31,39 @@ GAME_MAP = {
     'GatesofOlympus': ('vs20olympgate', 'Gates of Olympus'),
     'SugarRush':      ('vs20sugarrush', 'Sugar Rush'),
     'SweetBonanza':   ('vs20pbonanza',  'Sweet Bonanza'),
+    # --- f19: 31 local-engine additions (engines vendored in repo) ---
+    'TheDogHouse':           ('vs20doghouse',   'The Dog House'),
+    'StarlightPrincess':     ('vs20starlight',  'Starlight Princess'),
+    'BigBassBonanza':        ('vs10bbbonanza',  'Big Bass Bonanza'),
+    'BiggerBassBonanza':     ('vs12bbb',        'Bigger Bass Bonanza'),
+    'BigBassKeepingitReel':  ('vs10bbkir',      'Big Bass - Keeping it Reel'),
+    'BigBassSplash':         ('vs10txbigbass',  'Big Bass Splash'),
+    'ChristmasBigBassBonanza': ('vs10bxmasbnza', 'Christmas Big Bass Bonanza'),
+    'BiggerBassBlizzard':    ('vs12bbbxmas',    'Bigger Bass Blizzard'),
+    'DayofDead':             ('vs20daydead',    'Day of Dead'),
+    'BonanzaGold':           ('vs20bonzgold',   'Bonanza Gold'),
+    'CandyVillage':          ('vs20candvil',    'Candy Ville'),
+    'TalesofEgypt':          ('vs20egypt',      'Tales of Egypt'),
+    'TweetyHouse':           ('vs20tweethouse', 'The Tweety House'),
+    'WildBooster':           ('vs20wildboost',  'Wild Booster'),
+    'WildPixies':            ('vs20wildpix',    'Wild Pixies'),
+    'ChilliHeat':            ('vs25chilli',     'Chilli Heat'),
+    'PyramidKing':           ('vs25pyramid',    'Pyramid King'),
+    'PirateGold':            ('vs40pirate',     'Pirate Gold'),
+    'WildWestGold':          ('vs40wildwest',   'Wild West Gold'),
+    'SafariKing':            ('vs50safariking', 'Safari King'),
+    'StrikingHot5':          ('vs5strh',        'Striking Hot 5'),
+    'Super7s':               ('vs5super7',      'Super 7s'),
+    'CowboysGold':           ('vs10cowgold',    'Cowboys Gold'),
+    'ReturnOfTtheDead':      ('vs10returndead', 'Return of the Dead'),
+    'VampiresvsWolves':      ('vs10vampwolf',   'Vampires vs Wolves'),
+    'WildBeachParty':        ('vs20bchprty',    'Wild Beach Party'),
+    'SweetBonanzaXmas':      ('vs20sbxmas',     'Sweet Bonanza Xmas'),
+    'TheTigerWarrior':       ('vs25tigerwar',   'The Tiger Warrior'),
+    'WildGladiators':        ('vs25gladiator',  'Wild Gladiators'),
+    'RiseOfSamurai3':        ('vs40samurai3',   'Rise of Samurai 3'),
+    # harvested client (release pp-clients) — symbol auto-detected from loader
+    'BookofTutPM':           (None,             'Book of Tut'),
 }
 
 OK_JSON = '{"error":0,"description":"OK"}'
@@ -53,17 +86,23 @@ LINT_FAILURES = []
 def patch_loader(path, name, sym, gname):
     s = open(path, encoding='utf-8', errors='replace').read()
     orig = s
-    # 1. client path rewrites (both loader template generations)
+    # 1. generic client path rewrites FIRST (handles harvested PM-shell
+    #    loaders whose paths use the host dir name, e.g. /games/BookofTut/)
+    s = re.sub(r'(["\'])/(?:public/)?games/[^"\']*/gs2c/',
+               lambda m: f'{m.group(1)}/games/{name}/gs2c/', s)
+    s = re.sub(r'(["\'])/(?:public/)?games/[^"\']*/server',
+               lambda m: f'{m.group(1)}/game/{name}/server', s)
+    # 2. known-symbol rewrites (ahmed_bet loader generations)
     s = s.replace(f'/public/{sym}/gs2c/', f'/games/{name}/gs2c/')
     s = s.replace(f'/games/{sym}/gs2c/', f'/games/{name}/gs2c/')
-    # 2. gameService -> engine endpoint (after path rewrite)
+    # 3. gameService -> engine endpoint (after path rewrite)
     s = s.replace(f'/games/{name}/gs2c/v3/gameService', f'/game/{name}/server')
     s = s.replace(f'/public/{sym}/gs2c/v3/gameService', f'/game/{name}/server')
     s = s.replace(f'/games/{sym}/gs2c/v3/gameService', f'/game/{name}/server')
-    # 3. balance / close endpoints
+    # 4. balance / close endpoints
     s = s.replace(f'/public/{sym}/server', f'/game/{name}/server')
     s = s.replace(f'/game/{sym}/server', f'/game/{name}/server')
-    # 4. auxiliary endpoints -> static files inside the client dir
+    # 5. auxiliary endpoints -> static files inside the client dir
     s = s.replace('"/gs2c/logout.do"', f'"/games/{name}/gs2c/logout.do"')
     s = s.replace('"/gs2c/jackpot/reload.do"', f'"/games/{name}/gs2c/jackpot/reload.do"')
     s = s.replace('"/gs2c/saveSettings.do"', f'"/games/{name}/gs2c/saveSettings.do"')
@@ -195,16 +234,28 @@ def main():
             raise SystemExit(1)
         patch_loader(loader, name, sym, gname)
         s = open(loader, encoding='utf-8', errors='replace').read()
+        # auto-detect the client symbol when the map has none (harvested clients)
+        sym_eff = sym
+        if not sym_eff:
+            m = re.search(r'games/vs([a-z0-9]+)/', s)
+            sym_eff = 'vs' + m.group(1) if m else None
         checks = [
             (f'/game/{name}/server' in s, 'gameService endpoint rewrite'),
-            (f'/games/{name}/gs2c/common/games-html5/games/vs/{sym}/' in s,
-             'datapath rewrite'),
-            ('mgckey' in s, 'mgckey config'),
+            (f'/games/{name}/gs2c/' in s, 'client path rewrite'),
+            (f'/games/{name}/gs2c/common/games-html5/games/vs/{sym_eff}/' in s
+             if sym_eff else '/games-html5/' in s, 'datapath rewrite'),
         ]
-        for ok, what in checks:
-            if not ok:
-                print(f'PP-GS2C GATE FAIL {name}: loader {what}')
-                raise SystemExit(1)
+        if sym:
+            checks.append(('mgckey' in s, 'mgckey config'))
+        bad = [what for ok, what in checks if not ok]
+        if bad:
+            print(f'PP-GS2C GATE FAIL {name}: loader ' + ', '.join(bad))
+            print(f'  sym_eff={sym_eff} loader first 1200 chars:')
+            print('  ' + s[:1200].replace('\n', ' ')[:1200])
+            for line in s.split('\n'):
+                if 'http' in line and ('gs2c' in line or 'gameService' in line or 'server' in line):
+                    print(f'  URL-LINE: {line.strip()[:300]}')
+            raise SystemExit(1)
         add_static_endpoints(cli)
         for f in eng_files:
             if f.endswith('.php') and not php_lint(f, php):

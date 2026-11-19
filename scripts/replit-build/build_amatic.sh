@@ -144,35 +144,65 @@ else
   echo '{"pm": []}' > /tmp/build/pm_names.json
 fi
 
-# ---------- 3b-ter. gs2c Pragmatic starter (local-math engines + real PP clients) ----------
-# Engines: louisbrant/goldsvet-pragmatic (VanguardLTE-native SlotSettings/Server
-#          + PragmaticLib math; no external spin server).
-# Clients: babyline00/ahmed_bet public/vs* (full official PP gs2c clients +
-#          html5Game.php loader, saveSettings.do/stats.do static endpoints).
+# ---------- 3b-ter. gs2c Pragmatic games (34: 3 starter + 31 f19 expansion) ----------
+# Engines: COMMITTED in the repo (assets/pp-gs2c/engines — all sqlite-repaired:
+#           per-row Jackpots increment, stat_* columns, no CheckRtp governor,
+#           no live var_dumps). The 3 f17 engines (GO/SB/SR) are untouched.
+# Clients: babyline00/ahmed_bet public/vs* (official PP gs2c packages) for 33
+#          games; BookofTutPM from our own release `pp-clients` (demo4 harvest).
 # The loader is rewritten to point gameService/RELOAD_BALANCE/CLOSE_GAME at the
 # platform engine endpoint /game/<Name>/server (CSRF-exempt route that already
 # serves AM/PM spins). Aux .do endpoints become static files — no new routes.
 : > /tmp/build/gs2c_names.txt
+: > /tmp/build/gs2c_l.txt
 GS2C_FETCHED=1
-# Engines are COMMITTED in the repo (assets/pp-gs2c/engines, incl. the sqlite
-# Jackpots fix and the SugarRush WinChecker syntax repair) — no clone needed.
-# Clients come from the pinned ahmed_bet sparse clone (full official PP gs2c packages).
-rm -rf /tmp/build/ppcli
+PP_PAIRS="GatesofOlympus:vs20olympgate SugarRush:vs20sugarrush SweetBonanza:vs20pbonanza TheDogHouse:vs20doghouse StarlightPrincess:vs20starlight BigBassBonanza:vs10bbbonanza BiggerBassBonanza:vs12bbb BigBassKeepingitReel:vs10bbkir BigBassSplash:vs10txbigbass ChristmasBigBassBonanza:vs10bxmasbnza BiggerBassBlizzard:vs12bbbxmas DayofDead:vs20daydead BonanzaGold:vs20bonzgold CandyVillage:vs20candvil TalesofEgypt:vs20egypt TweetyHouse:vs20tweethouse WildBooster:vs20wildboost WildPixies:vs20wildpix ChilliHeat:vs25chilli PyramidKing:vs25pyramid PirateGold:vs40pirate WildWestGold:vs40wildwest SafariKing:vs50safariking StrikingHot5:vs5strh Super7s:vs5super7 CowboysGold:vs10cowgold ReturnOfTtheDead:vs10returndead VampiresvsWolves:vs10vampwolf WildBeachParty:vs20bchprty SweetBonanzaXmas:vs20sbxmas TheTigerWarrior:vs25tigerwar WildGladiators:vs25gladiator RiseOfSamurai3:vs40samurai3 BookofTutPM:RELEASE"
+rm -rf /tmp/build/ppcli /tmp/build/pprel
+SYM_LIST=$(for pair in $PP_PAIRS; do SYM=${pair##*:}; [ "$SYM" != RELEASE ] && echo "public/$SYM"; done)
 git clone -q --depth 1 --filter=blob:none --sparse https://github.com/babyline00/ahmed_bet /tmp/build/ppcli 2>/tmp/build/gs2c_clone_cli.log \
-  && (cd /tmp/build/ppcli && git sparse-checkout set public/vs20olympgate public/vs20sugarrush public/vs20pbonanza) \
+  && (cd /tmp/build/ppcli && git sparse-checkout set $SYM_LIST) \
   || { echo "PP CLIENT sparse clone FAILED (see /tmp/build/gs2c_clone_cli.log)"; GS2C_FETCHED=0; }
+# BookofTutPM client comes from the release `pp-clients` (demo4 PM harvest).
+# Fail-closed: if the fetch fails the game is skipped this run (never faked).
+TUT_OK=0
+mkdir -p /tmp/build/pprel
+RELJSON=/tmp/build/pprel/rel.json
+if curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" "${GITHUB_API_URL:-https://api.github.com}/repos/${GITHUB_REPOSITORY}/releases/tags/pp-clients" > "$RELJSON" \
+  && ASSET_URL=$(python3 -c "import json;d=json.load(open('$RELJSON'));print([a['url'] for a in d.get('assets',[]) if a['name']=='pp-clients.zip'][0])") \
+  && curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" -H "Accept: application/octet-stream" "$ASSET_URL" -o /tmp/build/pprel/pp-clients.zip \
+  && unzip -q /tmp/build/pprel/pp-clients.zip -d /tmp/build/pprel/x \
+  && TUT_SRC=$(dirname "$(find /tmp/build/pprel/x -path '*gs2c/html5Game.php' | grep -i 'BookofTut' | head -1)") \
+  && [ -n "$TUT_SRC" ] \
+  && cp -a "$TUT_SRC" /tmp/build/pprel/BookofTutPM; then
+  TUT_OK=1
+  echo "BookofTutPM client from release: $TUT_SRC"
+else
+  echo "PP-CLIENTS RELEASE FETCH FAILED — BookofTutPM skipped this run"
+fi
 if [ "$GS2C_FETCHED" = 1 ]; then
   mkdir -p stage/app/Games stage/resources/views/frontend/games/list stage/public/games
-  for pair in "GatesofOlympus:vs20olympgate" "SugarRush:vs20sugarrush" "SweetBonanza:vs20pbonanza"; do
+  for pair in $PP_PAIRS; do
     NAME=${pair%%:*}; SYM=${pair##*:}
+    CLISRC=""
+    if [ "$SYM" = RELEASE ]; then
+      [ "$TUT_OK" = 1 ] && CLISRC=/tmp/build/pprel/BookofTutPM
+    else
+      [ -d "/tmp/build/ppcli/public/$SYM" ] && CLISRC="/tmp/build/ppcli/public/$SYM"
+    fi
+    # spin-test line count from the client symbol prefix (vs5/vs10/vs12/vs20/vs25/vs40/vs50)
+    case "$SYM" in
+      vs5*) L=5 ;; vs10*) L=10 ;; vs12*) L=12 ;; vs20*) L=20 ;;
+      vs25*) L=25 ;; vs40*) L=40 ;; vs50*) L=50 ;; RELEASE) L=10 ;; *) L=20 ;;
+    esac
     rm -rf "stage/app/Games/$NAME" "stage/public/games/$NAME"
-    if [ -d "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" ] && [ -d "/tmp/build/ppcli/public/$SYM" ]; then
+    if [ -d "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" ] && [ -n "$CLISRC" ] && [ -f "$GITHUB_WORKSPACE/assets/pp-gs2c/views/$NAME.blade.php" ]; then
       cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" "stage/app/Games/$NAME"
-      cp -a "/tmp/build/ppcli/public/$SYM" "stage/public/games/$NAME"
+      cp -a "$CLISRC" "stage/public/games/$NAME"
       cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/views/$NAME.blade.php" "stage/resources/views/frontend/games/list/$NAME.blade.php"
       echo "$NAME" >> /tmp/build/gs2c_names.txt
+      echo "$NAME $L" >> /tmp/build/gs2c_l.txt
     else
-      echo "GS2C MISSING SOURCES for $NAME (eng: $(ls "$GITHUB_WORKSPACE/assets/pp-gs2c/engines" 2>/dev/null | tr '\n' ' '); cli: $(ls /tmp/build/ppcli/public 2>/dev/null | tr '\n' ' '))"
+      echo "GS2C MISSING SOURCES for $NAME (eng: $([ -d "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" ] && echo ok || echo MISSING); cli: ${CLISRC:-NONE}; blade: $([ -f "$GITHUB_WORKSPACE/assets/pp-gs2c/views/$NAME.blade.php" ] && echo ok || echo MISSING))"
     fi
   done
   if [ -s /tmp/build/gs2c_names.txt ]; then
@@ -183,7 +213,7 @@ if [ "$GS2C_FETCHED" = 1 ]; then
       echo "composer not present — relying on dynamic psr-4 autoloading for app/Games"
     fi
   fi
-  echo "GS2C starter names: $(tr '\n' ' ' < /tmp/build/gs2c_names.txt)"
+  echo "GS2C names: $(tr '\n' ' ' < /tmp/build/gs2c_names.txt)"
 fi
 
 # ---------- 3c. AM publish list (JS-manifest verification is authoritative) ----------
@@ -298,7 +328,7 @@ if fixed:
 con.close()
 PY
 
-# ---------- 4b. gs2c Pragmatic starter w_games rows ----------
+# ---------- 4b. gs2c Pragmatic w_games rows (34 games, ids 9101-9134) ----------
 if [ -s /tmp/build/gs2c_names.txt ]; then
   python3 - "$GITHUB_WORKSPACE/sql/w_games-gs2c-starter.sql" <<'PY'
 import sqlite3, sys, pathlib
@@ -310,9 +340,16 @@ for stmt in [s.strip() for s in '\n'.join(lines).split(';') if s.strip()]:
     con.execute(stmt)
     n += 1
 con.commit()
-print(f'GS2C sql: {n} statements applied')
-for row in con.execute("SELECT id,name,title,view,shop_id,device,gamebank FROM w_games WHERE name IN ('GatesofOlympus','SugarRush','SweetBonanza') ORDER BY id"):
-    print('GS2C row:', row)
+names = [x.strip() for x in open('/tmp/build/gs2c_names.txt') if x.strip()]
+qs = ','.join('?' * len(names))
+rows = con.execute(f'SELECT id,name,view FROM w_games WHERE name IN ({qs}) ORDER BY id', names).fetchall()
+print(f'GS2C sql: {n} statements applied; {len(rows)}/{len(names)} wired games have w_games rows')
+for r in rows:
+    print('GS2C row:', r)
+if len(rows) != len(names):
+    missing = set(names) - {r[1] for r in rows}
+    print(f'GS2C SQL FAIL: no w_games row for {sorted(missing)}')
+    raise SystemExit(1)
 con.close()
 PY
   echo "GS2C w_games rows applied"
@@ -413,10 +450,11 @@ All American Poker, All Ways Fruits, All Ways Joker, Bingo). No other providers.
 - `.env` ships a fresh APP_KEY, sqlite driver, APP_DEBUG=false.
 - Partially-mirrored AM games are in `public/games/` but hidden — enable them in
   the admin (Games -> view) once you audit their assets.
-- **gs2c Pragmatic starter** (GatesofOlympus, SugarRush, SweetBonanza): real
+- **gs2c Pragmatic games** ($GS2C_N e2e-verified): real
   Pragmatic Play gs2c clients with local-math engines (no external spin server).
   Engine per game in `app/Games/<Name>/`, client in `public/games/<Name>/gs2c/`,
   spins via `/game/<Name>/server` (the platform engine endpoint, CSRF-exempt).
+  Games that failed e2e are hidden (view=0) — enable only after fixing them.
 - Spins work over HTTP; live websocket features may not connect via Replit proxy.
 - Audit engines (RtpControlCount) before real money; licensing is your responsibility.
 EOF
@@ -569,25 +607,54 @@ curl -s -o /dev/null -w 'HTTP GET /login -> %{http_code}\n' http://127.0.0.1:809
 head -c 200 /tmp/build/logs/root.html || true
 
 # ---------- 8b. gs2c Pragmatic end-to-end (open game -> doInit -> doSpin) ----------
-GS2C_E2E=0
-if [ -s /tmp/build/gs2c_names.txt ]; then
-  for NAME in $(cat /tmp/build/gs2c_names.txt); do
+# Sticky per game: PASS -> stays published (view=1); FAIL -> HIDDEN (view=0,
+# dropped from the controller bypass list). A failing game is NEVER shipped
+# visible — hiding is the gate, the build itself continues.
+GS2C_PASSN=0
+GS2C_N=0
+: > /tmp/build/gs2c_passed.txt
+: > /tmp/build/gs2c_failed.txt
+if [ -s /tmp/build/gs2c_l.txt ]; then
+  for PAIRLINE in $(cat /tmp/build/gs2c_l.txt); do
+    NAME=${PAIRLINE%% *}; L=${PAIRLINE##* }
     JAR=/tmp/build/jar_$NAME.txt; rm -f $JAR
     CODE=$(curl -s -c $JAR -o /tmp/build/go_$NAME.html -w '%{http_code}' -L "http://127.0.0.1:8099/game/$NAME/demo" || echo curlfail)
     BLADE=$(grep -c "gs2c/html5Game.php" /tmp/build/go_$NAME.html 2>/dev/null || echo 0)
     INIT=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doInit&index=1&counter=0" | head -c 60000)
-    SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=20&index=1&counter=1&bl=0&pur=1" | head -c 60000)
-    echo "GS2C E2E $NAME: go=$CODE bladeRefs=$BLADE"
+    SPIN=$(curl -s -b $JAR -X POST "http://127.0.0.1:8099/game/$NAME/server" --data "action=doSpin&c=0.10&l=$L&index=1&counter=1&bl=0&pur=1" | head -c 60000)
+    echo "GS2C E2E $NAME (l=$L): go=$CODE bladeRefs=$BLADE"
     echo "  doInit: $(echo "$INIT" | head -c 150)"
     echo "  doSpin: $(echo "$SPIN" | head -c 150)"
     if echo "$INIT" | grep -qE "balance=[0-9]" && echo "$SPIN" | grep -qE "tw=[0-9]" && echo "$SPIN" | grep -qE "(^|&)s=[0-9]"; then
       echo "  GS2C E2E $NAME: PASS"
+      echo "$NAME" >> /tmp/build/gs2c_passed.txt
     else
-      echo "  GS2C E2E $NAME: FAIL (doInit/doSpin invalid)"
-      GS2C_E2E=2
+      echo "  GS2C E2E $NAME: FAIL — will be HIDDEN"
+      printf '%s' "$INIT" > "/tmp/build/logs/e2e_init_$NAME.txt" 2>/dev/null || true
+      printf '%s' "$SPIN" > "/tmp/build/logs/e2e_spin_$NAME.txt" 2>/dev/null || true
+      echo "$NAME" >> /tmp/build/gs2c_failed.txt
     fi
   done
-  if [ "$GS2C_E2E" = 2 ]; then echo "GS2C E2E FAILED"; exit 1; fi
+  if [ -s /tmp/build/gs2c_failed.txt ]; then
+    python3 - <<'PY'
+import sqlite3
+failed = [x.strip() for x in open('/tmp/build/gs2c_failed.txt') if x.strip()]
+passed = [x.strip() for x in open('/tmp/build/gs2c_passed.txt') if x.strip()]
+con = sqlite3.connect('/tmp/build/stage/database/database.sqlite')
+qs = ','.join('?' * len(failed))
+con.execute(f'UPDATE w_games SET view = 0 WHERE name IN ({qs})', failed)
+con.commit()
+left = con.execute('SELECT COUNT(*) FROM w_games WHERE id BETWEEN 9101 AND 9134 AND view = 1').fetchone()[0]
+con.close()
+open('/tmp/build/stage/app/Games/pp_gs2c_list.php', 'w').write('<?php\nreturn ' + repr(passed) + ';\n')
+print(f'HIDDEN (view=0): {", ".join(failed)}')
+print(f'visible gs2c rows now: {left}; controller bypass list rewritten: {len(passed)} games')
+PY
+    echo "GS2C E2E FAILURES (hidden, not shipped): $(tr '\n' ' ' < /tmp/build/gs2c_failed.txt)"
+  fi
+  GS2C_PASSN=$(wc -l < /tmp/build/gs2c_passed.txt)
+  GS2C_N=$GS2C_PASSN
+  echo "GS2C E2E TOTAL: $GS2C_PASSN passed, $(wc -l < /tmp/build/gs2c_failed.txt) hidden"
 fi
 LLOG=$(ls -t /tmp/build/stage/storage/logs/laravel*.log 2>/dev/null | head -1)
 if [ -n "${LLOG:-}" ]; then
@@ -617,9 +684,13 @@ cd /tmp/build
 python3 -m zipfile -t final.zip && echo "ZIP TEST OK"
 SIZE=$(stat -c%s final.zip); SHA=$(sha256sum final.zip | awk '{print $1}')
 PUB=$(wc -l < /tmp/build/am_names.txt)
-GS2C_N=$(wc -l < /tmp/build/gs2c_names.txt 2>/dev/null || echo 0)
+# GS2C_N = e2e-PASSED gs2c games only (failures are hidden, not shipped)
+GS2C_N=${GS2C_PASSN:-0}
+GS2C_LIST=$(tr '\n' ',' < /tmp/build/gs2c_passed.txt | sed 's/,$//; s/,/, /g')
+[ -n "$GS2C_LIST" ] || GS2C_LIST="(none)"
 TOTAL_PUB=$((PUB + GS2C_N))
 echo "FINAL: $SIZE bytes  sha256=$SHA  published=$TOTAL_PUB (incl. $GS2C_N gs2c)"
+echo "GS2C PASSED: $GS2C_LIST"
 if [ "$SIZE" -ge 2000000000 ]; then
   split -b 1900000000 -d final.zip part_
   ls -la part_*
@@ -636,7 +707,7 @@ cat part_00 part_01 > amatic-replit-ready.zip
 sha256sum amatic-replit-ready.zip   # must equal $SHA
 \`\`\`
 
-Lobby: **Amatic + PM + gs2c Pragmatic starter** — $TOTAL_PUB published ($PUB AM/PM + $GS2C_N gs2c real-PP games with local math).
+Lobby: **Amatic + PM + gs2c Pragmatic** — $TOTAL_PUB published ($PUB AM/PM + $GS2C_N gs2c real-PP games with local math).
 Deploy steps in \`README-REPLIT.md\` inside the zip.
 EOF
 else
@@ -645,7 +716,7 @@ cat > notes.md <<EOF
 
 - Single asset: **final.zip** — ${SIZE} bytes, sha256 \`$SHA\`
 - Full Laravel platform; lobby limited to **Amatic + Pragmatic-style PM games** — $PUB published (AM verified against per-game JS manifests incl. settings__<hash>.js boot scripts; PM harvested manifest-first from the reference demo), incomplete games hidden
-- **gs2c Pragmatic starter: $GS2C_N real PP games with local math engines** — GatesofOlympus, SugarRush, SweetBonanza (engines: VanguardLTE-native PragmaticLib; clients: official gs2c packages; spins via \`/game/<Name>/server\`; verified end-to-end in CI: open → doInit → doSpin). **Total published: $TOTAL_PUB**
+- **gs2c Pragmatic: $GS2C_N real PP games with local math engines** — $GS2C_LIST (engines: VanguardLTE-native PragmaticLib, sqlite-repaired; clients: official gs2c packages; spins via \`/game/<Name>/server\`; verified end-to-end in CI: open → doInit → doSpin)
 - DB: \`database/database.sqlite\` pre-converted, curated lobby; MySQL legacy path included
 - Deploy: import into a blank Repl -> \`unzip\` -> Run. Steps in \`README-REPLIT.md\` inside the zip.
 EOF
