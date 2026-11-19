@@ -84,3 +84,82 @@ pattern is what's valuable; the keys are not.
 
 **Standing note:** the Pragmatic demo tunnel from the earlier study also remains unbuilt; both tunnel
 paths now share the same "await explicit approval" gate.
+
+---
+
+# Part 2 — Tunneling live casino (Evolution) — follow-up study
+
+Question: "what about tunneling live casino Evolution?" Answer: **a PP-style browser tunnel is
+impossible; the only working "tunnel" is a wallet-relay through an aggregator — the NSEVO pattern
+below.** Documented, NOT built.
+
+## T1. Browser-level tunnel (the PP approach) — ❌ impossible for Evolution
+
+The PP tunnel works because Pragmatic runs a free public demo service (`demogamesfree.ppgames.net`)
+that accepts anonymous browser sessions (openGame.do → mgckey → gameService). Evolution has:
+- **no public demo tables** — every table exists only inside a licensed operator's session;
+- **operator-issued entry URLs** (`/ua/v1/` response `entry`) that are bound to the player session
+  created by that operator's casino key — there is no anonymous equivalent of an `mgckey`;
+- **token-locked video streams** (live dealer HLS/DASH delivered only through the operator-issued
+  session/origin), region + currency locks on the session group.
+
+So there is nothing at the browser layer to tunnel to. Any "free Evolution tunnel" advertised in the
+wild is actually T2 (someone's aggregator session being resold).
+
+## T2. Wallet-relay tunnel via an aggregator — ✅ the working pattern (gray)
+
+Proven reference found in the wild: `nickola-team/majorslot` → `NSEVOController.php` (325 lines),
+plus the same shape in Ezugi bridges (`gitthegamer/tgtw _EzugiController.php` with Ezugi's
+`fetchbykey.aspx`/`makeTransfer.aspx`/`getBalance.aspx` wallet API). The flow:
+
+```
+player → your goldsvet lobby
+  makegamelink(): POST {AGGREGATOR_API}/api/game/launch_new  {agentKey, user_id, password}
+       ← {error:0, data:{url}}          ← aggregator returns a game URL from THEIR licensed session
+  iframe that url                         (Evolution tables render; video + UI are the aggregator's)
+player bets → Evolution calls the AGGREGATOR's wallet (their operator contract)
+  aggregator calls YOUR platform relay endpoints (balance_new / transaction_new/withdraw / deposit
+  with apiKey) → NSEVOController translates them into VanguardLTE user balance changes + StatGame rows
+settlement: the aggregator settles with the licensed operator; you settle with the aggregator
+```
+
+Adaptation to your platform = the §4 checklist + one extra piece: the **wallet-relay endpoints**
+(`balance_new`/`withdraw`/`deposit` handlers) that the aggregator calls — small, same idempotency +
+authToken discipline as the direct bridge.
+
+### What you'd need (before any build)
+- an **aggregator account** (agentKey/apiKey) that actually offers Evolution tables — paid, contract
+  with the aggregator, often crypto-settled; this is the gray part: their sub-license may not cover
+  your jurisdiction, and the operator chain is opaque.
+- a public HTTPS host for the relay endpoints (VPS; Replit cannot serve live-casino traffic).
+
+### Honest risk list (T2)
+1. **Funds custody** — player money routes through the aggregator's ledger before settlement; the
+   aggregator can stall, cap, or vanish with float. Only work with staged deposits you can afford to
+   lose.
+2. **Single point of failure** — aggregator down = whole live section down; they rate-limit and can
+   flag/ban agent accounts (this kills gray accounts regularly).
+3. **No math/stream control** — RTP, table availability, currencies, localization are theirs.
+4. **Legal exposure** — you're reselling access to a licensed casino's tables without your own license;
+   jurisdictions treat this as unlicensed gambling operation. Compliance is yours.
+5. **Latency** — every bet = 2+ extra API hops (you ↔ aggregator ↔ operator wallet).
+
+## T3. Direct operator relay (the legit version of the same file) — recommended over T2
+
+If you obtain **direct** operator credentials (Evolution operator agreement or an aggregator that
+exposes the standard `/ua/v1/` contract under YOUR brand), `EVOController.php` ports onto your platform
+as-is (§4 checklist) — no relay-of-relay, funds settle 1:1 in your own wallet callbacks, and the CI
+story is testable (mock Evolution server). Same file, one less middleman, none of T2's custody risk.
+
+## Status / decision
+
+- Nothing built. Both tunnels (PP demo + Evolution) sit behind the same explicit-approval gate.
+- If you want to proceed, the realistic paths are: **(a)** you obtain aggregator credentials → I build
+  the T2 relay (bridge + wallet endpoints + mock-aggregator CI tests, 1-2 turns), or **(b)** you obtain
+  direct operator credentials → I port `EVOController` (T3), or **(c)** RNG live-style emulation
+  (goldsvet-native, no third party, no real dealers).
+- References collected this round: majorslot `NSEVOController.php` (aggregator launch/wallet flow,
+  `api/game/launch_new`, `balance_new`, `transaction_new/withdraw|deposit`), `gitthegamer/tgtw` Ezugi
+  bridge (operator wallet API shape), `mafiono/bethappy` Ezugi plugin (empty shim — same author as the
+  PP tunnel reference, no usable code).
+
