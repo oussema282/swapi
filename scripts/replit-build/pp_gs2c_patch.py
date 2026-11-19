@@ -86,11 +86,12 @@ LINT_FAILURES = []
 def patch_loader(path, name, sym, gname):
     s = open(path, encoding='utf-8', errors='replace').read()
     orig = s
-    # 1. generic client path rewrites FIRST (handles harvested PM-shell
-    #    loaders whose paths use the host dir name, e.g. /games/BookofTut/)
-    s = re.sub(r'(["\'])/(?:public/)?games/[^"\']*/gs2c/',
+    # 1. generic client path rewrites FIRST — normalize ANY quoted absolute
+    #    path containing /gs2c/ (shapes: /public/<sym>/gs2c/, /games/<sym>/gs2c/,
+    #    /public/games/<sym>/gs2c/, host-dir forms like /games/BookofTut/gs2c/)
+    s = re.sub(r'(["\'])/[^"\']*?/gs2c/',
                lambda m: f'{m.group(1)}/games/{name}/gs2c/', s)
-    s = re.sub(r'(["\'])/(?:public/)?games/[^"\']*/server',
+    s = re.sub(r'(["\'])/[^"\']*?/server',
                lambda m: f'{m.group(1)}/game/{name}/server', s)
     # 2. known-symbol rewrites (ahmed_bet loader generations)
     s = s.replace(f'/public/{sym}/gs2c/', f'/games/{name}/gs2c/')
