@@ -162,7 +162,10 @@ SYM_LIST=$(for pair in $PP_PAIRS; do SYM=${pair##*:}; [ "$SYM" != RELEASE ] && e
 git clone -q --depth 1 --filter=blob:none --sparse https://github.com/babyline00/ahmed_bet /tmp/build/ppcli 2>/tmp/build/gs2c_clone_cli.log \
   && (cd /tmp/build/ppcli && git sparse-checkout set $SYM_LIST) \
   || { echo "PP CLIENT sparse clone FAILED (see /tmp/build/gs2c_clone_cli.log)"; GS2C_FETCHED=0; }
-# BookofTutPM client comes from the release `pp-clients` (demo4 PM harvest).
+# BookofTutPM client comes from the release `pp-clients` (demo4 PM harvest —
+# STATIC gs2c package: html5Game.html, no PHP loader). We stage it and graft a
+# donor PHP loader (ahmed_bet generation, symbol-agnostic apart from the
+# symbol string) with the client's real symbol detected from its statics.
 # Fail-closed: if the fetch fails the game is skipped this run (never faked).
 TUT_OK=0
 mkdir -p /tmp/build/pprel
@@ -170,12 +173,33 @@ RELJSON=/tmp/build/pprel/rel.json
 if curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" "${GITHUB_API_URL:-https://api.github.com}/repos/${GITHUB_REPOSITORY}/releases/tags/pp-clients" > "$RELJSON" \
   && ASSET_URL=$(python3 -c "import json;d=json.load(open('$RELJSON'));print([a['url'] for a in d.get('assets',[]) if a['name']=='pp-clients.zip'][0])") \
   && curl -sfL -H "Authorization: token ${GITHUB_TOKEN:-}" -H "Accept: application/octet-stream" "$ASSET_URL" -o /tmp/build/pprel/pp-clients.zip \
-  && unzip -q /tmp/build/pprel/pp-clients.zip -d /tmp/build/pprel/x \
-  && TUT_SRC=$(dirname "$(find /tmp/build/pprel/x -path '*gs2c/html5Game.php' | grep -i 'BookofTut' | head -1)") \
-  && [ -n "$TUT_SRC" ] \
-  && cp -a "$TUT_SRC" /tmp/build/pprel/BookofTutPM; then
-  TUT_OK=1
-  echo "BookofTutPM client from release: $TUT_SRC"
+  && unzip -q /tmp/build/pprel/pp-clients.zip -d /tmp/build/pprel/x; then
+  TUT_FIND=$(find /tmp/build/pprel/x -path '*gs2c/html5Game.htm*' | grep -i 'BookofTut' | head -1 || true)
+  if [ -n "$TUT_FIND" ]; then
+    TUT_SRC=$(dirname "$TUT_FIND")
+    cp -a "$TUT_SRC" /tmp/build/pprel/BookofTutPM
+    TUTSYM=$(python3 - /tmp/build/pprel/BookofTutPM <<'PY'
+import re, sys, glob, os
+root = sys.argv[1]
+cands = [os.path.join(root, 'gs2c', 'html5Game.html')]
+cands += sorted(glob.glob(root + '/gs2c/**/*.js', recursive=True))[:80]
+for p in cands:
+    try:
+        t = open(p, encoding='utf-8', errors='replace').read()
+    except Exception:
+        continue
+    m = re.search(r'games/vs([0-9a-z]+)/', t)
+    if m:
+        print('vs' + m.group(1))
+        break
+PY
+)
+    TUTSYM=${TUTSYM:-vs20tut}
+    echo "BookofTutPM client from release: $TUT_SRC (symbol=$TUTSYM)"
+    TUT_OK=1
+  else
+    echo "PP-CLIENTS RELEASE: no BookofTut gs2c package found in zip"
+  fi
 else
   echo "PP-CLIENTS RELEASE FETCH FAILED — BookofTutPM skipped this run"
 fi
@@ -199,6 +223,27 @@ if [ "$GS2C_FETCHED" = 1 ]; then
       cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/engines/$NAME" "stage/app/Games/$NAME"
       cp -a "$CLISRC" "stage/public/games/$NAME"
       cp -a "$GITHUB_WORKSPACE/assets/pp-gs2c/views/$NAME.blade.php" "stage/resources/views/frontend/games/list/$NAME.blade.php"
+      # device.js/addon.js live only in some ahmed_bet clients — donor-copy
+      # the generic UHT shims so the blade references never 404
+      for aux in device.js addon.js; do
+        if [ ! -f "stage/public/games/$NAME/$aux" ] && [ -f "/tmp/build/ppcli/public/vs20doghouse/$aux" ]; then
+          cp -a "/tmp/build/ppcli/public/vs20doghouse/$aux" "stage/public/games/$NAME/$aux"
+          echo "GS2C $NAME: donor-copied $aux"
+        fi
+      done
+      if [ "$NAME" = BookofTutPM ]; then
+        # static harvest has no PHP loader — graft the doghouse donor loader,
+        # sed its symbol to the detected one, then let the patcher rewrite it
+        if [ -f /tmp/build/ppcli/public/vs20doghouse/gs2c/html5Game.php ] && [ -n "$TUTSYM" ]; then
+          cp -a /tmp/build/ppcli/public/vs20doghouse/gs2c/html5Game.php "stage/public/games/BookofTutPM/gs2c/html5Game.php"
+          sed -i "s/vs20doghouse/$TUTSYM/g" "stage/public/games/BookofTutPM/gs2c/html5Game.php"
+          echo "GS2C BookofTutPM: donor loader grafted (symbol=$TUTSYM)"
+        else
+          echo "GS2C BookofTutPM: MISSING donor loader or symbol — removing"
+          rm -rf "stage/app/Games/BookofTutPM" "stage/public/games/BookofTutPM" "stage/resources/views/frontend/games/list/BookofTutPM.blade.php"
+          sed -i '/^BookofTutPM$/d; /^BookofTutPM /d' /tmp/build/gs2c_names.txt /tmp/build/gs2c_l.txt
+        fi
+      fi
       echo "$NAME" >> /tmp/build/gs2c_names.txt
       echo "$NAME $L" >> /tmp/build/gs2c_l.txt
     else
