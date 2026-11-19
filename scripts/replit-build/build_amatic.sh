@@ -681,6 +681,9 @@ if [ -s /tmp/build/gs2c_l.txt ]; then
       echo "  GS2C E2E $NAME: FAIL — will be HIDDEN"
       printf '%s' "$INIT" > "/tmp/build/logs/e2e_init_$NAME.txt" 2>/dev/null || true
       printf '%s' "$SPIN" > "/tmp/build/logs/e2e_spin_$NAME.txt" 2>/dev/null || true
+      echo "  FAIL-SPIN 1200: $(printf '%s' "$SPIN" | head -c 1200 | tr '\n' ' ')"
+      LLOGF=$(ls -t /tmp/build/stage/storage/logs/laravel*.log 2>/dev/null | head -1)
+      [ -n "$LLOGF" ] && grep -E "\.ERROR: " "$LLOGF" | tail -3 | cut -c1-400 | while IFS= read -r EL; do echo "  FAIL-LOG: $EL"; done
       echo "$NAME" >> /tmp/build/gs2c_failed.txt
     fi
   done < /tmp/build/gs2c_l.txt
