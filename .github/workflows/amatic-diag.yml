@@ -16,21 +16,10 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: trace demo asset chain
+      - name: extract d60 economy seed (temp — econ study)
         run: |
-          bash scripts/hunt/diag.sh
-          bash scripts/hunt/diag_pp2.sh
-          bash scripts/hunt/diag_pp3.sh
-          bash scripts/hunt/diag_pp4.sh
-          bash scripts/hunt/diag_pp5.sh
-          bash scripts/hunt/diag_pp6.sh
-          bash scripts/hunt/diag_pp7.sh
-          bash scripts/hunt/diag_pp8.sh
-          bash scripts/hunt/diag_pp9.sh
-          bash scripts/hunt/diag_pp10.sh
-          bash scripts/hunt/diag_pp11.sh
-          bash scripts/hunt/diag_pp12.sh
-          bash scripts/hunt/diag_pp13.sh
+          bash scripts/hunt/econ_dump.sh
+          cp /tmp/econ.log /tmp/diag.log 2>/dev/null || echo "no econ.log" > /tmp/diag.log
       - name: push diag log
         if: always()
         run: |
