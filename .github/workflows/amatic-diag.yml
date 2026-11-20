@@ -16,10 +16,13 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: extract d60 economy seed (temp — econ study)
+      - name: extract economy seed from release pack (temp — econ study)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          bash -x scripts/hunt/econ_dump.sh > /tmp/diag.log 2>&1 || true
-          tail -c 4000 /tmp/econ.log >> /tmp/diag.log 2>/dev/null || true
+          bash -x scripts/hunt/econ_from_release.sh > /tmp/diag.log 2>&1 || true
+          tail -c 6000 /tmp/econ.log >> /tmp/diag.log 2>/dev/null || true
           echo "STEP EXIT: captured"
       - name: push diag log
         if: always()
