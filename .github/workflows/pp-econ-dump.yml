@@ -1,0 +1,24 @@
+name: pp-econ-dump
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  econ:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: extract economy seed values from d60 dump
+        run: bash scripts/hunt/econ_dump.sh
+      - name: push econ log (relay)
+        if: always()
+        run: |
+          mkdir -p /tmp/logpush && cd /tmp/logpush && rm -rf .git
+          git init -q -b econ-log
+          cp /tmp/econ.log . 2>/dev/null || echo "no econ.log" > econ.log
+          git config user.email "log@bot" && git config user.name "logbot"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A
+          git commit -qm "econ log $(date -u +%FT%TZ)"
+          git push -qf origin econ-log
