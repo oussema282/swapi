@@ -187,3 +187,23 @@ With stake 0.2 and base-game wins mostly 0.02–4 TND, the balance is a random w
 - RNG figures were produced with the vendored strips/paytables exactly as delivered in release `amatic-replit-ready` v8 (asset sha256 `22136ac6…`).
 
 **Artifacts:** `docs/bonus-promocode-math-study.md` (this file), `scripts/study/bonus_sim.py` (sha256 cba3af77b428d0f9…), `scripts/study/bonus_sim-results.txt`, `scripts/study/bonus_sim-results-w10.txt`.
+
+---
+
+## Errata (2026-09-23, post-delivery verification against Spin.php guards)
+
+Re-reading each engine's actual `Spin.php` psym call-guard corrected three calibration figures
+(the simulator had replicated the DogHouse-style "psym every spin" guard for all engines):
+
+- **TalesofEgypt is NOT exploited.** Its `Spin.php` calls `getPsym` **only when scatters ≥ 3**, and its
+  backward index on the ascending table `0,0,2.5,7.5,50` is self-consistent (3→2.5×, 4→7.5×, 5→50×).
+  With the base-game scatter cap (`limit=1`) those counts are unreachable → scatter RTP = 0.
+  True RTP = lines-only ≈ **33–35%**. All §5 Tales rows (1,961% RTP, MC payouts 69–9,374 TND) are invalid.
+- **SafariKing exploit confirmed but smaller than reported**: `getPsym` is called every base spin, forward
+  index `[cnt−1]` on the *descending* table `4,4,4,0,0` → any single scatter pays 4× total bet.
+  Exact P(≥1 scatter) = 1−(1−0.1579)(1−0)(1−0.1429)(1−0)(1−0.125) = **0.3684** → scatter RTP = **147.4%**
+  (not 187%; total ≈ **204%**, not 244%). Exploit verdict and fix unchanged.
+- **BookofTutPM verdict unchanged** (guard replicated correctly: forward table, exploit is strip density).
+
+Operator impact: the promo-blacklist recommendation shrinks to **SafariKing + BookofTutPM**
+(TalesofEgypt is safe, merely low-RTP/stuck-class like the other capped line engines).
