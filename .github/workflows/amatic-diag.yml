@@ -18,8 +18,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: extract d60 economy seed (temp — econ study)
         run: |
-          bash scripts/hunt/econ_dump.sh
-          cp /tmp/econ.log /tmp/diag.log 2>/dev/null || echo "no econ.log" > /tmp/diag.log
+          bash -x scripts/hunt/econ_dump.sh > /tmp/diag.log 2>&1 || true
+          tail -c 4000 /tmp/econ.log >> /tmp/diag.log 2>/dev/null || true
+          echo "STEP EXIT: captured"
       - name: push diag log
         if: always()
         run: |
