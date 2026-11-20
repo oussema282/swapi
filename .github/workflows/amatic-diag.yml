@@ -16,14 +16,21 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: extract economy seed from release pack (temp — econ study)
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
+      - name: trace demo asset chain
         run: |
-          bash -x scripts/hunt/econ_from_release.sh > /tmp/diag.log 2>&1 || true
-          tail -c 6000 /tmp/econ.log >> /tmp/diag.log 2>/dev/null || true
-          echo "STEP EXIT: captured"
+          bash scripts/hunt/diag.sh
+          bash scripts/hunt/diag_pp2.sh
+          bash scripts/hunt/diag_pp3.sh
+          bash scripts/hunt/diag_pp4.sh
+          bash scripts/hunt/diag_pp5.sh
+          bash scripts/hunt/diag_pp6.sh
+          bash scripts/hunt/diag_pp7.sh
+          bash scripts/hunt/diag_pp8.sh
+          bash scripts/hunt/diag_pp9.sh
+          bash scripts/hunt/diag_pp10.sh
+          bash scripts/hunt/diag_pp11.sh
+          bash scripts/hunt/diag_pp12.sh
+          bash scripts/hunt/diag_pp13.sh
       - name: push diag log
         if: always()
         run: |
