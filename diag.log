@@ -1,0 +1,171 @@
++ UA='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0'
++ B=https://demo4.scriptcasino.ru
++ T=/tmp/pp13
++ mkdir -p /tmp/pp13
++ DP=/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold
++ echo '=== 1. sizes ==='
+=== 1. sizes ===
++ for U in "$DP/desktop/client/resources.json" "$DP/desktop/client/game.json" "$DP/desktop/build.js" "$DP/desktop/style.css"
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json /tmp/pp13/p.bin
++++ curl -s -o /tmp/pp13/p.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json
+++ CODE=200
++++ stat -c%s /tmp/pp13/p.bin
+++ SZ=105733
+++ echo '200 105733'
++ C='200 105733'
++ echo '/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json -> 200 105733'
+/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json -> 200 105733
++ for U in "$DP/desktop/client/resources.json" "$DP/desktop/client/game.json" "$DP/desktop/build.js" "$DP/desktop/style.css"
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json /tmp/pp13/p.bin
++++ curl -s -o /tmp/pp13/p.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json
+++ CODE=200
++++ stat -c%s /tmp/pp13/p.bin
+++ SZ=21866
+++ echo '200 21866'
++ C='200 21866'
++ echo '/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json -> 200 21866'
+/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json -> 200 21866
++ for U in "$DP/desktop/client/resources.json" "$DP/desktop/client/game.json" "$DP/desktop/build.js" "$DP/desktop/style.css"
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js /tmp/pp13/p.bin
++++ curl -s -o /tmp/pp13/p.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js
+++ CODE=200
++++ stat -c%s /tmp/pp13/p.bin
+++ SZ=3603936
+++ echo '200 3603936'
++ C='200 3603936'
++ echo '/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js -> 200 3603936'
+/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js -> 200 3603936
++ for U in "$DP/desktop/client/resources.json" "$DP/desktop/client/game.json" "$DP/desktop/build.js" "$DP/desktop/style.css"
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/style.css /tmp/pp13/p.bin
++++ curl -s -o /tmp/pp13/p.bin -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/style.css
+++ CODE=200
++++ stat -c%s /tmp/pp13/p.bin
+++ SZ=22000
+++ echo '200 22000'
++ C='200 22000'
++ echo '/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/style.css -> 200 22000'
+/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/style.css -> 200 22000
++ echo '=== 2. resources.json head (2KB) ==='
+=== 2. resources.json head (2KB) ===
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json /tmp/pp13/res.json
++++ curl -s -o /tmp/pp13/res.json -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/resources.json
+++ CODE=200
++++ stat -c%s /tmp/pp13/res.json
+++ SZ=105733
+++ echo '200 105733'
++ C='200 105733'
++ echo '200 105733'
+200 105733
++ head -c 2000 /tmp/pp13/res.json
+{
+"resources" : [{"type":"Texture","id":"0c5b719e782646945bd7edaa7dadc167","isInline":true,"data":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAA1BMVEX///+nxBvIAAAADElEQVQI12NgGNwAAACgAAFhJX1HAAAAAElFTkSuQmCC"},{"type":"Texture","id":"d302c6c320ce47549ac2b1c432828e9d","isInline":true,"data":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJEAAACfCAMAAADODMthAAABj1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8jHyD////39/f7+/v9/f0uKyvz8/NbWFlyb3AmIiNCPz9+e3zv7u9cWVqmpaWYlpexsLCLiIlmZGQ5NTafnZ40MDC2tbWtrKx3dHVJRkY9OTrCwcJvbG1ST1A5NjfFxMQrJyiRj5CEgoLh4OHm5uZYVVZ8eXq8u7tlYmKAfn5oZWZhXl/s7Oz5+fkoJCX4+PgmIyOnpab29fV4dXavra7p6emqqKhNSktraGnKycnHxsbQz8+Qjo7c29s2MjOjoaGXlZUBDfmLAAAARHRSTlMAT4j2uOJC+wV5JDfyA5dqpd3OaMAxCsikkHDVYFjbPSNHKr5bshWwAgjnoMQQGmOp2g136a27Dz7rdL8ne/jQvZyCVLAxIzcAAAYkSURBVHja7dz3WxNJGAfwkSQkMUFpoYuASjm6FVDPU2dTIKFJC0SalKMdxc55ot794ZeN2dme3Zmd3ZnHh/c3Q3b3w5dspq4ASPXkqT8g/KyA/+kTwLpuPhbU9fgmU8+jBkFfDY/Yga62CkbVepUZ6L5gXPcZke62CmbVepeJqEEwrwYmd5lQqljccQ/R1d9++jgh1sdPb9FrDxl8rNHF32xCqTbfoFe9/3DfQ6B3UK53iHTPc5G/eOUPm1BZmx+Kr/s9F0lt2XuorvdSG+e5SPrrrGtE69IPmIkmNKKJS9Gl6JcQ8XOv8fd9xN93Nn/tGn9tv7p/9JdYjPtHHPYh+etnczgW4W+8xuGYlsNxP4dzIzzOH12WzeoIF/5wAX+4gwtPe5/ig11bztzT2aW52R50sgXFftN9HwViLEGRqMFXZDTCDlQeNWxG2JHKfSZNLStSxGfaHYkyueUGRmVBfCV3mFuJyy/4WJD88vXXFgsd/8WvTElX5KvPZYpjkcwcS1K1HsSWFDMCMSW9QJ+hjGqYrSQFr3gpqpXuslXNVAQzktSeLUNtZWZpkHpGBsNl4cFICHv+aAfqyzGp//Yd6ds3WjmCKcpB2qQ853dVA1BrrzMRLL59G1Il9Q/6g7o2KRi2c+hw8d0X0JJ02xGnUL0V1kcPSW8+pETqrPkjaD610Wh9ghrpvdOTxqRXOKTSHLFarH8ldIY/nZIGmvoEy4pad997BSqkEpzdi13Fv55bitp8WCTD1AfG6k00ya9TYg9ndSmBztBmSRqTjz95bUkSrut+pRKc/R/SKWZQN7DX+sOtGKlNm5D+MyO1hatNOIm13A/lKdIYIdXdsibNK641ZouT1Z7iH+mHlYA66VZ7SJwkaDbhnB6kswZn2ENv6KBPEoKBqDknZXwCOaQh4ALJuOLL62Yc3JBUpPENIlJpDn+ echo
+
++ echo '--- package-like strings:'
+--- package-like strings:
++ grep -oE '"[A-Za-z0-9_]{3,30}"' /tmp/pp13/res.json
++ sort -u
++ tr -d '"'
++ head -30
+Font
+Texture
+data
+fontName
+isInline
+path
+resources
+type
++ echo '=== 3. game.json head (2KB) ==='
+=== 3. game.json head (2KB) ===
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json /tmp/pp13/g.json
++++ curl -s -o /tmp/pp13/g.json -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/client/game.json
+++ CODE=200
++++ stat -c%s /tmp/pp13/g.json
+++ SZ=21866
+++ echo '200 21866'
++ C='200 21866'
++ echo '200 21866'
+200 21866
++ head -c 2000 /tmp/pp13/g.json
+{
+"resources" : [{"type":"GameObject","id":"GAME","data" : {"root" : [{"name":"ClientRoot","activeSelf":true,"layer":0,"components" : [{"componentType":"Transform","enabled":true,"serializableData" : {"parent" : {"fileID":0},"children" : [{"fileID":1}],"psr":"d"},"fileID":2}],"fileID":3},{"name":"UI Root","activeSelf":true,"layer":0,"components" : [{"componentType":"Transform","enabled":true,"serializableData" : {"parent" : {"fileID":2},"children" : [{"fileID":4},{"fileID":5}],"s":"0.002002002"},"fileID":1},{"componentType":"UIRoot","enabled":true,"serializableData" : {"scalingStyle":1,"manualWidth":666,"manualHeight":999,"minimumHeight":320,"maximumHeight":1536,"fitWidth":true,"fitHeight":true,"adjustByDPI":false,"shrinkPortraitUI":false},"fileID":6},{"componentType":"UIPanel","enabled":true,"serializableData" : {"depth":0,"alpha":1},"fileID":7}],"fileID":8},{"name":"Cameras","activeSelf":true,"layer":0,"components" : [{"componentType":"Transform","enabled":true,"serializableData" : {"parent" : {"fileID":1},"children" : [{"fileID":9},{"fileID":10}],"p":",,-1"},"fileID":4}],"fileID":11},{"name":"_CameraClearListener","activeSelf":true,"layer":0,"components" : [{"componentType":"Transform","enabled":true,"serializableData" : {"parent" : {"fileID":4},"children" : [],"psr":"d"},"fileID":9},{"componentType":"Camera","enabled":true,"serializableData" : {"cullingMask":0,"depth":0,"orthographicSize":1},"fileID":12}],"fileID":13},{"name":"CameraClient","activeSelf":true,"layer":0,"components" : [{"componentType":"Transform","enabled":true,"serializableData" : {"parent" : {"fileID":4},"children" : [],"psr":"d"},"fileID":10},{"componentType":"Camera","enabled":true,"serializableData" : {"cullingMask":1073741824,"depth":69,"orthographicSize":1},"fileID":14}],"fileID":15},{"name":+ echo
+
++ echo '=== 4. build.js tail + package refs ==='
+=== 4. build.js tail + package refs ===
+++ getf https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js /tmp/pp13/build.js
++++ curl -s -o /tmp/pp13/build.js -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0' --connect-timeout 6 --max-time 60 https://demo4.scriptcasino.ru/games/WolfGold/gs2c/common/games-html5/games/vs/vs25wolfgold/desktop/build.js
+++ CODE=200
++++ stat -c%s /tmp/pp13/build.js
+++ SZ=3603936
+++ echo '200 3603936'
++ C='200 3603936'
++ echo '200 3603936'
+200 3603936
++ tail -c 1500 /tmp/pp13/build.js
+AAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAACMc3RjbwAAAAAAAAAfAAAALAAAA1UAAANyAAADhgAAA6IAAAO+AAAD0QAAA+0AAAQAAAAEHAAABC8AAARLAAAEZwAABHoAAASWAAAEqQAABMUAAATYAAAE9AAABRAAAAUjAAAFPwAABVIAAAVuAAAFgQAABZ0AAAWwAAAFzAAABegAAAX7AAAGFwAAAGJ1ZHRhAAAAWm1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAG1kaXJhcHBsAAAAAAAAAAAAAAAALWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNTUuMzMuMTAw");
+    video.addEventListener("timeupdate",
+        function() {
+            if (video.currentTime > .5) video.currentTime = Math.random()
+        });
+    video.play();
+    document.removeEventListener("touchend", NoSleep.IOS10, false);
+    NoSleep = null
+};
+NoSleep.Init = function() {
+    if (NoSleep.uap == null) {
+        NoSleep.uap = new UAParser2;
+        NoSleep.os = NoSleep.uap.getOS() || {
+            name: "",
+            version: "0"
+        };
+        NoSleep.browserName = NoSleep.uap.getBrowser().name
+    }
+    if (NoSleep.os.name == "Android" && NoSleep.uap.getBrowser().name == "Chrome" && !IS_UCBROWSER) {
+        if (renderCanvas == undefined) {
+            setTimeout(NoSleep.Init, 100);
+            return
+        }
+        renderCanvas.addEventListener("touchend", NoSleep.Android, false)
+    } else if (NoSleep.os.name == "iOS" && (NoSleep.browserName.indexOf("Safari") != -1 || NoSleep.browserName.indexOf("Chrome") !=
+            -1))
+        if (parseFloat(NoSleep.os.version) >= 10) document.addEventListener("touchend", NoSleep.IOS10, false)
+};
+NoSleep.Init();+ echo
+
++ echo '--- build.js quoted strings with json/pkg:'
+--- build.js quoted strings with json/pkg:
++ grep -oE '"[A-Za-z0-9_./-]{3,60}"' /tmp/pp13/build.js
++ tr -d '"'
++ sort -u
++ head -30
+-100000px
+-200px
+-ms-content-zooming
+-ms-touch-action
+..........
+../../../const
+../../../math
+../../../utils
+../../Resource
+../../b64
+../../const
+../../core
+../../core/renderers/webgl/WebGLRenderer
+../../core/renderers/webgl/utils/ObjectRenderer
+../../math
+../../package.json
+../../renderers/webgl/WebGLRenderer
+../../renderers/webgl/shaders/TextureShader
+../../renderers/webgl/utils/ObjectRenderer
+../../utils
+../Point
+../SystemRenderer
+../const
+../core
+../core/utils
+../display/Container
+../extras
+../filters/SpriteMaskFilter
+../managers/WebGLManager
+../math
++ echo PP13_DIAG_DONE
+PP13_DIAG_DONE
