@@ -37,40 +37,40 @@ con = sqlite3.connect(sys.argv[1])
 cols = [r[1] for r in con.execute("PRAGMA table_info(w_shops)")]
 pick = [c for c in ('id','name','percent','balance','show_reel') if c in cols]
 for r in con.execute(f"SELECT {','.join(pick)} FROM w_shops"):
-    log(f"shop: {r}")
-log("")
-log("=== w_game_bank rows ===")
+    print(f"shop: {r}")
+print("")
+print("=== w_game_bank rows ===")
 gbcols = [r[1] for r in con.execute("PRAGMA table_info(w_game_bank)")]
-log("columns: " + ", ".join(gbcols))
+print("columns: " + ", ".join(gbcols))
 for r in con.execute("SELECT * FROM w_game_bank"):
-    log(f"bank: {r}")
-log("")
-log("=== users (id, name, role_id, shop_id, balance, count_balance) ===")
+    print(f"bank: {r}")
+print("")
+print("=== users (id, name, role_id, shop_id, balance, count_balance) ===")
 ucols = [r[1] for r in con.execute("PRAGMA table_info(w_users)")]
 pick = [c for c in ('id','name','role_id','shop_id','balance','count_balance') if c in ucols]
 for r in con.execute(f"SELECT {','.join(pick)} FROM w_users LIMIT 12"):
-    log(f"user: {r}")
-log("")
-log("=== w_jpg (jackpots) ===")
+    print(f"user: {r}")
+print("")
+print("=== w_jpg (jackpots) ===")
 try:
     for r in con.execute("SELECT id, name, shop_id, balance, start_balance, percent FROM w_jpg LIMIT 10"):
-        log(f"jpg: {r}")
-    log(f"jpg count: {con.execute('SELECT COUNT(*) FROM w_jpg').fetchone()[0]}")
+        print(f"jpg: {r}")
+    print(f"jpg count: {con.execute('SELECT COUNT(*) FROM w_jpg').fetchone()[0]}")
 except Exception as e:
-    log(f"jpg query: {e}")
-log("")
-log("=== gs2c w_games rows (stat bookkeeping) ===")
+    print(f"jpg query: {e}")
+print("")
+print("=== gs2c w_games rows (stat bookkeeping) ===")
 for r in con.execute("SELECT id,name,view,stat_in,stat_out,bids FROM w_games WHERE id BETWEEN 9101 AND 9134 LIMIT 40"):
-    log(f"game: {r}")
-log("")
-log("=== happyhours (bank multipliers) ===")
+    print(f"game: {r}")
+print("")
+print("=== happyhours (bank multipliers) ===")
 try:
     hh = con.execute("SELECT COUNT(*) FROM w_happyhours").fetchone()[0]
-    log(f"happyhours rows: {hh}")
+    print(f"happyhours rows: {hh}")
     for r in con.execute("SELECT * FROM w_happyhours LIMIT 4"):
-        log(f"hh: {str(r)[:300]}")
+        print(f"hh: {str(r)[:300]}")
 except Exception as e:
-    log(f"hh: {e}")
+    print(f"hh: {e}")
 con.close()
 PY
 log "ECON DUMP DONE"
